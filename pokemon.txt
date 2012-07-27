@@ -1,0 +1,22 @@
+Pokemon - TCC
+
+
+Estilo: SIDESCROLLER
+
+Story Mode: jogador controla um pokemon a sua escolha, inicialmente podendo escolher um numero limitado de personagens. a medida que vai derrotando inimigos, vai liberando mais pokemons para poder escolher ao inicio de uma nova partida. Ao passar um certo numero de "fases" o jogador enfrentará um chefao, que tera mais vida do que os outros inimigos normais, e so ao derrotá-lo podera continuar sua aventura. ao comecar o jogo o jogador tera 3 vidas, ao perder todas será game over e tera a opcao de comecar um jogo novo, dessa vez podendo escolher todos os pokemons que já tiver derrotado.
+
+para liberar um pokemon, é necessário derrotá-lo um certo número de vezes, que seria inversamente proporcional a raridade do mesmo. ou seja, um pokemon com uma raridade grande precisaria matar menos vezes do que um com uma raridade bem baixa
+
+em certas partes do jogo, o jogador poderá jogar uma fase bonus, onde terá a chance de enfrentar um pokemon raro, com mais vida do que o normal, se morrer nao perde vida mas perde a chance de enfrentá-lo. se ganhar, libera ele para jogar.
+
+Versus Mode: um jogador enfrenta o outro podendo escolher qualquer um dos pokemons ja liberados anteriormente
+
+Quick Battle: jogador escolhe um pokemon ja liberado para batalhar contra o computador, que tambem usara apenas personagens ja liberados
+
+
+
+-vida do player em cima na esquerda, vida do inimigo na direita em baixo. vida do boss em baixo ocupando a tela toda
+
+-ao matar um chefe, ganha mais uma vida.
+
+-na hora de escolher o personagem, o jogador tera a opcao de ver alguns dados sobre o pokemon, como quantos desses o jogador ja matou, ate onde o jogador chegou com esse pokemon e quantos inimigos ja derrotou.

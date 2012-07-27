@@ -1,0 +1,5 @@
+1 - coloca tds as img no gimp, uma em cada camada, em ordem.
+2 - aplicar o filtro combinar - tira de filme
+3 - extrair o fundo
+4 - copiar o que sobrou para uma img transparente
+5 - profit!

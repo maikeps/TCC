@@ -1,0 +1,25 @@
+Bulbasaur
+Ivysaur
+Venusaur
+Charmander
+Charmeleon
+Charizard
+Squirtle
+Wartortle
+Blastoise
+Caterpie
+Metapod
+Butterfree
+Weedle  (Arrumar WeedleIcon_Right.gif)
+
+
+Pidgey
+Pidgeotto
+Pidgeot
+
+
+
+
+
+
+Pikachu

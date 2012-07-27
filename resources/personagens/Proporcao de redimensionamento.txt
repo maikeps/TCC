@@ -1,0 +1,3 @@
+Largura da imagem * 2,333333333
+
+resolucao: 300x300
