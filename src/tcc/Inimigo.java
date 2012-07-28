@@ -26,7 +26,6 @@ public class Inimigo extends ObjetoComMovimento {
     int minDistanciaX = 50;
     int minDistanciaY = 50;
     EstadoInimigo estado;
-    
     int destX, destY;
     double angulo;
     //diminuir minDistancia para 50, e so chamar o metodo aproxima se o ataque sorteado tiver uma distancia curta
@@ -195,24 +194,25 @@ public class Inimigo extends ObjetoComMovimento {
             this.personagem.spriteAtual = this.personagem.spriteRight;
         }
 
-        //        
-//        if (this.xPlayer >= this.personagem.getX() && this.yPlayer >= this.personagem.getY()) {
-//            this.personagem.direcao = Direcao.DIREITA_BAIXO;
-//            this.personagem.spriteAtual = this.personagem.spriteDown;
-//        }
-//        if (this.xPlayer >= this.personagem.getX() && this.yPlayer < this.personagem.getY()) {
-//            this.personagem.direcao = Direcao.DIREITA_CIMA;
-//            this.personagem.spriteAtual = this.personagem.spriteUp;
-//        }
-        //if (this.xPlayer < this.personagem.getX() && this.yPlayer >= this.personagem.getY()) {
-//        if (this.distanciaX >= this.distanciaY && this.yPlayer < this.personagem.getY()) {
-//            //this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
-//            this.personagem.spriteAtual = this.personagem.spriteUp;
-//        } 
-//        if (this.xPlayer < this.personagem.getX() && this.yPlayer < this.personagem.getY()) {
-//           // this.personagem.direcao = Direcao.ESQUERDA_CIMA;
-//            this.personagem.spriteAtual = this.personagem.spriteLeft;
-//        }
+
+        if (this.xPlayer >= this.personagem.getX() && this.yPlayer >= this.personagem.getY()) {
+            this.personagem.direcao = Direcao.DIREITA_BAIXO;
+            this.personagem.spriteAtual = this.personagem.spriteDown;
+        }
+        if (this.xPlayer >= this.personagem.getX() && this.yPlayer < this.personagem.getY()) {
+            this.personagem.direcao = Direcao.DIREITA_CIMA;
+            this.personagem.spriteAtual = this.personagem.spriteUp;
+        }
+        if (this.xPlayer < this.personagem.getX() && this.yPlayer >= this.personagem.getY()) {
+            if (this.distanciaX >= this.distanciaY && this.yPlayer < this.personagem.getY()) {
+                //this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
+                this.personagem.spriteAtual = this.personagem.spriteUp;
+            }
+            if (this.xPlayer < this.personagem.getX() && this.yPlayer < this.personagem.getY()) {
+                // this.personagem.direcao = Direcao.ESQUERDA_CIMA;
+                this.personagem.spriteAtual = this.personagem.spriteLeft;
+            }
+        }
     }
 
     public void afasta() {
@@ -288,7 +288,7 @@ public class Inimigo extends ObjetoComMovimento {
     }
 
     public boolean playerEstaVendo() {
-//        return this.player.getCampoDeVisao().intersects(this.personagem.getRetangulo());
+        //return this.player.getCampoDeVisao().intersects(this.personagem.getRetangulo());
         return false;
     }
 
@@ -326,12 +326,12 @@ public class Inimigo extends ObjetoComMovimento {
 
     public void getEstaProximoDoPlayer() {
     }
-    
-    
-    public int getX(){
+
+    public int getX() {
         return this.personagem.getX();
     }
-    public int getY(){
+
+    public int getY() {
         return this.personagem.getY();
     }
 

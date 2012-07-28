@@ -1,0 +1,6 @@
+insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQueEvolui, idAtaque, elementoPrimario, elementoSecundario) values
+
+
+
+insert into pokemonLiberado (idJogador, idPokemon, lvlQueChegou, faseQueChegou, inimigosDerrotados, vezesQueZerouOJogo, vezesDerrotasParaNPC, totalDanoCausado, medalhas, atk, def, spd, hp, lvl) values
+

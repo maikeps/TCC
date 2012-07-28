@@ -32,7 +32,7 @@ public abstract class Personagem extends ObjetoComMovimento {
     
     
     int cooldownAtual; //como esta o cooldown atualmente(diminui em um por step)
-    int cooldown; //cooldown que tem que esperar ate atacar de novo
+    int cooldown = 50; //cooldown que tem que esperar ate atacar de novo
     //se o cooldownAtual for menor que zero, o jogador pode atacar
     Ataques ataque;
 
@@ -41,7 +41,7 @@ public abstract class Personagem extends ObjetoComMovimento {
 
         //ver se pode tirar isso
 //        this.hp = 200;
-//        this.hpAtual = 200;
+  //      this.hpAtual = 200;
         try {
             this.spriteRight = new Imagem("resources/personagens/Blastoise/Blastoise_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Blastoise/Blastoise_Left.gif");
@@ -148,6 +148,10 @@ public abstract class Personagem extends ObjetoComMovimento {
     //retorna o cooldownAtual(quanto falta para poder atacar novamente)
     public int getcooldownAtual() {
         return this.cooldownAtual;
+    }
+    
+    public void setCooldownAtual(){
+        this.cooldownAtual = this.cooldown;
     }
 
     public int getCooldown() {
