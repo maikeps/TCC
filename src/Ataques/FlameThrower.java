@@ -7,12 +7,9 @@ package Ataques;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import javaPlay2.GameObject;
-import javaPlay2.Sprite;
 import javaPlay2.Imagem;
+import javaPlay2.Sprite;
 import javax.swing.JOptionPane;
-import pokemonbrawlreloaded.Direcao;
-import pokemonbrawlreloaded.ObjetoComMovimento;
 
 /**
  *
@@ -22,38 +19,48 @@ public class FlameThrower extends Ataque {
 
     int frameElapsed;
     int frame;
-    Direcao direcao;
     Sprite spriteLeft;
     Sprite spriteRight;
     Sprite spriteUp;
     Sprite spriteDown;
     Sprite spriteAtual;
     Sprite vazio;
+    double angulo;
+    int destX;
+    int destY;
+    double deltaX, deltaY, dx, dy;
 
-    public FlameThrower(int x, int y, Direcao direcao, Personagem personagem) {
+    public FlameThrower(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         this.setDano(15);
         this.personagem = personagem;
-        this.direcao = direcao;
 
         this.desativado = false;
+        this.xInicial = x;
+        this.yInicial = y;
         this.x = x;
         this.y = y;
+        this.destX = destX;
+        this.destY = destY;
+        this.velocidade = 10;
+
+        this.angulo = angulo;
 
         int frame = 0;
 
         try {
-            this.spriteLeft = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Left.png", 8, 215, 65);
-            this.spriteRight = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
-            this.spriteUp = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Up.png", 8, 65, 215);
-            this.spriteDown = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Down.png", 8, 65, 215);
-            this.vazio = new Sprite("resources/ataques/vazio.png", 1, 10, 10);
-            this.spriteAtual = this.vazio;
+            //    this.spriteLeft = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Left.png", 8, 215, 65);
+            this.imagem = new Imagem("resources/ataques/Flame Thrower/FlameThrower_Right.gif");
+            //this.spriteRight = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
+            //  this.spriteUp = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Up.png", 8, 65, 215);
+            //this.spriteDown = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Down.png", 8, 65, 215);
+            // this.vazio = new Sprite("resources/ataques/vazio.png", 1, 10, 10);
+            this.spriteAtual = this.spriteRight;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 
-        this.ajustaAtaque();
+//        this.ajustaAtaque();
 
     }
 
@@ -62,29 +69,31 @@ public class FlameThrower extends Ataque {
             return;
         }
 
+        this.spriteAtual = this.spriteRight;
+
         this.frameElapsed++;
+//
+//        switch (this.direcao) {
+//            case DIREITA:
+//                this.spriteAtual = this.spriteRight;
+//                break;
+//            case ESQUERDA:
+//                this.spriteAtual = this.spriteLeft;
+//                break;
+//            case CIMA:
+//                this.spriteAtual = this.spriteUp;
+//                break;
+//            case BAIXO:
+//                this.spriteAtual = this.spriteDown;
+//                break;
+//        }
 
-        switch (this.direcao) {
-            case DIREITA:
-                this.spriteAtual = this.spriteRight;
-                break;
-            case ESQUERDA:
-                this.spriteAtual = this.spriteLeft;
-                break;
-            case CIMA:
-                this.spriteAtual = this.spriteUp;
-                break;
-            case BAIXO:
-                this.spriteAtual = this.spriteDown;
-                break;
-        }
-
-        if (this.frameElapsed > 5) {
-            this.frame++;
-            this.spriteAtual.setCurrAnimFrame(this.frame);
-            this.frameElapsed -= 5;
-
-        }
+////////        if (this.frameElapsed > 5) {
+////////            this.frame++;
+////////            this.spriteAtual.setCurrAnimFrame(this.frame);
+////////            this.frameElapsed -= 5;
+////////
+////////        }
 
 
 
@@ -92,7 +101,9 @@ public class FlameThrower extends Ataque {
 
     @Override
     public void draw(Graphics g) {
-        this.spriteAtual.draw(g, this.x, this.y);
+        this.imagem.drawRotated(g, this.x, this.y, this.angulo);
+////////        this.spriteAtual.drawRotated(g, this.x, this.y, this.angulo);
+////////        this.spriteAtual.draw(g, this.x, this.y);
     }
 
     @Override

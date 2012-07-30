@@ -48,10 +48,12 @@ public class Imagem {
     }
 
     // Rotaciona a imagem em um determinado angulo e a desenha
-    public void drawRotated(Graphics graphics, Graphics2D g2d, int x, int y, double angle) {
+    public void drawRotated(Graphics graphics, int x, int y, double angle) {
         int w = this.pegaLargura();
         int h = this.pegaAltura();
 
+        Graphics2D g2d = (Graphics2D)graphics;
+        
         AffineTransform tx = new AffineTransform();
 
         tx.translate(x, y);

@@ -64,8 +64,7 @@ public class Twister extends Ataque {
             return;
         }
 
-        Graphics2D g2d = (Graphics2D) g;
-        this.imagem.drawRotated(g, g2d, this.x, this.y, angulo);
+        this.imagem.drawRotated(g, this.x, this.y, angulo);
 
     }
 

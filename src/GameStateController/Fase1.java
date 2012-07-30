@@ -6,6 +6,7 @@ package GameStateController;
 
 import Ataques.Ataque;
 import Ataques.DragonRage;
+import Ataques.FlameThrower;
 import Personagens.Charmander;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -43,6 +44,8 @@ public class Fase1 implements GameStateController {
         }
 
         this.lancaAtaques();
+        
+        
     }
 
     public void draw(Graphics g) {
@@ -71,7 +74,8 @@ public class Fase1 implements GameStateController {
     public void lancaAtaques() {
         if (this.player.atacou == true) {
             if (this.player.personagem.podeAtirar()) {
-                this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.charmander));
+              //  this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.charmander));
+                this.ataques.add(new FlameThrower(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.charmander));
                 this.player.personagem.setCooldownAtual();
             }
         }

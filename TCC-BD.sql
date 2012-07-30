@@ -2,148 +2,215 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-CREATE SCHEMA IF NOT EXISTS `TCC` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci ;
-USE `TCC` ;
+CREATE SCHEMA IF NOT EXISTS `tcc` DEFAULT CHARACTER SET latin1 ;
+USE `tcc` ;
 
 -- -----------------------------------------------------
--- Table `TCC`.`jogador`
+-- Table `tcc`.`elemento`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`jogador` (
+CREATE  TABLE IF NOT EXISTS `tcc`.`elemento` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `nome` VARCHAR(45) NOT NULL ,
+  `elemento` ENUM('Normal','Fire','Fighting','Water','Flying','Grass','Poison','Electric','Ground','Psychic','Rock','Ice','Bug','Dragon','Ghost','Dark','Steel', ' ') NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `TCC`.`ataque`
+-- Table `tcc`.`ataque`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`ataque` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
+CREATE  TABLE IF NOT EXISTS `tcc`.`ataque` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
   `nome` VARCHAR(45) NOT NULL ,
-  `atk` INT NOT NULL ,
-  `elemento` ENUM('fire', '...') NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `TCC`.`pokemon`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`pokemon` (
-  `id` INT NOT NULL ,
-  `nome` VARCHAR(45) NOT NULL ,
-  `raridade` INT NOT NULL ,
-  `atkBase` INT NOT NULL ,
-  `defBase` INT NOT NULL ,
-  `spdBase` INT NOT NULL ,
-  `hpBase` INT NOT NULL ,
-  `lvlQueEvolui` INT NULL ,
-  `idAtaque` INT NOT NULL ,
-  `elementoPrimario` ENUM('fire', '...') NOT NULL ,
-  `elementoSecundario` ENUM('fire', '...') NULL ,
-  PRIMARY KEY (`id`, `idAtaque`) ,
-  INDEX `fk_pokemon_ataque1` (`idAtaque` ASC) ,
-  CONSTRAINT `fk_pokemon_ataque1`
-    FOREIGN KEY (`idAtaque` )
-    REFERENCES `TCC`.`ataque` (`id` )
+  `atk` INT(11) NOT NULL ,
+  `elemento` INT NOT NULL ,
+  PRIMARY KEY (`id`, `elemento`) ,
+  INDEX `fk_ataque_elemento1` (`elemento` ASC) ,
+  CONSTRAINT `fk_ataque_elemento1`
+    FOREIGN KEY (`elemento` )
+    REFERENCES `tcc`.`elemento` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+AUTO_INCREMENT = 3
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `TCC`.`pokemonLiberado`
+-- Table `tcc`.`pokemon`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`pokemonLiberado` (
-  `idJogador` INT NOT NULL ,
-  `idPokemon` INT NOT NULL ,
-  `lvlQueChegou` INT NOT NULL ,
-  `faseQueChegou` INT NOT NULL ,
-  `inimigosDerrotados` INT NOT NULL ,
-  `vezesQueZerouOJogo` INT NOT NULL ,
-  `vezesDerrotasParaNPC` INT NOT NULL ,
-  `totalDanoCausado` INT NOT NULL ,
-  `medalhas` INT NOT NULL ,
-  `atk` INT NOT NULL ,
-  `def` INT NOT NULL ,
-  `spd` INT NOT NULL ,
-  `lvl` INT NOT NULL ,
-  `hp` INT NOT NULL ,
+CREATE  TABLE IF NOT EXISTS `tcc`.`pokemon` (
+  `id` INT(11) NOT NULL ,
+  `nome` VARCHAR(45) NOT NULL ,
+  `raridade` INT(11) NOT NULL ,
+  `atkBase` INT(11) NOT NULL ,
+  `defBase` INT(11) NOT NULL ,
+  `spdBase` INT(11) NOT NULL ,
+  `hpBase` INT(11) NOT NULL ,
+  `lvlQueEvolui` INT(11) NULL DEFAULT NULL ,
+  `idAtaque` INT(11) NOT NULL ,
+  `elementoPrimario` INT NOT NULL ,
+  `elementoSecundario` INT NULL ,
+  PRIMARY KEY (`id`, `idAtaque`, `elementoPrimario`, `elementoSecundario`) ,
+  INDEX `fk_pokemon_ataque1` (`idAtaque` ASC) ,
+  INDEX `fk_pokemon_elemento1` (`elementoPrimario` ASC) ,
+  INDEX `fk_pokemon_elemento2` (`elementoSecundario` ASC) ,
+  CONSTRAINT `fk_pokemon_ataque1`
+    FOREIGN KEY (`idAtaque` )
+    REFERENCES `tcc`.`ataque` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pokemon_elemento1`
+    FOREIGN KEY (`elementoPrimario` )
+    REFERENCES `tcc`.`elemento` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pokemon_elemento2`
+    FOREIGN KEY (`elementoSecundario` )
+    REFERENCES `tcc`.`elemento` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tcc`.`evolucaoporpedra`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tcc`.`evolucaoporpedra` (
+  `id` VARCHAR(45) NOT NULL ,
+  `idPokemon` INT(11) NOT NULL ,
+  `idEvolucao` INT(11) NOT NULL ,
+  `elemento` INT NOT NULL ,
+  PRIMARY KEY (`idPokemon`, `idEvolucao`, `id`, `elemento`) ,
+  INDEX `fk_pokemon_has_pokemon_pokemon2` (`idEvolucao` ASC) ,
+  INDEX `fk_pokemon_has_pokemon_pokemon1` (`idPokemon` ASC) ,
+  INDEX `fk_evolucaoporpedra_elemento1` (`elemento` ASC) ,
+  CONSTRAINT `fk_pokemon_has_pokemon_pokemon1`
+    FOREIGN KEY (`idPokemon` )
+    REFERENCES `tcc`.`pokemon` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_pokemon_has_pokemon_pokemon2`
+    FOREIGN KEY (`idEvolucao` )
+    REFERENCES `tcc`.`pokemon` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_evolucaoporpedra_elemento1`
+    FOREIGN KEY (`elemento` )
+    REFERENCES `tcc`.`elemento` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tcc`.`jogador`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tcc`.`jogador` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `nome` VARCHAR(45) NOT NULL ,
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tcc`.`pokemonderrotado`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tcc`.`pokemonderrotado` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `vezesDerrotado` INT(11) NOT NULL DEFAULT '0' ,
+  `idPokemon` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`, `idPokemon`) ,
+  INDEX `fk_PokemonDerrotado_pokemon1` (`idPokemon` ASC) ,
+  CONSTRAINT `fk_PokemonDerrotado_pokemon1`
+    FOREIGN KEY (`idPokemon` )
+    REFERENCES `tcc`.`pokemon` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tcc`.`pokemoninimigo`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tcc`.`pokemoninimigo` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `idPokemon` INT(11) NOT NULL ,
+  `tipo` ENUM('boss','minion') NOT NULL ,
+  `atk` INT(11) NOT NULL ,
+  `def` INT(11) NOT NULL ,
+  `spd` INT(11) NOT NULL ,
+  `hp` INT(11) NOT NULL ,
+  `lvl` INT(11) NOT NULL ,
+  PRIMARY KEY (`id`, `idPokemon`) ,
+  INDEX `fk_PokemonInimigo_pokemon1` (`idPokemon` ASC) ,
+  CONSTRAINT `fk_PokemonInimigo_pokemon1`
+    FOREIGN KEY (`idPokemon` )
+    REFERENCES `tcc`.`pokemon` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tcc`.`pokemonliberado`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tcc`.`pokemonliberado` (
+  `idJogador` INT(11) NOT NULL ,
+  `idPokemon` INT(11) NOT NULL ,
+  `lvlQueChegou` INT(11) NULL DEFAULT 0 ,
+  `faseQueChegou` INT(11) NULL DEFAULT 0 ,
+  `inimigosDerrotados` INT(11) NULL DEFAULT 0 ,
+  `vezesQueZerouOJogo` INT(11) NULL DEFAULT 0 ,
+  `vezesDerrotasParaNPC` INT(11) NULL DEFAULT 0 ,
+  `totalDanoCausado` INT(11) NULL DEFAULT 0 ,
+  `medalhas` INT(11) NULL DEFAULT 0 ,
+  `atk` INT(11) NOT NULL ,
+  `def` INT(11) NOT NULL ,
+  `spd` INT(11) NOT NULL ,
+  `hp` INT(11) NOT NULL ,
+  `lvl` INT(11) NULL DEFAULT 1 ,
+  `exp` INT NULL DEFAULT 0 ,
   PRIMARY KEY (`idJogador`, `idPokemon`) ,
   INDEX `fk_jogador_has_pokemon_pokemon1` (`idPokemon` ASC) ,
   INDEX `fk_jogador_has_pokemon_jogador` (`idJogador` ASC) ,
   CONSTRAINT `fk_jogador_has_pokemon_jogador`
     FOREIGN KEY (`idJogador` )
-    REFERENCES `TCC`.`jogador` (`id` )
+    REFERENCES `tcc`.`jogador` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_jogador_has_pokemon_pokemon1`
     FOREIGN KEY (`idPokemon` )
-    REFERENCES `TCC`.`pokemon` (`id` )
+    REFERENCES `tcc`.`pokemon` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `TCC`.`PokemonDerrotado`
+-- Table `tcc`.`bonusDeElemento`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`PokemonDerrotado` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `vezesDerrotado` INT NOT NULL DEFAULT 0 ,
-  `idPokemon` INT NOT NULL ,
-  PRIMARY KEY (`id`, `idPokemon`) ,
-  INDEX `fk_PokemonDerrotado_pokemon1` (`idPokemon` ASC) ,
-  CONSTRAINT `fk_PokemonDerrotado_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `TCC`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `TCC`.`PokemonInimigo`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`PokemonInimigo` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `idPokemon` INT NOT NULL ,
-  `tipo` ENUM('boss', 'minion') NOT NULL ,
-  `atk` INT NOT NULL ,
-  `def` INT NOT NULL ,
-  `spd` INT NOT NULL ,
-  `hp` INT NOT NULL ,
-  `lvl` INT NOT NULL ,
-  PRIMARY KEY (`id`, `idPokemon`) ,
-  INDEX `fk_PokemonInimigo_pokemon1` (`idPokemon` ASC) ,
-  CONSTRAINT `fk_PokemonInimigo_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `TCC`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `TCC`.`evolucaoPorPedra`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `TCC`.`evolucaoPorPedra` (
-  `id` VARCHAR(45) NOT NULL ,
-  `idPokemon` INT NOT NULL ,
-  `idEvolucao` INT NOT NULL ,
-  `pedra` ENUM('fire', 'thunder', '...') NOT NULL ,
-  PRIMARY KEY (`idPokemon`, `idEvolucao`, `id`) ,
-  INDEX `fk_pokemon_has_pokemon_pokemon2` (`idEvolucao` ASC) ,
-  INDEX `fk_pokemon_has_pokemon_pokemon1` (`idPokemon` ASC) ,
-  CONSTRAINT `fk_pokemon_has_pokemon_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `TCC`.`pokemon` (`id` )
+CREATE  TABLE IF NOT EXISTS `tcc`.`bonusDeElemento` (
+  `elemento` INT NOT NULL ,
+  `elementoVantagem` INT NOT NULL ,
+  `elementoFraqueza` INT NOT NULL ,
+  PRIMARY KEY (`elemento`, `elementoVantagem`, `elementoFraqueza`) ,
+  INDEX `fk_elemento_has_elemento_elemento2` (`elementoVantagem` ASC) ,
+  INDEX `fk_elemento_has_elemento_elemento1` (`elementoFraqueza` ASC) ,
+  CONSTRAINT `fk_elemento_has_elemento_elemento1`
+    FOREIGN KEY (`elementoFraqueza` )
+    REFERENCES `tcc`.`elemento` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pokemon_has_pokemon_pokemon2`
-    FOREIGN KEY (`idEvolucao` )
-    REFERENCES `TCC`.`pokemon` (`id` )
+  CONSTRAINT `fk_elemento_has_elemento_elemento2`
+    FOREIGN KEY (`elementoVantagem` )
+    REFERENCES `tcc`.`elemento` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

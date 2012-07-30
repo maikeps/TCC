@@ -1,18 +1,19 @@
 /*
  * Sprite
  */
-
 package javaPlay2;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 
 /**
  * @author VisionLab/PUC-Rio
  */
-public class Sprite 
-{    
+public class Sprite {
+
     private Image image;
     private int animFrameCount;
     private int currAnimFrame;
@@ -21,37 +22,32 @@ public class Sprite
     private int MAX_COUNT = 50;
 
     public Sprite(String filename, int animFrameCount, int animFrameWidth,
-            int animFrameHeight) throws Exception
-    {
+            int animFrameHeight) throws Exception {
         image = Toolkit.getDefaultToolkit().getImage(filename);
 
         int count = 0;
 
-        while(image.getWidth(null) == -1)
-        {
+        while (image.getWidth(null) == -1) {
             Thread.sleep(4);
             count++;
 
-            if(count == MAX_COUNT)
-            {
-                throw new Exception("Imagem \""+filename+"\" não pode ser carregada");
+            if (count == MAX_COUNT) {
+                throw new Exception("Imagem \"" + filename + "\" não pode ser carregada");
             }
         }
 
         this.animFrameCount = animFrameCount;
         this.animFrameWidth = animFrameWidth;
         this.animFrameHeight = animFrameHeight;
-        
+
         this.currAnimFrame = 0;
     }
 
-    public void setCurrAnimFrame(int frame)
-    {
+    public void setCurrAnimFrame(int frame) {
         currAnimFrame = frame;
     }
 
-    public void draw(Graphics g, int x, int y)
-    {
+    public void draw(Graphics g, int x, int y) {
         GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
 
         int xpos = canvas.getRenderScreenStartX() + x;
@@ -62,8 +58,7 @@ public class Sprite
     }
 
     private Sprite(Image image, int animFrameCount,
-            int currAnimFrame, int animFrameWidth, int animFrameHeight)
-    {
+            int currAnimFrame, int animFrameWidth, int animFrameHeight) {
         this.image = image;
         this.animFrameCount = animFrameCount;
         this.currAnimFrame = currAnimFrame;
@@ -71,13 +66,39 @@ public class Sprite
         this.animFrameHeight = animFrameHeight;
     }
 
-    public Sprite clone()
-    {
+    public Sprite clone() {
         return new Sprite(image, animFrameCount, currAnimFrame,
                 animFrameWidth, animFrameHeight);
     }
+
+    /*
+     * public void setImage(String img){ this.image =
+     * Toolkit.getDefaultToolkit().getImage(img); }
+     */
+    public void drawRotated(Graphics graphics, int x, int y, double angle) {
+
+        AffineTransform tx = new AffineTransform();
+
+        tx.translate(x, y);
+        tx.rotate(Math.toRadians(-angle));
+
+        Graphics2D g2d = (Graphics2D) graphics;
+        
+        g2d.drawImage(image, tx, null);
+
+        
+        
     
-    /*public void setImage(String img){
-        this.image = Toolkit.getDefaultToolkit().getImage(img);
-    }*/
+        GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
+
+        int xpos = canvas.getRenderScreenStartX() + x;
+        int ypos = canvas.getRenderScreenStartY() + y;
+
+        
+        g2d.drawImage(image, xpos, ypos, xpos + animFrameWidth, ypos + animFrameHeight,
+                currAnimFrame * animFrameWidth, 0, (currAnimFrame + 1) * animFrameWidth, animFrameHeight, null);
+
+
+
+    }
 }
