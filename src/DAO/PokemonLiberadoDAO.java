@@ -1,0 +1,83 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package DAO;
+
+import MySQL.ConjuntoResultados;
+import MySQL.MySQL;
+import java.util.ArrayList;
+import model.PokemonLiberado;
+
+/**
+ *
+ * @author maike_p_santos
+ */
+public class PokemonLiberadoDAO {
+
+    public static ArrayList<PokemonLiberado> getListaPokemon(int idJogador) {
+        
+        ArrayList<PokemonLiberado> lista = new ArrayList<PokemonLiberado>();
+        
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemonLiberado where id = "+idJogador;
+        
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        
+        while(linhas.next()){
+            PokemonLiberado p = new PokemonLiberado();
+            
+            p.setId(linhas.getInt("id"));
+            p.setIdJogador(linhas.getInt("idJogador"));
+            p.setIdPokemon(linhas.getInt("idPokemon"));
+            p.setAtk(linhas.getInt("atk"));
+            p.setDef(linhas.getInt("def"));
+            p.setExp(linhas.getInt("exp"));
+            p.setFaseQueChegou(linhas.getInt("faseQueChegou"));
+            p.setHp(linhas.getInt("hp"));
+            p.setInimigosDerrotados(linhas.getInt("inimigosDerrotados"));
+            p.setLvl(linhas.getInt("lvl"));
+            p.setLvlQueChegou(linhas.getInt("lvlQueChegou"));
+            p.setSpd(linhas.getInt("spd"));
+            p.setTotalDanoCausado(linhas.getInt("totalDanoCausado"));
+            p.setVezesDerrotasParaNPC(linhas.getInt("vezesDerrotasParaNPC"));
+            p.setVezesQueZerouOJogo(linhas.getInt("vezesQueZerouOJogo"));
+            
+            lista.add(p);
+        }
+        
+        return lista;
+        
+    }
+    
+    public static PokemonLiberado getPokemon(int id){
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemonLiberado "
+                + "inner join Pokemon on Pokemon.id = PokemonLiberado.idPokemon "
+                + "where PokemonLiberado.idPokemon = "+id;
+        
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        PokemonLiberado p = new PokemonLiberado();
+        
+        if(linhas.next()){
+            p.setId(linhas.getInt("id"));
+            p.setIdJogador(linhas.getInt("idJogador"));
+            p.setIdPokemon(linhas.getInt("idPokemon"));
+            p.setAtk(linhas.getInt("atk"));
+            p.setDef(linhas.getInt("def"));
+            p.setExp(linhas.getInt("exp"));
+            p.setFaseQueChegou(linhas.getInt("faseQueChegou"));
+            p.setHp(linhas.getInt("hp"));
+            p.setInimigosDerrotados(linhas.getInt("inimigosDerrotados"));
+            p.setLvl(linhas.getInt("lvl"));
+            p.setLvlQueChegou(linhas.getInt("lvlQueChegou"));
+            p.setSpd(linhas.getInt("spd"));
+            p.setTotalDanoCausado(linhas.getInt("totalDanoCausado"));
+            p.setVezesDerrotasParaNPC(linhas.getInt("vezesDerrotasParaNPC"));
+            p.setVezesQueZerouOJogo(linhas.getInt("vezesQueZerouOJogo"));
+            p.setNome(linhas.getString("nome"));
+        }
+        
+        return p;
+    }
+}

@@ -1,0 +1,15 @@
+select * from pokemonLiberado pl inner join Pokemon p on p.id = pl.idPokemon where pl.idPokemon = 4
+
+
+
+melhor:
+
+select pl.idPokemon as Numero, p.Nome, a.Nome as Ataque, e.Elemento as ElementoPrimario, 
+e.Elemento as ElementoSecundario from pokemonLiberado pl 
+inner join Pokemon p on p.id = pl.idPokemon 
+inner join Ataque a on p.idAtaque = a.id
+inner join Elemento e on p.elementoPrimario = e.id
+inner join Elemento e2 on p.elementoSecundario = e2.id
+where pl.idPokemon = 4
+
+errado por que o elementoSecundario aparece como primario

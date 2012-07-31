@@ -9,7 +9,7 @@ public class MySQL
     Statement statement;
     String user = "root";
     String pass = "senai2012";
-    String database = "The Dancing Mustache";
+    String database = "TCC";
     String host = "localhost";
    
     public MySQL()
@@ -24,7 +24,7 @@ public class MySQL
             System.out.println("Driver MySQL não encontrado.");
             System.exit(0);
         } catch (SQLException e){
-            System.out.println("Erro na conex�o com a base de dados: "+e);
+            System.out.println("Erro na conexão com a base de dados: "+e);
         }        
     }
 

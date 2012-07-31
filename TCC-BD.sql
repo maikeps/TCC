@@ -31,7 +31,7 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`ataque` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 3
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -112,7 +112,7 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`jogador` (
   `nome` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -169,7 +169,6 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`pokemonliberado` (
   `vezesQueZerouOJogo` INT(11) NULL DEFAULT 0 ,
   `vezesDerrotasParaNPC` INT(11) NULL DEFAULT 0 ,
   `totalDanoCausado` INT(11) NULL DEFAULT 0 ,
-  `medalhas` INT(11) NULL DEFAULT 0 ,
   `atk` INT(11) NOT NULL ,
   `def` INT(11) NOT NULL ,
   `spd` INT(11) NOT NULL ,

@@ -4,20 +4,20 @@
  */
 package GameStateController;
 
+import DAO.PokemonLiberadoDAO;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javaPlay2.*;
+import java.util.ArrayList;
 import javaPlay2.GameEngine;
 import javaPlay2.GameStateController;
 import javaPlay2.Imagem;
 import javaPlay2.Keyboard;
 import javaPlay2.Keys;
-import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
+import model.PokemonLiberado;
 import util.Util;
+
+
 
 /**
  *
@@ -47,6 +47,10 @@ public class CharacterSelect implements GameStateController {
     private int ySelecionado;
     private int xDraw;
     private int yDraw;
+    
+    String nome;
+    
+    ArrayList<PokemonLiberado> listaDePokemon;
 
     public CharacterSelect(String p1) {
         this.ySelecionado = 1;
@@ -84,6 +88,17 @@ public class CharacterSelect implements GameStateController {
 
     public void step(long timeElapsed) {
 
+//        for(int i = 0; i <= 7; i ++){
+//            this.listaDePokemon.
+//        }
+        
+        PokemonLiberado po = PokemonLiberadoDAO.getPokemon(4);
+ ////// PokemonLiberado po = PokemonLiberadoDAO.getPokemon(this.xSelecionado);
+        for(PokemonLiberado p : this.listaDePokemon){
+            this.nome = p.getNome();
+        }
+        
+        
         Keyboard teclado = GameEngine.getInstance().getKeyboard();
 
         if (teclado.keyDown(Keys.ESQUERDA)) {
@@ -304,6 +319,8 @@ public class CharacterSelect implements GameStateController {
         this.Pidgeotto.draw(g, 575, 175);
         this.Pidgeot.draw(g, 675, 175);
         this.Pikachu.draw(g, 75, 275);
+        
+        g.drawString(nome + "", 500, 500);
 
     }
 
@@ -312,6 +329,8 @@ public class CharacterSelect implements GameStateController {
 
     public void start() {
         this.sorteiaInimigo();
+        
+        this.listaDePokemon = PokemonLiberadoDAO.getListaPokemon(1);
 
     }
 
@@ -376,4 +395,5 @@ public class CharacterSelect implements GameStateController {
     public void iniciaJogo(){
         GameEngine.getInstance().setNextGameStateController(3);
     }
+
 }
