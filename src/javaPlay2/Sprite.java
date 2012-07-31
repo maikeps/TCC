@@ -84,11 +84,8 @@ public class Sprite {
 
         Graphics2D g2d = (Graphics2D) graphics;
         
-        g2d.drawImage(image, tx, null);
+        //g2d.drawImage(image, tx, null);
 
-        
-        
-    
         GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
 
         int xpos = canvas.getRenderScreenStartX() + x;

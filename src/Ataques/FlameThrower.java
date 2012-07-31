@@ -50,7 +50,7 @@ public class FlameThrower extends Ataque {
         try {
             //    this.spriteLeft = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Left.png", 8, 215, 65);
             this.imagem = new Imagem("resources/ataques/Flame Thrower/FlameThrower_Right.gif");
-            //this.spriteRight = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
+//            this.spriteRight = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
             //  this.spriteUp = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Up.png", 8, 65, 215);
             //this.spriteDown = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Down.png", 8, 65, 215);
             // this.vazio = new Sprite("resources/ataques/vazio.png", 1, 10, 10);

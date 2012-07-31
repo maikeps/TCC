@@ -18,7 +18,12 @@ public class TCC {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        GameEngine.getInstance().addGameStateController(1, new Fase1());
+        
+        String p1 = "ABC";
+        
+        GameEngine.getInstance().addGameStateController(1, new MainMenu());
+        GameEngine.getInstance().addGameStateController(2, new CharacterSelect(p1));
+        GameEngine.getInstance().addGameStateController(3, new Fase1());
         
         GameEngine.getInstance().setStartingGameStateController(1);
         
