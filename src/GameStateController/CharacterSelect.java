@@ -49,7 +49,7 @@ public class CharacterSelect implements GameStateController {
 
         try {
             this.Cenario = new Imagem("resources/Cenario/493pokemons2 preto.png");
-            } catch (Exception ex) {
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
@@ -141,134 +141,34 @@ public class CharacterSelect implements GameStateController {
             Util.sleep(150);
         }
 
-        if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 1 && this.ySelecionado == 1) {
-            this.player1 = "Bulbasaur";
+
+
+        if (teclado.keyDown(Keys.ESPACO)) {
+            int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
+            if (i <= this.nomes.size()) {
+                if (i < 10) {
+                    this.player1 = this.nomes.get(i);
+                } else {
+                    this.player1 = this.nomes.get(i-1);
+                }
+            
             Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
                 this.sorteiaInimigo();
+                while (this.inimigo == this.getPlayer1()) {
+                    this.sorteiaInimigo();
+                }
+                this.iniciaJogo();
             }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 2 && this.ySelecionado == 1) {
-            this.player1 = "Ivysaur";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 3 && this.ySelecionado == 1) {
-            this.player1 = "Venusaur";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 4 && this.ySelecionado == 1) {
-            this.player1 = "Charmander";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 5 && this.ySelecionado == 1) {
-            this.player1 = "Charmeleon";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 6 && this.ySelecionado == 1) {
-            this.player1 = "Charizard";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 7 && this.ySelecionado == 1) {
-            this.player1 = "Squirtle";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 1 && this.ySelecionado == 2) {
-            this.player1 = "Wartortle";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 2 && this.ySelecionado == 2) {
-            this.player1 = "Blastoise";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 3 && this.ySelecionado == 2) {
-            this.player1 = "Caterpie";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 4 && this.ySelecionado == 2) {
-            this.player1 = "Metapod";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 5 && this.ySelecionado == 2) {
-            this.player1 = "Pidgey";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 6 && this.ySelecionado == 2) {
-            this.player1 = "Pidgeotto";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 7 && this.ySelecionado == 2) {
-            this.player1 = "Pidgeot";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else if (teclado.keyDown(Keys.ESPACO) && this.xSelecionado == 1 && this.ySelecionado == 3) {
-            this.player1 = "Pikachu";
-            Util.sleep(500);
-            this.sorteiaInimigo();
-            while (this.inimigo == this.getPlayer1()) {
-                this.sorteiaInimigo();
-            }
-            this.iniciaJogo();
-        } else {
-            //nao faz nada
+
+
+
+
+
+
+
         }
-
-
-
-
     }
+    
 
     public void draw(Graphics g) {
         g.setColor(Color.black);
@@ -335,19 +235,28 @@ public class CharacterSelect implements GameStateController {
         }
 
 
-        //lista com 12 nomes, se chegar ao item 12, da erro, pois começa no zero
-        //tentar arrumar isso
         int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
-        if (i <= this.nomes.size() - 1) {
-            g.drawString(this.nomes.get(i) + "", 100, 100);
+        if (i <= this.nomes.size()) {
+            if (i < 10) {
+                g.drawString(this.nomes.get(i) + "", 100, 100);
+                //g.drawString("x+10*(y-1) = " + i, 100, 175);
+            } else {
+                g.drawString(this.nomes.get(i - 1) + "", 100, 100);
+                //g.drawString("x+10*(y-1) = " + (i - 1), 100, 175);
+            }
+
         }
 
 
 
-        g.drawString("x+10*(y-1) = " + i, 100, 175);
+
         g.drawString("x = " + this.xSelecionado, 100, 125);
         g.drawString("y = " + this.ySelecionado, 100, 150);
 
+        
+        System.out.println(this.player1);
+        
+        
     }
 
     public void unload() {
