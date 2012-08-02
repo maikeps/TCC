@@ -56,11 +56,15 @@ public class Imagem {
         
         AffineTransform tx = new AffineTransform();
 
-        tx.translate(x, y);
-        tx.rotate(Math.toRadians(-angle));
+//////        if(-angle >= 90 && -angle < 270){
+//////            tx.translate(x, y+h/2);
+//////        } else {
+//////            tx.translate(x, y-h/2);
+//////        }
+        
+        tx.translate(x, y);        
+        tx.rotate(Math.toRadians(-angle));        
 
         g2d.drawImage(image, tx, null);
-
-
     }
 }

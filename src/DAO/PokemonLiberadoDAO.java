@@ -20,14 +20,16 @@ public class PokemonLiberadoDAO {
         ArrayList<PokemonLiberado> lista = new ArrayList<PokemonLiberado>();
         
         MySQL banco = new MySQL();
-        String sql = "select * from pokemonLiberado where id = "+idJogador;
+//        String sql = "select * from pokemonLiberado where idJogador = "+idJogador;
+        String sql = "select * from pokemonLiberado "
+                + "inner join Pokemon on Pokemon.id = PokemonLiberado.idPokemon "
+                + "where idJogador = "+idJogador;
         
         ConjuntoResultados linhas = banco.executaSelect(sql);
         
         while(linhas.next()){
             PokemonLiberado p = new PokemonLiberado();
             
-            p.setId(linhas.getInt("id"));
             p.setIdJogador(linhas.getInt("idJogador"));
             p.setIdPokemon(linhas.getInt("idPokemon"));
             p.setAtk(linhas.getInt("atk"));
@@ -42,6 +44,7 @@ public class PokemonLiberadoDAO {
             p.setTotalDanoCausado(linhas.getInt("totalDanoCausado"));
             p.setVezesDerrotasParaNPC(linhas.getInt("vezesDerrotasParaNPC"));
             p.setVezesQueZerouOJogo(linhas.getInt("vezesQueZerouOJogo"));
+            p.setNome(linhas.getString("nome"));
             
             lista.add(p);
         }
@@ -60,7 +63,6 @@ public class PokemonLiberadoDAO {
         PokemonLiberado p = new PokemonLiberado();
         
         if(linhas.next()){
-            p.setId(linhas.getInt("id"));
             p.setIdJogador(linhas.getInt("idJogador"));
             p.setIdPokemon(linhas.getInt("idPokemon"));
             p.setAtk(linhas.getInt("atk"));

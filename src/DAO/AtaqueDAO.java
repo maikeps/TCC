@@ -40,4 +40,29 @@ public class AtaqueDAO {
         
     }
     
+    
+    public static Ataque getAtaque(String nome) {
+        
+        MySQL banco = new MySQL();
+        String sql = "select * from ataque where nome = \""+nome+"\"";
+        
+        System.out.println(sql);
+        
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        
+        Ataque a = new Ataque();
+        
+        if(linhas.next()){
+            a.setId(linhas.getInt("id"));
+            a.setNome(linhas.getString("nome"));
+            a.setAtk(linhas.getInt("atk"));
+            a.setElemento(linhas.getInt("elemento"));
+  
+        }
+        
+        return a;
+        
+    }
+    
+    
 }

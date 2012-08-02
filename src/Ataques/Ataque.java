@@ -4,6 +4,7 @@
  */
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;

@@ -10,7 +10,6 @@ package model;
  */
 public class PokemonLiberado {
     
-    protected int id;
     protected int idJogador;
     protected int idPokemon;
     protected int lvlQueChegou;
@@ -31,8 +30,7 @@ public class PokemonLiberado {
         
     }
     
-    public PokemonLiberado(String nome, int id, int idJogador, int idPokemon, int lvlQueChegou, int faseQueChegou, int inimigosDerrotados, int vezesQueZerouOJogo, int vezesDerrotasParaNPC, int totalDanoCausado, int atk, int def, int spd, int hp, int lvl, int exp){
-        this.id = id;
+    public PokemonLiberado(String nome, int idJogador, int idPokemon, int lvlQueChegou, int faseQueChegou, int inimigosDerrotados, int vezesQueZerouOJogo, int vezesDerrotasParaNPC, int totalDanoCausado, int atk, int def, int spd, int hp, int lvl, int exp){
         this.idJogador = idJogador;
         this.idPokemon = idPokemon;
         this.lvlQueChegou = lvlQueChegou;
@@ -88,14 +86,6 @@ public class PokemonLiberado {
 
     public void setHp(int hp) {
         this.hp = hp;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getIdJogador() {

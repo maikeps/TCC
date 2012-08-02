@@ -23,15 +23,15 @@ insert into elemento (elemento) values
 
 
 insert into ataque (nome, atk, elemento) values
-("Water Gun", 40, 5),
-("Water Pulse", 60, 5),
-("Hydro Pump", 120, 5),
+("WaterGun", 40, 5),
+("WaterPulse", 60, 5),
+("HydroPump", 120, 5),
 ("Ember", 40, 3),
-("Flame Burst", 70, 3),
+("FlameBurst", 70, 3),
 ("Inferno", 100, 3), -- talvez --
-("Leech Seed", 20, 7), -- cura 1/4 do dano tirado --
-("Razor Leaf", 55, 7),
-("Solar Beam", 120, 7);
+("LeechSeed", 20, 7), -- cura 1/4 do dano tirado --
+("RazorLeaf", 55, 7),
+("SolarBeam", 120, 7);
 
 
 insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQueEvolui, idAtaque, elementoPrimario, elementoSecundario) values
@@ -43,7 +43,11 @@ insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQ
 (6, "Charizard", 0, 84, 78, 100, 78, null, 6, 3, 15),
 (7, "Squirtle", 0, 48, 65, 43, 44, 16, 1, 5, 1),
 (8, "Wartortle", 0, 63, 80, 58, 59, 32, 2, 5, 1),
-(9, "Blastoise", 0, 83, 100, 78, 79, null, 3, 5, 1);
+(9, "Blastoise", 0, 83, 100, 78, 79, null, 3, 5, 1),
+-- arrumar algumas coisas como idAtaque e elemento --
+(10, "Caterpie", 90, 30, 35, 45, 45, 7, 1, 1, 1),
+(11, "Metapod", 85, 20, 55, 30, 50, 10, 1, 1, 1),
+(12, "Butterfree", 70, 45, 50, 70, 60, null, 1, 1, 1);
 
 
 

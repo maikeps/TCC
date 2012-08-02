@@ -5,7 +5,7 @@ select * from pokemonLiberado pl inner join Pokemon p on p.id = pl.idPokemon whe
 melhor:
 
 select pl.idPokemon as Numero, p.Nome, a.Nome as Ataque, e.Elemento as ElementoPrimario, 
-e.Elemento as ElementoSecundario from pokemonLiberado pl 
+e2.Elemento as ElementoSecundario from pokemonLiberado pl 
 inner join Pokemon p on p.id = pl.idPokemon 
 inner join Ataque a on p.idAtaque = a.id
 inner join Elemento e on p.elementoPrimario = e.id

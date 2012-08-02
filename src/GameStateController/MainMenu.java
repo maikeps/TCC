@@ -25,7 +25,7 @@ public class MainMenu implements GameStateController{
     private Imagem imagem;
     
     public void load() {
-        AudioPlayer.play("resources/sounds/Pokemon Opening.wav");
+       // AudioPlayer.play("resources/sounds/Pokemon Opening.wav");
         
         try {
             this.imagem = new Imagem("resources/Title.png");

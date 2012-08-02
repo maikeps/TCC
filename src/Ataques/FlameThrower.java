@@ -7,7 +7,6 @@ package Ataques;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import javaPlay2.Imagem;
 import javaPlay2.Sprite;
 import javax.swing.JOptionPane;
 
@@ -19,12 +18,7 @@ public class FlameThrower extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite spriteLeft;
-    Sprite spriteRight;
-    Sprite spriteUp;
-    Sprite spriteDown;
-    Sprite spriteAtual;
-    Sprite vazio;
+    Sprite sprite;
     double angulo;
     int destX;
     int destY;
@@ -48,13 +42,7 @@ public class FlameThrower extends Ataque {
         int frame = 0;
 
         try {
-            //    this.spriteLeft = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Left.png", 8, 215, 65);
-            this.imagem = new Imagem("resources/ataques/Flame Thrower/FlameThrower_Right.gif");
-//            this.spriteRight = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
-            //  this.spriteUp = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Up.png", 8, 65, 215);
-            //this.spriteDown = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Down.png", 8, 65, 215);
-            // this.vazio = new Sprite("resources/ataques/vazio.png", 1, 10, 10);
-            this.spriteAtual = this.spriteRight;
+            this.sprite = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -69,46 +57,31 @@ public class FlameThrower extends Ataque {
             return;
         }
 
-        this.spriteAtual = this.spriteRight;
-
         this.frameElapsed++;
-//
-//        switch (this.direcao) {
-//            case DIREITA:
-//                this.spriteAtual = this.spriteRight;
-//                break;
-//            case ESQUERDA:
-//                this.spriteAtual = this.spriteLeft;
-//                break;
-//            case CIMA:
-//                this.spriteAtual = this.spriteUp;
-//                break;
-//            case BAIXO:
-//                this.spriteAtual = this.spriteDown;
-//                break;
-//        }
 
-////////        if (this.frameElapsed > 5) {
-////////            this.frame++;
-////////            this.spriteAtual.setCurrAnimFrame(this.frame);
-////////            this.frameElapsed -= 5;
-////////
-////////        }
+        if (this.frameElapsed > 5) {
+            this.frame++;
+            this.sprite.setCurrAnimFrame(this.frame);
+            this.frameElapsed -= 5;
 
-
-
+        }
     }
 
     @Override
     public void draw(Graphics g) {
-        this.imagem.drawRotated(g, this.x, this.y, this.angulo);
-////////        this.spriteAtual.drawRotated(g, this.x, this.y, this.angulo);
-////////        this.spriteAtual.draw(g, this.x, this.y);
+       // this.imagem.drawRotated(g, this.x, this.y, this.angulo);
+        this.sprite.drawRotated(g, this.x, this.y, this.angulo);
+        
+       //this.spriteAtual.draw(g, this.x, this.y);
     }
 
     @Override
     public Rectangle getRetangulo() {
-        return new Rectangle(this.x, this.y, 215, 65);
+        Rectangle r = new Rectangle(this.x, this.y, 215, 65);
+        
+        
+        
+        return r;
     }
 
     @Override

@@ -7,3 +7,13 @@ L = lvl do pokemon derrotado
 calcular exp necessario para upar:
 4n³/4   (4n ao cubo / 5)
 n = proximo level
+
+
+
+ver se vai ou nao aparecer um bixo:
+(raridade/2)/100
+
+quanto menor a raridade, mais dificil é de aparecer
+
+se raridade for igual a 10, terá 5% de chance de aparecer em cada tile
+se for igual a 90, tera 45% de chance de aparecer

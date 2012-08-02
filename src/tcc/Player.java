@@ -8,7 +8,8 @@ import javaPlay2.GameEngine;
 import javaPlay2.Keyboard;
 import javaPlay2.Mouse;
 
-
+//fazer o DAO de acordo com o personagem recebido como parametro
+//stats entao so pegar do DAO
 
 public class Player extends ObjetoComMovimento {
 

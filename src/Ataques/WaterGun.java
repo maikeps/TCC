@@ -1,6 +1,8 @@
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -46,6 +48,22 @@ public class WaterGun extends Ataque {
 
 
 
+        
+        
+
+        String clsname = this.getClass().getName();
+        System.out.println("Full class name =" + clsname);
+        int mid = clsname.lastIndexOf('.') + 1;
+        String finalClsName = clsname.substring(mid);
+        System.out.println(finalClsName);
+
+
+        model.Ataque a = AtaqueDAO.getAtaque(finalClsName);
+        this.setDano(a.getAtk());
+
+        
+        
+        
     }
 
     public void step(long timeElapsed) {
@@ -66,6 +84,7 @@ public class WaterGun extends Ataque {
 
         this.imagem.drawRotated(g, this.x, this.y, angulo);
 
+        
     }
 
     @Override

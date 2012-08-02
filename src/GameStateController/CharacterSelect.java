@@ -4,6 +4,7 @@
  */
 package GameStateController;
 
+import DAO.PokemonDAO;
 import DAO.PokemonLiberadoDAO;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,10 +15,9 @@ import javaPlay2.Imagem;
 import javaPlay2.Keyboard;
 import javaPlay2.Keys;
 import javax.swing.JOptionPane;
+import model.Pokemon;
 import model.PokemonLiberado;
 import util.Util;
-
-
 
 /**
  *
@@ -47,15 +47,16 @@ public class CharacterSelect implements GameStateController {
     private int ySelecionado;
     private int xDraw;
     private int yDraw;
-    
-    String nome;
-    
-    ArrayList<PokemonLiberado> listaDePokemon;
+    int id;
+    ArrayList<PokemonLiberado> listaDePokemonLiberado;
+    ArrayList<Pokemon> listaDePokemon;
+    ArrayList<String> nomes;
+    Imagem pokemonImage;
 
     public CharacterSelect(String p1) {
         this.ySelecionado = 1;
         this.player1 = p1;
-        this.xDraw = -25;
+        this.xDraw = 75;
         this.yDraw = 75;
     }
 
@@ -80,7 +81,7 @@ public class CharacterSelect implements GameStateController {
             this.Caterpie = new Imagem("resources/personagens/Caterpie/Caterpie_Down.gif");
             this.Metapod = new Imagem("resources/personagens/Metapod/Metapod_Down.gif");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 
@@ -91,25 +92,33 @@ public class CharacterSelect implements GameStateController {
 //        for(int i = 0; i <= 7; i ++){
 //            this.listaDePokemon.
 //        }
-        
-        PokemonLiberado po = PokemonLiberadoDAO.getPokemon(4);
- ////// PokemonLiberado po = PokemonLiberadoDAO.getPokemon(this.xSelecionado);
-        for(PokemonLiberado p : this.listaDePokemon){
-            this.nome = p.getNome();
-        }
-        
-        
+
+
+// //// PokemonLiberado po = PokemonLiberadoDAO.getPokemon(this.xSelecionado);
+//////////////        for(PokemonLiberado p : this.listaDePokemon){
+//////////////            int id = p.getIdPokemon();
+//////////////            
+//////////////            PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(id);
+//////////////            this.nome = pl.getNome();
+//////////////            System.out.println(this.nome);
+//////////////            
+//////////////        }
+
+
+
+
+
         Keyboard teclado = GameEngine.getInstance().getKeyboard();
 
         if (teclado.keyDown(Keys.ESQUERDA)) {
-            if (this.xSelecionado > 1) {
+            if (this.xSelecionado > 0) {
                 this.xSelecionado -= 1;
-            } else if (this.xSelecionado <= 1) {
-                this.xSelecionado = 7;
+            } else if (this.xSelecionado <= 0) {
+                this.xSelecionado = 8;
             }
 
             if (this.xDraw > 75) {
-                this.xDraw -= 100;
+                this.xDraw -= 75;
             } else {
                 this.xDraw = 675;
             }
@@ -117,14 +126,14 @@ public class CharacterSelect implements GameStateController {
             Util.sleep(150);
         }
         if (teclado.keyDown(Keys.DIREITA)) {
-            if (this.xSelecionado < 7) {
+            if (this.xSelecionado < 8) {
                 this.xSelecionado += 1;
-            } else if (this.xSelecionado >= 1) {
-                this.xSelecionado = 1;
+            } else if (this.xSelecionado >= 0) {
+                this.xSelecionado = 0;
             }
 
             if (this.xDraw < 675) {
-                this.xDraw += 100;
+                this.xDraw += 75;
             } else {
                 this.xDraw = 75;
             }
@@ -140,7 +149,7 @@ public class CharacterSelect implements GameStateController {
             }
 
             if (this.yDraw > 75) {
-                this.yDraw -= 100;
+                this.yDraw -= 75;
             } else {
                 this.yDraw = 275;
             }
@@ -155,7 +164,7 @@ public class CharacterSelect implements GameStateController {
             }
 
             if (this.yDraw < 275) {
-                this.yDraw += 100;
+                this.yDraw += 75;
             } else {
                 this.yDraw = 75;
             }
@@ -300,27 +309,75 @@ public class CharacterSelect implements GameStateController {
         g.setColor(Color.white);
         g.drawString(" P1, escolha o personagem", 325, 420);
 
-        if (this.xDraw >= 50) {
-            g.drawRect(this.xDraw - 8, this.yDraw - 8, 80, 80);
+        // if (this.xDraw >= 50) {
+        g.drawRect(this.xDraw - 8, this.yDraw - 8, 80, 80);
+        // }
+
+        int x1 = 0;
+        int x2 = 0;
+        int cont1 = 0;
+        int cont2 = 1;
+        int y1 = 0;
+        int y2 = 0;
+
+        for (Pokemon p : this.listaDePokemon) {
+            cont1++;
+            if (cont1 > 9) {
+                cont1 = 0;
+                x1 = 0;
+                y1 += 75;
+            }
+
+            String nome = p.getNome();
+
+
+            try {
+                this.pokemonImage = new Imagem("resources/personagens/" + nome + "/" + nome + "_Selected.gif");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
+                System.exit(1);
+            }
+
+            this.pokemonImage.draw(g, 75 + x1, 75 + y1);
+            x1 += 75;
+
         }
 
-        this.Bulbasaur.draw(g, 75, 75);
-        this.Ivysaur.draw(g, 175, 75);
-        this.Venusaur.draw(g, 275, 75);
-        this.Charmander.draw(g, 375, 75);
-        this.Charmeleon.draw(g, 475, 75);
-        this.Charizard.draw(g, 575, 75);
-        this.Squirtle.draw(g, 675, 75);
-        this.Wartortle.draw(g, 75, 175);
-        this.Blastoise.draw(g, 175, 175);
-        this.Caterpie.draw(g, 275, 175);
-        this.Metapod.draw(g, 375, 175);
-        this.Pidgey.draw(g, 475, 175);
-        this.Pidgeotto.draw(g, 575, 175);
-        this.Pidgeot.draw(g, 675, 175);
-        this.Pikachu.draw(g, 75, 275);
-        
-        g.drawString(nome + "", 500, 500);
+        for (PokemonLiberado pl : this.listaDePokemonLiberado) {
+
+            int i = this.listaDePokemonLiberado.size();
+            if (pl.getIdPokemon() > 9 * cont2) {
+                cont2++;
+                x2 = 0;
+                y2 += 75;
+            }
+
+            String nome = pl.getNome();
+
+            try {
+                this.pokemonImage = new Imagem("resources/personagens/" + nome + "/" + nome + "_Down.gif");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
+                System.exit(1);
+            }
+
+            this.pokemonImage.draw(g, 75 + x2 * (pl.getIdPokemon() - 1), 75 + y2);
+            x2 += 75;
+        }
+
+
+        //lista com 12 nomes, se chegar ao item 12, da erro, pois começa no zero
+        //tentar arrumar isso
+        int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
+        if (i <= this.nomes.size() - 1) {
+            g.drawString(this.nomes.get(i) + "", 100, 100);
+        }
+
+
+
+        g.drawString("x+10*(y-1) = " + i, 100, 175);
+        g.drawString("x = " + this.xSelecionado, 100, 125);
+        g.drawString("y = " + this.ySelecionado, 100, 150);
 
     }
 
@@ -329,8 +386,23 @@ public class CharacterSelect implements GameStateController {
 
     public void start() {
         this.sorteiaInimigo();
-        
-        this.listaDePokemon = PokemonLiberadoDAO.getListaPokemon(1);
+
+        this.listaDePokemon = PokemonDAO.getLista();
+        this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
+
+        this.nomes = new ArrayList<String>();
+
+        for (Pokemon p : this.listaDePokemon) {
+            this.nomes.add(p.getNome());
+        }
+//////////////        for (PokemonLiberado p : this.listaDePokemonLiberado) {
+//////////////            this.id = p.getIdPokemon();
+//////////////
+//////////////            PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(id);
+//////////////            this.nomes.add(pl.getNome());            
+//////////////            
+//////////////        }
+
 
     }
 
@@ -391,9 +463,8 @@ public class CharacterSelect implements GameStateController {
                 break;
         }
     }
-    
-    public void iniciaJogo(){
+
+    public void iniciaJogo() {
         GameEngine.getInstance().setNextGameStateController(3);
     }
-
 }

@@ -77,24 +77,27 @@ public class Sprite {
      */
     public void drawRotated(Graphics graphics, int x, int y, double angle) {
 
-        AffineTransform tx = new AffineTransform();
+       // AffineTransform tx = new AffineTransform();
 
-        tx.translate(x, y);
-        tx.rotate(Math.toRadians(-angle));
+       // tx.translate(x, y);
+       // tx.rotate(Math.toRadians(-angle));
 
         Graphics2D g2d = (Graphics2D) graphics;
         
-        //g2d.drawImage(image, tx, null);
+       // g2d.drawImage(image, tx, null);
 
+        
+        //codigo original do draw
+        
         GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
 
         int xpos = canvas.getRenderScreenStartX() + x;
         int ypos = canvas.getRenderScreenStartY() + y;
 
-        
+        g2d.rotate( Math.toRadians(-angle), xpos, ypos );
         g2d.drawImage(image, xpos, ypos, xpos + animFrameWidth, ypos + animFrameHeight,
                 currAnimFrame * animFrameWidth, 0, (currAnimFrame + 1) * animFrameWidth, animFrameHeight, null);
-
+        g2d.rotate( -Math.toRadians(-angle), xpos, ypos );
 
 
     }

@@ -1,6 +1,8 @@
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -8,19 +10,15 @@ import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
 
-
 public class Bubbles extends Ataque {
 
     double angulo;
     int destX;
     int destY;
-    
-    
-     double deltaX, deltaY, dx, dy;
-
+    double deltaX, deltaY, dx, dy;
 
     public Bubbles(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
-        
+
         this.setDano(5);
         this.desativado = false;
         this.xInicial = x;
@@ -35,20 +33,19 @@ public class Bubbles extends Ataque {
 
         try {
             this.imagem = new Imagem("resources/ataques/Bubbles/Bubble.png");
-            
-          //  this.spriteAtual = spriteVazio;
+
+            //  this.spriteAtual = spriteVazio;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
         }
-        
-        deltaX = Math.abs(this.x-this.destX);
-        deltaY = Math.abs(this.y-this.destY);
 
-        this.dx=Math.cos(Math.toRadians(angulo))*velocidade;
-        this.dy=-Math.sin(Math.toRadians(angulo))*velocidade;
- 
-        
+        deltaX = Math.abs(this.x - this.destX);
+        deltaY = Math.abs(this.y - this.destY);
+
+        this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
+        this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
+
 
     }
 
@@ -57,9 +54,9 @@ public class Bubbles extends Ataque {
             return;
         }
         this.x += this.dx;
-    	this.y += this.dy;
-        
-        
+        this.y += this.dy;
+
+
     }
 
     @Override
@@ -70,6 +67,7 @@ public class Bubbles extends Ataque {
 
         this.imagem.drawRotated(g, this.x, this.y, angulo);
 
+        
     }
 
     @Override
@@ -92,7 +90,6 @@ public class Bubbles extends Ataque {
         }
     }
 
-    
     public void ajustaAtaque() {
         switch (this.direcao) {
             case DIREITA:
