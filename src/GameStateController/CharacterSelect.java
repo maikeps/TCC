@@ -26,21 +26,6 @@ import util.Util;
 public class CharacterSelect implements GameStateController {
 
     private Imagem Cenario;
-    private Imagem Charmander;
-    private Imagem Charmeleon;
-    private Imagem Charizard;
-    private Imagem Bulbasaur;
-    private Imagem Ivysaur;
-    private Imagem Venusaur;
-    private Imagem Pidgey;
-    private Imagem Pidgeotto;
-    private Imagem Pidgeot;
-    private Imagem Squirtle;
-    private Imagem Pikachu;
-    private Imagem Wartortle;
-    private Imagem Blastoise;
-    private Imagem Caterpie;
-    private Imagem Metapod;
     private String player1;
     private String inimigo;
     private int xSelecionado;
@@ -64,23 +49,7 @@ public class CharacterSelect implements GameStateController {
 
         try {
             this.Cenario = new Imagem("resources/Cenario/493pokemons2 preto.png");
-
-            this.Charmander = new Imagem("resources/personagens/Charmander/Charmander_Down.gif");
-            this.Charmeleon = new Imagem("resources/personagens/Charmeleon/Charmeleon_Down.gif");
-            this.Charizard = new Imagem("resources/personagens/Charizard/Charizard_Down.gif");
-            this.Bulbasaur = new Imagem("resources/personagens/Bulbasaur/Bulbasaur_Down.gif");
-            this.Ivysaur = new Imagem("resources/personagens/Ivysaur/Ivysaur_Down.gif");
-            this.Venusaur = new Imagem("resources/personagens/Venusaur/Venusaur_Down.gif");
-            this.Pidgey = new Imagem("resources/personagens/Pidgey/Pidgey_Down.gif");
-            this.Pidgeotto = new Imagem("resources/personagens/Pidgeotto/Pidgeotto_Down.gif");
-            this.Pidgeot = new Imagem("resources/personagens/Pidgeot/Pidgeot_Down.gif");
-            this.Squirtle = new Imagem("resources/personagens/Squirtle/Squirtle_Down.gif");
-            this.Pikachu = new Imagem("resources/personagens/Pikachu/Pikachu_Down.gif");
-            this.Wartortle = new Imagem("resources/personagens/Wartortle/Wartortle_Down.gif");
-            this.Blastoise = new Imagem("resources/personagens/Blastoise/Blastoise_Down.gif");
-            this.Caterpie = new Imagem("resources/personagens/Caterpie/Caterpie_Down.gif");
-            this.Metapod = new Imagem("resources/personagens/Metapod/Metapod_Down.gif");
-        } catch (Exception ex) {
+            } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
