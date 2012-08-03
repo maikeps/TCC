@@ -43,10 +43,10 @@ public abstract class Personagem extends ObjetoComMovimento {
 //        this.hp = 200;
   //      this.hpAtual = 200;
         try {
-            this.spriteRight = new Imagem("resources/personagens/Blastoise/Blastoise_Right.gif");
-            this.spriteLeft = new Imagem("resources/personagens/Blastoise/Blastoise_Left.gif");
-            this.spriteDown = new Imagem("resources/personagens/Blastoise/Blastoise_Down.gif");
-            this.spriteUp = new Imagem("resources/personagens/Blastoise/Blastoise_Up.gif");
+//            this.spriteRight = new Imagem("resources/personagens/Blastoise/Blastoise_Right.gif");
+//            this.spriteLeft = new Imagem("resources/personagens/Blastoise/Blastoise_Left.gif");
+//            this.spriteDown = new Imagem("resources/personagens/Blastoise/Blastoise_Down.gif");
+//            this.spriteUp = new Imagem("resources/personagens/Blastoise/Blastoise_Up.gif");
             this.spriteAtual = this.spriteDown;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
@@ -58,47 +58,47 @@ public abstract class Personagem extends ObjetoComMovimento {
 
     public void step(long timeElapsed) {
         
-        this.cooldownAtual --;
-
-        if (this.tocaParedeEsquerda()) {
-            this.x = 5;
-            this.velocidade = this.velocidadeInicial;
-        }
-        if (this.tocaParedeDireita()) {
-            this.x = 795 - this.spriteAtual.pegaLargura();
-            this.velocidade = this.velocidadeInicial;
-        }
-        if (this.tocaParedeCima()) {
-            this.y = 194;
-            this.velocidade = this.velocidadeInicial;
-        }
-        if (this.tocaParedeBaixo()) {
-            this.y = 694 - this.spriteAtual.pegaAltura();
-            this.velocidade = this.velocidadeInicial;
-        }
+//        this.cooldownAtual --;
+//
+//        if (this.tocaParedeEsquerda()) {
+//            this.x = 5;
+//            this.velocidade = this.velocidadeInicial;
+//        }
+//        if (this.tocaParedeDireita()) {
+//            this.x = 795 - this.spriteAtual.pegaLargura();
+//            this.velocidade = this.velocidadeInicial;
+//        }
+//        if (this.tocaParedeCima()) {
+//            this.y = 194;
+//            this.velocidade = this.velocidadeInicial;
+//        }
+//        if (this.tocaParedeBaixo()) {
+//            this.y = 694 - this.spriteAtual.pegaAltura();
+//            this.velocidade = this.velocidadeInicial;
+//        }
 
 
     }
 
     public void draw(Graphics g) {
-        this.spriteAtual.draw(g, this.x, this.y);
+        //this.spriteAtual.draw(g, this.x, this.y);
     }
 
-    public boolean tocaParedeEsquerda() {
-        return (this.x <= 4);
-    }
-
-    public boolean tocaParedeDireita() {
-        return (this.x >= 796 - this.spriteAtual.pegaLargura());
-    }
-
-    public boolean tocaParedeBaixo() {
-        return (this.y > 695 - this.spriteAtual.pegaAltura());
-    }
-
-    public boolean tocaParedeCima() {
-        return (this.y < 190);
-    }
+//    public boolean tocaParedeEsquerda() {
+//        return (this.x <= 4);
+//    }
+//
+//    public boolean tocaParedeDireita() {
+//        return (this.x >= 796 - this.spriteAtual.pegaLargura());
+//    }
+//
+//    public boolean tocaParedeBaixo() {
+//        return (this.y > 695 - this.spriteAtual.pegaAltura());
+//    }
+//
+//    public boolean tocaParedeCima() {
+//        return (this.y < 190);
+//    }
 
     //retorna o retangulo invisivel ocupado pelo personagem
     public Rectangle getRetangulo() {
@@ -173,9 +173,9 @@ public abstract class Personagem extends ObjetoComMovimento {
     }
     
     //para saber se jogador tocou uma das bordas do cenario
-    public boolean tocaParede(){
-        return(this.tocaParedeBaixo() || this.tocaParedeCima() || this.tocaParedeDireita() || this.tocaParedeEsquerda());
-    }
+//    public boolean tocaParede(){
+//        return(this.tocaParedeBaixo() || this.tocaParedeCima() || this.tocaParedeDireita() || this.tocaParedeEsquerda());
+//    }
 
     public String getNome() {
         return nome;

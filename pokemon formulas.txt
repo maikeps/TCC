@@ -1,19 +1,31 @@
-exp obtido apos batalha:
+-exp obtido apos batalha:
 (e*L)/7
 
 e = exp base do pokemon derrotado
 L = lvl do pokemon derrotado
 
-calcular exp necessario para upar:
+
+
+-calcular exp necessario para upar:
 4n³/4   (4n ao cubo / 5)
 n = proximo level
 
 
 
-ver se vai ou nao aparecer um bixo:
+-ver se vai ou nao aparecer um bixo:
 (raridade/2)/100
 
 quanto menor a raridade, mais dificil é de aparecer
 
 se raridade for igual a 10, terá 5% de chance de aparecer em cada tile
 se for igual a 90, tera 45% de chance de aparecer
+
+
+
+-calcular hp de acordo com o level:
+((base + 1/8 + 50) * lvl)/50 + 10
+
+
+
+-calcular outros stats de acordo com o level:
+((base + 1/8 + 50) * lvl)/50 + 5

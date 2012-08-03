@@ -77,7 +77,7 @@ public class Inimigo extends ObjetoComMovimento {
             //
         }
 
-        this.setCampoDeVisao();
+    //    this.setCampoDeVisao();
 
         personagem.step(timeElapsed);
 
@@ -113,7 +113,7 @@ public class Inimigo extends ObjetoComMovimento {
     }
 
     public void draw(Graphics g) {
-        personagem.draw(g);
+        this.personagem.draw(g);
     }
 
     public Direcao getDirecao() {
@@ -301,24 +301,24 @@ public class Inimigo extends ObjetoComMovimento {
 //        return()
 //    }
 
-    public void setCampoDeVisao() {
-        switch (this.personagem.direcao) {
-            case CIMA:
-                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY() - 800, this.personagem.spriteAtual.pegaLargura(), 800);
-                break;
-            case BAIXO:
-                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);
-                break;
-            case ESQUERDA:
-                this.campoDeVisao = new Rectangle(this.personagem.getX() - 800, this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
-                break;
-            case DIREITA:
-                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
-                break;
-
-
-        }
-    }
+//    public void setCampoDeVisao() {
+//        switch (this.personagem.direcao) {
+//            case CIMA:
+//                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY() - 800, this.personagem.spriteAtual.pegaLargura(), 800);
+//                break;
+//            case BAIXO:
+//                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);
+//                break;
+//            case ESQUERDA:
+//                this.campoDeVisao = new Rectangle(this.personagem.getX() - 800, this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
+//                break;
+//            case DIREITA:
+//                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
+//                break;
+//
+//
+//        }
+//    }
 
     public Rectangle getCampoDeVisao() {
         return this.campoDeVisao;

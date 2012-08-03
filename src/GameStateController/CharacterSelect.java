@@ -142,8 +142,16 @@ public class CharacterSelect implements GameStateController {
         }
 
 
+        int n = this.xSelecionado + 10 * (this.ySelecionado - 1);
+        if(n >= 10){
+            n -= 1;
+        }
+        
+        Pokemon p = this.listaDePokemon.get(n);
+        String nome = p.getNome();
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
 
-        if (teclado.keyDown(Keys.ESPACO)) {
+        if (teclado.keyDown(Keys.ESPACO) && pl.getNome() != null) {
             int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
             if (i <= this.nomes.size()) {
                 if (i < 10) {
@@ -154,16 +162,11 @@ public class CharacterSelect implements GameStateController {
             
             Util.sleep(500);
                 this.sorteiaInimigo();
-                while (this.inimigo == this.getPlayer1()) {
+                while (this.inimigo.equals(this.getPlayer1())) {
                     this.sorteiaInimigo();
                 }
                 this.iniciaJogo();
             }
-
-
-
-
-
 
 
         }
@@ -304,42 +307,19 @@ public class CharacterSelect implements GameStateController {
     }
 
     public void sorteiaInimigo() {
-        int n = Util.random(11);
-        switch (n) {
-            case 1:
-                this.inimigo = "Charizard";
-                break;
-            case 2:
-                this.inimigo = "Bulbasaur";
-                break;
-            case 3:
-                this.inimigo = "Pidgeotto";
-                break;
-            case 4:
-                this.inimigo = "Squirtle";
-                break;
-            case 5:
-                this.inimigo = "Pikachu";
-                break;
-            case 6:
-                this.inimigo = "Charmander";
-                break;
-            case 7:
-                this.inimigo = "Charmeleon";
-                break;
-            case 8:
-                this.inimigo = "Ivysaur";
-                break;
-            case 9:
-                this.inimigo = "Venusaur";
-                break;
-            case 10:
-                this.inimigo = "Pidgey";
-                break;
-            case 11:
-                this.inimigo = "Pidgeot";
-                break;
+        this.nomes = new ArrayList<String>();
+        this.listaDePokemon = PokemonDAO.getLista();
+        this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
+        for (Pokemon p : this.listaDePokemon) {
+            this.nomes.add(p.getNome());
         }
+        int n = Util.random(this.nomes.size() + 1);
+        while(n >= this.nomes.size()){
+            n = Util.random(this.nomes.size() + 1);
+        }
+        //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
+        this.inimigo = this.nomes.get(n);
+        
     }
 
     public void iniciaJogo() {

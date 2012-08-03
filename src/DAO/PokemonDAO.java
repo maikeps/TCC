@@ -72,4 +72,32 @@ public class PokemonDAO {
         
         return lista;
     }
+    
+    public static Pokemon getPokemonPeloNome(String nome) {
+        
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemon where nome = \""+nome+"\"";
+        
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        
+        Pokemon p = new Pokemon();
+        if(linhas.next()){
+            
+            
+            p.setId(linhas.getInt("id"));
+            p.setNome(linhas.getString("nome"));
+            p.setRaridade(linhas.getInt("raridade"));
+            p.setLevelQueEvolui(linhas.getInt("lvlQueEvolui"));
+            p.setAtkbase(linhas.getInt("atkBase"));
+            p.setDefBase(linhas.getInt("defBase"));
+            p.setSpdbase(linhas.getInt("spdBase"));
+            p.setHpBase(linhas.getInt("hpBase"));
+            p.setElementoPrimario(linhas.getInt("elementoPrimario"));
+            p.setElementoSecundario(linhas.getInt("elementoSecundario"));
+            
+        }
+        
+        return p;
+        
+    }
 }

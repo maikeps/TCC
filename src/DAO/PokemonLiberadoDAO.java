@@ -82,4 +82,36 @@ public class PokemonLiberadoDAO {
         
         return p;
     }
+    
+    public static PokemonLiberado getPokemonPeloNome(String nome){
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemonLiberado "
+                + "inner join Pokemon on Pokemon.id = PokemonLiberado.idPokemon "
+                + "where Pokemon.nome = \""+nome+"\"";
+        
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        PokemonLiberado p = new PokemonLiberado();
+        
+        if(linhas.next()){
+            p.setIdJogador(linhas.getInt("idJogador"));
+            p.setIdPokemon(linhas.getInt("idPokemon"));
+            p.setAtk(linhas.getInt("atk"));
+            p.setDef(linhas.getInt("def"));
+            p.setExp(linhas.getInt("exp"));
+            p.setFaseQueChegou(linhas.getInt("faseQueChegou"));
+            p.setHp(linhas.getInt("hp"));
+            p.setInimigosDerrotados(linhas.getInt("inimigosDerrotados"));
+            p.setLvl(linhas.getInt("lvl"));
+            p.setLvlQueChegou(linhas.getInt("lvlQueChegou"));
+            p.setSpd(linhas.getInt("spd"));
+            p.setTotalDanoCausado(linhas.getInt("totalDanoCausado"));
+            p.setVezesDerrotasParaNPC(linhas.getInt("vezesDerrotasParaNPC"));
+            p.setVezesQueZerouOJogo(linhas.getInt("vezesQueZerouOJogo"));
+            p.setNome(linhas.getString("Pokemon.nome"));
+        }
+        
+        return p;
+    }
+    
+    
 }
