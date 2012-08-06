@@ -111,10 +111,8 @@ public class Fase1 implements GameStateController {
     
     
     public void criaPlayer1(){
-
         
         PokemonLiberado pokemon = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
-        
         
         String nome = pokemon.getNome();
         int id = pokemon.getIdPokemon();
@@ -122,6 +120,16 @@ public class Fase1 implements GameStateController {
         int def = pokemon.getDef();
         int spd = pokemon.getSpd();
         int hp = pokemon.getHp();
+        int lvl = pokemon.getLvl();
+        
+        
+        //fazer update na tabela PokemonLiberado com os stats novos
+        
+        
+        hp += (((hp + 1/8 + 50) * lvl)/50 + 10);
+        atk += ((atk + 1/8 + 50) * lvl)/50 + 5;
+        def += ((def + 1/8 + 50) * lvl)/50 + 5;
+        spd += ((spd + 1/8 + 50) * lvl)/50 + 5;
         
         this.p = new PersonagemTeste(id, nome, atk, def, spd, hp);
         
@@ -141,44 +149,25 @@ public class Fase1 implements GameStateController {
         int spd = pokemon.getSpdbase();
         int hp = pokemon.getHpBase();
         
-      //  PokemonInimigoInsert pokeInsert = new PokemonInimigoInsert(def, nome, atk, def, spd, hp, 5);
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
+        int lvl = pl.getLvl();
+        
+        hp += (((hp + 1/8 + 50) * lvl)/50 + 10);
+        atk += ((atk + 1/8 + 50) * lvl)/50 + 5;
+        def += ((def + 1/8 + 50) * lvl)/50 + 5;
+        spd += ((spd + 1/8 + 50) * lvl)/50 + 5;
         
         String sql = "insert into pokemonInimigo "
                 + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
                 + "(\""+id+"\", \"minion\", \""+atk+"\", "
-                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+50+"\")";
+                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+lvl+"\")";
         
         MySQL bd = new MySQL();
         boolean bool = bd.executaInsert(sql);
         
-        
-        ArrayList<PokemonInimigo> listaPokeInimigo = PokemonInimigoDAO.getListaPokemonInimigo();
-        
-        int i = listaPokeInimigo.size()+1;
-        
-        PokemonInimigo pokeInimigo = PokemonInimigoDAO.getPokemonInimigo(i);
-        
-        hp += ((hp + 1/8 + 50) * pokeInimigo.getLvl())/50 + 10;
-        atk += ((atk + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
-        def += ((def + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
-        spd += ((spd + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
-        
-        
-        String sql2 = "update pokemonInimigo set "
-                + "atk = "+atk+", def = "+def+", spd = "+spd+", hp = "+hp+" "
-                + "where id = "+(i-1);
-        
-        bool = bd.executaUpdate(sql2);
-        
-
         this.p2 = new PersonagemTeste(id, nome, atk, def, spd, hp);
         
         this.inimigo = new Inimigo(this.p2, this.player);
-        
-        System.out.println("atk: "+atk);
-        System.out.println("def: "+def);
-        System.out.println("spd: "+spd);
-        System.out.println("hp: "+hp);
-        System.out.println("hp: "+i);
+
     }
 }

@@ -220,8 +220,6 @@ public class Inimigo extends ObjetoComMovimento {
             quadranteDoPlayer = 8;
         }
         
-        System.out.println(quadranteDoPlayer + " angulo:" + this.angulo);
-
 
 
         switch (quadranteDoPlayer) {

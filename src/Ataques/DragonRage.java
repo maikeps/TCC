@@ -18,7 +18,7 @@ public class DragonRage extends Ataque {
     int destY;
     
     
-     double deltaX, deltaY, dx, dy;
+    double deltaX, deltaY, dx, dy;
 
 
 
