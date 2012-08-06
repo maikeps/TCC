@@ -1,6 +1,6 @@
 package tcc;
 
-import Personagens.Personagem;
+import Personagens.PersonagemTeste;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -13,7 +13,7 @@ import javaPlay2.Mouse;
 
 public class Player extends ObjetoComMovimento {
 
-    public Personagem personagem; //personagem escolhido pelo player
+    public PersonagemTeste personagem; //personagem escolhido pelo player
     
 //    public int vida;
 //    protected int velocidade = 1;
@@ -33,7 +33,7 @@ public class Player extends ObjetoComMovimento {
     public Rectangle campoDeVisao;
     
     
-    public Player(Personagem personagem) {
+    public Player(PersonagemTeste personagem) {
 
         this.destX = 0;
         this.destY = 0;
@@ -118,11 +118,11 @@ public class Player extends ObjetoComMovimento {
         return this.personagem.getDirecao();
     }
 
-    public Personagem getPersonagem() {
+    public PersonagemTeste getPersonagem() {
         return this.personagem;
     }
 
-    public void setPersonagem(Personagem p) {
+    public void setPersonagem(PersonagemTeste p) {
         this.personagem = p;
     }
 

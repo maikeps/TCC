@@ -12,4 +12,18 @@ inner join Elemento e on p.elementoPrimario = e.id
 inner join Elemento e2 on p.elementoSecundario = e2.id
 where pl.idPokemon = 4
 
-errado por que o elementoSecundario aparece como primario
+
+
+SELECT pi.id, pi.idPokemon, p.nome, pi.atk, pi.def, pi.spd, pi.hp, pi.lvl FROM pokemonInimigo pi 
+inner join pokemon p on p.id = pi.idPokemon
+order by pi.id;
+
+
+
+
+select p.id, p.nome, a.nome as ataque, e.elemento as elementoPrimario, e2.elemento as elementoSecundario from pokemon p 
+inner join elemento e on e.id = p.elementoPrimario
+inner join elemento e2 on e2.id = p.elementoSecundario
+inner join ataque a on a.id = p.idAtaque
+order by p.id
+

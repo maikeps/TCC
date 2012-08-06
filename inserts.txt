@@ -45,9 +45,15 @@ insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQ
 (8, "Wartortle", 0, 63, 80, 58, 59, 32, 2, 5, 1),
 (9, "Blastoise", 0, 83, 100, 78, 79, null, 3, 5, 1),
 -- arrumar algumas coisas como idAtaque e elemento --
-(10, "Caterpie", 90, 30, 35, 45, 45, 7, 1, 1, 1),
-(11, "Metapod", 85, 20, 55, 30, 50, 10, 1, 1, 1),
-(12, "Butterfree", 70, 45, 50, 70, 60, null, 1, 1, 1);
+(10, "Caterpie", 90, 30, 35, 45, 45, 7, 1, 14, 1),
+(11, "Metapod", 85, 20, 55, 30, 50, 10, 1, 14, 1),
+(12, "Butterfree", 70, 45, 50, 70, 60, null, 1, 14, 6),
+(13, "Weedle", 90, 35, 30, 50, 40, 7, 1, 14, 8),
+(14, "Kakuna", 85, 25, 50, 35, 45, 10, 1, 14, 8),
+(15, "Beedrill", 70, 80, 40, 75, 65, null, 1, 14, 6),
+(16, "Pidgey", 85, 45, 40, 56, 40, 18, 1, 2, 6),
+(17, "Pidgeotto", 65, 60, 55, 71, 63, 36, 1, 2, 6),
+(18, "Pidgeot", 50, 80, 75, 91, 83, null, 1, 2, 6);
 
 
 

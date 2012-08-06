@@ -20,7 +20,6 @@ import tcc.Inimigo;
 import tcc.Player;
 
 
-import java.awt.Polygon;
 import model.Pokemon;
 import model.PokemonInimigo;
 import model.PokemonLiberado;
@@ -45,8 +44,6 @@ public class Fase1 implements GameStateController {
     }
 
     public void load() {
-        this.charmander = new Charmander();
-        this.charmander2 = new Charmander();
         this.ataques = new ArrayList<Ataque>();
     }
 
@@ -60,6 +57,8 @@ public class Fase1 implements GameStateController {
 
         this.lancaAtaques();
 
+        this.inimigo.setXPlayer(this.player.getX());
+        this.inimigo.setYPlayer(this.player.getY());
 
     }
 
@@ -74,8 +73,7 @@ public class Fase1 implements GameStateController {
         }
 
         g.setColor(Color.red);
-        g.drawString("" + this.player.personagem.getcooldownAtual(), 500, 500);
-
+        g.drawString("" + this.player.personagem.getCooldownAtual(), 500, 500);
     }
 
     public void start() {
@@ -91,10 +89,9 @@ public class Fase1 implements GameStateController {
 
     public void lancaAtaques() {
         if (this.player.atacou == true) {
-            if (this.player.personagem.podeAtirar()) {
-                //this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.charmander));
-                //this.ataques.add(new FlameThrower(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.charmander));
-                this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.charmander));
+            //problema aqui, cooldownAtual ta sempre menor que zero
+           if (this.player.personagem.podeAtirar()) {
+                this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
                 this.player.personagem.setCooldownAtual();
             }
         }
@@ -102,15 +99,17 @@ public class Fase1 implements GameStateController {
 
         if (this.inimigo.atacou == true) {
             if (this.inimigo.personagem.podeAtirar()) {
-                this.ataques.add(new DragonRage(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.charmander2));
-                this.inimigo.personagem.setCooldownAtual();
+                this.ataques.add(new DragonRage(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
+               // this.inimigo.personagem.setCooldownAtual();
+                this.inimigo.personagem.cooldownAtual = this.inimigo.personagem.cooldown;
             }
         }
+        this.inimigo.atacou = false;
+
     }
     
     
     
-    //prblema no cria player1
     public void criaPlayer1(){
 
         
@@ -126,8 +125,6 @@ public class Fase1 implements GameStateController {
         
         this.p = new PersonagemTeste(id, nome, atk, def, spd, hp);
         
-        System.out.println("inimigo: "+CharSelect.getInimigo());
-        
         this.player = new Player(p);
         
         
@@ -135,7 +132,6 @@ public class Fase1 implements GameStateController {
     }
     
     public void criaInimigo(){
-        System.out.println("inimigo: "+CharSelect.getInimigo());
         Pokemon pokemon = PokemonDAO.getPokemonPeloNome(CharSelect.getInimigo());
         
         String nome = pokemon.getNome();
@@ -150,25 +146,39 @@ public class Fase1 implements GameStateController {
         String sql = "insert into pokemonInimigo "
                 + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
                 + "(\""+id+"\", \"minion\", \""+atk+"\", "
-                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+5+"\")";
+                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+50+"\")";
         
         MySQL bd = new MySQL();
         boolean bool = bd.executaInsert(sql);
         
-        System.out.println(sql);
         
+        ArrayList<PokemonInimigo> listaPokeInimigo = PokemonInimigoDAO.getListaPokemonInimigo();
         
-        PokemonInimigo pokeInimigo = PokemonInimigoDAO.getPokemonInimigo(id);
+        int i = listaPokeInimigo.size()+1;
+        
+        PokemonInimigo pokeInimigo = PokemonInimigoDAO.getPokemonInimigo(i);
         
         hp += ((hp + 1/8 + 50) * pokeInimigo.getLvl())/50 + 10;
         atk += ((atk + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
         def += ((def + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
         spd += ((spd + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
-        hp += ((hp + 1/8 + 50) * pokeInimigo.getLvl())/50 + 5;
+        
+        
+        String sql2 = "update pokemonInimigo set "
+                + "atk = "+atk+", def = "+def+", spd = "+spd+", hp = "+hp+" "
+                + "where id = "+(i-1);
+        
+        bool = bd.executaUpdate(sql2);
+        
 
         this.p2 = new PersonagemTeste(id, nome, atk, def, spd, hp);
         
         this.inimigo = new Inimigo(this.p2, this.player);
         
+        System.out.println("atk: "+atk);
+        System.out.println("def: "+def);
+        System.out.println("spd: "+spd);
+        System.out.println("hp: "+hp);
+        System.out.println("hp: "+i);
     }
 }
