@@ -141,7 +141,8 @@ public class CharacterSelect implements GameStateController {
             Util.sleep(150);
         }
 
-
+// Arrumar !!! 
+        // Para verificar onde esta o quadrado
         int n = this.xSelecionado + 10 * (this.ySelecionado - 1);
         if(n >= 10){
             n -= 1;
@@ -151,6 +152,9 @@ public class CharacterSelect implements GameStateController {
         String nome = p.getNome();
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
 
+        
+        // Verifica se o pokemon está liberado
+        // para a esolha;
         if (teclado.keyDown(Keys.ESPACO) && pl.getNome() != null) {
             int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
             if (i <= this.nomes.size()) {
