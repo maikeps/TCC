@@ -53,7 +53,8 @@ insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQ
 (15, "Beedrill", 70, 80, 40, 75, 65, null, 1, 14, 6),
 (16, "Pidgey", 85, 45, 40, 56, 40, 18, 1, 2, 6),
 (17, "Pidgeotto", 65, 60, 55, 71, 63, 36, 1, 2, 6),
-(18, "Pidgeot", 50, 80, 75, 91, 83, null, 1, 2, 6);
+(18, "Pidgeot", 50, 80, 75, 91, 83, null, 1, 2, 6),
+(19, "Rattata", 90, 56, 35, 72, 30, 20, 1, 2, 1);
 
 
 

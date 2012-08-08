@@ -2,6 +2,7 @@ package Ataques;
 
 import DAO.AtaqueDAO;
 import Personagens.Personagem;
+import Personagens.PersonagemTeste;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,7 +18,7 @@ public class Bubbles extends Ataque {
     int destY;
     double deltaX, deltaY, dx, dy;
 
-    public Bubbles(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    public Bubbles(int x, int y, int destX, int destY, double angulo, PersonagemTeste personagem) {
 
         this.setDano(5);
         this.desativado = false;

@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 import javaPlay2.GameObject;
 import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
-import pokemonbrawlreloaded.ObjetoComMovimento;
 
 public class LeechLife extends Ataque {
 

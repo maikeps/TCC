@@ -17,9 +17,9 @@ public class DragonRage extends Ataque {
     int destX; // Posição do mouse
     int destY; // Posição do mouse
     
-    
-     double deltaX, deltaY, dx, dy; // Variaveis para calcular, para o personagem andar
-     
+
+    double deltaX, deltaY, dx, dy;
+
 
 
 
