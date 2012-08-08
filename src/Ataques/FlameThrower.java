@@ -5,6 +5,7 @@
 package Ataques;
 
 import Personagens.Personagem;
+import Personagens.PersonagemTeste;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Sprite;
@@ -24,7 +25,7 @@ public class FlameThrower extends Ataque {
     int destY;
     double deltaX, deltaY, dx, dy;
 
-    public FlameThrower(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    public FlameThrower(int x, int y, int destX, int destY, double angulo, PersonagemTeste personagem) {
         this.setDano(15);
         this.personagem = personagem;
 

@@ -1,6 +1,7 @@
 package Ataques;
 
 import Personagens.Personagem;
+import Personagens.PersonagemTeste;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Sprite;
@@ -17,7 +18,7 @@ public class FlameBurst extends Ataque {
     Sprite spriteVazio;
     Sprite spriteAtual;
 
-    public FlameBurst(int x, int y, Personagem personagem) {
+    public FlameBurst(int x, int y, PersonagemTeste personagem) {
         this.personagem = personagem;
         this.setDano(10);
         AudioPlayer.play("resources/sounds/Sound 1.wav");

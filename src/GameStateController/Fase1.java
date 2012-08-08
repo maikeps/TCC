@@ -99,7 +99,9 @@ public class Fase1 implements GameStateController {
 
         if (this.inimigo.atacou == true) {
             if (this.inimigo.personagem.podeAtirar()) {
-                this.ataques.add(new DragonRage(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
+              //  this.ataques.add(new DragonRage(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
+//                this.ataques.add(new FlameThrower(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
+                this.ataques.add(new Bubbles(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
                // this.inimigo.personagem.setCooldownAtual();
                 this.inimigo.personagem.cooldownAtual = this.inimigo.personagem.cooldown;
             }
@@ -152,15 +154,15 @@ public class Fase1 implements GameStateController {
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
         int lvl = pl.getLvl();
         
-        hp += (((hp + 1/8 + 50) * lvl)/50 + 10);
-        atk += ((atk + 1/8 + 50) * lvl)/50 + 5;
-        def += ((def + 1/8 + 50) * lvl)/50 + 5;
-        spd += ((spd + 1/8 + 50) * lvl)/50 + 5;
+        hp += (((hp + 1/8 + 50) * 150)/50 + 10);
+        atk += ((atk + 1/8 + 50) * 150)/50 + 5;
+        def += ((def + 1/8 + 50) * 150)/50 + 5;
+        spd += ((spd + 1/8 + 50) * 150)/50 + 5;
         
         String sql = "insert into pokemonInimigo "
                 + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
                 + "(\""+id+"\", \"minion\", \""+atk+"\", "
-                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+lvl+"\")";
+                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+150+"\")";
         
         MySQL bd = new MySQL();
         boolean bool = bd.executaInsert(sql);

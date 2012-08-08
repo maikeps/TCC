@@ -13,7 +13,7 @@ public class Inimigo extends ObjetoComMovimento {
     public PersonagemTeste personagem;
     public Player player;
     public int vida;
-    protected int velocidade = 2;
+    protected int velocidade = 4;
     protected Imagem spriteAtual;
     protected int cooldownAtaque;
     public boolean atacou;
