@@ -35,6 +35,7 @@ public class WaterPulse extends Ataque {
 
     }
 
+    @Override
     public void step(long timeElapsed) {
         if (this.frame >= 4) {
             return;
@@ -53,10 +54,12 @@ public class WaterPulse extends Ataque {
         this.sprite.draw(g, this.x, this.y);
     }
 
+    @Override
     public Rectangle getRetangulo() {
         return new Rectangle(this.x, this.y, 261, 248);
     }
 
+    @Override
     public boolean temColisao(Rectangle retangulo) {
         if (this.desativado || this.frame == 4) {
             return false;

@@ -46,6 +46,7 @@ public class CharacterSelect implements GameStateController {
         this.yDraw = 70;
     }
 
+    @Override
     public void load() {
 
         try {
@@ -57,10 +58,12 @@ public class CharacterSelect implements GameStateController {
 
     }
 
+    @Override
     public void step(long timeElapsed) {
         this.teclas();
     }
 
+    @Override
     public void draw(Graphics g) {
         g.setColor(Color.black);
         g.fillRect(0, 0, 800, 700);
@@ -81,9 +84,11 @@ public class CharacterSelect implements GameStateController {
         this.desenhaStats(g);
     }
 
+    @Override
     public void unload() {
     }
 
+    @Override
     public void start() {
         this.sorteiaInimigo();
 
@@ -106,6 +111,7 @@ public class CharacterSelect implements GameStateController {
 
     }
 
+    @Override
     public void stop() {
     }
 

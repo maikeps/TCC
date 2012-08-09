@@ -48,6 +48,7 @@ public class Twister extends Ataque {
 
     }
 
+    @Override
     public void step(long timeElapsed) {
         if (this.desativado) {
             return;
