@@ -1,0 +1,9 @@
+--para resolver o problema do charSelect - numero limitdo de imagens sendo mostradas na tela
+
+se apertar tecla pra baixo na ultima linha, a variavel Y de todas as imagens diminue em 75. as imagens cujo Y forem menores que um certo valor não serão exibidas. assim é como se elas estivessem indo para cima, a primeira linha some enquanto que aparece uma a mais bem em baixo
+
+
+
+--problema dos pokemons peixes e outros do genero
+
+fazer como se fosse no fundo do mar

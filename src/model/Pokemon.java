@@ -103,7 +103,7 @@ public class Pokemon {
     }
 
     public int getRaridade() {
-        return raridade;
+        return this.raridade;
     }
 
     public void setRaridade(int raridade) {

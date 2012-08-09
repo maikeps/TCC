@@ -15,18 +15,17 @@ import model.Pokemon;
  */
 public class PokemonDAO {
 
-    public static ArrayList<Pokemon> getPokemon(int id) {
-        
-        ArrayList<Pokemon> lista = new ArrayList<Pokemon>();
-        
+    public static Pokemon getPokemon(int id) {
+
         MySQL banco = new MySQL();
-        String sql = "select * from pokemon where id = "+id;
-        
+        String sql = "select * from pokemon where id = " + id;
+
         ConjuntoResultados linhas = banco.executaSelect(sql);
-        
-        while(linhas.next()){
-            Pokemon p = new Pokemon();
-            
+
+        Pokemon p = new Pokemon();
+
+        if (linhas.next()) {
+
             p.setId(linhas.getInt("id"));
             p.setNome(linhas.getString("nome"));
             p.setRaridade(linhas.getInt("raridade"));
@@ -37,25 +36,24 @@ public class PokemonDAO {
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));
-            
-            lista.add(p);
+
         }
-        
-        return lista;
-        
+
+        return p;
+
     }
-    
-    public static ArrayList<Pokemon> getLista(){
+
+    public static ArrayList<Pokemon> getLista() {
         ArrayList<Pokemon> lista = new ArrayList<Pokemon>();
-        
+
         MySQL banco = new MySQL();
         String sql = "select * from pokemon";
-        
+
         ConjuntoResultados linhas = banco.executaSelect(sql);
-        
-        while(linhas.next()){
+
+        while (linhas.next()) {
             Pokemon p = new Pokemon();
-            
+
             p.setId(linhas.getInt("id"));
             p.setNome(linhas.getString("nome"));
             p.setRaridade(linhas.getInt("raridade"));
@@ -66,24 +64,24 @@ public class PokemonDAO {
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));
-            
+
             lista.add(p);
         }
-        
+
         return lista;
     }
-    
+
     public static Pokemon getPokemonPeloNome(String nome) {
-        
+
         MySQL banco = new MySQL();
-        String sql = "select * from pokemon where nome = \""+nome+"\"";
-        
+        String sql = "select * from pokemon where nome = \"" + nome + "\"";
+
         ConjuntoResultados linhas = banco.executaSelect(sql);
-        
+
         Pokemon p = new Pokemon();
-        if(linhas.next()){
-            
-            
+        if (linhas.next()) {
+
+
             p.setId(linhas.getInt("id"));
             p.setNome(linhas.getString("nome"));
             p.setRaridade(linhas.getInt("raridade"));
@@ -94,10 +92,10 @@ public class PokemonDAO {
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));
-            
+
         }
-        
+
         return p;
-        
+
     }
 }
