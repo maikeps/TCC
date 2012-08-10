@@ -9,7 +9,7 @@ public class MySQL
     Statement statement;
     String user = "root";
     String pass = "senai2012";
-    String database = "TCC";
+    String database = "tcc";
     String host = "localhost";
    
     public MySQL()
