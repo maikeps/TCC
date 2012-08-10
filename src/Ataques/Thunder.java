@@ -5,12 +5,8 @@
 package Ataques;
 
 import Personagens.Personagem;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javaPlay2.Imagem;
 import javaPlay2.Sprite;
 import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;

@@ -22,14 +22,14 @@ import tcc.ObjetoComMovimento;
  */
 public abstract class Ataque extends ObjetoComMovimento{
  
-    int velocidade;
+    int velocidade; //Determina a velocidade em que o personagem anda
     boolean desativado;
-    int dano;
-    int xInicial;
+    int dano;// è o dano do ataque
+    int xInicial; // Possição inicial para 
     int yInicial;
     Imagem imagem;
     Imagem Vazio;
-    PersonagemTeste personagem;
+    PersonagemTeste personagem; // personagem que ataca
     
     public void step(long timeElapsed){
         

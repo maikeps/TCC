@@ -7,12 +7,9 @@ package Ataques;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import javaPlay2.GameObject;
 import javaPlay2.Sprite;
-import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
-import pokemonbrawlreloaded.Direcao;
-import pokemonbrawlreloaded.ObjetoComMovimento;
+import tcc.Direcao;
 
 /**
  *

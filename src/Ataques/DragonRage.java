@@ -12,12 +12,13 @@ import javax.swing.JOptionPane;
 
 public class DragonRage extends Ataque {
 
-    double angulo;
-    int destX;
-    int destY;
+    double angulo; // Angulo de inclinação, rotaciona a imagem
+    int destX; // Posição do mouse
+    int destY; // Posição do mouse
     
-    
+
     double deltaX, deltaY, dx, dy;
+
 
 
 
@@ -65,7 +66,8 @@ public class DragonRage extends Ataque {
         
         
     }
-
+    
+// Responsavel por desenha na tela 
     @Override
     public void draw(Graphics g) {
         if (this.desativado) {
@@ -76,11 +78,13 @@ public class DragonRage extends Ataque {
 
     }
 
+    //Retangula para verificar colisão
     @Override
     public Rectangle getRetangulo() {
         return new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura());
     }
 
+    // Verificar se tem colisão
     @Override
     public boolean temColisao(Rectangle retangulo) {
         if (this.desativado) {
@@ -96,7 +100,7 @@ public class DragonRage extends Ataque {
         }
     }
 
-    
+    // Ajustar o Ataque em relação ao tamanho do pokemon0
     public void ajustaAtaque() {
         switch (this.direcao) {
             case DIREITA:

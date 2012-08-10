@@ -5,6 +5,7 @@
 package GameStateController;
 
 import Ataques.*;
+import DAO.AtaqueDAO;
 import DAO.PokemonDAO;
 import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
@@ -59,7 +60,10 @@ public class Fase1 implements GameStateController {
 
         this.inimigo.setXPlayer(this.player.getX());
         this.inimigo.setYPlayer(this.player.getY());
-
+        
+        model.Ataque a = AtaqueDAO.getPoder(this.CharSelect.getPlayer1());
+        System.out.println(a.getNome());
+      
     }
 
     public void draw(Graphics g) {

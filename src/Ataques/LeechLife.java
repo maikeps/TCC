@@ -1,12 +1,12 @@
 package Ataques;
 
 import Personagens.Personagem;
+import Personagens.PersonagemTeste;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.GameObject;
 import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
-import pokemonbrawlreloaded.ObjetoComMovimento;
 
 public class LeechLife extends Ataque {
 
@@ -17,7 +17,7 @@ public class LeechLife extends Ataque {
         this.setDano(4);
         this.velocidade = 5;
         this.desativado = false;
-        this.personagem = personagem;
+         this.personagem = personagem;
 
         this.x = x;
         this.y = y;

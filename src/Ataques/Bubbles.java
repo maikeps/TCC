@@ -1,10 +1,7 @@
 package Ataques;
 
-import DAO.AtaqueDAO;
 import Personagens.PersonagemTeste;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;

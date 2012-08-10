@@ -6,7 +6,6 @@ package GameStateController;
 
 import DAO.PokemonDAO;
 import DAO.PokemonDerrotadoDAO;
-import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +18,6 @@ import javaPlay2.Keys;
 import javax.swing.JOptionPane;
 import model.Pokemon;
 import model.PokemonDerrotado;
-import model.PokemonInimigo;
 import model.PokemonLiberado;
 import util.Util;
 
@@ -51,6 +49,7 @@ public class CharacterSelect implements GameStateController {
         this.yDraw = 70 + 350;
     }
 
+    @Override
     public void load() {
 
         try {
@@ -62,10 +61,12 @@ public class CharacterSelect implements GameStateController {
 
     }
 
+    @Override
     public void step(long timeElapsed) {
         this.teclas();
     }
 
+    @Override
     public void draw(Graphics g) {
         g.setColor(Color.black);
         g.fillRect(0, 0, 800, 700);
@@ -86,9 +87,11 @@ public class CharacterSelect implements GameStateController {
         this.desenhaStats(g);
     }
 
+    @Override
     public void unload() {
     }
 
+    @Override
     public void start() {
         this.sorteiaInimigo();
 
@@ -111,6 +114,7 @@ public class CharacterSelect implements GameStateController {
 
     }
 
+    @Override
     public void stop() {
     }
 
@@ -144,6 +148,9 @@ public class CharacterSelect implements GameStateController {
         //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
         this.inimigo = this.nomes.get(n);
 
+        
+    
+       
     }
 
     public void iniciaJogo() {
@@ -151,6 +158,7 @@ public class CharacterSelect implements GameStateController {
     }
 
     public void desenhaStats(Graphics g) {
+
 
         //tem que ver uma formula melhor para calcular o i
         //quando o ySelecionado for = a 3, o resultado sera 20
