@@ -148,9 +148,9 @@ public class CharacterSelect implements GameStateController {
         //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
         this.inimigo = this.nomes.get(n);
 
-        
-    
-       
+
+
+
     }
 
     public void iniciaJogo() {
@@ -183,14 +183,14 @@ public class CharacterSelect implements GameStateController {
         g.drawString("ATK: " + p.getAtkbase(), 100, 200);
         g.drawString("DEF: " + p.getDefBase(), 100, 225);
         g.drawString("SPD: " + p.getSpdbase(), 100, 250);
-        
+
         g.setColor(Color.white);
-        PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado+1);
-        g.drawString("Kills: "+pl.getInimigosDerrotados(), 500, 175);
-        g.drawString("Deaths: "+pl.getVezesDerrotasParaNPC(), 500, 200);
-        g.drawString("Total dano causado: "+pl.getTotalDanoCausado(), 500, 225);
-        g.drawString("Vezes que zerou o jogo: "+pl.getVezesQueZerouOJogo(), 500, 250);
-        
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
+        g.drawString("Kills: " + pl.getInimigosDerrotados(), 500, 175);
+        g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 500, 200);
+        g.drawString("Total dano causado: " + pl.getTotalDanoCausado(), 500, 225);
+        g.drawString("Vezes que zerou o jogo: " + pl.getVezesQueZerouOJogo(), 500, 250);
+
     }
 
     public void desenhaImagens(Graphics g) {
@@ -335,7 +335,7 @@ public class CharacterSelect implements GameStateController {
                 //this.pokemonSelecionado = maximo de pokemon, num de linhas
             }
 
-            this.yDraw = (this.ySelecionado * 75 - 5) + 350 ;
+            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
 
 //            if (this.yDraw > 75) {
 //                this.yDraw -= 75;
@@ -348,7 +348,8 @@ public class CharacterSelect implements GameStateController {
         if (teclado.keyDown(Keys.BAIXO)) {
             if (this.ySelecionado < 3) {
                 this.ySelecionado += 1;
-                this.pokemonSelecionado = 9 * (this.ySelecionado - 1);
+                // this.pokemonSelecionado = 9 * (this.ySelecionado - 1);
+                this.pokemonSelecionado += 9;
             } else if (this.ySelecionado >= 3) {
                 this.ySelecionado = 1;
                 this.pokemonSelecionado -= 9 * this.ySelecionado;
@@ -498,6 +499,13 @@ public class CharacterSelect implements GameStateController {
     }
 
     public void desenhaFundo(Graphics g) {
+
+        //arrumar
+        //desenha fundo de cima
+        g.setColor(Color.lightGray);
+        g.fillRect(75, 25, 675, 350);
+        g.setColor(Color.decode("1996553984"));
+        g.drawRect(75, 25, 675, 350);
 
 
         int linhas = 3;

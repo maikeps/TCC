@@ -15,6 +15,7 @@ Necessarios:
 
 
 	--> Procurar tiles que irão compor o mapa
+
 	--> Criar uma barra de progresso para mostrar quanto que falta para os personagens serem liberados.
 
 	--> Pensar em um mapa, e onde ficarão os bosses.
@@ -22,6 +23,8 @@ Necessarios:
 	--> "NOME PARA O JOGO" <--
 
 	--> Para fazer com que os pokemons de um elemento so nascam em areas desse elemento, usar o valor "raridade" da tabela pokemon para ver se o pokemon vai ou nao nascer em cada tile. se nascer, a variavel "ocupado" do tile sera true e permanecerá assim ate o pokemon morrer, assim ficara sendo false. so pode nascer outro pokemon nesse mesmo tile se essa variavel for false.
+
+	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro
 
 --------
 
