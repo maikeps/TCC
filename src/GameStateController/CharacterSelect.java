@@ -5,6 +5,8 @@
 package GameStateController;
 
 import DAO.PokemonDAO;
+import DAO.PokemonDerrotadoDAO;
+import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,6 +18,8 @@ import javaPlay2.Keyboard;
 import javaPlay2.Keys;
 import javax.swing.JOptionPane;
 import model.Pokemon;
+import model.PokemonDerrotado;
+import model.PokemonInimigo;
 import model.PokemonLiberado;
 import util.Util;
 
@@ -196,7 +200,7 @@ public class CharacterSelect implements GameStateController {
         g.drawString("xSelecionado" + this.xSelecionado, 100, 400);
         g.drawString("ySelecionado" + this.ySelecionado, 100, 450);
         g.drawString("pokemonSelecionado" + this.pokemonSelecionado, 100, 500);
-        g.drawString(i+1 + " - " + this.nomes.get(i) + "", 100, 100);
+        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 100, 100);
         Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
         g.setColor(Color.white);
         g.fillRect(100, 160, p.getHpBase(), 20);
@@ -219,6 +223,7 @@ public class CharacterSelect implements GameStateController {
         int y1 = 0;
         int y2 = 0;
 
+        //desenha todos os pokemons
         for (Pokemon p : this.listaDePokemon) {
             cont1++;
             if (cont1 > 9) {
@@ -231,7 +236,7 @@ public class CharacterSelect implements GameStateController {
 
 
             try {
-                this.pokemonImage = new Imagem("resources/personagens/" + nome + "/" + nome + "_Selected.gif");
+                this.pokemonImage = new Imagem("resources/personagens/" + p.getId() + " - " + nome + "/" + nome + "_Locked.gif");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
                 System.exit(1);
@@ -242,6 +247,7 @@ public class CharacterSelect implements GameStateController {
 
         }
 
+        //desenha os pokemons liberados
         for (PokemonLiberado pl : this.listaDePokemonLiberado) {
 
             int i = this.listaDePokemonLiberado.size();
@@ -254,7 +260,7 @@ public class CharacterSelect implements GameStateController {
             String nome = pl.getNome();
 
             try {
-                this.pokemonImage = new Imagem("resources/personagens/" + nome + "/" + nome + "_Down.gif");
+                this.pokemonImage = new Imagem("resources/personagens/" + pl.getIdPokemon() + " - " + nome + "/" + nome + "_Down.gif");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
                 System.exit(1);
@@ -263,6 +269,18 @@ public class CharacterSelect implements GameStateController {
             this.pokemonImage.draw(g, 75 + x2 * (pl.getIdPokemon() - 1), 75 + y2);
             x2 += 75;
         }
+
+        //desenha a progress bar
+        //nao desenha na primeira linha, nao sei porque
+        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado+1);
+        g.setColor(Color.green);
+        g.fillRect(100, 573, poke.getRaridade(), 29);
+        PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado+1);
+        g.setColor(Color.white);
+        g.fillRect(102, 575, pokeDerrotado.getVezesDerrotado(), 25);
+        g.setColor(Color.black);
+        g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), 110, 593);
+        g.setColor(Color.white);
     }
 
     public void teclas() {
@@ -275,10 +293,10 @@ public class CharacterSelect implements GameStateController {
                 this.pokemonSelecionado -= 1;
             } else if (this.xSelecionado <= 0) {
                 this.xSelecionado = 8;
-                this.pokemonSelecionado +=8;
+                this.pokemonSelecionado += 8;
             }
-            
-            this.xDraw = (this.xSelecionado+1)*75-5;
+
+            this.xDraw = (this.xSelecionado + 1) * 75 - 5;
 
 //            if (this.xDraw > 75) {
 //                this.xDraw -= 75;
@@ -294,11 +312,11 @@ public class CharacterSelect implements GameStateController {
                 this.pokemonSelecionado += 1;
             } else if (this.xSelecionado >= 0) {
                 this.xSelecionado = 0;
-                this.pokemonSelecionado -=8;
+                this.pokemonSelecionado -= 8;
             }
 
-            this.xDraw = (this.xSelecionado+1)*75-5;
-            
+            this.xDraw = (this.xSelecionado + 1) * 75 - 5;
+
 //            if (this.xDraw < 675) {
 //                this.xDraw += 75;
 //            } else {
@@ -317,8 +335,8 @@ public class CharacterSelect implements GameStateController {
                 this.pokemonSelecionado = 9 * (this.ySelecionado - 1);
                 //this.pokemonSelecionado = maximo de pokemon, num de linhas
             }
-            
-            this.yDraw = this.ySelecionado*75-5;
+
+            this.yDraw = this.ySelecionado * 75 - 5;
 
 //            if (this.yDraw > 75) {
 //                this.yDraw -= 75;
@@ -336,8 +354,8 @@ public class CharacterSelect implements GameStateController {
                 this.ySelecionado = 1;
                 this.pokemonSelecionado -= 9 * this.ySelecionado;
             }
-            
-            this.yDraw = this.ySelecionado*75-5;
+
+            this.yDraw = this.ySelecionado * 75 - 5;
 
 //            if (this.yDraw < 275) {
 //                this.yDraw += 75;
