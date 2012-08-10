@@ -42,12 +42,13 @@ public class CharacterSelect implements GameStateController {
     ArrayList<String> nomes;
     Imagem pokemonImage;
     int pokemonSelecionado = 0;//na lista o item zero é o primeiro pokemon
+    private Imagem imgGrande;
 
     public CharacterSelect(String p1) {
         this.ySelecionado = 1;
         this.player1 = p1;
         this.xDraw = 70;
-        this.yDraw = 70;
+        this.yDraw = 70 + 350;
     }
 
     public void load() {
@@ -162,7 +163,7 @@ public class CharacterSelect implements GameStateController {
         g.drawString("xSelecionado" + this.xSelecionado, 100, 400);
         g.drawString("ySelecionado" + this.ySelecionado, 100, 450);
         g.drawString("pokemonSelecionado" + this.pokemonSelecionado, 100, 500);
-        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 100, 100);
+        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 350, 350);
         Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
         g.setColor(Color.white);
         g.fillRect(100, 160, p.getHpBase(), 20);
@@ -174,6 +175,14 @@ public class CharacterSelect implements GameStateController {
         g.drawString("ATK: " + p.getAtkbase(), 100, 200);
         g.drawString("DEF: " + p.getDefBase(), 100, 225);
         g.drawString("SPD: " + p.getSpdbase(), 100, 250);
+        
+        g.setColor(Color.white);
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado+1);
+        g.drawString("Kills: "+pl.getInimigosDerrotados(), 500, 175);
+        g.drawString("Deaths: "+pl.getVezesDerrotasParaNPC(), 500, 200);
+        g.drawString("Total dano causado: "+pl.getTotalDanoCausado(), 500, 225);
+        g.drawString("Vezes que zerou o jogo: "+pl.getVezesQueZerouOJogo(), 500, 250);
+        
     }
 
     public void desenhaImagens(Graphics g) {
@@ -182,8 +191,8 @@ public class CharacterSelect implements GameStateController {
         int x2 = 0;
         int cont1 = 0;
         int cont2 = 1;
-        int y1 = 0;
-        int y2 = 0;
+        int y1 = 350;
+        int y2 = 350;
 
         //desenha todos os pokemons
         for (Pokemon p : this.listaDePokemon) {
@@ -229,20 +238,40 @@ public class CharacterSelect implements GameStateController {
             }
 
             this.pokemonImage.draw(g, 75 + x2 * (pl.getIdPokemon() - 1), 75 + y2);
-            x2 += 75;
+            x2 = 75;
         }
 
         //desenha a progress bar
         //nao desenha na primeira linha, nao sei porque
-        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado+1);
+        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1);
         g.setColor(Color.green);
         g.fillRect(100, 573, poke.getRaridade(), 29);
-        PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado+1);
+        PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado + 1);
         g.setColor(Color.white);
         g.fillRect(102, 575, pokeDerrotado.getVezesDerrotado(), 25);
         g.setColor(Color.black);
         g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), 110, 593);
         g.setColor(Color.white);
+
+
+        //desenha o pokemon com zoom
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
+
+        try {
+            if (pl.getIdPokemon() != 0) {
+                this.imgGrande = new Imagem("resources/personagens/" + pl.getIdPokemon() + " - " + pl.getNome() + "/" + pl.getNome() + "_Down.gif");
+
+            } else {
+                this.imgGrande = new Imagem("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Locked.gif");
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
+            System.exit(1);
+        }
+
+        this.imgGrande.drawZoomed(g, 250, 50, 5);
+
+
     }
 
     public void teclas() {
@@ -298,7 +327,7 @@ public class CharacterSelect implements GameStateController {
                 //this.pokemonSelecionado = maximo de pokemon, num de linhas
             }
 
-            this.yDraw = this.ySelecionado * 75 - 5;
+            this.yDraw = (this.ySelecionado * 75 - 5) + 350 ;
 
 //            if (this.yDraw > 75) {
 //                this.yDraw -= 75;
@@ -317,7 +346,7 @@ public class CharacterSelect implements GameStateController {
                 this.pokemonSelecionado -= 9 * this.ySelecionado;
             }
 
-            this.yDraw = this.ySelecionado * 75 - 5;
+            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
 
 //            if (this.yDraw < 275) {
 //                this.yDraw += 75;
@@ -469,10 +498,10 @@ public class CharacterSelect implements GameStateController {
         for (int i = 1; i <= colunas; i++) {
             for (int i2 = 1; i2 <= linhas; i2++) {
                 g.setColor(Color.lightGray);
-                g.fillRect(75 * i, 75 * i2, 70, 70);
+                g.fillRect(75 * i, 350 + 75 * i2, 70, 70);
                 //g.setColor(Color.red); 
                 g.setColor(Color.decode("1996553984"));
-                g.drawRect(75 * i, 75 * i2, 70, 70);
+                g.drawRect(75 * i, 350 + 75 * i2, 70, 70);
             }
         }
         g.setColor(Color.white);
