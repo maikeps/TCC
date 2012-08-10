@@ -61,10 +61,10 @@ public class PersonagemTeste extends ObjetoComMovimento {
         
         
         try {
-            this.spriteRight = new Imagem("resources/personagens/"+this.nome+"/"+this.nome+"_Right.gif");
-            this.spriteLeft = new Imagem("resources/personagens/"+this.nome+"/"+this.nome+"_Left.gif");
-            this.spriteDown = new Imagem("resources/personagens/"+this.nome+"/"+this.nome+"_Down.gif");
-            this.spriteUp = new Imagem("resources/personagens/"+this.nome+"/"+this.nome+"_Up.gif");
+            this.spriteRight = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Right.gif");
+            this.spriteLeft = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Left.gif");
+            this.spriteDown = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Down.gif");
+            this.spriteUp = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Up.gif");
             this.spriteAtual = this.spriteDown;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
@@ -123,7 +123,7 @@ public class PersonagemTeste extends ObjetoComMovimento {
     }
 
     //verifica se o retangulo do personagem tem colisao com o do inimigo
-    public boolean temColisao(Personagem player) {
+    public boolean temColisao(PersonagemTeste player) {
         return this.getRetangulo().intersects(player.getRetangulo());
     }
 

@@ -1,6 +1,5 @@
 package Ataques;
 
-import Personagens.Personagem;
 import Personagens.PersonagemTeste;
 import java.awt.Graphics;
 import java.awt.Graphics2D;

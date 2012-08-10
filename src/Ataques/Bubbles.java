@@ -1,7 +1,6 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
-import Personagens.Personagem;
 import Personagens.PersonagemTeste;
 import java.awt.Color;
 import java.awt.Graphics;
