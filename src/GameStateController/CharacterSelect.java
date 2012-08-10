@@ -6,7 +6,6 @@ package GameStateController;
 
 import DAO.PokemonDAO;
 import DAO.PokemonDerrotadoDAO;
-import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,7 +18,6 @@ import javaPlay2.Keys;
 import javax.swing.JOptionPane;
 import model.Pokemon;
 import model.PokemonDerrotado;
-import model.PokemonInimigo;
 import model.PokemonLiberado;
 import util.Util;
 
@@ -149,37 +147,9 @@ public class CharacterSelect implements GameStateController {
         //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
         this.inimigo = this.nomes.get(n);
 
-
-// Arrumar !!! 
-        // Para verificar onde esta o quadrado
-        int n = this.xSelecionado + 10 * (this.ySelecionado - 1);
-        if(n >= 10){
-            n -= 1;
-        }
         
-        Pokemon p = this.listaDePokemon.get(n);
-        String nome = p.getNome();
-        PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
-
-        
-        // Verifica se o pokemon está liberado
-        // para a esolha;
-        if (teclado.keyDown(Keys.ESPACO) && pl.getNome() != null) {
-            int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
-            if (i <= this.nomes.size()) {
-                if (i < 10) {
-                    this.player1 = this.nomes.get(i);
-                } else {
-                    this.player1 = this.nomes.get(i-1);
-                }
-            
-            Util.sleep(500);
-                this.sorteiaInimigo();
-                while (this.inimigo.equals(this.getPlayer1())) {
-                    this.sorteiaInimigo();
-                }
-                this.iniciaJogo();
-            }
+    
+       
     }
 
     public void iniciaJogo() {

@@ -24,6 +24,7 @@ public class MainMenu implements GameStateController{
 
     private Imagem imagem;
     
+    @Override
     public void load() {
        // AudioPlayer.play("resources/sounds/Pokemon Opening.wav");
         
@@ -36,6 +37,7 @@ public class MainMenu implements GameStateController{
         
     }
 
+    @Override
     public void step(long timeElapsed) { 
         
         
@@ -50,6 +52,7 @@ public class MainMenu implements GameStateController{
         
     
 
+    @Override
     public void draw(Graphics g) {  
         g.setColor(Color.black);
         g.fillRect(0, 0, 800, 700);
@@ -59,10 +62,13 @@ public class MainMenu implements GameStateController{
         
     }
     
+    @Override
     public void unload() {    }
 
+    @Override
     public void start() {    }
 
+    @Override
     public void stop() {    }
     
 }

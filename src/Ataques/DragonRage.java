@@ -100,7 +100,7 @@ public class DragonRage extends Ataque {
         }
     }
 
-    
+    // Ajustar o Ataque em relação ao tamanho do pokemon0
     public void ajustaAtaque() {
         switch (this.direcao) {
             case DIREITA:
