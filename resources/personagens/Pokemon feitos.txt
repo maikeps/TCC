@@ -17,9 +17,9 @@ Pidgey
 Pidgeotto
 Pidgeot
 Rattata
-
-
-
+Raticate
+Spearow
+Fearow
 
 
 Pikachu

@@ -67,4 +67,18 @@ public class Imagem {
 
         g2d.drawImage(image, tx, null);
     }
+    
+    public void drawZoomed(Graphics graphics, int x, int y, int zoom){
+        
+        Graphics2D g2d = (Graphics2D)graphics;
+        
+        AffineTransform tx = new AffineTransform();
+        
+        tx.translate(x, y);
+        tx.scale(zoom, zoom);
+        
+        g2d.drawImage(image, tx, null);
+        
+        
+    }
 }

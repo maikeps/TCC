@@ -31,7 +31,18 @@ insert into ataque (nome, atk, elemento) values
 ("Inferno", 100, 3), -- talvez --
 ("LeechSeed", 20, 7), -- cura 1/4 do dano tirado --
 ("RazorLeaf", 55, 7),
-("SolarBeam", 120, 7);
+("SolarBeam", 120, 7),
+("StringShot", 25, 14),
+("SilverWind", 60, 14),
+("PoisonSting", 15, 8), -- 15 com o poison, como nao tem esse sistema ainda, aumentar atk --
+("PinMissile", 42, 14),
+("WingAttack", 40, 6),
+("Twister", 60, 15),
+("Hurricane", 120, 6),
+("Bite", 60, 17),
+("HyperFang", 80, 2),
+("AerialAce", 60, 6),
+("DrillPeck", 80, 6);
 
 
 insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQueEvolui, idAtaque, elementoPrimario, elementoSecundario) values
@@ -44,17 +55,19 @@ insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQ
 (7, "Squirtle", 0, 48, 65, 43, 44, 16, 1, 5, 1),
 (8, "Wartortle", 0, 63, 80, 58, 59, 32, 2, 5, 1),
 (9, "Blastoise", 0, 83, 100, 78, 79, null, 3, 5, 1),
--- arrumar algumas coisas como idAtaque e elemento --
-(10, "Caterpie", 90, 30, 35, 45, 45, 7, 1, 14, 1),
-(11, "Metapod", 85, 20, 55, 30, 50, 10, 1, 14, 1),
-(12, "Butterfree", 70, 45, 50, 70, 60, null, 1, 14, 6),
-(13, "Weedle", 90, 35, 30, 50, 40, 7, 1, 14, 8),
-(14, "Kakuna", 85, 25, 50, 35, 45, 10, 1, 14, 8),
-(15, "Beedrill", 70, 80, 40, 75, 65, null, 1, 14, 6),
-(16, "Pidgey", 85, 45, 40, 56, 40, 18, 1, 2, 6),
-(17, "Pidgeotto", 65, 60, 55, 71, 63, 36, 1, 2, 6),
-(18, "Pidgeot", 50, 80, 75, 91, 83, null, 1, 2, 6),
-(19, "Rattata", 90, 56, 35, 72, 30, 20, 1, 2, 1);
+(10, "Caterpie", 90, 30, 35, 45, 45, 7, 10, 14, 1),
+(11, "Metapod", 85, 20, 55, 30, 50, 10, 10, 14, 1),
+(12, "Butterfree", 70, 45, 50, 70, 60, null, 11, 14, 6),
+(13, "Weedle", 90, 35, 30, 50, 40, 7, 12, 14, 8),
+(14, "Kakuna", 85, 25, 50, 35, 45, 10, 12, 14, 8),
+(15, "Beedrill", 70, 80, 40, 75, 65, null, 13, 14, 6),
+(16, "Pidgey", 85, 45, 40, 56, 40, 18, 14, 2, 6),
+(17, "Pidgeotto", 65, 60, 55, 71, 63, 36, 15, 2, 6),
+(18, "Pidgeot", 50, 80, 75, 91, 83, null, 16, 2, 6),
+(19, "Rattata", 90, 56, 35, 72, 30, 20, 17, 2, 1),
+(20, "Raticate", 70, 81, 60, 97, 55, null, 18, 2, 1),
+(21, "Spearow", 85, 60, 30, 70, 40, 20, 19, 2, 6),
+(22, "Fearow", 65, 90, 65, 70, 40, null, 20, 2, 6);
 
 
 
