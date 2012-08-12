@@ -11,45 +11,63 @@ import tcc.ObjetoComMovimento;
 
 //Tem que verificar o temColisao()
 
-public abstract class Personagem extends ObjetoComMovimento {
+public class Personagem extends ObjetoComMovimento {
     
-    String nome;
-    int hpAtual;
-    int velocidade = 1; // ??
+        int velocidade = 1; // ??
     int velocidadeInicial = 1; // ??
+    
+    
     public Imagem spriteRight; 
     public Imagem spriteLeft;
     public Imagem spriteUp;
     public Imagem spriteDown;
     public Imagem spriteAtual;
     public Direcao direcao;
-        
-    // stats
-    int atk;
-    int def;
-    int spd;
-    int hp;
+
     
-    
-    int cooldownAtual; //como esta o cooldown atualmente(diminui em um por step)
-    int cooldown = 50; //cooldown que tem que esperar ate atacar de novo
+    public int cooldownAtual; //como esta o cooldown atualmente(diminui em um por step)
+    public int cooldown; //cooldown que tem que esperar ate atacar de novo
     //se o cooldownAtual for menor que zero, o jogador pode atacar
     Ataques ataque;
+    
+    
+    
+    
+    protected int id;
+    protected String nome;
+    protected int atk;
+    protected int def;
+    protected int spd;
+    protected int hp;
 
+    public Personagem(){
+        
+    }
 
-    public Personagem() {
+    public Personagem(int id, String nome, int atk, int def, int spd, int hp) {
 
-        //ver se pode tirar isso
-//        this.hp = 200;
-  //      this.hpAtual = 200;
+        this.id = id;
+        this.nome = nome;
+        this.atk = atk;
+        this.def = def;
+        this.spd = spd;
+        this.hp = hp;
+        
+        double n = (30/(double)this.spd)*100;
+        this.cooldown = (int)n;
+        
+        System.out.println("spd do "+ nome + ": " + spd);
+        System.out.println("cooldown do "+ nome + ": " + this.cooldown);
+        
+        
         try {
-//            this.spriteRight = new Imagem("resources/personagens/Blastoise/Blastoise_Right.gif");
-//            this.spriteLeft = new Imagem("resources/personagens/Blastoise/Blastoise_Left.gif");
-//            this.spriteDown = new Imagem("resources/personagens/Blastoise/Blastoise_Down.gif");
-//            this.spriteUp = new Imagem("resources/personagens/Blastoise/Blastoise_Up.gif");
+            this.spriteRight = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Right.gif");
+            this.spriteLeft = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Left.gif");
+            this.spriteDown = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Down.gif");
+            this.spriteUp = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Up.gif");
             this.spriteAtual = this.spriteDown;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
         
@@ -58,47 +76,46 @@ public abstract class Personagem extends ObjetoComMovimento {
 
     public void step(long timeElapsed) {
         
-//        this.cooldownAtual --;
-//
-//        if (this.tocaParedeEsquerda()) {
-//            this.x = 5;
-//            this.velocidade = this.velocidadeInicial;
-//        }
-//        if (this.tocaParedeDireita()) {
-//            this.x = 795 - this.spriteAtual.pegaLargura();
-//            this.velocidade = this.velocidadeInicial;
-//        }
-//        if (this.tocaParedeCima()) {
-//            this.y = 194;
-//            this.velocidade = this.velocidadeInicial;
-//        }
-//        if (this.tocaParedeBaixo()) {
-//            this.y = 694 - this.spriteAtual.pegaAltura();
-//            this.velocidade = this.velocidadeInicial;
-//        }
+          this.cooldownAtual --;
 
+        if (this.tocaParedeEsquerda()) {
+            this.x = 5;
+            this.velocidade = this.velocidadeInicial;
+        }
+        if (this.tocaParedeDireita()) {
+            this.x = 795 - this.spriteAtual.pegaLargura();
+            this.velocidade = this.velocidadeInicial;
+        }
+        if (this.tocaParedeCima()) {
+            this.y = 194;
+            this.velocidade = this.velocidadeInicial;
+        }
+        if (this.tocaParedeBaixo()) {
+            this.y = 694 - this.spriteAtual.pegaAltura();
+            this.velocidade = this.velocidadeInicial;
+        }
 
     }
 
     public void draw(Graphics g) {
-        //this.spriteAtual.draw(g, this.x, this.y);
+        this.spriteAtual.draw(g, this.x, this.y);
     }
 
-//    public boolean tocaParedeEsquerda() {
-//        return (this.x <= 4);
-//    }
-//
-//    public boolean tocaParedeDireita() {
-//        return (this.x >= 796 - this.spriteAtual.pegaLargura());
-//    }
-//
-//    public boolean tocaParedeBaixo() {
-//        return (this.y > 695 - this.spriteAtual.pegaAltura());
-//    }
-//
-//    public boolean tocaParedeCima() {
-//        return (this.y < 190);
-//    }
+    public boolean tocaParedeEsquerda() {
+        return (this.x <= 4);
+    }
+
+    public boolean tocaParedeDireita() {
+        return (this.x >= 796 - this.spriteAtual.pegaLargura());
+    }
+
+    public boolean tocaParedeBaixo() {
+        return (this.y > 695 - this.spriteAtual.pegaAltura());
+    }
+
+    public boolean tocaParedeCima() {
+        return (this.y < 190);
+    }
 
     //retorna o retangulo invisivel ocupado pelo personagem
     public Rectangle getRetangulo() {
@@ -146,7 +163,7 @@ public abstract class Personagem extends ObjetoComMovimento {
     }
 
     //retorna o cooldownAtual(quanto falta para poder atacar novamente)
-    public int getcooldownAtual() {
+    public int getCooldownAtual() {
         return this.cooldownAtual;
     }
     
@@ -158,9 +175,13 @@ public abstract class Personagem extends ObjetoComMovimento {
         return this.cooldown;
     }
 
-    public void setCooldown(int cooldown) {
-        this.cooldown = cooldown;
+    public void setCooldown() {
+        this.cooldown = 30/this.spd;
     }
+    
+//    public void setCooldown(int cooldown) {
+//        this.cooldown = cooldown;
+//    }
 
     // seta o ataque que sera usado pelo pokemon
     public void setAtaque(Ataques ataque){
@@ -173,9 +194,9 @@ public abstract class Personagem extends ObjetoComMovimento {
     }
     
     //para saber se jogador tocou uma das bordas do cenario
-//    public boolean tocaParede(){
-//        return(this.tocaParedeBaixo() || this.tocaParedeCima() || this.tocaParedeDireita() || this.tocaParedeEsquerda());
-//    }
+    public boolean tocaParede(){
+        return(this.tocaParedeBaixo() || this.tocaParedeCima() || this.tocaParedeDireita() || this.tocaParedeEsquerda());
+    }
 
     public String getNome() {
         return nome;
@@ -212,5 +233,14 @@ public abstract class Personagem extends ObjetoComMovimento {
     public void setSpd(int spd) {
         this.spd = spd;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     
 }

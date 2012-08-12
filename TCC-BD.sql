@@ -77,7 +77,7 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `tcc`.`evolucaoporpedra`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tcc`.`evolucaoporpedra` (
-  `id` VARCHAR(45) NOT NULL ,
+  `id` VARCHAR(45) NOT NULL AUTO_INCREMENT,
   `idPokemon` INT(11) NOT NULL ,
   `idEvolucao` INT(11) NOT NULL ,
   `elemento` INT NOT NULL ,

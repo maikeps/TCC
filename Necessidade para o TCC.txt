@@ -26,6 +26,10 @@ Necessarios:
 
 	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro
 
+	--> No CharSelect ainda é usado o modo antigo para ver qual pokemon está selecionado. utilizar this.pokemonSelecionado.
+
+	--> Fazer com que ao apertar a tecla para cima estando na primeira linha va para a ultima, e vice-versa. Agora da para fazer isso sabendo qual o numero de linhas.
+
 --------
 
 "Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens acima."

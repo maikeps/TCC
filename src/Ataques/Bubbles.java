@@ -1,6 +1,6 @@
 package Ataques;
 
-import Personagens.PersonagemTeste;
+import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
@@ -14,7 +14,7 @@ public class Bubbles extends Ataque {
     int destY;
     double deltaX, deltaY, dx, dy;
 
-    public Bubbles(int x, int y, int destX, int destY, double angulo, PersonagemTeste personagem) {
+    public Bubbles(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
         this.setDano(5);
         this.desativado = false;
