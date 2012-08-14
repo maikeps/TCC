@@ -40,12 +40,14 @@ public class Personagem extends ObjetoComMovimento {
     protected int def;
     protected int spd;
     protected int hp;
+    protected int hpInicial;
+    protected int lvl;
 
     public Personagem(){
         
     }
 
-    public Personagem(int id, String nome, int atk, int def, int spd, int hp) {
+    public Personagem(int id, String nome, int atk, int def, int spd, int hp, int lvl) {
 
         this.id = id;
         this.nome = nome;
@@ -53,12 +55,11 @@ public class Personagem extends ObjetoComMovimento {
         this.def = def;
         this.spd = spd;
         this.hp = hp;
+        this.hpInicial = hp;
+        this.lvl = lvl;
         
         double n = (30/(double)this.spd)*100;
         this.cooldown = (int)n;
-        
-        System.out.println("spd do "+ nome + ": " + spd);
-        System.out.println("cooldown do "+ nome + ": " + this.cooldown);
         
         
         try {
@@ -216,6 +217,12 @@ public class Personagem extends ObjetoComMovimento {
     public void setHp(int hp) {
         this.hp = hp;
     }
+    public int getHpInicial() {
+        return hpInicial;
+    }
+    public void setHpInicial(int hpInicial) {
+        this.hpInicial = hpInicial;
+    }
     public int getAtk(){
         return this.atk;
     }
@@ -234,14 +241,19 @@ public class Personagem extends ObjetoComMovimento {
     public void setSpd(int spd) {
         this.spd = spd;
     }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
+    public int getLvl() {
+        return lvl;
+    }
+    public void setLvl(int lvl) {
+        this.lvl = lvl;
+    }
+    
     
     
 }

@@ -129,7 +129,7 @@ public class Player extends ObjetoComMovimento {
         this.personagem = p;
     }
 
-    public int getVida() {
+    public int getHp() {
         return this.personagem.getHp();
     }
 

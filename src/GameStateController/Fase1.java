@@ -40,12 +40,10 @@ public class Fase1 implements GameStateController {
     Player player;
     Inimigo inimigo;
     ArrayList<Ataque> ataques;
-    Charmander charmander;
-    Charmander charmander2;
     Personagem p;
     Personagem p2;
-    
-    public Fase1(CharacterSelect CharSelect){
+
+    public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
     }
 
@@ -56,8 +54,8 @@ public class Fase1 implements GameStateController {
     public void step(long timeElapsed) {
         this.player.step(timeElapsed);
         this.inimigo.step(timeElapsed);
-        
-        
+
+
 //        this.player.setX(this.player.getPersonagem().spriteAtual.pegaLargura()/2);
 //        this.player.setY(this.player.getPersonagem().spriteAtual.pegaAltura()/2);
 //        
@@ -73,7 +71,7 @@ public class Fase1 implements GameStateController {
 
         this.inimigo.setXPlayer(this.player.getX()); //atualiza as informacoes do player para o inimigo
         this.inimigo.setYPlayer(this.player.getY()); //atualiza as informacoes do player para o inimigo
-    
+
     }
 
     public void draw(Graphics g) {
@@ -89,7 +87,7 @@ public class Fase1 implements GameStateController {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
             System.exit(1);
         }
-        
+
         //desenha retangulo preto em toda a tela
         g.fillRect(0, 0, 1000, 1000);
 
@@ -100,10 +98,10 @@ public class Fase1 implements GameStateController {
         for (Ataque a : this.ataques) {
             a.draw(g);
         }
-        
-        
-        
-        
+
+        this.desenhaHealthBar(g);
+
+
         g.setColor(Color.white);
         g.fillRect(this.player.getX(), this.player.getY(), 10, 10);
         g.setColor(Color.black);
@@ -111,8 +109,8 @@ public class Fase1 implements GameStateController {
     }
 
     public void start() {
-       this.criaPlayer1();
-       this.criaInimigo();
+        this.criaPlayer1();
+        this.criaInimigo();
     }
 
     public void stop() {
@@ -124,7 +122,7 @@ public class Fase1 implements GameStateController {
     public void lancaAtaques() {
         //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
         if (this.player.atacou == true) {
-           if (this.player.personagem.podeAtirar()) {
+            if (this.player.personagem.podeAtirar()) {
                 this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
                 this.player.personagem.setCooldownAtual();
             }
@@ -141,11 +139,11 @@ public class Fase1 implements GameStateController {
         this.inimigo.atacou = false;
 
     }
-    
-    public void criaPlayer1(){
-        
+
+    public void criaPlayer1() {
+
         PokemonLiberado pokemon = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
-        
+
         String nome = pokemon.getNome();
         int id = pokemon.getIdPokemon();
         int atk = pokemon.getAtk();
@@ -153,53 +151,80 @@ public class Fase1 implements GameStateController {
         int spd = pokemon.getSpd();
         int hp = pokemon.getHp();
         int lvl = pokemon.getLvl();
-        
-        
+
+
         //fazer update na tabela PokemonLiberado com os stats novos
-        
-        
-        hp += (((hp + 1/8 + 50) * lvl)/50 + 10);
-        atk += ((atk + 1/8 + 50) * lvl)/50 + 5;
-        def += ((def + 1/8 + 50) * lvl)/50 + 5;
-        spd += ((spd + 1/8 + 50) * lvl)/50 + 5;
-        
-        this.p = new Personagem(id, nome, atk, def, spd, hp);
-        
+
+
+        hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
+        atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
+        def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
+        spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
+
+        this.p = new Personagem(id, nome, atk, def, spd, hp, lvl);
+
         this.player = new Player(p);
-        
-        
-        
+
+
+
     }
-    
-    public void criaInimigo(){
+
+    public void criaInimigo() {
         Pokemon pokemon = PokemonDAO.getPokemonPeloNome(CharSelect.getInimigo());
-        
+
         String nome = pokemon.getNome();
         int id = pokemon.getId();
         int atk = pokemon.getAtkbase();
         int def = pokemon.getDefBase();
         int spd = pokemon.getSpdbase();
         int hp = pokemon.getHpBase();
-        
+
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
         int lvl = pl.getLvl();
-        
-        hp += (((hp + 1/8 + 50) * lvl)/50 + 10);
-        atk += ((atk + 1/8 + 50) * lvl)/50 + 5;
-        def += ((def + 1/8 + 50) * lvl)/50 + 5;
-        spd += ((spd + 1/8 + 50) * lvl)/50 + 5;
-        
+
+        hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
+        atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
+        def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
+        spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
+
         String sql = "insert into pokemonInimigo "
                 + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
-                + "(\""+id+"\", \"minion\", \""+atk+"\", "
-                + "\""+def+"\", \""+spd+"\", \""+hp+"\", \""+lvl+"\")";
-        
+                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
+                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
+
         MySQL bd = new MySQL();
         boolean bool = bd.executaInsert(sql);
-        
-        this.p2 = new Personagem(id, nome, atk, def, spd, hp);
-        
+
+        this.p2 = new Personagem(id, nome, atk, def, spd, hp, lvl);
+
         this.inimigo = new Inimigo(this.p2, this.player);
+
+    }
+
+    public void desenhaHealthBar(Graphics g) {
+        // HealthBar do player
+        int hpInicial = this.player.getPersonagem().getHpInicial();
+        int hp = this.player.getHp();
+        int lvl = this.player.getPersonagem().getLvl();
+        g.setColor(Color.white);
+        g.drawString(""+this.CharSelect.getPlayer1(), 50, 588);
+        g.drawString("LVL "+lvl, 98, 558);
+        g.fillRect(98, 598, hpInicial + 4, 24);
+        g.setColor(Color.green);
+        g.fillRect(100, 600, hp, 20);
+        g.drawString("HP: "+hp+"/"+hpInicial, 100, 650);
+        
+        // HealthBar do inimigo
+        int hpInicialInimigo = this.inimigo.getPersonagem().getHpInicial();
+        int hpInimigo = this.inimigo.getHp();
+        int lvlInimigo = this.player.getPersonagem().getLvl();
+        g.setColor(Color.white);
+        g.drawString(""+this.CharSelect.getInimigo(), 550, 58);
+        g.drawString("LVL "+lvlInimigo, 550, 98);
+        g.fillRect(598, 98, hpInicialInimigo + 4, 24);
+        g.setColor(Color.green);
+        g.fillRect(600, 100, hpInimigo, 20);
+        g.drawString("HP: "+hpInimigo+"/"+hpInicialInimigo, 600, 150);
 
     }
 }
