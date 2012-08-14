@@ -177,14 +177,6 @@ public class CharacterSelect implements GameStateController {
 
     public void desenhaStats(Graphics g) {
 
-
-        //nao sei se precisa mais
-        //tem que ver uma formula melhor para calcular o i
-        //quando o ySelecionado for = a 3, o resultado sera 20
-        //quando ter que ser 18
-
-//        int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
-
         int i = this.pokemonSelecionado;
 
         //nome do pokemon
@@ -378,14 +370,19 @@ public class CharacterSelect implements GameStateController {
             //se o quadrado de seleção nao estiver na primeira linha
             //o quadrado entao simplesmenta anda uma casa para cima
             if (this.ySelecionado > 1) {
-                this.ySelecionado -= 1;
+                //se a linha for uma das tres primeiras, move o quadrado
+                //senao, simplesmente deixa ele parado na ultima
+                if (this.linha <= 3) {
+                    this.ySelecionado -= 1;
+                }
                 this.pokemonSelecionado -= 9;
                 this.linha--; //linha onde esta o quadrado
             } else //se o quadrado de seleção estiver na primeira linha
             //o quadrado entao vai para a linha de bem de baixo(terceira)
             if (this.ySelecionado <= 1) {
                 this.ySelecionado = 3;
-                this.pokemonSelecionado += 18; //pokemon selecionado é o da terceira linha
+                this.pokemonSelecionado += 9 * (this.numLinhas - 1); //pokemon selecionado é o da ultima linha
+                this.linha = this.numLinhas;
             }
 
             this.yDraw = (this.ySelecionado * 75 - 5) + 350;
@@ -401,51 +398,40 @@ public class CharacterSelect implements GameStateController {
                 this.pokemonSelecionado += 9;
             } else //se o quadrado de seleção esiver na ultima linha
             //o quadrado anda uma linha para baixo, mostrando os pokemons da proxima linha
-            //e fazendo desaparecer os da linha de cimaif (this.ySelecionado >= 3) {
+            //e fazendo desaparecer os da linha de cima
             {
-                this.pokemonSelecionado += 9;
+                if (this.linha == this.numLinhas + 1 && this.linha > 3) {
+                    this.linha = 1;
+                    this.ySelecionado = 1;
+                    this.pokemonSelecionado = this.xSelecionado;
+                } else {
+                    this.pokemonSelecionado += 9;
+                }
             }
         }
-
-
         this.yDraw = (this.ySelecionado * 75 - 5) + 350;
-
         Util.sleep(150);
 
-        //modo antigo de ver qual pokemon esta selecionado
-        //arrumar
-        int n = this.xSelecionado + 10 * (this.ySelecionado - 1);
-        if (n >= 10 && n < 20) {
-            n -= 1;
-        } else if (n >= 20) {
-            n -= 2;
-        }
-        Pokemon p = this.listaDePokemon.get(n);
+
+        
+        //tecla de espaço
+        
+        Pokemon p = this.listaDePokemon.get(this.pokemonSelecionado);
         String nome = p.getNome();
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
-
         //se o jogador apertou espaço e o pokemon escolhido ja foi liberado, comeca o jogo
         if (teclado.keyDown(Keys.ESPACO) && pl.getNome() != null) {
-            int i = this.xSelecionado + 10 * (this.ySelecionado - 1);
-            if (i <= this.nomes.size()) {
-                if (i < 10) {
-                    this.player1 = this.nomes.get(i);
-                } else {
-                    this.player1 = this.nomes.get(i - 1);
-                }
+            this.player1 = this.nomes.get(this.pokemonSelecionado);
 
-                Util.sleep(500);
+            Util.sleep(500);
+            this.sorteiaInimigo();
+            //enquanto o inimigo for igual ao jogador, sorteia de novo.
+            //isso nao sera mais usado quando for implantado o sistema de tiles
+            //porque pode sim existir um pokemon igual ao selecionado pelo jogador
+            while (this.inimigo.equals(this.getPlayer1())) {
                 this.sorteiaInimigo();
-                //enquanto o inimigo for igual ao jogador, sorteia de novo.
-                //isso nao sera mais usado quando for implantado o sistema de tiles
-                //porque pode sim existir um pokemon igual ao selecionado pelo jogador
-                while (this.inimigo.equals(this.getPlayer1())) {
-                    this.sorteiaInimigo();
-                }
-                this.iniciaJogo();
             }
-
-
+            this.iniciaJogo();
         }
     }
 

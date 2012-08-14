@@ -2,6 +2,7 @@ package Personagens;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
 import tcc.Ataques;

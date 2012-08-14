@@ -35,6 +35,7 @@ public class Player extends ObjetoComMovimento {
     
     public Player(Personagem personagem) {
 
+        
         this.destX = 0;
         this.destY = 0;
         this.atacou = false;
@@ -46,6 +47,8 @@ public class Player extends ObjetoComMovimento {
         this.personagem.setX(200);
         this.personagem.setY(500);
 
+        
+        
 
     }
 

@@ -8,7 +8,7 @@ public class MySQL
 {
     Statement statement;
     String user = "root";
-    String pass = "7huy7119";
+    String pass = "senai2012";
     String database = "tcc";
     String host = "localhost";
    

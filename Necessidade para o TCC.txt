@@ -4,19 +4,12 @@ Principal
 ---------
 
 Necessarios:
-	
-	--> Colocar uma barra de rolagem ou algo do tipo para o player poder escolher todos os personagens, sendo que na tela so caberiam aproximadamente 80.
 
 	--> Pegar o valor do banco de dados para definir o ataque do personagem.
 
-	--> Utilizar fontes (nas palavras) diferentes que nao estao disponiveis no windows.
-
 	--> Arrumar a classe Player, no pegar o X e Y do mouse , mas com a condição de se  continuar pressionado a posição irá mudar(por enquanto se segurar o botao do mouse e mexer o cursor, o tal X e Y nao muda, impossibilitando de o player apenas mexer o mouse para mudar o local alvo para o ataque).
 
-
 	--> Procurar tiles que irão compor o mapa
-
-	--> Criar uma barra de progresso para mostrar quanto que falta para os personagens serem liberados.
 
 	--> Pensar em um mapa, e onde ficarão os bosses.
 
@@ -25,10 +18,6 @@ Necessarios:
 	--> Para fazer com que os pokemons de um elemento so nascam em areas desse elemento, usar o valor "raridade" da tabela pokemon para ver se o pokemon vai ou nao nascer em cada tile. se nascer, a variavel "ocupado" do tile sera true e permanecerá assim ate o pokemon morrer, assim ficara sendo false. so pode nascer outro pokemon nesse mesmo tile se essa variavel for false.
 
 	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro
-
-	--> No CharSelect ainda é usado o modo antigo para ver qual pokemon está selecionado. utilizar this.pokemonSelecionado.
-
-	--> Fazer com que ao apertar a tecla para cima estando na primeira linha va para a ultima, e vice-versa. Agora da para fazer isso sabendo qual o numero de linhas.
 
 --------
 

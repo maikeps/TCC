@@ -31,7 +31,7 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`ataque` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = latin1;
 
 
@@ -77,11 +77,11 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `tcc`.`evolucaoporpedra`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tcc`.`evolucaoporpedra` (
-  `id` VARCHAR(45) NOT NULL AUTO_INCREMENT,
-  `idPokemon` INT(11) NOT NULL ,
-  `idEvolucao` INT(11) NOT NULL ,
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `idPokemon` INT NOT NULL ,
+  `idEvolucao` INT NOT NULL ,
   `elemento` INT NOT NULL ,
-  PRIMARY KEY (`idPokemon`, `idEvolucao`, `id`, `elemento`) ,
+  PRIMARY KEY (`id`, `idPokemon`, `idEvolucao`, `elemento`) ,
   INDEX `fk_pokemon_has_pokemon_pokemon2` (`idEvolucao` ASC) ,
   INDEX `fk_pokemon_has_pokemon_pokemon1` (`idPokemon` ASC) ,
   INDEX `fk_evolucaoporpedra_elemento1` (`elemento` ASC) ,
@@ -112,7 +112,7 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`jogador` (
   `nome` VARCHAR(45) NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
-AUTO_INCREMENT = 1
+AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = latin1;
 
 

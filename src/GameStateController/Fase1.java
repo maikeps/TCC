@@ -56,6 +56,14 @@ public class Fase1 implements GameStateController {
     public void step(long timeElapsed) {
         this.player.step(timeElapsed);
         this.inimigo.step(timeElapsed);
+        
+        
+//        this.player.setX(this.player.getPersonagem().spriteAtual.pegaLargura()/2);
+//        this.player.setY(this.player.getPersonagem().spriteAtual.pegaAltura()/2);
+//        
+//        this.inimigo.setX(this.player.getPersonagem().spriteAtual.pegaLargura()/2);
+//        this.inimigo.setY(this.player.getPersonagem().spriteAtual.pegaAltura()/2);
+//        
 
         for (Ataque a : this.ataques) {
             a.step(timeElapsed);
@@ -92,6 +100,13 @@ public class Fase1 implements GameStateController {
         for (Ataque a : this.ataques) {
             a.draw(g);
         }
+        
+        
+        
+        
+        g.setColor(Color.white);
+        g.fillRect(this.player.getX(), this.player.getY(), 10, 10);
+        g.setColor(Color.black);
 
     }
 
@@ -126,8 +141,6 @@ public class Fase1 implements GameStateController {
         this.inimigo.atacou = false;
 
     }
-    
-    
     
     public void criaPlayer1(){
         
