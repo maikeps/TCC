@@ -1,7 +1,7 @@
 package Ataques;
 
 import Personagens.Personagem;
-import Personagens.PersonagemTeste;
+import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.GameObject;

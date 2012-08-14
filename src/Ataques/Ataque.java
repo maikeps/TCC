@@ -6,7 +6,7 @@ package Ataques;
 
 import DAO.AtaqueDAO;
 import Personagens.Personagem;
-import Personagens.PersonagemTeste;
+import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
@@ -29,7 +29,7 @@ public abstract class Ataque extends ObjetoComMovimento{
     int yInicial;
     Imagem imagem;
     Imagem Vazio;
-    PersonagemTeste personagem; // personagem que ataca
+    Personagem personagem; // personagem que ataca
     
     public void step(long timeElapsed){
         

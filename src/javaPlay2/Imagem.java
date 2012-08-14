@@ -55,12 +55,6 @@ public class Imagem {
         Graphics2D g2d = (Graphics2D)graphics;
         
         AffineTransform tx = new AffineTransform();
-
-//////        if(-angle >= 90 && -angle < 270){
-//////            tx.translate(x, y+h/2);
-//////        } else {
-//////            tx.translate(x, y-h/2);
-//////        }
         
         tx.translate(x, y);        
         tx.rotate(Math.toRadians(-angle));        

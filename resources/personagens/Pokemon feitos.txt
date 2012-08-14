@@ -20,6 +20,8 @@ Rattata
 Raticate
 Spearow
 Fearow
-
-
+Ekans
+Arbok
 Pikachu
+Raichu
+Sandshrew

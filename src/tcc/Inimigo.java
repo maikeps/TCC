@@ -1,6 +1,6 @@
 package tcc;
 
-import Personagens.PersonagemTeste;
+import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
@@ -10,7 +10,7 @@ import util.Util;
 public class Inimigo extends ObjetoComMovimento {
 
     public Rectangle campoDeVisao;
-    public PersonagemTeste personagem;
+    public Personagem personagem;
     public Player player;
     public int vida;
     protected int velocidade = 4;
@@ -34,7 +34,7 @@ public class Inimigo extends ObjetoComMovimento {
     //so entao aproxima
 
     //o player estiver na linha de visao do inimigo e se estiver suficientemente perto, o inimigo atira.
-    public Inimigo(PersonagemTeste personagem, Player player) {
+    public Inimigo(Personagem personagem, Player player) {
         this.sorteiaDestino();
         this.atacou = false;
 
@@ -138,11 +138,11 @@ public class Inimigo extends ObjetoComMovimento {
         return this.personagem.getDirecao();
     }
 
-    public PersonagemTeste getPersonagem() {
+    public Personagem getPersonagem() {
         return this.personagem;
     }
 
-    public void setPersonagem(PersonagemTeste p) {
+    public void setPersonagem(Personagem p) {
         this.personagem = p;
     }
 

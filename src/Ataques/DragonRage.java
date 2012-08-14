@@ -1,6 +1,6 @@
 package Ataques;
 
-import Personagens.PersonagemTeste;
+import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -22,7 +22,7 @@ public class DragonRage extends Ataque {
 
 
 
-    public DragonRage(int x, int y, int destX, int destY, double angulo, PersonagemTeste personagem) {
+    public DragonRage(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         //precisa saber qual personagem atacou para poder calcular
         //a posicao certa do lancamento do ataque
         
