@@ -22,11 +22,7 @@ import tcc.ObjetoComMovimento;
  */
 public abstract class Ataque extends ObjetoComMovimento{
 
-    public static class poder extends Ataque {
-
-        public poder(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
-        }
-    }
+  
 
     
     int velocidade; //Determina a velocidade em que o personagem anda

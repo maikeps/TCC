@@ -5,13 +5,11 @@
 package GameStateController;
 
 import Ataques.*;
+import Ataques.Ataque.poder;
 import DAO.AtaqueDAO;
 import DAO.PokemonDAO;
-import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
-import Insert.PokemonInimigoInsert;
 import MySQL.MySQL;
-import Personagens.Charmander;
 import Personagens.Personagem;
 import java.awt.Color;
 import java.awt.Font;
@@ -28,7 +26,6 @@ import tcc.Player;
 
 
 import model.Pokemon;
-import model.PokemonInimigo;
 import model.PokemonLiberado;
 
 /**
@@ -36,6 +33,8 @@ import model.PokemonLiberado;
  * @author maike_p_santos
  */
 public class Fase1 implements GameStateController {
+
+   
 
     CharacterSelect CharSelect;
     Player player;
@@ -46,8 +45,13 @@ public class Fase1 implements GameStateController {
 
     Imagem img;
     Font f;
-
-
+    
+    String nome = CharSelect.getPlayer1();
+    model.Ataque poder = AtaqueDAO.getPoder(nome);
+    Class oi = poder.getClass();
+    
+ 
+    
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
     }
@@ -144,7 +148,7 @@ public class Fase1 implements GameStateController {
        
         if (this.player.atacou == true) {
             if (this.player.personagem.podeAtirar()) {
-                this.ataques.add(new Ataque.poder(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+                this.ataques.add(new oi(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
                 this.player.personagem.setCooldownAtual();
             }
         }
