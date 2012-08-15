@@ -23,7 +23,6 @@ import model.PokemonLiberado;
 import util.Util;
 import java.awt.FontFormatException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.FileInputStream;
 
 /**
@@ -381,7 +380,7 @@ public class CharacterSelect implements GameStateController {
             //o quadrado entao vai para a linha de bem de baixo(terceira)
             if (this.ySelecionado <= 1) {
                 this.ySelecionado = 3;
-                this.pokemonSelecionado += 9 * (this.numLinhas - 1); //pokemon selecionado é o da ultima linha
+                this.pokemonSelecionado += 9 * (this.numLinhas-1); //pokemon selecionado é o da ultima linha
                 this.linha = this.numLinhas;
             }
 
@@ -400,7 +399,7 @@ public class CharacterSelect implements GameStateController {
             //o quadrado anda uma linha para baixo, mostrando os pokemons da proxima linha
             //e fazendo desaparecer os da linha de cima
             {
-                if (this.linha == this.numLinhas + 1 && this.linha > 3) {
+                if (this.linha == this.numLinhas && this.linha > 3) {
                     this.linha = 1;
                     this.ySelecionado = 1;
                     this.pokemonSelecionado = this.xSelecionado;

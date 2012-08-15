@@ -19,6 +19,9 @@ Necessarios:
 
 	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro
 
+	--> Arrumar teclas para cima e para baixo(ir da primeira linha para a ultima e vice-versa)
+
+	--> Arumar a tabela bonusDeElemento, tem elementos que nao possuem vantagens ou desantagens. Fazer assim: tabela bonusDeElemento possuindo apenas o elemento em questao, o elemento sobre o qual tem vantagem(ou desvantagem) e o multiplicador. ficaria assim: Fire, Grass, 2.0.  2.0 significa 2x dano e 0.5 significa metade do dano.
 --------
 
 "Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens acima."
