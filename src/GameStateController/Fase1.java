@@ -19,6 +19,7 @@ import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import javaPlay2.GameStateController;
 import javaPlay2.Imagem;
@@ -78,7 +79,7 @@ public class Fase1 implements GameStateController {
     }
 
     public void draw(Graphics g) {
-        
+
         //cria fonte
         try {
             this.f = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("resources/fontes/PressStart2P.ttf"));
@@ -94,17 +95,17 @@ public class Fase1 implements GameStateController {
 
         //desenha retangulo preto em toda a tela
         g.fillRect(0, 0, 1000, 1000);
-        
-        
+
+
         //desenha imagem do fundo(mapa)
         //nao vai ficar assim
-        try{
+        try {
             this.img = new Imagem("resources/map.png");
-        }catch(Exception ex){
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
-        img.drawZoomed(g, -50, -50, 5); 
+        img.drawZoomed(g, -50, -50, 5);
 
         //desenha os personagens e os ataques
         this.player.draw(g);
@@ -120,8 +121,7 @@ public class Fase1 implements GameStateController {
         g.setColor(Color.white);
         g.fillRect(this.player.getX(), this.player.getY(), 10, 10);
         g.setColor(Color.black);
-        
-        
+
     }
 
     public void start() {
@@ -139,10 +139,47 @@ public class Fase1 implements GameStateController {
         //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
         if (this.player.atacou == true) {
             if (this.player.personagem.podeAtirar()) {
-                this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+
+                model.Ataque a = AtaqueDAO.getPoder(this.CharSelect.getPlayer1());
+                String s = "Ataques."+a.getNome();
+                try {
+                    Class cls = Class.forName(s);
+                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, double.class, Personagem.class};
+                    java.lang.reflect.Constructor con = cls.getConstructor(parameters);
+                    Object o = con.newInstance(new Object[]{this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()});
+                    System.out.println(o);
+                    // Ataque at = (Ataque) cls.newInstance();
+                   // at.setxInicial(this.player.getX());
+                  //  at.setyInicial(this.player.getY());
+                  //  at.setDestX(this.player.getDestX());
+                   // at.setDestY(this.player.getDestY());
+                   // at.setAngulo(this.player.getAngulo());
+                   // at.setPersonagem(this.player.getPersonagem());
+                    this.ataques.add((Ataque)o);
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
+                } catch (IllegalAccessException ex2){
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
+                    System.exit(1);
+                } catch (InstantiationException ex3){
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex3.getMessage());
+                    System.exit(1);
+                } catch (NoSuchMethodException ex4){
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
+                    System.exit(1);
+                } catch (IllegalArgumentException ex){
+                    
+                }  catch (InvocationTargetException ex){
+                    
+                } catch(SecurityException ex){
+                    
+                }
+               // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
                 this.player.personagem.setCooldownAtual();
             }
         }
+        
         this.player.atacou = false;
 
         //se o inimigo atacou, verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
@@ -223,24 +260,24 @@ public class Fase1 implements GameStateController {
         int hp = this.player.getHp();
         int lvl = this.player.getPersonagem().getLvl();
         g.setColor(Color.white);
-        g.drawString("LVL "+lvl, 98, 568);
-        g.drawString(""+this.CharSelect.getPlayer1(), 98, 588);
+        g.drawString("LVL " + lvl, 98, 568);
+        g.drawString("" + this.CharSelect.getPlayer1(), 98, 588);
         g.fillRect(98, 598, hpInicial + 4, 24);
         g.setColor(Color.green);
         g.fillRect(100, 600, hp, 20);
-        g.drawString("HP: "+hp+"/"+hpInicial, 100, 650);
-        
+        g.drawString("HP: " + hp + "/" + hpInicial, 100, 650);
+
         // HealthBar do inimigo
         int hpInicialInimigo = this.inimigo.getPersonagem().getHpInicial();
         int hpInimigo = this.inimigo.getHp();
         int lvlInimigo = this.player.getPersonagem().getLvl();
         g.setColor(Color.white);
-        g.drawString("LVL "+lvlInimigo, 598, 68);
-        g.drawString(""+this.CharSelect.getInimigo(), 598, 88);
+        g.drawString("LVL " + lvlInimigo, 598, 68);
+        g.drawString("" + this.CharSelect.getInimigo(), 598, 88);
         g.fillRect(598, 98, hpInicialInimigo + 4, 24);
         g.setColor(Color.green);
         g.fillRect(600, 100, hpInimigo, 20);
-        g.drawString("HP: "+hpInimigo+"/"+hpInicialInimigo, 600, 150);
+        g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600, 150);
 
     }
 }
