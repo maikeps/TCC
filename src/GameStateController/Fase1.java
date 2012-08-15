@@ -42,6 +42,8 @@ public class Fase1 implements GameStateController {
     ArrayList<Ataque> ataques;
     Personagem p;
     Personagem p2;
+    
+    String poder = CharSelect.getPlayer1();
 
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
@@ -72,6 +74,7 @@ public class Fase1 implements GameStateController {
         this.inimigo.setXPlayer(this.player.getX()); //atualiza as informacoes do player para o inimigo
         this.inimigo.setYPlayer(this.player.getY()); //atualiza as informacoes do player para o inimigo
 
+           System.out.println(poder);
     }
 
     public void draw(Graphics g) {
@@ -121,9 +124,11 @@ public class Fase1 implements GameStateController {
 
     public void lancaAtaques() {
         //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
+       
+       
         if (this.player.atacou == true) {
             if (this.player.personagem.podeAtirar()) {
-                this.ataques.add(new DragonRage(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+                this.ataques.add(new Ataque.poder(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
                 this.player.personagem.setCooldownAtual();
             }
         }
@@ -151,7 +156,9 @@ public class Fase1 implements GameStateController {
         int spd = pokemon.getSpd();
         int hp = pokemon.getHp();
         int lvl = pokemon.getLvl();
-
+     
+         model.Ataque poder  = AtaqueDAO.getPoder(nome);
+       
 
         //fazer update na tabela PokemonLiberado com os stats novos
 
@@ -227,4 +234,6 @@ public class Fase1 implements GameStateController {
         g.drawString("HP: "+hpInimigo+"/"+hpInicialInimigo, 600, 150);
 
     }
+
+   
 }
