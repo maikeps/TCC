@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
+import pixelPerfect.GameObjectImagePixelPerfect;
 import tcc.Ataques;
 import tcc.Direcao;
 import tcc.ObjetoComMovimento;
@@ -17,14 +18,20 @@ public class Personagem extends ObjetoComMovimento {
         int velocidade = 1; // ??
     int velocidadeInicial = 1; // ??
     
-    
+    /* Colisão simple
     public Imagem spriteRight; 
     public Imagem spriteLeft;
     public Imagem spriteUp;
     public Imagem spriteDown;
-    public Imagem spriteAtual;
+    public Imagem spriteAtual;*/
     public Direcao direcao;
 
+    //Com colisão pixel perfct 
+   public GameObjectImagePixelPerfect  spriteRight; 
+   public GameObjectImagePixelPerfect  spriteLeft;
+   public GameObjectImagePixelPerfect  spriteUp;
+   public GameObjectImagePixelPerfect  spriteDown;
+   public GameObjectImagePixelPerfect  spriteAtual;
     
     public int cooldownAtual; //como esta o cooldown atualmente(diminui em um por step)
     public int cooldown; //cooldown que tem que esperar ate atacar de novo
@@ -61,7 +68,7 @@ public class Personagem extends ObjetoComMovimento {
         double n = (30/(double)this.spd)*100;
         this.cooldown = (int)n;
         
-        
+       /*  Colisão simples
         try {
             this.spriteRight = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Left.gif");
@@ -72,8 +79,19 @@ public class Personagem extends ObjetoComMovimento {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
-        
+        */
 
+         try {
+            this.spriteRight = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Right.gif");
+            this.spriteLeft = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Left.gif");
+            this.spriteDown = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Down.gif");
+            this.spriteUp = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Up.gif");
+            this.spriteAtual = this.spriteDown;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
+            System.exit(1);
+        }
+        
     }
 
     public void step(long timeElapsed) {
@@ -99,8 +117,12 @@ public class Personagem extends ObjetoComMovimento {
 
     }
 
-    public void draw(Graphics g) {
-        this.spriteAtual.draw(g, this.x, this.y);
+//    public void draw(Graphics g) {
+//        this.spriteAtual.draw(g, this.x, this.y);
+//    }
+
+      public void draw(Graphics g) {
+        this.spriteAtual.draw(g);
     }
 
     public boolean tocaParedeEsquerda() {
@@ -120,9 +142,9 @@ public class Personagem extends ObjetoComMovimento {
     }
 
     //retorna o retangulo invisivel ocupado pelo personagem
-    public Rectangle getRetangulo() {
-        return new Rectangle(this.x, this.y, this.spriteAtual.pegaLargura(), this.spriteAtual.pegaAltura());
-    }
+  //  public Rectangle getRetangulo() {
+    //    return new Rectangle(this.x, this.y, this.spriteAtual.pegaLargura(), this.spriteAtual.pegaAltura());
+   // }
 
     //verifica se o retangulo do personagem tem colisao com o do inimigo
     public boolean temColisao(Personagem player) {
@@ -138,10 +160,10 @@ public class Personagem extends ObjetoComMovimento {
         this.direcao = direcao;
     }
 
-    public void setSpriteAtual(Imagem sprite) {
-        this.spriteAtual = sprite;
+   // public void setSpriteAtual(Imagem sprite) {
+     //   this.spriteAtual = sprite;
 
-    }
+    //}
 
     public boolean estaMorto() {
         return (this.hp <= 0);

@@ -1,14 +1,12 @@
 package MySQL;
 
-import java.io.*;
 import java.sql.*; 
-import javax.swing.*;
 
 public class MySQL
 {
     Statement statement;
     String user = "root";
-    String pass = "7huy7119";
+    String pass = "vertrigo";
     String database = "tcc";
     String host = "localhost";
    

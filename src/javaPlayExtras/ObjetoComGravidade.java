@@ -49,3 +49,8 @@ public abstract class ObjetoComGravidade extends GameObject {
         return (this.yVelocidade > 0);
     }
 }
+
+
+   
+
+  

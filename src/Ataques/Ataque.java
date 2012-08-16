@@ -19,7 +19,10 @@ import tcc.ObjetoComMovimento;
  * @author Maike
  */
 public abstract class Ataque extends ObjetoComMovimento{
- 
+
+  
+
+    
     int velocidade; //Determina a velocidade em que o personagem anda
     boolean desativado;
     int dano;// è o dano do ataque

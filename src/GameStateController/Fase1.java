@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +26,7 @@ import tcc.Inimigo;
 import tcc.Player;
 import model.Pokemon;
 import model.PokemonLiberado;
+import pixelPerfect.GameObjectImagePixelPerfect;
 
 /**
  *
@@ -32,15 +34,21 @@ import model.PokemonLiberado;
  */
 public class Fase1 implements GameStateController {
 
+   
+
     CharacterSelect CharSelect;
     Player player;
     Inimigo inimigo;
     ArrayList<Ataque> ataques;
     Personagem p;
     Personagem p2;
+
     Imagem img;
     Font f;
-
+    
+ 
+ 
+    
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
     }
@@ -70,6 +78,25 @@ public class Fase1 implements GameStateController {
         this.inimigo.setXPlayer(this.player.getX()); //atualiza as informacoes do player para o inimigo
         this.inimigo.setYPlayer(this.player.getY()); //atualiza as informacoes do player para o inimigo
 
+        
+        /* Colisão pixel perfect
+        Point colisao = this.player.temColisao( this.inimigo );
+        if(colisao != null){
+
+            if(this.explosao != null && this.explosao.isActive()){
+                //Já tem uma explosao ativa, não faz nada
+            } else {
+                //Nenhuma explosao ativa, cria uma nova.
+                this.explosao = new ExplosaoFraca(colisao.x, colisao.y);
+            }
+            
+        }
+
+        if(this.explosao != null){
+            this.explosao.step(timeElapsed);
+        }
+         */  
+        
     }
 
     public void draw(Graphics g) {
@@ -131,6 +158,8 @@ public class Fase1 implements GameStateController {
 
     public void lancaAtaques() {
         //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
+       
+       
         if (this.player.atacou == true) {
             if (this.player.personagem.podeAtirar()) {
 
@@ -165,12 +194,15 @@ public class Fase1 implements GameStateController {
                     System.exit(1);
                 }
                // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+
                 this.player.personagem.setCooldownAtual();
             }
         }
         
         this.player.atacou = false;
 
+        // Arrumar essa parte para que o inimigo tbm troque de poder!!!!
+        
         //se o inimigo atacou, verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
         if (this.inimigo.atacou == true) {
             if (this.inimigo.personagem.podeAtirar()) {
@@ -225,7 +257,8 @@ public class Fase1 implements GameStateController {
         int spd = pokemon.getSpd();
         int hp = pokemon.getHp();
         int lvl = pokemon.getLvl();
-
+     
+               
 
         //fazer update na tabela PokemonLiberado com os stats novos
 
@@ -301,4 +334,6 @@ public class Fase1 implements GameStateController {
         g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600, 150);
 
     }
+
+   
 }
