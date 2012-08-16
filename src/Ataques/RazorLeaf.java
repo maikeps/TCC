@@ -4,6 +4,7 @@
  */
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -25,7 +26,14 @@ public class RazorLeaf extends Ataque {
     double deltaX, deltaY, dx, dy;
 
     public RazorLeaf(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
-        this.setDano(10);
+        
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
         this.personagem = personagem;
 
         this.desativado = false;

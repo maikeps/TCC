@@ -22,6 +22,8 @@ Necessarios:
 	--> Arrumar teclas para cima e para baixo(ir da primeira linha para a ultima e vice-versa)
 
 	--> Arumar a tabela bonusDeElemento, tem elementos que nao possuem vantagens ou desantagens. Fazer assim: tabela bonusDeElemento possuindo apenas o elemento em questao, o elemento sobre o qual tem vantagem(ou desvantagem) e o multiplicador. ficaria assim: Fire, Grass, 2.0.  2.0 significa 2x dano e 0.5 significa metade do dano.
+
+	--> Fazer a colisao no jogo
 --------
 
 "Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens acima."

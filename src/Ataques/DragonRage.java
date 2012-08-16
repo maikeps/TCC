@@ -1,5 +1,6 @@
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,24 +10,19 @@ import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
 
 //revisar ajustaAtaque()
-
 public class DragonRage extends Ataque {
 
     double angulo; // Angulo de inclinação, rotaciona a imagem
     int destX; // Posição do mouse
     int destY; // Posição do mouse
-    
-
     double deltaX, deltaY, dx, dy;
-
-
-
 
     public DragonRage(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         //precisa saber qual personagem atacou para poder calcular
         //a posicao certa do lancamento do ataque
+
+
         
-        this.setDano(5);
         this.desativado = false;
         this.xInicial = x;
         this.yInicial = y;
@@ -40,20 +36,20 @@ public class DragonRage extends Ataque {
 
         try {
             this.imagem = new Imagem("resources/ataques/Dragon Rage/Rage_Right.png");
-            
-          //  this.spriteAtual = spriteVazio;
+
+            //  this.spriteAtual = spriteVazio;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
         }
-        
-        deltaX = Math.abs(this.x-this.destX);
-        deltaY = Math.abs(this.y-this.destY);
 
-        this.dx=Math.cos(Math.toRadians(angulo))*velocidade;
-        this.dy=-Math.sin(Math.toRadians(angulo))*velocidade;
- 
-        
+        deltaX = Math.abs(this.x - this.destX);
+        deltaY = Math.abs(this.y - this.destY);
+
+        this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
+        this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
+
+
 
     }
 
@@ -62,11 +58,11 @@ public class DragonRage extends Ataque {
             return;
         }
         this.x += this.dx;
-    	this.y += this.dy;
-        
-        
+        this.y += this.dy;
+
+
     }
-    
+
 // Responsavel por desenha na tela 
     @Override
     public void draw(Graphics g) {
@@ -74,7 +70,7 @@ public class DragonRage extends Ataque {
             return;
         }
 
-        this.imagem.drawRotated(g, this.x, this.y + this.imagem.pegaAltura()/2, angulo);
+        this.imagem.drawRotated(g, this.x, this.y + this.imagem.pegaAltura() / 2, angulo);
 
     }
 

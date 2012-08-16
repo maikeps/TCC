@@ -46,8 +46,6 @@ public class AtaqueDAO {
         MySQL banco = new MySQL();
         String sql = "select * from ataque where nome = \""+nome+"\"";
         
-        System.out.println(sql);
-        
         ConjuntoResultados linhas = banco.executaSelect(sql);
         
         Ataque a = new Ataque();
