@@ -19,7 +19,13 @@ public class WaterGun extends Ataque {
 
     public WaterGun(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
-        this.setDano(5);
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
         this.desativado = false;
         this.xInicial = x;
         this.yInicial = y;
@@ -49,17 +55,17 @@ public class WaterGun extends Ataque {
 
 
         
-        
-
-        String clsname = this.getClass().getName();
-        System.out.println("Full class name =" + clsname);
-        int mid = clsname.lastIndexOf('.') + 1;
-        String finalClsName = clsname.substring(mid);
-        System.out.println(finalClsName);
-
-
-        model.Ataque a = AtaqueDAO.getAtaque(finalClsName);
-        this.setDano(a.getAtk());
+//        
+//
+//        String clsname = this.getClass().getName();
+//        System.out.println("Full class name =" + clsname);
+//        int mid = clsname.lastIndexOf('.') + 1;
+//        String finalClsName = clsname.substring(mid);
+//        System.out.println(finalClsName);
+//
+//
+//        model.Ataque a = AtaqueDAO.getAtaque(finalClsName);
+//        this.setDano(a.getAtk());
 
         
         

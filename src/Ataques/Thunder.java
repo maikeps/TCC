@@ -4,6 +4,7 @@
  */
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -23,7 +24,14 @@ public class Thunder extends Ataque {
 
     public Thunder(int x, int y, Personagem alvo) {
         this.personagem = alvo;
-        this.setDano(15);
+        
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
 
         AudioPlayer.play("resources/sounds/Sound 1.wav");
         this.desativado = false;

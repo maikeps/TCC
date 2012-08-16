@@ -1,5 +1,6 @@
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import Personagens.Personagem;
 import java.awt.Graphics;
@@ -20,7 +21,16 @@ public class FlameBurst extends Ataque {
 
     public FlameBurst(int x, int y, Personagem personagem) {
         this.personagem = personagem;
-        this.setDano(10);
+        
+        
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
+        
         AudioPlayer.play("resources/sounds/Sound 1.wav");
         this.desativado = false;
         this.x = x - (this.personagem.spriteAtual.pegaLargura() + 20);

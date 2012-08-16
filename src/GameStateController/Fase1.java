@@ -24,8 +24,6 @@ import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
 import tcc.Inimigo;
 import tcc.Player;
-
-
 import model.Pokemon;
 import model.PokemonLiberado;
 import pixelPerfect.GameObjectImagePixelPerfect;
@@ -172,17 +170,9 @@ public class Fase1 implements GameStateController {
                     Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, double.class, Personagem.class};
                     java.lang.reflect.Constructor con = cls.getConstructor(parameters);
                     Object o = con.newInstance(new Object[]{this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()});
-                    System.out.println(o);
-                    // Ataque at = (Ataque) cls.newInstance();
-                   // at.setxInicial(this.player.getX());
-                  //  at.setyInicial(this.player.getY());
-                  //  at.setDestX(this.player.getDestX());
-                   // at.setDestY(this.player.getDestY());
-                   // at.setAngulo(this.player.getAngulo());
-                   // at.setPersonagem(this.player.getPersonagem());
                     this.ataques.add((Ataque)o);
                 } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
                     System.exit(1);
                 } catch (IllegalAccessException ex2){
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
@@ -194,11 +184,14 @@ public class Fase1 implements GameStateController {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
                     System.exit(1);
                 } catch (IllegalArgumentException ex){
-                    
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
                 }  catch (InvocationTargetException ex){
-                    
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
                 } catch(SecurityException ex){
-                    
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
                 }
                // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
 
