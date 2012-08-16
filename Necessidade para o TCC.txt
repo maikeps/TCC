@@ -5,8 +5,6 @@ Principal
 
 Necessarios:
 
-	--> Pegar o valor do banco de dados para definir o ataque do personagem.
-
 	--> Arrumar a classe Player, no pegar o X e Y do mouse , mas com a condição de se  continuar pressionado a posição irá mudar(por enquanto se segurar o botao do mouse e mexer o cursor, o tal X e Y nao muda, impossibilitando de o player apenas mexer o mouse para mudar o local alvo para o ataque).
 
 	--> Procurar tiles que irão compor o mapa
@@ -24,6 +22,8 @@ Necessarios:
 	--> Arumar a tabela bonusDeElemento, tem elementos que nao possuem vantagens ou desantagens. Fazer assim: tabela bonusDeElemento possuindo apenas o elemento em questao, o elemento sobre o qual tem vantagem(ou desvantagem) e o multiplicador. ficaria assim: Fire, Grass, 2.0.  2.0 significa 2x dano e 0.5 significa metade do dano.
 
 	--> Fazer a colisao no jogo
+
+	--> Atualizar dados do personagem liberado na fase1 quando cria ele
 --------
 
 "Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens acima."

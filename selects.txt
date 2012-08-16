@@ -27,3 +27,9 @@ inner join elemento e2 on e2.id = p.elementoSecundario
 inner join ataque a on a.id = p.idAtaque
 order by p.id
 
+
+-- elemento em questao - multiplicador - elemento
+select e.elemento, b.multiplicador, e2.elemento from bonusDeElemento b 
+inner join elemento e on e.id = b.elemento
+inner join elemento e2 on e2.id = b.elementoMultiplicador
+

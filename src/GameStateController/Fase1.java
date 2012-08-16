@@ -34,30 +34,28 @@ import pixelPerfect.GameObjectImagePixelPerfect;
  */
 public class Fase1 implements GameStateController {
 
-   
-
     CharacterSelect CharSelect;
     Player player;
     Inimigo inimigo;
-    ArrayList<Ataque> ataques;
+    ArrayList<Ataque> ataquesPlayer;
+    ArrayList<Ataque> ataquesInimigo;
     Personagem p;
     Personagem p2;
-
-    Imagem img;
     Font f;
-    
- 
- 
-    
+
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
     }
 
     public void load() {
-        this.ataques = new ArrayList<Ataque>();
+        this.ataquesPlayer = new ArrayList<Ataque>();
+        this.ataquesInimigo = new ArrayList<Ataque>();
     }
 
     public void step(long timeElapsed) {
+
+
+
         this.player.step(timeElapsed);
         this.inimigo.step(timeElapsed);
 
@@ -69,7 +67,10 @@ public class Fase1 implements GameStateController {
 //        this.inimigo.setY(this.player.getPersonagem().spriteAtual.pegaAltura()/2);
 //        
 
-        for (Ataque a : this.ataques) {
+        for (Ataque a : this.ataquesPlayer) {
+            a.step(timeElapsed);
+        }
+        for (Ataque a : this.ataquesInimigo) {
             a.step(timeElapsed);
         }
 
@@ -78,25 +79,29 @@ public class Fase1 implements GameStateController {
         this.inimigo.setXPlayer(this.player.getX()); //atualiza as informacoes do player para o inimigo
         this.inimigo.setYPlayer(this.player.getY()); //atualiza as informacoes do player para o inimigo
 
-        
+
         /* Colisão pixel perfect
         Point colisao = this.player.temColisao( this.inimigo );
         if(colisao != null){
-
-            if(this.explosao != null && this.explosao.isActive()){
-                //Já tem uma explosao ativa, não faz nada
-            } else {
-                //Nenhuma explosao ativa, cria uma nova.
-                this.explosao = new ExplosaoFraca(colisao.x, colisao.y);
-            }
-            
-        }
-
-        if(this.explosao != null){
-            this.explosao.step(timeElapsed);
-        }
-         */  
         
+        if(this.explosao != null && this.explosao.isActive()){
+        //Já tem uma explosao ativa, não faz nada
+        } else {
+        //Nenhuma explosao ativa, cria uma nova.
+        this.explosao = new ExplosaoFraca(colisao.x, colisao.y);
+        }
+        
+        }
+        
+        if(this.explosao != null){
+        this.explosao.step(timeElapsed);
+        }
+         */
+        
+        this.verificaColisao();
+        
+        
+
     }
 
     public void draw(Graphics g) {
@@ -118,21 +123,14 @@ public class Fase1 implements GameStateController {
         g.fillRect(0, 0, 1000, 1000);
 
 
-        //desenha imagem do fundo(mapa)
-        //nao vai ficar assim
-        try {
-            this.img = new Imagem("resources/map.png");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
-            System.exit(1);
-        }
-        img.drawZoomed(g, -50, -50, 5);
-
         //desenha os personagens e os ataques
         this.player.draw(g);
         this.inimigo.draw(g);
 
-        for (Ataque a : this.ataques) {
+        for (Ataque a : this.ataquesPlayer) {
+            a.draw(g);
+        }
+        for (Ataque a : this.ataquesInimigo) {
             a.draw(g);
         }
 
@@ -140,9 +138,16 @@ public class Fase1 implements GameStateController {
 
 
         g.setColor(Color.white);
-        g.fillRect(this.player.getX(), this.player.getY(), 10, 10);
+        
+        g.drawRect(this.player.personagem.getX(), this.player.personagem.getY(), this.player.personagem.spriteAtual.getLargura(), this.player.personagem.spriteAtual.getAltura());
+        for(Ataque a : this.ataquesInimigo){
+            g.drawRect(a.getX(), a.getY(), a.imagem.getLargura(), a.imagem.getAltura());
+        }
+        
         g.setColor(Color.black);
+        
 
+        
     }
 
     public void start() {
@@ -158,56 +163,56 @@ public class Fase1 implements GameStateController {
 
     public void lancaAtaques() {
         //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
-       
-       
+
+
         if (this.player.atacou == true) {
             if (this.player.personagem.podeAtirar()) {
 
                 model.Ataque a = AtaqueDAO.getPoder(this.CharSelect.getPlayer1());
-                String s = "Ataques."+a.getNome();
+                String s = "Ataques." + a.getNome();
                 try {
                     Class cls = Class.forName(s);
                     Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, double.class, Personagem.class};
                     java.lang.reflect.Constructor con = cls.getConstructor(parameters);
                     Object o = con.newInstance(new Object[]{this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()});
-                    this.ataques.add((Ataque)o);
+                    this.ataquesPlayer.add((Ataque) o);
                 } catch (ClassNotFoundException ex) {
                     JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
                     System.exit(1);
-                } catch (IllegalAccessException ex2){
+                } catch (IllegalAccessException ex2) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
                     System.exit(1);
-                } catch (InstantiationException ex3){
+                } catch (InstantiationException ex3) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex3.getMessage());
                     System.exit(1);
-                } catch (NoSuchMethodException ex4){
+                } catch (NoSuchMethodException ex4) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
                     System.exit(1);
-                } catch (IllegalArgumentException ex){
+                } catch (IllegalArgumentException ex) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
                     System.exit(1);
-                }  catch (InvocationTargetException ex){
+                } catch (InvocationTargetException ex) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
                     System.exit(1);
-                } catch(SecurityException ex){
+                } catch (SecurityException ex) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
                     System.exit(1);
                 }
-               // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+                // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
 
                 this.player.personagem.setCooldownAtual();
             }
         }
-        
+
         this.player.atacou = false;
 
         // Arrumar essa parte para que o inimigo tbm troque de poder!!!!
-        
+
         //se o inimigo atacou, verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
         if (this.inimigo.atacou == true) {
             if (this.inimigo.personagem.podeAtirar()) {
-               this.ataques.add(new DragonRage(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
-                
+                this.ataquesInimigo.add(new WaterGun(this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
+
 ////////                model.Ataque a = AtaqueDAO.getPoder(this.CharSelect.getInimigo());
 ////////                String s = "Ataques."+a.getNome();
 ////////                try {
@@ -256,9 +261,9 @@ public class Fase1 implements GameStateController {
         int def = pokemon.getDef();
         int spd = pokemon.getSpd();
         int hp = pokemon.getHp();
-        int lvl = pokemon.getLvl();
-     
-               
+        int lvl = pokemon.getLvl()+50;
+
+
 
         //fazer update na tabela PokemonLiberado com os stats novos
 
@@ -287,7 +292,7 @@ public class Fase1 implements GameStateController {
         int hp = pokemon.getHpBase();
 
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
-        int lvl = pl.getLvl();
+        int lvl = pl.getLvl()+50;
 
         hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
         atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
@@ -334,6 +339,26 @@ public class Fase1 implements GameStateController {
         g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600, 150);
 
     }
-
-   
+    
+    public void verificaColisao(){
+        //colisao ataque inimigo com player
+        for (Ataque a : this.ataquesInimigo) {
+            Point colisao = this.player.personagem.spriteAtual.temColisao(a.imagem);
+            if (colisao != null) {
+                this.player.personagem.perdeHp(a.getDano());
+                a.desativado();
+                System.out.println("colisao");
+            }
+        }
+        
+        //colisao ataque player com inimigo
+        for (Ataque a : this.ataquesPlayer) {
+            Point colisao = this.inimigo.personagem.spriteAtual.temColisao(a.imagem);
+            if (colisao != null) {
+                this.inimigo.personagem.perdeHp(a.getDano());
+                a.desativado();
+                System.out.println("colisao");
+            }
+        }
+    }
 }

@@ -9,13 +9,9 @@ import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
+import pixelPerfect.GameObjectImagePixelPerfect;
 
 public class WaterGun extends Ataque {
-
-    double angulo;
-    int destX;
-    int destY;
-    double deltaX, deltaY, dx, dy;
 
     public WaterGun(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
@@ -37,15 +33,28 @@ public class WaterGun extends Ataque {
 
         this.angulo = angulo;
 
-        try {
-            this.imagem = new Imagem("resources/ataques/Water Gun/WaterGun_Right.png");
+//////        try {
+//////            this.imagem = new Imagem("resources/ataques/Water Gun/WaterGun_Right.png");
+//////
+//////            //  this.spriteAtual = spriteVazio;
+//////        } catch (Exception ex) {
+//////            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+//////            System.exit(1);
+//////        }
 
-            //  this.spriteAtual = spriteVazio;
+        
+          try {
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/Water Gun/WaterGun_Right.png");
+
+             // this.spriteAtual = spriteVazio;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
         }
-
+        
+        
+        
+        
         deltaX = Math.abs(this.x - this.destX);
         deltaY = Math.abs(this.y - this.destY);
 
@@ -89,7 +98,6 @@ public class WaterGun extends Ataque {
         }
 
         this.imagem.drawRotated(g, this.x, this.y, angulo);
-
         
     }
 
@@ -98,20 +106,20 @@ public class WaterGun extends Ataque {
         return new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura());
     }
 
-    @Override
-    public boolean temColisao(Rectangle retangulo) {
-        if (this.desativado) {
-            return false;
-        }
-
-        if (this.getRetangulo().intersects(retangulo)) {
-            AudioPlayer.play("resources/sounds/Sound 2.wav");
-            this.desativado = true;
-            return true;
-        } else {
-            return false;
-        }
-    }
+////    @Override
+////    public boolean temColisao(Rectangle retangulo) {
+////        if (this.desativado) {
+////            return false;
+////        }
+////
+////        if (this.getRetangulo().intersects(retangulo)) {
+////            AudioPlayer.play("resources/sounds/Sound 2.wav");
+////            this.desativado = true;
+////            return true;
+////        } else {
+////            return false;
+////        }
+////    }
 
     public void ajustaAtaque() {
         switch (this.direcao) {

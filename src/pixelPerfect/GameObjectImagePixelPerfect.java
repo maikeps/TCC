@@ -34,18 +34,22 @@ public class GameObjectImagePixelPerfect extends GameObject {
     public void draw(Graphics g) {
         this.img.draw(g, this.x, this.y);        
     }
-
     public void drawFlipped(Graphics g) {
         this.img.drawFlipped(g, this.x, this.y);        
     }
 
     public int pegaAltura() {
-       return getX();
+       return img.pegaAltura();
     }
 
     public int pegaLargura() {
-        return getY();
+        return img.pegaLargura();
     }
+
+    public void drawRotated(Graphics g, int x, int y, double angulo) {
+        img.drawRotated(g, x, y, angulo);
+    }
+
 
     
 

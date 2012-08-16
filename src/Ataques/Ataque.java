@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
+import pixelPerfect.GameObjectImagePixelPerfect;
 import tcc.ObjetoComMovimento;
 
 
@@ -28,7 +29,9 @@ public abstract class Ataque extends ObjetoComMovimento{
     int dano;// è o dano do ataque
     int xInicial; // Possição inicial para 
     int yInicial;
-    Imagem imagem;
+    // Imagem imagem;
+    public GameObjectImagePixelPerfect imagem;
+    
     Imagem Vazio;
     Personagem personagem; // personagem que ataca
     
@@ -38,11 +41,16 @@ public abstract class Ataque extends ObjetoComMovimento{
     double deltaX, deltaY, dx, dy;
     
     public void step(long timeElapsed){
+        if(this.desativado == true){
+            return;
+        }
         
     }
     
     public void draw(Graphics g){
-        
+        if(this.desativado == true){
+            return;
+        }
     }
     
     public void setDano(int n) {
@@ -53,23 +61,23 @@ public abstract class Ataque extends ObjetoComMovimento{
         return this.dano;
     }
     
-     public Rectangle getRetangulo(){
-        return new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura());
-    }
-    
-    public boolean temColisao(Rectangle retangulo){
-        if(this.desativado){
-            return false;
-        }
-        
-        if(this.getRetangulo().intersects(retangulo)){
-            AudioPlayer.play("resources/sounds/Sound 2.wav");
-            this.desativado = true;
-            return true;            
-        } else {
-            return false;
-        }
-    }
+////////     public Rectangle getRetangulo(){
+////////        return new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura());
+////////    }
+////////    
+////////    public boolean temColisao(Rectangle retangulo){
+////////        if(this.desativado){
+////////            return false;
+////////        }
+////////        
+////////        if(this.getRetangulo().intersects(retangulo)){
+////////            AudioPlayer.play("resources/sounds/Sound 2.wav");
+////////            this.desativado = true;
+////////            return true;            
+////////        } else {
+////////            return false;
+////////        }
+////////    }
 
     public double getAngulo() {
         return angulo;
@@ -149,6 +157,10 @@ public abstract class Ataque extends ObjetoComMovimento{
 
     public void setPersonagem(Personagem personagem) {
         this.personagem = personagem;
+    }
+    
+    public void desativado(){
+        this.desativado = true;
     }
     
     

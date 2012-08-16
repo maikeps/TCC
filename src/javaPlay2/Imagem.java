@@ -57,7 +57,7 @@ public class Imagem {
         
         AffineTransform tx = new AffineTransform();
         
-        tx.translate(x, y);        
+        tx.translate(x, y);
         tx.rotate(Math.toRadians(-angle));        
 
         g2d.drawImage(image, tx, null);

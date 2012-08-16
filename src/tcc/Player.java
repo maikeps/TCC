@@ -114,6 +114,8 @@ public class Player extends ObjetoComMovimento {
     }
 
     public void draw(Graphics g) {
+        personagem.spriteAtual.setX(this.personagem.getX());
+        personagem.spriteAtual.setY(this.personagem.getY());
         personagem.draw(g);
     }
 

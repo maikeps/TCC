@@ -12,7 +12,6 @@ import javaPlay2.TileInfo;
 
 
 
-
 public class CenarioComColisao {
 
     private Scene scene;
@@ -79,7 +78,7 @@ public class CenarioComColisao {
     }
 
     private void verificaColisao(ObjetoComGravidade obj) {
-        //Considera que n�o existe bloco abaixo
+        //Considera que não existe bloco abaixo
         obj.saiuChao();
 
         ArrayList<TileInfo> tiles = this.scene.getTilesFromRect(obj.getPontoMin(), obj.getPontoMax());
@@ -95,11 +94,11 @@ public class CenarioComColisao {
 
     private DirecaoColisao pegaDirecaoColisao(ObjetoComGravidade obj, TileInfo tile) {
         /**
-         * Para calcular  de ond evem a dire��o
-         * verifica-se quais o ponto do Tile mais pr�ximo do ponto central do objeto.
+         * Para calcular  de ond evem a direção
+         * verifica-se quais o ponto do Tile mais próximo do ponto central do objeto.
          */
 
-        //Considera inicialmente que a colis�o foi de cima para baixo
+        //Considera inicialmente que a colisão foi de cima para baixo
         DirecaoColisao direcao = DirecaoColisao.CIMA_PARA_BAIXO;
         double distancia = this.calculaDistancia(tile.getTopPoint(), obj.getPontoCentral());
         double distanciaTemp;
@@ -123,7 +122,7 @@ public class CenarioComColisao {
         }
 
         //Caso especial quando o objeto
-        //por causa da for�a da gravidade
+        //por causa da força da gravidade
         //atravessa todo o tile.
         if (obj.getY() < tile.getCentralY() && obj.getMaxY() > tile.max.y && obj.getPontoCentral().x > tile.min.x && obj.getPontoCentral().x < tile.max.x && !obj.estaSubindo()) {
             direcao = DirecaoColisao.CIMA_PARA_BAIXO;

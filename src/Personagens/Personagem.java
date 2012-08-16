@@ -1,6 +1,8 @@
 package Personagens;
 
+import Ataques.Ataque;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import javaPlay2.Imagem;
@@ -147,9 +149,16 @@ public class Personagem extends ObjetoComMovimento {
    // }
 
     //verifica se o retangulo do personagem tem colisao com o do inimigo
-    public boolean temColisao(Personagem player) {
-        return this.getRetangulo().intersects(player.getRetangulo());
-    }
+////////    public boolean temColisao(Personagem player) {
+////////        return this.getRetangulo().intersects(player.getRetangulo());
+////////    }
+    
+//    public boolean temColisao(Ataque ataque){
+//        Point colisao = this.spriteAtual.temColisao(ataque.imagem);
+//        if(colisao != null){
+//            return true;
+//        }
+//    }
 
     //direcao que o personagem esta virado
     public Direcao getDirecao() {

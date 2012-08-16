@@ -77,11 +77,11 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `tcc`.`evolucaoporpedra`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tcc`.`evolucaoporpedra` (
-  `id` VARCHAR(45) NOT NULL ,
-  `idPokemon` INT(11) NOT NULL ,
-  `idEvolucao` INT(11) NOT NULL ,
+  `id` INT(11) NOT NULL AUTO_INCREMENT ,
+  `idPokemon` INT NOT NULL ,
+  `idEvolucao` INT NOT NULL ,
   `elemento` INT NOT NULL ,
-  PRIMARY KEY (`idPokemon`, `idEvolucao`, `id`, `elemento`) ,
+  PRIMARY KEY (`id`, `idPokemon`, `idEvolucao`, `elemento`) ,
   INDEX `fk_pokemon_has_pokemon_pokemon2` (`idEvolucao` ASC) ,
   INDEX `fk_pokemon_has_pokemon_pokemon1` (`idPokemon` ASC) ,
   INDEX `fk_evolucaoporpedra_elemento1` (`elemento` ASC) ,
@@ -190,6 +190,16 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`pokemonliberado` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `tcc`.`experiencia`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `tcc`.`experiencia` (
+  `lvl` INT NOT NULL ,
+  `exp` INT NOT NULL ,
+  PRIMARY KEY (`lvl`) )
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------

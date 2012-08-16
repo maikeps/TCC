@@ -131,6 +131,8 @@ public class Inimigo extends ObjetoComMovimento {
     }
 
     public void draw(Graphics g) {
+        personagem.spriteAtual.setX(this.personagem.getX());
+        personagem.spriteAtual.setY(this.personagem.getY());
         this.personagem.draw(g);
     }
 
