@@ -33,7 +33,7 @@ public class Twineedle extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+"_Right.png");
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".png");
 
             //  this.spriteAtual = spriteVazio;
         } catch (Exception ex) {

@@ -34,7 +34,7 @@ public class Twister extends Ataque {
 
             //  this.spriteAtual = spriteVazio;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 
