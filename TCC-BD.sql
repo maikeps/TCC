@@ -77,11 +77,11 @@ DEFAULT CHARACTER SET = latin1;
 -- Table `tcc`.`evolucaoporpedra`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tcc`.`evolucaoporpedra` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `idPokemon` INT NOT NULL ,
-  `idEvolucao` INT NOT NULL ,
+  `id` VARCHAR(45) NOT NULL ,
+  `idPokemon` INT(11) NOT NULL ,
+  `idEvolucao` INT(11) NOT NULL ,
   `elemento` INT NOT NULL ,
-  PRIMARY KEY (`id`, `idPokemon`, `idEvolucao`, `elemento`) ,
+  PRIMARY KEY (`idPokemon`, `idEvolucao`, `id`, `elemento`) ,
   INDEX `fk_pokemon_has_pokemon_pokemon2` (`idEvolucao` ASC) ,
   INDEX `fk_pokemon_has_pokemon_pokemon1` (`idPokemon` ASC) ,
   INDEX `fk_evolucaoporpedra_elemento1` (`elemento` ASC) ,
@@ -197,18 +197,18 @@ DEFAULT CHARACTER SET = latin1;
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `tcc`.`bonusDeElemento` (
   `elemento` INT NOT NULL ,
-  `elementoVantagem` INT NOT NULL ,
-  `elementoFraqueza` INT NOT NULL ,
-  PRIMARY KEY (`elemento`, `elementoVantagem`, `elementoFraqueza`) ,
-  INDEX `fk_elemento_has_elemento_elemento2` (`elementoVantagem` ASC) ,
-  INDEX `fk_elemento_has_elemento_elemento1` (`elementoFraqueza` ASC) ,
+  `elementoMultiplicador` INT NOT NULL ,
+  `multiplicador` DOUBLE NOT NULL ,
+  PRIMARY KEY (`elemento`, `elementoMultiplicador`) ,
+  INDEX `fk_elemento_has_elemento_elemento2` (`elementoMultiplicador` ASC) ,
+  INDEX `fk_elemento_has_elemento_elemento1` (`elemento` ASC) ,
   CONSTRAINT `fk_elemento_has_elemento_elemento1`
-    FOREIGN KEY (`elementoFraqueza` )
+    FOREIGN KEY (`elemento` )
     REFERENCES `tcc`.`elemento` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_elemento_has_elemento_elemento2`
-    FOREIGN KEY (`elementoVantagem` )
+    FOREIGN KEY (`elementoMultiplicador` )
     REFERENCES `tcc`.`elemento` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
