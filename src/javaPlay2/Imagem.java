@@ -6,24 +6,25 @@ import java.awt.image.BufferedImage;
 
 public class Imagem {
 
-    private Image image;
+    protected  Image image;
     private static int MAX_COUNT = 50;
-    String filename;
+    protected String filename;
 
-    public Imagem(String filename) throws Exception {
+    public Imagem(String filename) throws Exception
+    {
         this.filename = filename;
         image = Toolkit.getDefaultToolkit().getImage(filename);
 
         int count = 0;
 
-        while (image.getWidth(null) == -1) {
-            Thread.sleep(4);
+        while(image.getWidth(null) == -1) {
+            Thread.sleep(1);
             count++;
 
-            if (count == MAX_COUNT) {
-                throw new Exception("Imagem \"" + filename + "\" não pode ser carregada");
+            if(count == MAX_COUNT) {
+                throw new Exception("Imagem \""+filename+"\" nï¿½o pode ser carregada");
             }
-        }
+        }        
     }
 
     // Gets the Width of this sprite

@@ -2,7 +2,6 @@ package Ataques;
 
 import Personagens.Personagem;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;

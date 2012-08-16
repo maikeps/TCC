@@ -15,7 +15,7 @@ public class Wartortle extends Personagem {
 
         this.ataque = Ataques.WATER_GUN;
 
-        try {
+       /* try {
             this.spriteRight = new Imagem("resources/personagens/Wartortle/Wartortle_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Wartortle/Wartortle_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Wartortle/Wartortle_Down.gif");
@@ -24,7 +24,7 @@ public class Wartortle extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

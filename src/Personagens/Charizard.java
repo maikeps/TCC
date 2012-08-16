@@ -15,7 +15,7 @@ public class Charizard extends Personagem {
 
         this.ataque = Ataques.FLAME_BURST;
 
-        try {
+       /* try {
             this.spriteRight = new Imagem("resources/personagens/Charizard/Charizard_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Charizard/Charizard_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Charizard/Charizard_Down.gif");
@@ -24,7 +24,7 @@ public class Charizard extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

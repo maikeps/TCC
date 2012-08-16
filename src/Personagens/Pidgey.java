@@ -15,7 +15,7 @@ public class Pidgey extends Personagem {
         
         this.ataque = Ataques.WING_ATTACK;
 
-        try {
+        /*try {
             this.spriteRight = new Imagem("resources/personagens/Pidgey/Pidgey_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Pidgey/Pidgey_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Pidgey/Pidgey_Down.gif");
@@ -24,8 +24,7 @@ public class Pidgey extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
-
+        }*/
     }
 
     public void step(long timeElapsed) {

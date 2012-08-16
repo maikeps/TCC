@@ -15,7 +15,7 @@ public class Pikachu extends Personagem {
 
         this.ataque = Ataques.ELECTRO_BALL;
 
-        try {
+     /*   try {
             this.spriteRight = new Imagem("resources/personagens/Pikachu/Pikachu_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Pikachu/Pikachu_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Pikachu/Pikachu_Down.gif");
@@ -24,7 +24,7 @@ public class Pikachu extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

@@ -15,7 +15,7 @@ public class Pidgeotto extends Personagem {
 
         this.ataque = Ataques.WING_ATTACK;
 
-        try {
+       /* try {
             this.spriteRight = new Imagem("resources/personagens/Pidgeotto/Pidgeotto_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Pidgeotto/Pidgeotto_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Pidgeotto/Pidgeotto_Down.gif");
@@ -24,7 +24,7 @@ public class Pidgeotto extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

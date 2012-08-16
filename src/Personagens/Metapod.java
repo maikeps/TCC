@@ -13,7 +13,7 @@ public class Metapod extends Personagem {
         this.def = 35;
         this.spd = 45;
         
-        try {
+        /*try {
             this.spriteRight = new Imagem("resources/personagens/Metapod/Metapod_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Metapod/Metapod_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Metapod/Metapod_Down.gif");
@@ -22,7 +22,7 @@ public class Metapod extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

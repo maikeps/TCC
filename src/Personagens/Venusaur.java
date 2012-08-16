@@ -15,7 +15,7 @@ public class Venusaur extends Personagem {
         
         this.ataque = Ataques.RAZOR_LEAF;
 
-        try {
+      /*  try {
             this.spriteRight = new Imagem("resources/personagens/Venusaur/Venusaur_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Venusaur/Venusaur_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Venusaur/Venusaur_Down.gif");
@@ -24,7 +24,7 @@ public class Venusaur extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

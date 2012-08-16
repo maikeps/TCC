@@ -13,7 +13,7 @@ public class Caterpie extends Personagem {
         this.def = 35;
         this.spd = 45;
         
-        try {
+       /* try {
             this.spriteRight = new Imagem("resources/personagens/Caterpie/Caterpie_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Caterpie/Caterpie_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Caterpie/Caterpie_Down.gif");
@@ -22,7 +22,7 @@ public class Caterpie extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

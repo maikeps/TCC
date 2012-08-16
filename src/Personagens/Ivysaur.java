@@ -15,7 +15,7 @@ public class Ivysaur extends Personagem {
         
         this.ataque = Ataques.LEECH_LIFE;
 
-        try {
+       /* try {
             this.spriteRight = new Imagem("resources/personagens/Ivysaur/Ivysaur_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Ivysaur/Ivysaur_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Ivysaur/Ivysaur_Down.gif");
@@ -24,7 +24,7 @@ public class Ivysaur extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

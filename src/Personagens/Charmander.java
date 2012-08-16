@@ -15,7 +15,7 @@ public class Charmander extends Personagem {
         
         this.ataque = Ataques.DRAGON_RAGE;
 
-        try {
+      /*  try {
             this.spriteRight = new Imagem("resources/personagens/Charmander/Charmander_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Charmander/Charmander_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Charmander/Charmander_Down.gif");
@@ -24,7 +24,7 @@ public class Charmander extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

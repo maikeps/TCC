@@ -15,7 +15,7 @@ public class Squirtle extends Personagem {
 
         this.ataque = Ataques.BUBBLES;
 
-        try {
+    /*    try {
             this.spriteRight = new Imagem("resources/personagens/Squirtle/Squirtle_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Squirtle/Squirtle_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Squirtle/Squirtle_Down.gif");
@@ -24,7 +24,7 @@ public class Squirtle extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
     }
 

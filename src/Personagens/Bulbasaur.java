@@ -3,6 +3,7 @@ package Personagens;
 import java.awt.Graphics;
 import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
+import pixelPerfect.GameObjectImagePixelPerfect;
 import tcc.Ataques;
 
 public class Bulbasaur extends Personagem {
@@ -15,7 +16,7 @@ public class Bulbasaur extends Personagem {
 
         this.ataque = Ataques.VINE_WHIP;
 
-        try {
+        /*try {
             this.spriteRight = new Imagem("resources/personagens/Bulbasaur/Bulbasaur_Right.gif");
             this.spriteLeft = new Imagem("resources/personagens/Bulbasaur/Bulbasaur_Left.gif");
             this.spriteDown = new Imagem("resources/personagens/Bulbasaur/Bulbasaur_Down.gif");
@@ -24,8 +25,18 @@ public class Bulbasaur extends Personagem {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
             System.exit(1);
-        }
+        }*/
 
+         try {
+            this.spriteRight = new GameObjectImagePixelPerfect("resources/personagens/Bulbasaur/Bulbasaur_Right.gif");
+            this.spriteLeft = new GameObjectImagePixelPerfect("resources/personagens/Bulbasaur/Bulbasaur_Left.gif");
+            this.spriteDown = new GameObjectImagePixelPerfect("resources/personagens/Bulbasaur/Bulbasaur_Down.gif");
+            this.spriteUp = new GameObjectImagePixelPerfect("resources/personagens/Bulbasaur/Bulbasaur_Up.gif");
+            this.spriteAtual = this.spriteDown;
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            System.exit(1);
+        }
     }
 
     public void step(long timeElapsed) {
