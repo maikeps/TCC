@@ -67,4 +67,29 @@ public class PokemonInimigoDAO {
         
         return lista;      
     }
+    
+    public static PokemonInimigo getPokemonInimigoPeloNome(String nome){
+        
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemonInimigo pi "
+                + "inner join pokemon p on p.id = pi.idPokemon "
+                + "where nome = \""+nome+"\"";
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        
+        PokemonInimigo p = new PokemonInimigo();
+        if(linhas.next()){
+            
+            p.setIdPokemon(linhas.getInt("pi.idPokemon"));
+            p.setTipo(linhas.getString("pi.tipo"));
+            p.setAtk(linhas.getInt("pi.atk"));
+            p.setDef(linhas.getInt("pi.def"));
+            p.setSpd(linhas.getInt("pi.spd"));
+            p.setHp(linhas.getInt("pi.hp"));
+            p.setLvl(linhas.getInt("pi.lvl"));
+            p.setNome(linhas.getString("p.nome"));
+            
+        }
+        
+        return p;    
+    }
 }

@@ -30,12 +30,13 @@ public class PokemonDAO {
             p.setNome(linhas.getString("nome"));
             p.setRaridade(linhas.getInt("raridade"));
             p.setLevelQueEvolui(linhas.getInt("lvlQueEvolui"));
-            p.setAtkbase(linhas.getInt("atkBase"));
+            p.setAtkBase(linhas.getInt("atkBase"));
             p.setDefBase(linhas.getInt("defBase"));
-            p.setSpdbase(linhas.getInt("spdBase"));
+            p.setSpdBase(linhas.getInt("spdBase"));
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));
+            p.setBaseExp(linhas.getInt("baseExp"));
 
         }
 
@@ -58,9 +59,9 @@ public class PokemonDAO {
             p.setNome(linhas.getString("nome"));
             p.setRaridade(linhas.getInt("raridade"));
             p.setLevelQueEvolui(linhas.getInt("lvlQueEvolui"));
-            p.setAtkbase(linhas.getInt("atkBase"));
+            p.setAtkBase(linhas.getInt("atkBase"));
             p.setDefBase(linhas.getInt("defBase"));
-            p.setSpdbase(linhas.getInt("spdBase"));
+            p.setSpdBase(linhas.getInt("spdBase"));
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));
@@ -86,9 +87,9 @@ public class PokemonDAO {
             p.setNome(linhas.getString("nome"));
             p.setRaridade(linhas.getInt("raridade"));
             p.setLevelQueEvolui(linhas.getInt("lvlQueEvolui"));
-            p.setAtkbase(linhas.getInt("atkBase"));
+            p.setAtkBase(linhas.getInt("atkBase"));
             p.setDefBase(linhas.getInt("defBase"));
-            p.setSpdbase(linhas.getInt("spdBase"));
+            p.setSpdBase(linhas.getInt("spdBase"));
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));

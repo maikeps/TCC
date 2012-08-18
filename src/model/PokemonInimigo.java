@@ -18,11 +18,12 @@ public class PokemonInimigo {
     int spd;
     int hp;
     int lvl;
+    String nome;
 
     public PokemonInimigo() {
     }
 
-    public PokemonInimigo(int idPokemon, String tipo, int atk, int def, int spd, int hp, int lvl) {
+    public PokemonInimigo(int idPokemon, String tipo, int atk, int def, int spd, int hp, int lvl, String nome) {
         this.idPokemon = idPokemon;
         this.tipo = tipo;
         this.atk = atk;
@@ -86,6 +87,14 @@ public class PokemonInimigo {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
     
     

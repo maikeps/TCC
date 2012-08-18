@@ -13,13 +13,14 @@ public class Pokemon {
     protected int id;
     protected String nome;
     protected int raridade;
-    protected int atkbase;
+    protected int atkBase;
     protected int defBase;
-    protected int spdbase;
+    protected int spdBase;
     protected int hpBase;
     protected int levelQueEvolui;
     protected int elementoPrimario;
     protected int elementoSecundario;
+    protected int baseExp;
     
     public Pokemon(){
         
@@ -29,21 +30,21 @@ public class Pokemon {
         this.id = id;
         this.nome = nome;
         this.raridade = raridade;
-        this.atkbase = atkBase;
+        this.atkBase = atkBase;
         this.defBase = defBase;
-        this.spdbase = spdBase;
+        this.spdBase = spdBase;
         this.hpBase = hpBase;
         this.levelQueEvolui = levelQueEvolui;
         this.elementoPrimario = elementoPrimario;
         this.elementoSecundario = elementoSecundario;
     }
 
-    public int getAtkbase() {
-        return atkbase;
+    public int getAtkBase() {
+        return atkBase;
     }
 
-    public void setAtkbase(int atkbase) {
-        this.atkbase = atkbase;
+    public void setAtkBase(int atkBase) {
+        this.atkBase = atkBase;
     }
 
     public int getDefBase() {
@@ -110,12 +111,20 @@ public class Pokemon {
         this.raridade = raridade;
     }
 
-    public int getSpdbase() {
-        return spdbase;
+    public int getSpdBase() {
+        return spdBase;
     }
 
-    public void setSpdbase(int spdbase) {
-        this.spdbase = spdbase;
+    public void setSpdBase(int spdBase) {
+        this.spdBase = spdBase;
+    }
+
+    public int getBaseExp() {
+        return baseExp;
+    }
+
+    public void setBaseExp(int baseExp) {
+        this.baseExp = baseExp;
     }
 
     

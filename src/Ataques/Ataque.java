@@ -7,6 +7,8 @@ package Ataques;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
 import pixelPerfect.GameObjectImagePixelPerfect;
@@ -25,7 +27,7 @@ public abstract class Ataque extends ObjetoComMovimento{
 
     
     int velocidade; //Determina a velocidade em que o personagem anda
-    boolean desativado;
+    public boolean desativado;
     int dano;// è o dano do ataque
     int xInicial; // Possição inicial para 
     int yInicial;

@@ -5,6 +5,11 @@ e = exp base do pokemon derrotado
 L = lvl do pokemon derrotado
 
 
+-exp obtido certo: ou nao
+((L/5)*((2*L+10)^2.5)/((L+Lp+10)^2.5)+1)
+
+((L/5)*(sqrt(pow5((2*L+10)))/((L+Lp+10)^2.5)+1)
+
 
 -calcular exp necessario para upar:
 4n³/4   (4n ao cubo / 5)
@@ -29,3 +34,11 @@ se for igual a 90, tera 45% de chance de aparecer
 
 -calcular outros stats de acordo com o level:
 ((base + 1/8 + 50) * lvl)/50 + 5
+
+
+-calcular o dano
+(((((((Level × 2 ÷ 5) + 2) × danoDoAtk x atkDoPokemon ÷ 50) ÷ defDoOponente) + 2) × R ÷ 100) x multiplicador)
+Level = lvl de q uem jogo o atk
+R = 100-Random(de 1 ate 15)
+
+http://www.smogon.com/dp/articles/damage_formula

@@ -184,15 +184,15 @@ public class CharacterSelect implements GameStateController {
         g.setColor(Color.white);
         //desenha barras de stats - HP, ATK, DEF, SPD
         g.fillRect(100, 160, p.getHpBase(), 20);
-        g.fillRect(100, 185, p.getAtkbase(), 20);
+        g.fillRect(100, 185, p.getAtkBase(), 20);
         g.fillRect(100, 210, p.getDefBase(), 20);
-        g.fillRect(100, 235, p.getSpdbase(), 20);
+        g.fillRect(100, 235, p.getSpdBase(), 20);
         g.setColor(Color.black);
         //desenha os numeros dos stats
         g.drawString("HP: " + p.getHpBase(), 100, 175);
-        g.drawString("ATK: " + p.getAtkbase(), 100, 200);
+        g.drawString("ATK: " + p.getAtkBase(), 100, 200);
         g.drawString("DEF: " + p.getDefBase(), 100, 225);
-        g.drawString("SPD: " + p.getSpdbase(), 100, 250);
+        g.drawString("SPD: " + p.getSpdBase(), 100, 250);
 
         //informacoes sobre o pokemon
         g.setColor(Color.white);
