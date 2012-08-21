@@ -2,13 +2,13 @@ package Ataques;
 
 import DAO.AtaqueDAO;
 import Personagens.Personagem;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
+import pixelPerfect.GameObjectImagePixelPerfect;
 
 public class Twineedle extends Ataque {
 
@@ -33,11 +33,9 @@ public class Twineedle extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".png");
-
-            //  this.spriteAtual = spriteVazio;
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 
@@ -49,22 +47,6 @@ public class Twineedle extends Ataque {
 
 
 
-        
-//        
-//
-//        String clsname = this.getClass().getName();
-//        System.out.println("Full class name =" + clsname);
-//        int mid = clsname.lastIndexOf('.') + 1;
-//        String finalClsName = clsname.substring(mid);
-//        System.out.println(finalClsName);
-//
-//
-//        model.Ataque a = AtaqueDAO.getAtaque(finalClsName);
-//        this.setDano(a.getAtk());
-
-        
-        
-        
     }
 
     public void step(long timeElapsed) {
@@ -83,9 +65,10 @@ public class Twineedle extends Ataque {
             return;
         }
 
-        this.imagem.drawRotated(g, this.x, this.y, angulo);
+        this.imagem.setX(this.getX());
+        this.imagem.setY(this.getY());
+        this.imagem.draw(g);
 
-        
     }
 
     @Override

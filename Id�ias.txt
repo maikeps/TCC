@@ -1,3 +1,6 @@
 --problema dos pokemons peixes e outros do genero
-
 fazer como se fosse no fundo do mar
+
+
+--se usar o sistema de vidas
+ao matar um chefe, ganha mais uma vida.

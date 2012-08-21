@@ -8,6 +8,7 @@ import java.util.HashSet;
 import javaPlay2.GameObject;
 import javaPlay2.Imagem;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 
 
@@ -18,7 +19,15 @@ public class ImagemPixelPerfect extends Imagem {
 
     public ImagemPixelPerfect(String filename, GameObject obj) throws Exception {
         super(filename);
+        try{
+            
         this.go = obj;
+        }catch(Exception ex){
+            
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado(class Pixel Perfect): " + ex.getMessage());
+            System.exit(1);
+        }
+        
     }
 
     // returns a HashSet of strings that list all the pixels in an image that aren't transparent

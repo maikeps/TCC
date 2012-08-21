@@ -167,7 +167,6 @@ public class CharacterSelect implements GameStateController {
 
 
 
-
     }
 
     public void iniciaJogo() {

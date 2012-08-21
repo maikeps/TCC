@@ -14,9 +14,3 @@ Versus Mode: um jogador enfrenta o outro podendo escolher qualquer um dos pokemo
 Quick Battle: jogador escolhe um pokemon ja liberado para batalhar contra o computador, que tambem usara apenas personagens ja liberados
 
 
-
--vida do player em cima na esquerda, vida do inimigo na direita em baixo. vida do boss em baixo ocupando a tela toda
-
--ao matar um chefe, ganha mais uma vida.
-
--na hora de escolher o personagem, o jogador tera a opcao de ver alguns dados sobre o pokemon, como quantos desses o jogador ja matou, ate onde o jogador chegou com esse pokemon e quantos inimigos ja derrotou.

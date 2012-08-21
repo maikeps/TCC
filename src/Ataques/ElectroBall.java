@@ -3,17 +3,14 @@ package Ataques;
 import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
+import pixelPerfect.GameObjectImagePixelPerfect;
 
 public class ElectroBall extends Ataque {
-
-    double angulo;
-    int destX;
-    int destY;
-    double deltaX, deltaY, dx, dy;
 
     public ElectroBall(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
@@ -36,11 +33,9 @@ public class ElectroBall extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new Imagem("resources/ataques/ElectroBall/ElectroBall.png");
-
-            //  this.spriteAtual = spriteVazio;
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 
@@ -70,7 +65,9 @@ public class ElectroBall extends Ataque {
             return;
         }
 
-        this.imagem.drawRotated(g, this.x, this.y, angulo);
+        this.imagem.setX(this.getX());
+        this.imagem.setY(this.getY());
+        this.imagem.draw(g);
 
     }
 

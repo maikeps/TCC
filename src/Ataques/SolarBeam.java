@@ -2,6 +2,7 @@ package Ataques;
 
 import DAO.AtaqueDAO;
 import Personagens.Personagem;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -10,9 +11,11 @@ import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
 import pixelPerfect.GameObjectImagePixelPerfect;
 
-public class Twister extends Ataque {
+public class SolarBeam extends Ataque {
 
-    public Twister(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    int cont = 0;
+    
+    public SolarBeam(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
@@ -32,13 +35,19 @@ public class Twister extends Ataque {
 
         this.angulo = angulo;
 
-        try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
+        
+          try {
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".png");
+
+             // this.spriteAtual = spriteVazio;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
-
+        
+        
+        
+        
         deltaX = Math.abs(this.x - this.destX);
         deltaY = Math.abs(this.y - this.destY);
 
@@ -46,17 +55,14 @@ public class Twister extends Ataque {
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
 
 
-
+        
     }
 
     public void step(long timeElapsed) {
-        if (this.desativado) {
+        if (this.cont >= 60) {
             return;
         }
-        this.x += this.dx;
-        this.y += this.dy;
-
-
+        this.cont ++;
     }
 
     @Override
@@ -65,10 +71,8 @@ public class Twister extends Ataque {
             return;
         }
 
-        this.imagem.setX(this.getX());
-        this.imagem.setY(this.getY());
-        this.imagem.draw(g);
-
+        this.imagem.drawRotated(g, this.x, this.y, angulo);
+        
     }
 
     @Override
@@ -76,20 +80,20 @@ public class Twister extends Ataque {
         return new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura());
     }
 
-    @Override
-    public boolean temColisao(Rectangle retangulo) {
-        if (this.desativado) {
-            return false;
-        }
-
-        if (this.getRetangulo().intersects(retangulo)) {
-            AudioPlayer.play("resources/sounds/Sound 2.wav");
-            this.desativado = true;
-            return true;
-        } else {
-            return false;
-        }
-    }
+////    @Override
+////    public boolean temColisao(Rectangle retangulo) {
+////        if (this.desativado) {
+////            return false;
+////        }
+////
+////        if (this.getRetangulo().intersects(retangulo)) {
+////            AudioPlayer.play("resources/sounds/Sound 2.wav");
+////            this.desativado = true;
+////            return true;
+////        } else {
+////            return false;
+////        }
+////    }
 
     public void ajustaAtaque() {
         switch (this.direcao) {

@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
+import pixelPerfect.GameObjectImagePixelPerfect;
 
 public class HyperFang extends Ataque {
 
@@ -32,7 +33,7 @@ public class HyperFang extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".gif");
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -64,7 +65,9 @@ public class HyperFang extends Ataque {
             return;
         }
 
-        this.imagem.draw(g, this.x, this.y);
+        this.imagem.setX(this.getX());
+        this.imagem.setY(this.getY());
+        this.imagem.draw(g);
 
     }
 

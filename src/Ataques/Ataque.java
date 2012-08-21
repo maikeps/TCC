@@ -28,6 +28,7 @@ public abstract class Ataque extends ObjetoComMovimento{
     
     int velocidade; //Determina a velocidade em que o personagem anda
     public boolean desativado;
+    public boolean acertou = false;
     int dano;// è o dano do ataque
     int xInicial; // Possição inicial para 
     int yInicial;

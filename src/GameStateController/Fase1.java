@@ -191,45 +191,45 @@ public class Fase1 implements GameStateController {
         this.player.atacou = false;
 
         // Arrumar essa parte para que o inimigo tbm troque de poder!!!!
-/*
-         * //se o inimigo atacou, verifica se pode atirar(cooldown <= 0) e
-         * adiciona o ataque à lista de ataques if (this.inimigo.atacou == true)
-         * { if (this.inimigo.personagem.podeAtirar()) {
-         * this.ataquesInimigo.add(new WaterGun(this.inimigo.getX(),
-         * this.inimigo.getY(), this.player.getX(), this.player.getY(),
-         * this.inimigo.getAngulo(), this.inimigo.getPersonagem()));
-         *
-         * //////// model.Ataque a =
-         * AtaqueDAO.getPoder(this.CharSelect.getInimigo()); //////// String s =
-         * "Ataques."+a.getNome(); //////// try { //////// Class cls =
-         * Class.forName(s); //////// Class[] parameters = new
-         * Class[]{int.class, int.class, int.class, int.class, double.class,
-         * Personagem.class}; //////// java.lang.reflect.Constructor con =
-         * cls.getConstructor(parameters); //////// Object o =
-         * con.newInstance(new Object[]{this.player.getX(), this.player.getY(),
-         * this.player.getDestX(), this.player.getDestY(),
-         * this.player.getAngulo(), this.player.getPersonagem()}); ////////
-         * this.ataques.add((Ataque)o); //////// } catch (ClassNotFoundException
-         * ex) { //////// JOptionPane.showMessageDialog(null, "ERROR: classe " +
-         * ex.getMessage() + " não encontrada"); //////// System.exit(1);
-         * //////// } catch (IllegalAccessException ex2){ ////////
-         * JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
-         * //////// System.exit(1); //////// } catch (InstantiationException
-         * ex3){ //////// JOptionPane.showMessageDialog(null, "ERROR: " +
-         * ex3.getMessage()); //////// System.exit(1); //////// } catch
-         * (NoSuchMethodException ex4){ ////////
-         * JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
-         * //////// System.exit(1); //////// } catch (IllegalArgumentException
-         * ex){ //////// JOptionPane.showMessageDialog(null, "ERROR: " +
-         * ex.getMessage()); //////// System.exit(1); //////// } catch
-         * (InvocationTargetException ex){ ////////
-         * JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-         * //////// System.exit(1); //////// } catch(SecurityException ex){
-         * //////// JOptionPane.showMessageDialog(null, "ERROR: " +
-         * ex.getMessage()); //////// System.exit(1); //////// } ////////
-         * this.inimigo.personagem.cooldownAtual =
-         * this.inimigo.personagem.cooldown; } } this.inimigo.atacou = false;
-         */
+
+        if (this.inimigo.atacou == true) {
+            if (this.inimigo.personagem.podeAtirar()) {
+                model.Ataque a = AtaqueDAO.getPoder(this.CharSelect.getInimigo());
+                String s = "Ataques." + a.getNome();
+                try {
+                    Class cls = Class.forName(s);
+                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, double.class, Personagem.class};
+                    java.lang.reflect.Constructor con = cls.getConstructor(parameters);
+                    Object o = con.newInstance(new Object[]{this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()});
+                    this.ataquesInimigo.add((Ataque) o);
+                } catch (ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
+                    System.exit(1);
+                } catch (IllegalAccessException ex2) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
+                    System.exit(1);
+                } catch (InstantiationException ex3) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex3.getMessage());
+                    System.exit(1);
+                } catch (NoSuchMethodException ex4) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
+                    System.exit(1);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
+                } catch (InvocationTargetException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
+                } catch (SecurityException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
+                }
+                // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+
+                this.inimigo.personagem.setCooldownAtual();
+            }
+        }
+        this.inimigo.atacou = false;
     }
 
     public void criaPlayer1() {
@@ -352,7 +352,10 @@ public class Fase1 implements GameStateController {
                     System.out.println(this.CharSelect.getPlayer1() + " took " + dano + " damage!");
                     this.player.personagem.perdeHp(dano);
                 }
+                a.acertou = true;
                 a.desativado();
+                //pra mandar pro sei-la-o-que garbage collector
+                a = null;
             }
         }
 
@@ -373,6 +376,7 @@ public class Fase1 implements GameStateController {
                     System.out.println(defDoOponente);
                     this.inimigo.personagem.perdeHp(dano);
                 }
+                a.acertou = true;
                 a.desativado();
                 a = null;
             }
@@ -396,13 +400,13 @@ public class Fase1 implements GameStateController {
             MySQL banco = new MySQL();
             String sql = "update pokemonLiberado "
                     + "set atk = " + atk + ", "
-                    + "set def = " + def + ", "
-                    + "set spd = " + spd + ", "
-                    + "set hp = " + hp + ", "
-                    + "set lvl = " + lvl + ", "
-                    + "set exp = " + exp + ", "
-                    + "set vezesDerrotasParaNPC = " + vezesDerrotasParaNPC + ", "
-                    + "set lvlQueChegou = " + lvlQueChegou + " "
+                    + "def = " + def + ", "
+                    + "spd = " + spd + ", "
+                    + "hp = " + hp + ", "
+                    + "lvl = " + lvl + ", "
+                    + "exp = " + exp + ", "
+                    + "vezesDerrotasParaNPC = " + vezesDerrotasParaNPC + ", "
+                    + "lvlQueChegou = " + lvlQueChegou + " "
                     + "where idPokemon = " + this.player.personagem.getId();
             boolean bool = banco.executaUpdate(sql);
 

@@ -46,6 +46,7 @@ CREATE  TABLE IF NOT EXISTS `tcc`.`pokemon` (
   `defBase` INT(11) NOT NULL ,
   `spdBase` INT(11) NOT NULL ,
   `hpBase` INT(11) NOT NULL ,
+  `baseExp` INT NOT NULL ,
   `lvlQueEvolui` INT(11) NULL DEFAULT NULL ,
   `idAtaque` INT(11) NOT NULL ,
   `elementoPrimario` INT NOT NULL ,

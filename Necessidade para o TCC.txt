@@ -23,7 +23,13 @@ Necessarios:
 
 	--> Fazer a colisao no jogo
 
-	--> Atualizar dados do personagem liberado na fase1 quando cria ele
+	--> Atualizar dados do personagem liberado na fase1 quando cria ele(acho que ja foi)
+
+	--> Arrumar sistema de cura em ataques que curam(LeechSeed)
+
+	--> Para diminuir o "lag" fazer com que apenas imagens rotacionadas sejam do tipo PixelPerfect, o resto(imagens de personagens, tiles e ataques nao rotacionados) seria do tipo Imagem
+
+	--> Fazer sistema de evolução
 --------
 
 "Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens acima."

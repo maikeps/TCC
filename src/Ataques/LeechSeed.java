@@ -10,9 +10,11 @@ import javaPlayExtras.AudioPlayer;
 import javax.swing.JOptionPane;
 import pixelPerfect.GameObjectImagePixelPerfect;
 
-public class Twister extends Ataque {
+public class LeechSeed extends Ataque {
+    
+    boolean jaCurou = false;
 
-    public Twister(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    public LeechSeed(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
@@ -29,6 +31,7 @@ public class Twister extends Ataque {
         this.destX = destX;
         this.destY = destY;
         this.velocidade = 10;
+        this.personagem = personagem;
 
         this.angulo = angulo;
 
@@ -52,6 +55,14 @@ public class Twister extends Ataque {
     public void step(long timeElapsed) {
         if (this.desativado) {
             return;
+        }
+        //se ja curou, verifica se acertou
+        if(jaCurou == false){
+            if(this.acertou){
+            //se acertou, player ganha vida(1/4 do dano)
+            this.personagem.ganhaHp(this.getDano()/4);
+            this.jaCurou = true;
+            }
         }
         this.x += this.dx;
         this.y += this.dy;
