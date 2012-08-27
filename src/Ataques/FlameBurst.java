@@ -38,7 +38,7 @@ public class FlameBurst extends Ataque {
         this.frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/Flame Burst/FlameBurst.png", 4, 240, 250);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 240, 250);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

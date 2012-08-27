@@ -28,7 +28,6 @@ public class Twister extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.velocidade = 10;
 
         this.angulo = angulo;
 

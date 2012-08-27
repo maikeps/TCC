@@ -48,7 +48,7 @@ insert into ataque (nome, atk, elemento) values
 ("ElectroBall", 60, 9), -- ok --classe ok
 ("Thunder", 120, 9), -- ok --classe ok
 ("RockTomb", 50, 12), -- 25
-("EarthQuake", 100, 10), --ok --classe ok
+("EarthQuake", 100, 10), -- ok --classe ok
 ("PoisonFang", 50, 8),
 ("BodySlam", 85, 2),
 ("PoisonJab", 80, 8),

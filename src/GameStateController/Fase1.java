@@ -7,6 +7,7 @@ package GameStateController;
 import Ataques.*;
 import DAO.AtaqueDAO;
 import DAO.PokemonDAO;
+import DAO.PokemonDerrotadoDAO;
 import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
 import MySQL.ConjuntoResultados;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import tcc.Inimigo;
 import tcc.Player;
 import model.Pokemon;
+import model.PokemonDerrotado;
 import model.PokemonInimigo;
 import model.PokemonLiberado;
 import pixelPerfect.GameObjectImagePixelPerfect;
@@ -129,8 +131,9 @@ public class Fase1 implements GameStateController {
         }
 
         g.setColor(Color.black);
+        g.setColor(Color.white);
 
-
+        g.drawString("atk do player: " + this.player.personagem.getAtk(), 100, 100);
 
     }
 
@@ -190,7 +193,7 @@ public class Fase1 implements GameStateController {
 
         this.player.atacou = false;
 
-        // Arrumar essa parte para que o inimigo tbm troque de poder!!!!
+        //---------------------\\
 
         if (this.inimigo.atacou == true) {
             if (this.inimigo.personagem.podeAtirar()) {
@@ -203,8 +206,10 @@ public class Fase1 implements GameStateController {
                     Object o = con.newInstance(new Object[]{this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()});
                     this.ataquesInimigo.add((Ataque) o);
                 } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
-                    System.exit(1);
+                    this.CharSelect.sorteiaInimigo();
+                    this.criaInimigo();
+                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada, vamos trocar o pokemon.");
+                    //System.exit(1);
                 } catch (IllegalAccessException ex2) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
                     System.exit(1);
@@ -375,6 +380,21 @@ public class Fase1 implements GameStateController {
                     System.out.println(atkDoPokemon);
                     System.out.println(defDoOponente);
                     this.inimigo.personagem.perdeHp(dano);
+
+
+
+                    //faz update no campo totalDanoCausado
+
+                    int idPlayer = this.player.personagem.getId();
+                    PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(idPlayer);
+                    int danoTotal = pokeLiberado.getTotalDanoCausado();
+                    int danoTotalDepois = danoTotal + dano;
+
+
+                    MySQL banco = new MySQL();
+                    String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
+                    boolean bool = banco.executaUpdate(sql);
+
                 }
                 a.acertou = true;
                 a.desativado();
@@ -417,6 +437,7 @@ public class Fase1 implements GameStateController {
 
     public void verificaSeInimigoEstaMorto() {
         if (this.inimigo.personagem.estaMorto()) {
+            int idInimigo = this.inimigo.personagem.getId();
             int lvlInimigo = this.inimigo.personagem.getLvl();
 
             //pega as informacoes do inimigo e calcula a exp a ser adquirida
@@ -425,9 +446,9 @@ public class Fase1 implements GameStateController {
             int expGanha = (expBase * lvlInimigo) / 7;
 
             //altera o campo exp do pokemonLiberado no banco
-            PokemonLiberado p = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
-            int exp = expGanha + p.getExp();
-            int lvlPlayer = p.getLvl();
+            PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
+            int exp = expGanha + pokeLiberado.getExp();
+            int lvlPlayer = pokeLiberado.getLvl();
 
             MySQL banco = new MySQL();
             String sql = "update PokemonLiberado set exp = " + exp + " where idPokemon = " + this.player.personagem.getId();
@@ -447,8 +468,29 @@ public class Fase1 implements GameStateController {
                 this.criaPlayer1();
             }
 
+            //update o numero de kill do player
+            int killsAntes = pokeLiberado.getInimigosDerrotados();
+            int killsDepois = killsAntes + 1;
+            sql = "update pokemonLiberado set InimigosDerrotados = " + killsDepois + " where idPokemon = " + this.player.personagem.getId();
+            bool = banco.executaUpdate(sql);
+
+            //update o numero de vezes que o inimigo foi derrotado
+            //se o idInimigo for maior que 9, ou seja, depois do squirtle
+            //aumenta o numero de vezesDerrotado
+            //por que os 9 primeiros pokemons nao podem ser liberados
+            //por morte, mas sim por evolucao.
+            if (idInimigo > 9) {
+                PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
+                int vezesAntes = pokeDerrotado.getVezesDerrotado();
+                int vezesDepois = vezesAntes + 1;
+                if (!(vezesAntes >= poke.getRaridade())) {
+                    sql = "update pokemonDerrotado set vezesDerrotado = " + vezesDepois + " where idPokemon = " + idInimigo;
+                    bool = banco.executaUpdate(sql);
+                }
+            }
+
             //mostra mensagem na tela
-            JOptionPane.showMessageDialog(null, p.getNome() + " fainted, you got " + expGanha + " experience.");
+            JOptionPane.showMessageDialog(null, poke.getNome() + " fainted, you got " + expGanha + " experience.");
             //sorteia o inimigo novamente
             this.CharSelect.sorteiaInimigo();
             //e cria outro inimigo

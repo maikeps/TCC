@@ -22,10 +22,16 @@
 23 - PokeFights
 24 - PokeBattles
 25 - Pokemon: The Ultimate Champions
+26 - Angry Pokemons
 
-
-7 - |
+1 - |
+7 - ||
 9 - |
 11 - |||
-14 - |
+14 - ||
+15 - |
+17 - |
+19 - |
+20 - ||
 22 - ||
+26 - ||

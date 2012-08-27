@@ -3,11 +3,12 @@ package javaPlay2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import javax.swing.JOptionPane;
 
 public class Imagem {
 
     protected  Image image;
-    private static int MAX_COUNT = 50;
+    private static int MAX_COUNT = 100;
     protected String filename;
 
     public Imagem(String filename) throws Exception
@@ -22,7 +23,9 @@ public class Imagem {
             count++;
 
             if(count == MAX_COUNT) {
-                throw new Exception("Imagem \""+filename+"\" nï¿½o pode ser carregada");
+                JOptionPane.showMessageDialog(null, "Imagem \""+filename+"\" não pode ser carregada");
+                System.exit(1);
+                //throw new Exception("Imagem \""+filename+"\" nï¿½o pode ser carregada");
             }
         }        
     }
@@ -40,6 +43,18 @@ public class Imagem {
     // Allows easy drawing of this sprite at any position
     public void draw(Graphics graphics, int x, int y) {
         graphics.drawImage(image, x, y, null);
+    }
+    
+    //arrumar, mas acho que com o x-w/2, y-h/2 deveria ficar mais certo
+    public void drawTranslated(Graphics g, int x, int y){
+        
+        int w = this.pegaLargura();
+        int h = this.pegaAltura();
+        //g.translate(x-w/2, y-h/2);
+        g.translate(w/2, h/2);
+        g.drawImage(image, x, y, null);
+        
+        g.translate(-w/2, -h/2);
     }
 
     public void drawFlipped(Graphics graphics, int x, int y) {

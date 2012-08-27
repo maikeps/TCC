@@ -1,3 +1,6 @@
+"Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens abaixo."
+
+
 Principal
 	 -->  Fazer  com que o personagem se mova pelo mapa.
 
@@ -15,13 +18,13 @@ Necessarios:
 
 	--> Para fazer com que os pokemons de um elemento so nascam em areas desse elemento, usar o valor "raridade" da tabela pokemon para ver se o pokemon vai ou nao nascer em cada tile. se nascer, a variavel "ocupado" do tile sera true e permanecerá assim ate o pokemon morrer, assim ficara sendo false. so pode nascer outro pokemon nesse mesmo tile se essa variavel for false.
 
-	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro
+	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro. Para fazer isso, usar o metodo drawTranslated(tem que arrumar ainda, mas ja da pra mudar a imagem)
 
 	--> Arrumar teclas para cima e para baixo(ir da primeira linha para a ultima e vice-versa)
 
 	--> Arumar a tabela bonusDeElemento, tem elementos que nao possuem vantagens ou desantagens. Fazer assim: tabela bonusDeElemento possuindo apenas o elemento em questao, o elemento sobre o qual tem vantagem(ou desvantagem) e o multiplicador. ficaria assim: Fire, Grass, 2.0.  2.0 significa 2x dano e 0.5 significa metade do dano.
 
-	--> Fazer a colisao no jogo
+	--> Fazer a colisao no jogo(arrumar)
 
 	--> Atualizar dados do personagem liberado na fase1 quando cria ele(acho que ja foi)
 
@@ -30,9 +33,25 @@ Necessarios:
 	--> Para diminuir o "lag" fazer com que apenas imagens rotacionadas sejam do tipo PixelPerfect, o resto(imagens de personagens, tiles e ataques nao rotacionados) seria do tipo Imagem
 
 	--> Fazer sistema de evolução
+
+	--> Colocar tela de loading para carregar todas as imagens, ou um icone de loading na hora de carregar uma imagem que normalmente daria erro.
+
+	--> Fazer busca no banco para adicionar o multiplicador(x0.5 ou x2) de dano(metodo verificaColisao)
+
+	--> Fazer Kills/Deaths ratio
+
+	--> Arrumar o bug de o inimigo andar mais rapido se estiver indo para a direita embaixo(so durante perseguicao)
+
+	--> Botar musica de "perseguicao" quando inimigo estiver perseguindo player :D ou nao
+
+	--> Arrumar o problema de imagens que antigamente eram da classe sprite(passar frame por frame)
+
+	--> Fazer com que libere personagem apos matar um inimigo um certo num de vezes
+
+	--> Arrumar o ataque do Venusaur(SolarBeam), fazer com que ele desapareca apos um tempo
+
+	--> Verificar se sistema de dano esta correto
+
+	--> Fazer com que se o personagem ja estiver sido liberado, suma a barra de progresso
+
 --------
-
-"Se mais alguem pensar em alguma modificação ou algo que prescise ser mudado adicione nos itens acima."
-
-
-

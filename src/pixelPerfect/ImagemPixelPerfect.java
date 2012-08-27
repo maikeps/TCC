@@ -19,15 +19,7 @@ public class ImagemPixelPerfect extends Imagem {
 
     public ImagemPixelPerfect(String filename, GameObject obj) throws Exception {
         super(filename);
-        try{
-            
-        this.go = obj;
-        }catch(Exception ex){
-            
-            JOptionPane.showMessageDialog(null, "Recurso não encontrado(class Pixel Perfect): " + ex.getMessage());
-            System.exit(1);
-        }
-        
+        this.go = obj;        
     }
 
     // returns a HashSet of strings that list all the pixels in an image that aren't transparent

@@ -198,8 +198,8 @@ public class CharacterSelect implements GameStateController {
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
         g.drawString("Kills: " + pl.getInimigosDerrotados(), 500, 175);
         g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 500, 200);
-        g.drawString("Total dano causado: " + pl.getTotalDanoCausado(), 500, 225);
-        g.drawString("Vezes que zerou o jogo: " + pl.getVezesQueZerouOJogo(), 500, 250);
+        g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 500, 225);
+        g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 500, 250);
 
 
 

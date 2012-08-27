@@ -28,12 +28,11 @@ public class Twineedle extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.velocidade = 10;
 
         this.angulo = angulo;
 
         try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".png");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
