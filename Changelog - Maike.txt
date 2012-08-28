@@ -1,3 +1,3 @@
 28/08
 -Adicionei sistema de level-up
--
+-PixelPerfect agora faz uma verificacao antes de comecar a funcionar, para aprimorar o desempenho. mais detalhes no metodo checkCollision() da classe ImagemPixelPerfect
