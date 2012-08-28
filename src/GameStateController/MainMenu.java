@@ -25,6 +25,9 @@ import javax.swing.JOptionPane;
 public class MainMenu implements GameStateController {
 
     private Imagem imagem;
+    int cont = 0;
+    Color cor = Color.white;
+    int veloc = 1;
 
     @Override
     public void load() {
@@ -46,9 +49,16 @@ public class MainMenu implements GameStateController {
 
         Keyboard teclado = GameEngine.getInstance().getKeyboard();
 
-        if (teclado.keyDown(Keys.ESPACO)) {
+        if (teclado.keyDown(Keys.ENTER)) {
             AudioPlayer.play("resources/sounds/comeon.wav");
             GameEngine.getInstance().setNextGameStateController(2);
+        }
+        
+        this.cont += this.veloc;
+        if(this.cont >= 30){
+            this.veloc = -1;
+        } else if(this.cont <= 0){
+            this.veloc = 1;
         }
     }
 
@@ -71,6 +81,14 @@ public class MainMenu implements GameStateController {
         g.fillRect(0, 0, 800, 700);
         this.imagem.draw(g, 195, 50);
 
+        if(this.veloc == 1){
+            this.cor = Color.white;
+        }else{
+            this.cor = Color.black;
+        }
+        
+        g.setColor(this.cor); 
+        g.drawString("Press ENTER", 315, 550);
 
 
     }

@@ -46,7 +46,7 @@ public class HydroPump extends Ataque {
         int frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/HydroPump/HydroPump_Right.png", 14, 220, 120);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+"_Right.png", 14, 220, 120);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

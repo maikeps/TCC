@@ -1,5 +1,6 @@
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -16,8 +17,15 @@ public class WaterPulse extends Ataque {
     Sprite spriteAtual;
 
     public WaterPulse(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+        
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
         this.personagem = personagem;
-        this.setDano(10);
         AudioPlayer.play("resources/sounds/Sound 1.wav");
         this.desativado = false;
         this.x = x - (this.personagem.spriteAtual.pegaLargura() + 70);
@@ -25,7 +33,7 @@ public class WaterPulse extends Ataque {
         this.frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/Water Pulse/WaterPulse.png", 4, 270, 250);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 270, 250);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

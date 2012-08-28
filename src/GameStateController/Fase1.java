@@ -122,19 +122,7 @@ public class Fase1 implements GameStateController {
 
         this.desenhaHealthBar(g);
 
-
-        g.setColor(Color.white);
-
-        g.drawRect(this.player.personagem.getX(), this.player.personagem.getY(), this.player.personagem.spriteAtual.getLargura(), this.player.personagem.spriteAtual.getAltura());
-        for (Ataque a : this.ataquesInimigo) {
-            g.drawRect(a.getX(), a.getY(), a.imagem.getLargura(), a.imagem.getAltura());
-        }
-
         g.setColor(Color.black);
-        g.setColor(Color.white);
-
-        g.drawString("atk do player: " + this.player.personagem.getAtk(), 100, 100);
-
     }
 
     public void start() {
@@ -437,12 +425,13 @@ public class Fase1 implements GameStateController {
 
     public void verificaSeInimigoEstaMorto() {
         if (this.inimigo.personagem.estaMorto()) {
+            int idPlayer = this.player.personagem.getId();
             int idInimigo = this.inimigo.personagem.getId();
             int lvlInimigo = this.inimigo.personagem.getLvl();
 
             //pega as informacoes do inimigo e calcula a exp a ser adquirida
-            Pokemon poke = PokemonDAO.getPokemon(this.inimigo.personagem.getId());
-            int expBase = poke.getBaseExp();
+            Pokemon pokeInimigo = PokemonDAO.getPokemon(this.inimigo.personagem.getId());
+            int expBase = pokeInimigo.getBaseExp();
             int expGanha = (expBase * lvlInimigo) / 7;
 
             //altera o campo exp do pokemonLiberado no banco
@@ -462,11 +451,44 @@ public class Fase1 implements GameStateController {
                 expProxLvlPlayer = linhas.getInt("exp");
             }
 
+            //se a exp do player for maior qe a necessaria para passar de level
+            //passa de level
             if (exp >= expProxLvlPlayer) {
                 sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
                 bool = banco.executaUpdate(sql);
                 this.criaPlayer1();
             }
+            
+            //se o level do pokemon for maior ou igual ao level de sua evolução
+            //evolui
+            Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
+            //if(pokePlayer.getLevelQueEvolui() != null){
+            if(this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()){
+                //faz a pesquisa no banco para ver se a evolucao ja foi liberada
+                PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId()+1);
+                //se o pokemon foi liberado, muda o nome do player para o novo pokemon
+                if(procuraPokeLiberado.getNome() != null){
+                    this.CharSelect.setPlayer1(procuraPokeLiberado.getNome());
+                    this.criaPlayer1();
+                } else {
+                    //senao, faz o insert no banco para liberar o pokemon
+                    //futuramente aumentar o contador na tabela pokemonDerrotado
+                    //para ver se o pokemon pode ser liberado
+                    Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer+1);
+                    sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
+                            + "(1, "
+                            + ""+pokeASerLiberado.getId()+", "
+                            + ""+pokeASerLiberado.getAtkBase()+", "
+                            + ""+pokeASerLiberado.getDefBase()+", "
+                            + ""+pokeASerLiberado.getSpdBase()+", "
+                            + ""+pokeASerLiberado.getHpBase()+");";
+                    System.out.println(sql);
+                    bool = banco.executaInsert(sql);
+                    this.CharSelect.setPlayer1(pokeASerLiberado.getNome());
+                    this.criaPlayer1();
+                }
+            }
+            //}
 
             //update o numero de kill do player
             int killsAntes = pokeLiberado.getInimigosDerrotados();
@@ -483,14 +505,14 @@ public class Fase1 implements GameStateController {
                 PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
                 int vezesAntes = pokeDerrotado.getVezesDerrotado();
                 int vezesDepois = vezesAntes + 1;
-                if (!(vezesAntes >= poke.getRaridade())) {
+                if (!(vezesAntes >= pokeInimigo.getRaridade())) {
                     sql = "update pokemonDerrotado set vezesDerrotado = " + vezesDepois + " where idPokemon = " + idInimigo;
                     bool = banco.executaUpdate(sql);
                 }
             }
 
             //mostra mensagem na tela
-            JOptionPane.showMessageDialog(null, poke.getNome() + " fainted, you got " + expGanha + " experience.");
+            JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
             //sorteia o inimigo novamente
             this.CharSelect.sorteiaInimigo();
             //e cria outro inimigo

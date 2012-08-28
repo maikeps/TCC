@@ -50,7 +50,7 @@ public class RazorLeaf extends Ataque {
         int frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/Razor Leaf/RazorLeaf_Right.png", 9, 220, 85);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+"_Right.png", 9, 220, 85);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

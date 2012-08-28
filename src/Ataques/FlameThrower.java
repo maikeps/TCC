@@ -4,6 +4,7 @@
  */
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import Personagens.Personagem;
 import java.awt.Graphics;
@@ -26,7 +27,14 @@ public class FlameThrower extends Ataque {
     double deltaX, deltaY, dx, dy;
 
     public FlameThrower(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
-        this.setDano(15);
+        
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
         this.personagem = personagem;
 
         this.desativado = false;
@@ -43,7 +51,7 @@ public class FlameThrower extends Ataque {
         int frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/Flame Thrower/FlameThrower_Right.png", 8, 215, 65);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+"_Right.png", 8, 215, 65);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

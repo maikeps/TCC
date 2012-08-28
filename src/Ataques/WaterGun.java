@@ -43,7 +43,7 @@ public class WaterGun extends Ataque {
 
         
           try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/Water Gun/WaterGun_Right.png");
+            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+"_Right.png");
 
              // this.spriteAtual = spriteVazio;
         } catch (Exception ex) {

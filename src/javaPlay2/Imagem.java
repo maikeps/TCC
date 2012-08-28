@@ -19,6 +19,10 @@ public class Imagem {
         int count = 0;
 
         while(image.getWidth(null) == -1) {
+            
+            //botar aqui icone de carregando, ou algo do tipo
+            //System.out.println("Carregando imagem...");
+            
             Thread.sleep(1);
             count++;
 

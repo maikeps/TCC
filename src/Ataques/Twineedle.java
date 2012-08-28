@@ -66,7 +66,8 @@ public class Twineedle extends Ataque {
 
         this.imagem.setX(this.getX());
         this.imagem.setY(this.getY());
-        this.imagem.draw(g);
+        //this.imagem.draw(g);
+        this.imagem.drawRotated(g, this.getX(), this.getY(), this.angulo);
 
     }
 

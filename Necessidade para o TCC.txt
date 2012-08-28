@@ -54,4 +54,22 @@ Necessarios:
 
 	--> Fazer com que se o personagem ja estiver sido liberado, suma a barra de progresso
 
+	--> Para arrumar o problema da lentidao, fazer colisao por quadrados em imagem que não é feita a rotacao.
+
+	--> Colocar tabela evolucao ou criar o campo evolucao na tabela pokemon, para saber para qual pokemon que evolui em determinado level
+
+	--> Melhorar lógica de evolucao, nao parte que vai pegar os stats da evolucao, simplesmente pega o proximo pokemon, isso é ruim por que evolucoes que tem varios caminhos nao funcionaria(eevee, por exemplo)
+
+	--> Para corrigir o problema de cima, adicionar campo evolucao na tabela pokemon, para saber para qual pokemon vai evoluir
+
+	--> Por enquanto ao evoluir, a evolucao comeca no level 1 e o pokemon antigo continua com seu level. ver se deixa assim ou se muda
+
+	--> Se jogar de novo com o pokemon que deveria estar evoluido, ele nao evolui de novo, so acontece isso quando mata um inimigo, que é onde acontece a verificacao do level.
+
+	--> Depois que um pokemon evolui e é liberado para jogar normalmente, ele continua com o numero de kills da evolucao enterior. ver se deixa assim ou se muda	
+
+	--> Fazer com que nao aparecam pokemons evoluidos se o level for menor que o necessario. por exemplo, nao pode aparecer um charizard se o level do inimigo for menor que 32.
+
+	--> Adicionar opcao ao jogador de evoluir ou nao o pokemon, assim como no gameboy
+
 --------

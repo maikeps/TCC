@@ -138,9 +138,17 @@ public class CharacterSelect implements GameStateController {
     public String getPlayer1() {
         return this.player1;
     }
+    
+    public void setPlayer1(String player1){
+        this.player1 = player1;
+    }
 
     public String getInimigo() {
         return this.inimigo;
+    }
+    
+    public void setInimigo(String inimigo){
+        this.inimigo = inimigo;
     }
 
     public int getYSelecionado() {
@@ -418,7 +426,7 @@ public class CharacterSelect implements GameStateController {
         String nome = p.getNome();
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
         //se o jogador apertou espaço e o pokemon escolhido ja foi liberado, comeca o jogo
-        if (teclado.keyDown(Keys.ESPACO) && pl.getNome() != null) {
+        if (teclado.keyDown(Keys.ENTER) && pl.getNome() != null) {
             this.player1 = this.nomes.get(this.pokemonSelecionado);
 
             Util.sleep(500);
