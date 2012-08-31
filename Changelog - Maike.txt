@@ -1,3 +1,7 @@
 28/08
 -Adicionei sistema de level-up
 -PixelPerfect agora faz uma verificacao antes de comecar a funcionar, para aprimorar o desempenho. mais detalhes no metodo checkCollision() da classe ImagemPixelPerfect
+
+30/08
+-Adicionado Try-Catch para contornar o problema do "Buffers have not been created"
+-Adicionado Kills/Deaths

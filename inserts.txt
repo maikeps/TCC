@@ -310,6 +310,6 @@ insert into experiencia (lvl, exp) values
 
 
 -- na verdade aqui no lugar do elemento deveria ser pedra, porque existe a moon stone e isso não é um -- elemento
-insert into evolucaoPorPedra (idPokemon, idEvolucao, elemento) values
-(25, 26, 9); -- thunder stone
+-- insert into evolucaoPorPedra (idPokemon, idEvolucao, elemento) values
+-- (25, 26, 9); -- thunder stone
 -- (30, 31, moon stone)

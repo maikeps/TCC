@@ -38,8 +38,6 @@ Necessarios:
 
 	--> Fazer busca no banco para adicionar o multiplicador(x0.5 ou x2) de dano(metodo verificaColisao)
 
-	--> Fazer Kills/Deaths ratio
-
 	--> Arrumar o bug de o inimigo andar mais rapido se estiver indo para a direita embaixo(so durante perseguicao)
 
 	--> Botar musica de "perseguicao" quando inimigo estiver perseguindo player :D ou nao

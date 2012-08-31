@@ -59,7 +59,8 @@ public class SolarBeam extends Ataque {
     }
 
     public void step(long timeElapsed) {
-        if (this.cont >= 60) {
+        if (this.cont >= 15) {
+            this.desativado = true;
             return;
         }
         this.cont ++;

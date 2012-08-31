@@ -98,8 +98,8 @@ public class Inimigo extends ObjetoComMovimento {
 
         if (this.podePerseguir()) {
             this.aproxima();
-            this.ataca();
-            this.sorteiaDestino();
+            this.ataca();//metodo antigo, provavelmente nao sera mais usado
+            this.sorteiaDestino();//nao sei por que tem isso aqui '-'
         } else {
             if (this.x != this.destMovimentoX && this.y != this.destMovimentoY) {
                 this.anda();
@@ -227,42 +227,34 @@ public class Inimigo extends ObjetoComMovimento {
         switch (quadranteDoPlayer) {
             case 1:
                 this.personagem.direcao = Direcao.DIREITA;
-              //  this.personagem.spriteAtual = this.personagem.spriteRight;
                 this.personagem.moveDireitaCima(this.velocidade);
                 break;
             case 2:
                 this.personagem.direcao = Direcao.CIMA;
-             //   this.personagem.spriteAtual = this.personagem.spriteUp;
                 this.personagem.moveDireitaCima(this.velocidade);
                 break;
             case 3:
                 this.personagem.direcao = Direcao.CIMA;
-              //  this.personagem.spriteAtual = this.personagem.spriteUp;
                 this.personagem.moveEsquerdaCima(this.velocidade);
                 break;
             case 4:
                 this.personagem.direcao = Direcao.ESQUERDA;
-              //  this.personagem.spriteAtual = this.personagem.spriteLeft;
                 this.personagem.moveEsquerdaCima(this.velocidade);
                 break;
             case 5:
                 this.personagem.direcao = Direcao.ESQUERDA;
-               // this.personagem.spriteAtual = this.personagem.spriteLeft;
                 this.personagem.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 6:
                 this.personagem.direcao = Direcao.BAIXO;
-             //   this.personagem.spriteAtual = this.personagem.spriteDown;
                 this.personagem.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 7:
                 this.personagem.direcao = Direcao.BAIXO;
-              //  this.personagem.spriteAtual = this.personagem.spriteDown;
                 this.personagem.moveDireitaBaixo(this.velocidade);
                 break;
             case 8:
                 this.personagem.direcao = Direcao.DIREITA;
-             //   this.personagem.spriteAtual = this.personagem.spriteRight;
                 this.personagem.moveDireitaBaixo(this.velocidade);
                 break;
         }

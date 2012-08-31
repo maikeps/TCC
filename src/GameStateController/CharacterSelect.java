@@ -127,7 +127,6 @@ public class CharacterSelect implements GameStateController {
         }
 
         this.numLinhas = ((this.listaDePokemon.size() + 1) / 9) + 1;
-        System.out.println(numLinhas);
 
     }
 
@@ -138,16 +137,16 @@ public class CharacterSelect implements GameStateController {
     public String getPlayer1() {
         return this.player1;
     }
-    
-    public void setPlayer1(String player1){
+
+    public void setPlayer1(String player1) {
         this.player1 = player1;
     }
 
     public String getInimigo() {
         return this.inimigo;
     }
-    
-    public void setInimigo(String inimigo){
+
+    public void setInimigo(String inimigo) {
         this.inimigo = inimigo;
     }
 
@@ -208,7 +207,11 @@ public class CharacterSelect implements GameStateController {
         g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 500, 200);
         g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 500, 225);
         g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 500, 250);
-
+        if (pl.getVezesDerrotasParaNPC() == 0) {
+            g.drawString("K/D: " + pl.getInimigosDerrotados(), 500, 275);
+        } else {
+            g.drawString("K/D: " + (pl.getInimigosDerrotados() / pl.getVezesDerrotasParaNPC()), 500, 275);
+        }
 
 
         //desenha a progress bar
@@ -387,7 +390,7 @@ public class CharacterSelect implements GameStateController {
             //o quadrado entao vai para a linha de bem de baixo(terceira)
             if (this.ySelecionado <= 1) {
                 this.ySelecionado = 3;
-                this.pokemonSelecionado += 9 * (this.numLinhas-1); //pokemon selecionado é o da ultima linha
+                this.pokemonSelecionado += 9 * (this.numLinhas - 1); //pokemon selecionado é o da ultima linha
                 this.linha = this.numLinhas;
             }
 
@@ -419,9 +422,9 @@ public class CharacterSelect implements GameStateController {
         Util.sleep(150);
 
 
-        
-        //tecla de espaço
-        
+
+        //tecla de enter
+
         Pokemon p = this.listaDePokemon.get(this.pokemonSelecionado);
         String nome = p.getNome();
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
