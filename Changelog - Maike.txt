@@ -5,3 +5,4 @@
 30/08
 -Adicionado Try-Catch para contornar o problema do "Buffers have not been created"
 -Adicionado Kills/Deaths
+-Ataque SolarBeam corrigido - agora ele desaparece da tela depois de um instante
