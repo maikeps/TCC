@@ -14,8 +14,6 @@ Necessarios:
 
 	--> Pensar em um mapa, e onde ficarão os bosses.
 
-	--> "NOME PARA O JOGO" <--
-
 	--> Para fazer com que os pokemons de um elemento so nascam em areas desse elemento, usar o valor "raridade" da tabela pokemon para ver se o pokemon vai ou nao nascer em cada tile. se nascer, a variavel "ocupado" do tile sera true e permanecerá assim ate o pokemon morrer, assim ficara sendo false. so pode nascer outro pokemon nesse mesmo tile se essa variavel for false.
 
 	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro. Para fazer isso, usar o metodo drawTranslated(tem que arrumar ainda, mas ja da pra mudar a imagem)
@@ -32,13 +30,9 @@ Necessarios:
 
 	--> Para diminuir o "lag" fazer com que apenas imagens rotacionadas sejam do tipo PixelPerfect, o resto(imagens de personagens, tiles e ataques nao rotacionados) seria do tipo Imagem
 
-	--> Fazer sistema de evolução
-
 	--> Colocar tela de loading para carregar todas as imagens, ou um icone de loading na hora de carregar uma imagem que normalmente daria erro.
 
 	--> Fazer busca no banco para adicionar o multiplicador(x0.5 ou x2) de dano(metodo verificaColisao)
-
-	--> Fazer Kills/Deaths ratio
 
 	--> Arrumar o bug de o inimigo andar mais rapido se estiver indo para a direita embaixo(so durante perseguicao)
 
@@ -47,8 +41,6 @@ Necessarios:
 	--> Arrumar o problema de imagens que antigamente eram da classe sprite(passar frame por frame)
 
 	--> Fazer com que libere personagem apos matar um inimigo um certo num de vezes
-
-	--> Arrumar o ataque do Venusaur(SolarBeam), fazer com que ele desapareca apos um tempo
 
 	--> Verificar se sistema de dano esta correto
 
@@ -61,8 +53,6 @@ Necessarios:
 	--> Melhorar lógica de evolucao, nao parte que vai pegar os stats da evolucao, simplesmente pega o proximo pokemon, isso é ruim por que evolucoes que tem varios caminhos nao funcionaria(eevee, por exemplo)
 
 	--> Para corrigir o problema de cima, adicionar campo evolucao na tabela pokemon, para saber para qual pokemon vai evoluir
-
-	--> Por enquanto ao evoluir, a evolucao comeca no level 1 e o pokemon antigo continua com seu level. ver se deixa assim ou se muda
 
 	--> Se jogar de novo com o pokemon que deveria estar evoluido, ele nao evolui de novo, so acontece isso quando mata um inimigo, que é onde acontece a verificacao do level.
 

@@ -458,35 +458,12 @@ public class Fase1 implements GameStateController {
                 bool = banco.executaUpdate(sql);
                 this.criaPlayer1();
             }
-            
             //se o level do pokemon for maior ou igual ao level de sua evolução
             //evolui
             Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
             //if(pokePlayer.getLevelQueEvolui() != null){
-            if(this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()){
-                //faz a pesquisa no banco para ver se a evolucao ja foi liberada
-                PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId()+1);
-                //se o pokemon foi liberado, muda o nome do player para o novo pokemon
-                if(procuraPokeLiberado.getNome() != null){
-                    this.CharSelect.setPlayer1(procuraPokeLiberado.getNome());
-                    this.criaPlayer1();
-                } else {
-                    //senao, faz o insert no banco para liberar o pokemon
-                    //futuramente aumentar o contador na tabela pokemonDerrotado
-                    //para ver se o pokemon pode ser liberado
-                    Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer+1);
-                    sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
-                            + "(1, "
-                            + ""+pokeASerLiberado.getId()+", "
-                            + ""+pokeASerLiberado.getAtkBase()+", "
-                            + ""+pokeASerLiberado.getDefBase()+", "
-                            + ""+pokeASerLiberado.getSpdBase()+", "
-                            + ""+pokeASerLiberado.getHpBase()+");";
-                    System.out.println(sql);
-                    bool = banco.executaInsert(sql);
-                    this.CharSelect.setPlayer1(pokeASerLiberado.getNome());
-                    this.criaPlayer1();
-                }
+            if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
+                this.evolui();
             }
             //}
 
@@ -518,5 +495,51 @@ public class Fase1 implements GameStateController {
             //e cria outro inimigo
             this.criaInimigo();
         }
+
+
+    }
+
+    public void evolui() {
+        Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
+        MySQL banco = new MySQL();
+        int idPlayer = this.player.personagem.getId();
+
+        //faz a pesquisa no banco para ver se a evolucao ja foi liberada
+        PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId() + 1);
+        //se o pokemon foi liberado, muda o nome do player para o novo pokemon
+        if (procuraPokeLiberado.getNome() != null) {
+            this.CharSelect.setPlayer1(procuraPokeLiberado.getNome());
+            this.criaPlayer1();
+        } else {
+            //senao, faz o insert no banco para liberar o pokemon
+            //futuramente aumentar o contador na tabela pokemonDerrotado
+            //para ver se o pokemon pode ser liberado
+            Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
+            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
+                    + "(1, "
+                    + "" + pokeASerLiberado.getId() + ", "
+                    + "" + pokeASerLiberado.getAtkBase() + ", "
+                    + "" + pokeASerLiberado.getDefBase() + ", "
+                    + "" + pokeASerLiberado.getSpdBase() + ", "
+                    + "" + pokeASerLiberado.getHpBase() + ");";
+            System.out.println(sql);
+            boolean bool = banco.executaInsert(sql);
+            this.CharSelect.setPlayer1(pokeASerLiberado.getNome());
+            this.criaPlayer1();
+
+        }
+
+
+        String sql = "update pokemonLiberado set"
+                + "  atk =" + pokePlayer.getAtkBase()
+                + ", def =" + pokePlayer.getDefBase()
+                + " , spd =" + pokePlayer.getSpdBase()
+                + ", hp =" + pokePlayer.getHpBase()
+                + ", lvl = 1"
+                + ", exp = 0"
+                + " where idPokemon = " + pokePlayer.getId();
+
+
+        boolean bool = banco.executaUpdate(sql);
     }
 }
