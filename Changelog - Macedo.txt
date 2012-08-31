@@ -1,2 +1,6 @@
 31/08
 - Eu e o Maike fizemos um update par que quando o player evoluir, o status do pokemon anterior for resetado o seu estatus  zera 
+
+- Barra de Progresso some quando ja for liberado
+
+- Arrumado bug - dos numeros de kills serem passados para a evolução 

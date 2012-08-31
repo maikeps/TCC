@@ -458,13 +458,7 @@ public class Fase1 implements GameStateController {
                 bool = banco.executaUpdate(sql);
                 this.criaPlayer1();
             }
-            //se o level do pokemon for maior ou igual ao level de sua evolução
-            //evolui
-            Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
-            //if(pokePlayer.getLevelQueEvolui() != null){
-            if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
-                this.evolui();
-            }
+            
             //}
 
             //update o numero de kill do player
@@ -487,13 +481,26 @@ public class Fase1 implements GameStateController {
                     bool = banco.executaUpdate(sql);
                 }
             }
+            
+            
 
             //mostra mensagem na tela
             JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
+            
+            
+            //se o level do pokemon for maior ou igual ao level de sua evolução
+            //evolui
+            Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
+            //if(pokePlayer.getLevelQueEvolui() != null){
+            if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
+                this.evolui();
+            }
+            
             //sorteia o inimigo novamente
             this.CharSelect.sorteiaInimigo();
             //e cria outro inimigo
             this.criaInimigo();
+            
         }
 
 
@@ -512,7 +519,7 @@ public class Fase1 implements GameStateController {
             this.criaPlayer1();
         } else {
             //senao, faz o insert no banco para liberar o pokemon
-            //futuramente aumentar o contador na tabela pokemonDerrotado
+            //futuramente aumentar o contador na tabela pokemonDerrotadoa
             //para ver se o pokemon pode ser liberado
             Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
             String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "

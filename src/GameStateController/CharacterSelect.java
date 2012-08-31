@@ -214,7 +214,12 @@ public class CharacterSelect implements GameStateController {
         //desenha a progress bar
         //nao desenha na primeira linha por que a raridade dos 9 primeiros pokemons é zero
         //isso quer dizer que nao tem como eles aparecerem como inimigo.
+        
+        
         Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+        PokemonLiberado pokeliberado = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
+        
+     if (pokeliberado.getNome() == null){ 
         g.setColor(Color.green);
         g.fillRect(400, 300, poke.getRaridade(), 29); //desenha a barra de baixo, quando essa encher, o pokemon é liberado
         PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado + 1); //ve quantas vezes o pokemon foi derrotado
@@ -224,7 +229,7 @@ public class CharacterSelect implements GameStateController {
         g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), 410, 320); //escreve os numeros
         g.setColor(Color.white);
 
-
+      }
     }
 
     public void desenhaImagens(Graphics g) {
