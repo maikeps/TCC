@@ -6,3 +6,9 @@
 -Adicionado Try-Catch para contornar o problema do "Buffers have not been created"
 -Adicionado Kills/Deaths
 -Ataque SolarBeam corrigido - agora ele desaparece da tela depois de um instante
+
+01/09
+-Adicionada SplashScreen para carregar todas as imagens do jogo
+
+04/09
+-Agora, se derrotar um pokemon um certo numero de vezes, libera o pokemon 

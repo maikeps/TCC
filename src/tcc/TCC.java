@@ -6,6 +6,7 @@ package tcc;
 
 import GameStateController.*;
 import javaPlay2.GameEngine;
+import javaPlayExtras.Splash;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +19,11 @@ public class TCC {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        Splash s = new Splash();
+        util.Util.carregaImagens();
+        s.setVisible(false);
+        
 
         try {
 

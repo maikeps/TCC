@@ -1,7 +1,20 @@
 package util;
 
-
+import model.Ataque;
+import DAO.AtaqueDAO;
+import DAO.PokemonDAO;
+import DAO.PokemonLiberadoDAO;
+import GameStateController.CharacterSelect;
+import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javaPlay2.Imagem;
+import javax.swing.JOptionPane;
+import model.Pokemon;
+import model.PokemonLiberado;
+import javaPlayExtras.Splash;
 
 public class Util {
 
@@ -17,14 +30,14 @@ public class Util {
         Random r = new Random();
         return r.nextInt(max);
     }
-    
+
     static public double calculaAngulo(int xAlvo, int xPersonagem, int yAlvo, int yPersonagem) {
 
         /*
-         * xAlvo e yAlvo é onde o player clica com o mouse
-         * xPersonagem e yPersonagem é onde o player esta atualmente
+         * xAlvo e yAlvo é onde o player clica com o mouse xPersonagem e
+         * yPersonagem é onde o player esta atualmente
          */
-        
+
         //se calculo estiver errado trocar x2 e y2 por xPonto e yPonto
         int x2 = xAlvo;
         int y2 = yAlvo;
@@ -74,8 +87,94 @@ public class Util {
         double endY = startY + 50 * Math.sin(Math.toRadians(anguloTotal * (-1)));
 
         return anguloTotal;
-        
+
     }
-    
-    //static public void animacao(int miliseconds)
+
+    public static void carregaImagens() {
+        
+        
+
+        ArrayList<Ataque> listaDeAtaques = AtaqueDAO.getListaAtaque();
+        ArrayList<Pokemon> listaDePokemon = PokemonDAO.getLista();
+
+        Imagem imgPokemon;
+        Imagem imgAtaque;
+        Imagem title;
+        Imagem fundoCharSelect;
+
+        //carrega as imagens "Locked" dos pokemon
+        for (Pokemon poke : listaDePokemon) {
+            try {
+                imgPokemon = new Imagem("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Locked.gif");
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+        }
+
+        //carrega as imagens "Down" dos pokemon
+        for (Pokemon poke : listaDePokemon) {
+            try {
+                imgPokemon = new Imagem("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Down.gif");
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+        }
+
+        //carrega as imagens "Up" dos pokemon
+        for (Pokemon poke : listaDePokemon) {
+            try {
+                imgPokemon = new Imagem("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Up.gif");
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+        }
+
+        //carrega as imagens "Left" dos pokemon
+        for (Pokemon poke : listaDePokemon) {
+            try {
+                imgPokemon = new Imagem("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Left.gif");
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+        }
+
+        //carrega as imagens "Right" dos pokemon
+        for (Pokemon poke : listaDePokemon) {
+            try {
+                imgPokemon = new Imagem("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Right.gif");
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+        }
+
+        //carrega os ataques
+        for (Ataque a : listaDeAtaques) {
+            try {
+                imgAtaque = new Imagem("resources/ataques/" + a.getNome() + "/" + a.getNome() + ".gif");
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+        }
+
+        //carrega a imagem do mainMenu
+        try {
+            imgPokemon = new Imagem("resources/Title.png");
+        } catch (Exception ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //carrega a imagem de fundo do CharSelect
+        try {
+            imgPokemon = new Imagem("resources/Cenario/493pokemons2 preto.png");
+        } catch (Exception ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 }

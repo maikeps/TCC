@@ -30,8 +30,6 @@ Necessarios:
 
 	--> Para diminuir o "lag" fazer com que apenas imagens rotacionadas sejam do tipo PixelPerfect, o resto(imagens de personagens, tiles e ataques nao rotacionados) seria do tipo Imagem
 
-	--> Colocar tela de loading para carregar todas as imagens, ou um icone de loading na hora de carregar uma imagem que normalmente daria erro.
-
 	--> Fazer busca no banco para adicionar o multiplicador(x0.5 ou x2) de dano(metodo verificaColisao)
 
 	--> Arrumar o bug de o inimigo andar mais rapido se estiver indo para a direita embaixo(so durante perseguicao)
@@ -39,8 +37,6 @@ Necessarios:
 	--> Botar musica de "perseguicao" quando inimigo estiver perseguindo player :D ou nao
 
 	--> Arrumar o problema de imagens que antigamente eram da classe sprite(passar frame por frame)
-
-	--> Fazer com que libere personagem apos matar um inimigo um certo num de vezes
 
 	--> Verificar se sistema de dano esta correto
 
@@ -55,5 +51,7 @@ Necessarios:
 	--> Fazer com que nao aparecam pokemons evoluidos se o level for menor que o necessario. por exemplo, nao pode aparecer um charizard se o level do inimigo for menor que 32.
 
 	--> Adicionar opcao ao jogador de evoluir ou nao o pokemon, assim como no gameboy
+
+	--> Arrumar SplashScreen, nao carrega totalmente algumas imagens e fica "piscando"	
 
 --------

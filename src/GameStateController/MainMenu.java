@@ -36,7 +36,7 @@ public class MainMenu implements GameStateController {
         try {
             this.imagem = new Imagem("resources/Title.png");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 

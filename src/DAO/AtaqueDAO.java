@@ -14,13 +14,78 @@ import java.util.ArrayList;
  * @author maike_p_santos
  */
 public class AtaqueDAO {
+
+    public static Ataque getAtaquePeloId(int id) {
+
+        MySQL banco = new MySQL();
+        String sql = "select * from ataque where id = " + id;
+
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+
+        Ataque a = new Ataque();
+        while (linhas.next()) {
+
+            a.setId(linhas.getInt("id"));
+            a.setNome(linhas.getString("nome"));
+            a.setAtk(linhas.getInt("atk"));
+            a.setElemento(linhas.getInt("elemento"));
+
+
+        }
+
+        return a;
+
+    }
+
+    public static Ataque getAtaque(String nome) {
+
+        MySQL banco = new MySQL();
+        String sql = "select * from ataque where nome = \"" + nome + "\"";
+
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+
+        Ataque a = new Ataque();
+
+        if (linhas.next()) {
+            a.setId(linhas.getInt("id"));
+            a.setNome(linhas.getString("nome"));
+            a.setAtk(linhas.getInt("atk"));
+            a.setElemento(linhas.getInt("elemento"));
+
+        }
+
+        return a;
+
+    }
+
+    public static Ataque getPoder(String nome) {
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemon p";
+        sql += " inner join ataque a on p.idAtaque = a.id ";
+        sql += "where p.nome = \"" + nome + "\"";
+
+
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+
+        Ataque a = new Ataque();
+
+        if (linhas.next()) {
+            a.setId(linhas.getInt("id"));
+            a.setNome(linhas.getString("a.nome"));
+            a.setAtk(linhas.getInt("atk"));
+            a.setElemento(linhas.getInt("elemento"));
+
+        }
+
+        return a;
+    }
     
-    public static ArrayList<Ataque> getAtaque(int id) {
+    public static ArrayList<Ataque> getListaAtaque(){
         
         ArrayList<Ataque> lista = new ArrayList<Ataque>();
         
         MySQL banco = new MySQL();
-        String sql = "select * from ataque where id = "+id;
+        String sql = "select * from ataque";
         
         ConjuntoResultados linhas = banco.executaSelect(sql);
         
@@ -31,60 +96,8 @@ public class AtaqueDAO {
             a.setNome(linhas.getString("nome"));
             a.setAtk(linhas.getInt("atk"));
             a.setElemento(linhas.getInt("elemento"));
-
-            
-            lista.add(a);
         }
-        
         return lista;
         
     }
-    
-    
-    public static Ataque getAtaque(String nome) {
-        
-        MySQL banco = new MySQL();
-        String sql = "select * from ataque where nome = \""+nome+"\"";
-        
-        ConjuntoResultados linhas = banco.executaSelect(sql);
-        
-        Ataque a = new Ataque();
-        
-        if(linhas.next()){
-            a.setId(linhas.getInt("id"));
-            a.setNome(linhas.getString("nome"));
-            a.setAtk(linhas.getInt("atk"));
-            a.setElemento(linhas.getInt("elemento"));
-  
-        }
-        
-        return a;
-        
-    }
-    
-    public static Ataque getPoder(String nome){
-        MySQL banco = new MySQL();
-        String sql =  "select * from pokemon p";
-               sql += " inner join ataque a on p.idAtaque = a.id ";
-               sql += "where p.nome = \""+ nome+"\"";
-        
-        
-        ConjuntoResultados linhas = banco.executaSelect(sql);
-        
-        Ataque a = new Ataque();
-        
-        if(linhas.next()){
-            a.setId(linhas.getInt("id"));
-            a.setNome(linhas.getString("a.nome"));
-            a.setAtk(linhas.getInt("atk"));
-            a.setElemento(linhas.getInt("elemento"));
-  
-        }
-        
-        return a;
-        
-    
-    }
-    
-    
 }

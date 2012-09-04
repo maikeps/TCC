@@ -38,14 +38,14 @@ public class CharacterSelect implements GameStateController {
     private int ySelecionado; //qual pokemon esta selecionado na vertical(de 1 ate 3)
     private int xDraw; //qual o x do quadrado de selecao
     private int yDraw; //qual o y do quadrado de selecao
-    ArrayList<PokemonLiberado> listaDePokemonLiberado; //lista de pokemons liberados
-    ArrayList<Pokemon> listaDePokemon; //lista de pokemon(todos)
-    ArrayList<String> nomes; //lista de nomes dos pokemons
-    Imagem pokemonImage; //imagem do pokemon a desenhar
-    int pokemonSelecionado = 0; //qual pokemon esta selecionado(na lista o item zero é o primeiro pokemon)
-    private Imagem imgGrande; //imagem redimensionada do pokemon
-    int linha = 1; //em qual linha o quadrado de selecao esta atualmente
-    int numLinhas; //numero de linhas de pokemon
+    public static ArrayList<PokemonLiberado> listaDePokemonLiberado; //lista de pokemons liberados
+    public static ArrayList<Pokemon> listaDePokemon; //lista de pokemon(todos)
+    public static ArrayList<String> nomes; //lista de nomes dos pokemons
+    public static Imagem pokemonImage; //imagem do pokemon a desenhar
+    public static int pokemonSelecionado = 0; //qual pokemon esta selecionado(na lista o item zero é o primeiro pokemon)
+    public static Imagem imgGrande; //imagem redimensionada do pokemon
+    public static int linha = 1; //em qual linha o quadrado de selecao esta atualmente
+    public static int numLinhas; //numero de linhas de pokemon
 
     public CharacterSelect(String p1) {
         this.ySelecionado = 1;
@@ -474,4 +474,5 @@ public class CharacterSelect implements GameStateController {
         }
         g.setColor(Color.white);
     }
+    
 }

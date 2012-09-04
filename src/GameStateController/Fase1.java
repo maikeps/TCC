@@ -458,7 +458,7 @@ public class Fase1 implements GameStateController {
                 bool = banco.executaUpdate(sql);
                 this.criaPlayer1();
             }
-            
+
             //}
 
             //update o numero de kill do player
@@ -481,13 +481,13 @@ public class Fase1 implements GameStateController {
                     bool = banco.executaUpdate(sql);
                 }
             }
-            
-            
+
+
 
             //mostra mensagem na tela
             JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
-            
-            
+
+
             //se o level do pokemon for maior ou igual ao level de sua evolução
             //evolui
             Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
@@ -495,12 +495,26 @@ public class Fase1 implements GameStateController {
             if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
                 this.evolui();
             }
-            
+
+            //se o player ja matou o pokemon o numero minimo de vezes
+            //libera o pokemon
+            PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
+            if (pokeDerrotado.getVezesDerrotado() >= pokeInimigo.getRaridade()) {
+                sql = "insert into pokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
+                        + "(1, "
+                        + "" + idInimigo + ", "
+                        + "" + pokeInimigo.getAtkBase() + ", "
+                        + "" + pokeInimigo.getDefBase() + ", "
+                        + "" + pokeInimigo.getSpdBase() + ", "
+                        + "" + pokeInimigo.getHpBase() + "";
+                bool = banco.executaInsert(sql);
+            }
+
             //sorteia o inimigo novamente
             this.CharSelect.sorteiaInimigo();
             //e cria outro inimigo
             this.criaInimigo();
-            
+
         }
 
 
