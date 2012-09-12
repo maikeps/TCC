@@ -14,6 +14,7 @@ import pixelPerfect.GameObjectImagePixelPerfect;
 public class SolarBeam extends Ataque {
 
     int cont = 0;
+    boolean desenhando = true;
     
     public SolarBeam(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
@@ -36,10 +37,8 @@ public class SolarBeam extends Ataque {
         this.angulo = angulo;
 
         
-          try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".png");
-
-             // this.spriteAtual = spriteVazio;
+       try {
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".png");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -60,7 +59,7 @@ public class SolarBeam extends Ataque {
 
     public void step(long timeElapsed) {
         if (this.cont >= 15) {
-            this.desativado = true;
+            this.desenhando = false;
             return;
         }
         this.cont ++;
@@ -68,7 +67,7 @@ public class SolarBeam extends Ataque {
 
     @Override
     public void draw(Graphics g) {
-        if (this.desativado) {
+        if (this.desenhando == false) {
             return;
         }
 

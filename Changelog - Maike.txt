@@ -12,3 +12,8 @@
 
 04/09
 -Agora, se derrotar um pokemon um certo numero de vezes, libera o pokemon 
+
+11/09
+-Mudanca no sistema de colisao, agora é baseado em Shape ao inves de PixelPerfect
+-Ataque solarBeam agora some APENAS depois de um certo tempo, ao inves de sumir assim que acertar o inimigo
+-Arrumado bug onde os ataque Twister e LeechSeed estavam rotacionando

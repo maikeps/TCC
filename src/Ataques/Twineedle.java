@@ -32,7 +32,7 @@ public class Twineedle extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".png");
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".png");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -63,11 +63,7 @@ public class Twineedle extends Ataque {
         if (this.desativado) {
             return;
         }
-
-        this.imagem.setX(this.getX());
-        this.imagem.setY(this.getY());
-        //this.imagem.draw(g);
-        this.imagem.drawRotated(g, this.getX(), this.getY(), this.angulo);
+        this.imagem.drawRotated(g, this.x, this.y, this.angulo);
 
     }
 

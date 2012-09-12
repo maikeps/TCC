@@ -12,9 +12,6 @@ public class WaterPulse extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite sprite;
-    Sprite spriteVazio;
-    Sprite spriteAtual;
 
     public WaterPulse(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         
@@ -28,9 +25,12 @@ public class WaterPulse extends Ataque {
         this.personagem = personagem;
         AudioPlayer.play("resources/sounds/Sound 1.wav");
         this.desativado = false;
-        this.x = x - (this.personagem.spriteAtual.pegaLargura() + 70);
-        this.y = y - (this.personagem.spriteAtual.pegaAltura() + 85);
+       // this.x = x - (this.personagem.spriteAtual.pegaLargura() + 70);
+        this.x = x;
+        //this.y = y - (this.personagem.spriteAtual.pegaAltura() + 85);
+        this.y = y;
         this.frame = 0;
+        this.angulo = 0;
 
         try {
             this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 270, 250);

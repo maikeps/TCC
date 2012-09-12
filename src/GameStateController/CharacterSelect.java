@@ -171,9 +171,8 @@ public class CharacterSelect implements GameStateController {
         }
         //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
         this.inimigo = this.nomes.get(n);
-
-
-
+        
+        this.inimigo = "Raichu";
     }
 
     public void iniciaJogo() {
@@ -210,7 +209,8 @@ public class CharacterSelect implements GameStateController {
         if (pl.getVezesDerrotasParaNPC() == 0) {
             g.drawString("K/D: " + pl.getInimigosDerrotados(), 500, 275);
         } else {
-            g.drawString("K/D: " + (pl.getInimigosDerrotados() / pl.getVezesDerrotasParaNPC()), 500, 275);
+            double killsDeaths = pl.getInimigosDerrotados() / pl.getVezesDerrotasParaNPC();
+            g.drawString("K/D: " + (killsDeaths), 500, 275);
         }
 
 

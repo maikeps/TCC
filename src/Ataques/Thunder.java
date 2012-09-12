@@ -15,9 +15,6 @@ public class Thunder extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite sprite;
-    Sprite spriteVazio;
-    Sprite spriteAtual;
 
     public Thunder(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         this.personagem = personagem;

@@ -52,6 +52,8 @@ Necessarios:
 
 	--> Adicionar opcao ao jogador de evoluir ou nao o pokemon, assim como no gameboy
 
-	--> Arrumar SplashScreen, nao carrega totalmente algumas imagens e fica "piscando"	
+	--> Arrumar SplashScreen, nao carrega totalmente algumas imagens e fica "piscando"
+
+	--> Arrumar o Kills/Deaths, mostra sempre zero, a nao ser que o player nao tenha morrido nenhuma vez	
 
 --------

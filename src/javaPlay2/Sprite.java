@@ -71,6 +71,17 @@ public class Sprite {
                 animFrameWidth, animFrameHeight);
     }
 
+    
+    public int pegaLargura() {
+        return this.animFrameWidth;
+    }
+
+    // Gets the Height of this sprite
+    public int pegaAltura() {
+        return this.animFrameHeight;
+    }
+    
+    
     /*
      * public void setImage(String img){ this.image =
      * Toolkit.getDefaultToolkit().getImage(img); }

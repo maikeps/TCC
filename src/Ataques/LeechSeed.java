@@ -32,14 +32,22 @@ public class LeechSeed extends Ataque {
         this.destY = destY;
         this.personagem = personagem;
 
-        this.angulo = angulo;
-
+        this.angulo = 0;
+        
         try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".gif");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
+
+
+//////        try {
+//////            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
+//////        } catch (Exception ex) {
+//////            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
+//////            System.exit(1);
+//////        }
 
         deltaX = Math.abs(this.x - this.destX);
         deltaY = Math.abs(this.y - this.destY);
@@ -75,9 +83,9 @@ public class LeechSeed extends Ataque {
             return;
         }
 
-        this.imagem.setX(this.getX());
-        this.imagem.setY(this.getY());
-        this.imagem.draw(g);
+       // this.imagem.setX(this.getX());
+       // this.imagem.setY(this.getY());
+        this.imagem.draw(g, this.x, this.y);
 
     }
 

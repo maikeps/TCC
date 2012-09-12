@@ -8,30 +8,29 @@ import Ataques.*;
 import DAO.AtaqueDAO;
 import DAO.PokemonDAO;
 import DAO.PokemonDerrotadoDAO;
-import DAO.PokemonInimigoDAO;
 import DAO.PokemonLiberadoDAO;
 import MySQL.ConjuntoResultados;
 import MySQL.MySQL;
 import Personagens.Personagem;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.Graphics2D;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import javaPlay2.GameEngine;
 import javaPlay2.GameStateController;
-import javaPlay2.Imagem;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import tcc.Inimigo;
 import tcc.Player;
 import model.Pokemon;
 import model.PokemonDerrotado;
-import model.PokemonInimigo;
 import model.PokemonLiberado;
-import pixelPerfect.GameObjectImagePixelPerfect;
 
 /**
  *
@@ -121,6 +120,26 @@ public class Fase1 implements GameStateController {
         }
 
         this.desenhaHealthBar(g);
+
+
+
+
+
+
+        int x1 = this.inimigo.getX(), x2 = this.inimigo.getPersonagem().spriteAtual.getLargura(), y1 = this.inimigo.getY(), y2 = this.inimigo.getPersonagem().spriteAtual.getAltura();
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.drawRect(x1, y1, x2, y2);
+
+
+        for (Ataque a : this.ataquesPlayer) {
+            a.draw(g);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.draw(a.getShape());
+        }
+
+
+
 
         g.setColor(Color.black);
     }
@@ -304,6 +323,22 @@ public class Fase1 implements GameStateController {
         int hpInicial = this.player.getPersonagem().getHpInicial();
         int hp = this.player.getHp();
         int lvl = this.player.getPersonagem().getLvl();
+        
+        
+//////////        JProgressBar barraHpPlayer = new JProgressBar();
+//////////        barraHpPlayer.setLocation(100, 600);
+//////////        barraHpPlayer.setString("HP: " + hp + "/" + hpInicial);
+//////////        barraHpPlayer.setForeground(Color.green);
+//////////        barraHpPlayer.setMaximum(hpInicial);
+//////////        barraHpPlayer.setPreferredSize(new Dimension(100, 10));
+//////////        barraHpPlayer.setValue(hp);
+//////////        barraHpPlayer.setVisible(true);
+//////////        GameEngine.getInstance().getGameCanvas().add(barraHpPlayer);
+//////////        GameEngine.getInstance().getGameCanvas().pack();
+//////////        
+//////////        
+//////        
+        
         g.setColor(Color.white);
         g.drawString("LVL " + lvl, 98, 568);
         g.drawString("" + this.CharSelect.getPlayer1(), 98, 588);
@@ -332,8 +367,10 @@ public class Fase1 implements GameStateController {
     public void verificaColisao() {
         //colisao ataque inimigo com player
         for (Ataque a : this.ataquesInimigo) {
-            Point colisao = this.player.personagem.spriteAtual.temColisao(a.imagem);
-            if (colisao != null) {
+
+            int x1 = this.player.getX(), x2 = this.player.getPersonagem().spriteAtual.getLargura(), y1 = this.player.getY(), y2 = this.player.getPersonagem().spriteAtual.getAltura();
+
+            if (a.getShape().intersects(x1, y1, x2, y2)) {
                 if (a.desativado == false) {
                     int lvl = this.inimigo.personagem.getLvl();
                     int danoDoAtk = a.getDano();
@@ -350,12 +387,34 @@ public class Fase1 implements GameStateController {
                 //pra mandar pro sei-la-o-que garbage collector
                 a = null;
             }
+
+
+//////////////            Point colisao = this.player.personagem.spriteAtual.temColisao(a.imagem);
+//////////////            if (colisao != null) {
+//////////////                if (a.desativado == false) {
+//////////////                    int lvl = this.inimigo.personagem.getLvl();
+//////////////                    int danoDoAtk = a.getDano();
+//////////////                    int atkDoPokemon = this.inimigo.personagem.getAtk();
+//////////////                    int defDoOponente = this.player.personagem.getDef();
+//////////////                    int r = 100 - util.Util.random(15);
+//////////////                    int multiplicador = 1; //fazer busca no banco
+//////////////                    int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+//////////////                    System.out.println(this.CharSelect.getPlayer1() + " took " + dano + " damage!");
+//////////////                    this.player.personagem.perdeHp(dano);
+//////////////                }
+//////////////                a.acertou = true;
+//////////////                a.desativado();
+//////////////                //pra mandar pro sei-la-o-que garbage collector
+//////////////                a = null;
+//////////////            }
         }
 
         //colisao ataque player com inimigo
         for (Ataque a : this.ataquesPlayer) {
-            Point colisao = this.inimigo.personagem.spriteAtual.temColisao(a.imagem);
-            if (colisao != null) {
+
+            int x1 = this.inimigo.getX(), x2 = this.inimigo.getPersonagem().spriteAtual.getLargura(), y1 = this.inimigo.getY(), y2 = this.inimigo.getPersonagem().spriteAtual.getAltura();
+
+            if (a.getShape().intersects(x1, y1, x2, y2)) {
                 if (a.desativado == false) {
                     int lvl = this.player.personagem.getLvl();
                     int danoDoAtk = a.getDano();
@@ -388,6 +447,44 @@ public class Fase1 implements GameStateController {
                 a.desativado();
                 a = null;
             }
+
+
+
+////////////
+////////////            Point colisao = this.inimigo.personagem.spriteAtual.temColisao(a.imagem);
+////////////            if (colisao != null) {
+////////////                if (a.desativado == false) {
+////////////                    int lvl = this.player.personagem.getLvl();
+////////////                    int danoDoAtk = a.getDano();
+////////////                    int atkDoPokemon = this.player.personagem.getAtk();
+////////////                    int defDoOponente = this.inimigo.personagem.getDef();
+////////////                    int r = 100 - util.Util.random(15);
+////////////                    int multiplicador = 1; //fazer busca no banco
+////////////                    int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+////////////                    System.out.println(this.CharSelect.getInimigo() + " took " + dano + " damage!");
+////////////                    System.out.println(atkDoPokemon);
+////////////                    System.out.println(defDoOponente);
+////////////                    this.inimigo.personagem.perdeHp(dano);
+////////////
+////////////
+////////////
+////////////                    //faz update no campo totalDanoCausado
+////////////
+////////////                    int idPlayer = this.player.personagem.getId();
+////////////                    PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(idPlayer);
+////////////                    int danoTotal = pokeLiberado.getTotalDanoCausado();
+////////////                    int danoTotalDepois = danoTotal + dano;
+////////////
+////////////
+////////////                    MySQL banco = new MySQL();
+////////////                    String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
+////////////                    boolean bool = banco.executaUpdate(sql);
+////////////
+////////////                }
+////////////                a.acertou = true;
+////////////                a.desativado();
+////////////                a = null;
+////////////            }
         }
     }
 

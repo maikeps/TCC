@@ -32,24 +32,22 @@ public class WaterGun extends Ataque {
 
         this.angulo = angulo;
 
-//////        try {
-//////            this.imagem = new Imagem("resources/ataques/Water Gun/WaterGun_Right.png");
-//////
-//////            //  this.spriteAtual = spriteVazio;
-//////        } catch (Exception ex) {
-//////            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
-//////            System.exit(1);
-//////        }
-
-        
-          try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+"_Right.png");
-
-             // this.spriteAtual = spriteVazio;
+        try {
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+"_Right.png");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
+
+        
+////////          try {
+////////            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+"_Right.png");
+////////
+////////             // this.spriteAtual = spriteVazio;
+////////        } catch (Exception ex) {
+////////            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+////////            System.exit(1);
+////////        }
         
         
         

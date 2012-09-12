@@ -32,7 +32,7 @@ public class ElectroBall extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new GameObjectImagePixelPerfect("resources/ataques/"+name+"/"+name+".gif");
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".gif");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -63,10 +63,7 @@ public class ElectroBall extends Ataque {
         if (this.desativado) {
             return;
         }
-
-        this.imagem.setX(this.getX());
-        this.imagem.setY(this.getY());
-        this.imagem.draw(g);
+        this.imagem.drawRotated(g, this.x, this.y, this.angulo);
 
     }
 
