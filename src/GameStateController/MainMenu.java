@@ -51,7 +51,7 @@ public class MainMenu implements GameStateController {
 
         if (teclado.keyDown(Keys.ENTER)) {
             AudioPlayer.play("resources/sounds/comeon.wav");
-            GameEngine.getInstance().setNextGameStateController(2);
+            GameEngine.getInstance().setNextGameStateController(3);
         }
         
         this.cont += this.veloc;

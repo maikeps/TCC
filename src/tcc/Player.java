@@ -31,6 +31,8 @@ public class Player extends ObjetoComMovimento {
     int controleTiro; //revisar isso
     int framesControleTiro; //revisar isso
     public Rectangle campoDeVisao;
+    public int xMouse;
+    public int yMouse;
     
     
     public Player(Personagem personagem) {
@@ -101,21 +103,23 @@ public class Player extends ObjetoComMovimento {
 
 
         Mouse mouse = GameEngine.getInstance().getMouse();
-        Point ponto = new Point();
+        Point ponto = mouse.getMousePos();
+        this.xMouse = ponto.x;
+        this.yMouse = ponto.y;
 
 
         if (mouse.isLeftButtonPressed()) {
             ponto = new Point(mouse.getMousePos());
-            this.destX = ponto.x;
-            this.destY = ponto.y;
+////            this.destX = ponto.x;
+////            this.destY = ponto.y;
+            this.destX = this.xMouse;
+            this.destY = this.yMouse;
             this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
             this.atacou = true;
         }
     }
 
     public void draw(Graphics g) {
-        personagem.spriteAtual.setX(this.personagem.getX());
-        personagem.spriteAtual.setY(this.personagem.getY());
         personagem.draw(g);
     }
 
@@ -156,7 +160,14 @@ public class Player extends ObjetoComMovimento {
     public int getY(){
         return this.personagem.getY();
     }
-    
+
+    public int getXMouse() {
+        return xMouse;
+    }
+
+    public int getYMouse() {
+        return yMouse;
+    }
     
     public void setCampoDeVisao() {
         this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);

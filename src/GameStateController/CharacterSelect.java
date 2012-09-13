@@ -58,7 +58,7 @@ public class CharacterSelect implements GameStateController {
     public void load() {
 
         try {
-            this.Cenario = new Imagem("resources/Cenario/493pokemons2 preto.png");
+            this.Cenario = new Imagem("resources/Cenario/fundo CharSelect.png");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -86,6 +86,7 @@ public class CharacterSelect implements GameStateController {
             System.exit(1);
         }
 
+        
         //pinta um retangulo preto
         g.setColor(Color.black);
         g.fillRect(0, 0, 800, 700);
@@ -171,12 +172,10 @@ public class CharacterSelect implements GameStateController {
         }
         //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
         this.inimigo = this.nomes.get(n);
-        
-        this.inimigo = "Raichu";
     }
 
     public void iniciaJogo() {
-        GameEngine.getInstance().setNextGameStateController(3);
+        GameEngine.getInstance().setNextGameStateController(4);
     }
 
     public void desenhaStats(Graphics g) {
@@ -184,7 +183,7 @@ public class CharacterSelect implements GameStateController {
         int i = this.pokemonSelecionado;
 
         //nome do pokemon
-        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 350, 350);
+        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 300, 375);
         Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
         g.setColor(Color.white);
         //desenha barras de stats - HP, ATK, DEF, SPD
@@ -202,15 +201,15 @@ public class CharacterSelect implements GameStateController {
         //informacoes sobre o pokemon
         g.setColor(Color.white);
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
-        g.drawString("Kills: " + pl.getInimigosDerrotados(), 500, 175);
-        g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 500, 200);
-        g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 500, 225);
-        g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 500, 250);
+        g.drawString("Kills: " + pl.getInimigosDerrotados(), 550, 175);
+        g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 550, 200);
+        g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 550, 225);
+        g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 550, 250);
         if (pl.getVezesDerrotasParaNPC() == 0) {
-            g.drawString("K/D: " + pl.getInimigosDerrotados(), 500, 275);
+            g.drawString("K/D: " + pl.getInimigosDerrotados(), 550, 275);
         } else {
-            double killsDeaths = pl.getInimigosDerrotados() / pl.getVezesDerrotasParaNPC();
-            g.drawString("K/D: " + (killsDeaths), 500, 275);
+            double killsDeaths = (double)pl.getInimigosDerrotados() / (double)pl.getVezesDerrotasParaNPC();
+            g.drawString("K/D: " + (killsDeaths), 550, 275);
         }
 
 
@@ -223,13 +222,14 @@ public class CharacterSelect implements GameStateController {
         PokemonLiberado pokeliberado = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
         
      if (pokeliberado.getNome() == null){ 
+        int x = GameEngine.getInstance().getGameCanvas().getWidth()/2;
         g.setColor(Color.green);
-        g.fillRect(400, 300, poke.getRaridade(), 29); //desenha a barra de baixo, quando essa encher, o pokemon é liberado
+        g.fillRect(x-poke.getRaridade()/2, 325, poke.getRaridade(), 29); //desenha a barra de baixo, quando essa encher, o pokemon é liberado
         PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado + 1); //ve quantas vezes o pokemon foi derrotado
         g.setColor(Color.white);
-        g.fillRect(402, 302, pokeDerrotado.getVezesDerrotado(), 25); //desenha a barra de cima que mostra quantas vezes o pokemon foi derrotado
+        g.fillRect((x-poke.getRaridade()/2)+2, 327, pokeDerrotado.getVezesDerrotado(), 25); //desenha a barra de cima que mostra quantas vezes o pokemon foi derrotado
         g.setColor(Color.black);
-        g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), 410, 320); //escreve os numeros
+        g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), (x-50)+10, 345); //escreve os numeros
         g.setColor(Color.white);
 
       }
@@ -334,9 +334,24 @@ public class CharacterSelect implements GameStateController {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
+        
+        
+        int largura = this.imgGrande.pegaLargura()*5;
+        int altura = this.imgGrande.pegaAltura()*5;
+        int x = GameEngine.getInstance().getGameCanvas().getWidth()/2;
+        int y = (GameEngine.getInstance().getGameCanvas().getHeight()*3)/13;
+        this.imgGrande.drawZoomed(g, x-largura/2, y-altura/2, 5);
 
-        this.imgGrande.drawZoomed(g, 250, 50, 5);
-
+        g.setColor(Color.lightGray);
+        g.fillRect(75, 40, 675, 10);//cima
+        g.fillRect(75, 300, 675, 10);//baixo
+        g.fillRect(75, 40, 200, 260);//esquerda
+        g.fillRect(525, 40, 225, 260);//direita
+        
+        
+        g.setColor(Color.decode("1996553984"));
+        g.drawRect(x-250/2, 50, 250, 250);
+        g.setColor(Color.white);
 
     }
 
@@ -437,7 +452,7 @@ public class CharacterSelect implements GameStateController {
         if (teclado.keyDown(Keys.ENTER) && pl.getNome() != null) {
             this.player1 = this.nomes.get(this.pokemonSelecionado);
 
-            Util.sleep(500);
+            Util.sleep(250);
             this.sorteiaInimigo();
             //enquanto o inimigo for igual ao jogador, sorteia de novo.
             //isso nao sera mais usado quando for implantado o sistema de tiles
@@ -455,6 +470,8 @@ public class CharacterSelect implements GameStateController {
         //desenha fundo de cima
         g.setColor(Color.lightGray);
         g.fillRect(75, 40, 675, 350);
+        g.setColor(Color.white);
+        g.fillRect((GameEngine.getInstance().getGameCanvas().getWidth()/2)-250/2, 50, 250, 250);
         g.setColor(Color.decode("1996553984"));
         g.drawRect(75, 40, 675, 350);
 

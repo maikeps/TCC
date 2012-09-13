@@ -96,6 +96,8 @@ public class AtaqueDAO {
             a.setNome(linhas.getString("nome"));
             a.setAtk(linhas.getInt("atk"));
             a.setElemento(linhas.getInt("elemento"));
+            
+            lista.add(a);
         }
         return lista;
         

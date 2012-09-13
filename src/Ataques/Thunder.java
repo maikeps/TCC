@@ -35,7 +35,7 @@ public class Thunder extends Ataque {
         this.frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 240, 250);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 165, 315);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

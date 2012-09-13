@@ -15,9 +15,6 @@ public class FlameBurst extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite sprite;
-    Sprite spriteVazio;
-    Sprite spriteAtual;
 
     public FlameBurst(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         this.personagem = personagem;

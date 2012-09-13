@@ -1,2 +1,0 @@
-bubbles 
-para funcionar legal o efeito de perseguir, criar 5 desses seguidos, cada um tirando 1 de dano, sempre que o player apertar a tecla de ataque.

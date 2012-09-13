@@ -17,3 +17,12 @@
 -Mudanca no sistema de colisao, agora é baseado em Shape ao inves de PixelPerfect
 -Ataque solarBeam agora some APENAS depois de um certo tempo, ao inves de sumir assim que acertar o inimigo
 -Arrumado bug onde os ataque Twister e LeechSeed estavam rotacionando
+
+12/09
+-Arrumados mais alguns bugs de imagens
+-SplashScreen agora é executada dentro de um GameStateController(LoadingScreen)
+
+13/09
+-Sistema modificado para suportar multiplos inimigos
+-Melhorado o visual do CharSelect(centralizei a imagem grande e coloquei um quadrado ao redor dela, centralizei a barra de progresso)
+-Bug do K/D mostrando zero quase sempre corrigido

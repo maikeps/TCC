@@ -1,3 +1,7 @@
+select @@max_connections;
+
+
+
 select * from pokemonLiberado pl inner join Pokemon p on p.id = pl.idPokemon where pl.idPokemon = 4
 
 

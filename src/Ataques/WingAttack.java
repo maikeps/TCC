@@ -1,8 +1,8 @@
 package Ataques;
 
+import DAO.AtaqueDAO;
 import Personagens.Personagem;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javaPlay2.Imagem;
 import javaPlayExtras.AudioPlayer;
@@ -17,7 +17,14 @@ public class WingAttack extends Ataque {
 
     public WingAttack(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
-        this.setDano(5);
+        String name = this.toString();
+        if (name.lastIndexOf('.') > 0) {
+            name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
+        }
+        model.Ataque a = AtaqueDAO.getAtaque(name);
+        this.setDano(a.getAtk());
+        
+        
         this.desativado = false;
         this.xInicial = x;
         this.yInicial = y;
@@ -25,16 +32,15 @@ public class WingAttack extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.velocidade = 10;
 
         this.angulo = angulo;
 
         try {
-            this.imagem = new Imagem("resources/ataques/Wing Attack/WingAttack_Right.png");
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".png");
 
             //  this.spriteAtual = spriteVazio;
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não ecnontrado: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
 

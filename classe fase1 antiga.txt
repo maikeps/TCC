@@ -40,14 +40,12 @@ public class Fase1 implements GameStateController {
 
     CharacterSelect CharSelect;
     Player player;
-    ArrayList<Inimigo> inimigo;
+    Inimigo inimigo;
     ArrayList<Ataque> ataquesPlayer;
     ArrayList<Ataque> ataquesInimigo;
     Personagem p;
     Personagem p2;
     Font f;
-    Inimigo inimigoMaisPerto;
-    double distanciaAteOInimigoMaisPerto = 9999;
 
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
@@ -56,25 +54,16 @@ public class Fase1 implements GameStateController {
     public void load() {
         this.ataquesPlayer = new ArrayList<Ataque>();
         this.ataquesInimigo = new ArrayList<Ataque>();
-        this.inimigo = new ArrayList<Inimigo>();
     }
 
     public void step(long timeElapsed) {
-
-        this.verificaInimigoMaisPerto();
-
-//        //this.xMouse = this.player.getPersonagem().xMouse;
-//        this.xMouse = this.player.getXMouse();
-//        this.yMouse = this.player.getYMouse();
 
         this.verificaSePlayerEstaMorto();
         this.verificaSeInimigoEstaMorto();
 
 
         this.player.step(timeElapsed);
-        for (Inimigo inimigo : this.inimigo) {
-            inimigo.step(timeElapsed);
-        }
+        this.inimigo.step(timeElapsed);
 
 
 //        this.player.setX(this.player.getPersonagem().spriteAtual.pegaLargura()/2);
@@ -91,12 +80,11 @@ public class Fase1 implements GameStateController {
             a.step(timeElapsed);
         }
 
-        this.lancaAtaques(); //metodo que lanÃ§a os ataques tanto do player como do inimigo
+        this.lancaAtaques(); //metodo que lança os ataques tanto do player como do inimigo
 
-        for (Inimigo inimigo : this.inimigo) {
-            inimigo.setXPlayer(this.player.getX()); //atualiza as informacoes do player para o inimigo
-            inimigo.setYPlayer(this.player.getY()); //atualiza as informacoes do player para o inimigo
-        }
+        this.inimigo.setXPlayer(this.player.getX()); //atualiza as informacoes do player para o inimigo
+        this.inimigo.setYPlayer(this.player.getY()); //atualiza as informacoes do player para o inimigo
+
 
         this.verificaColisao();
     }
@@ -117,14 +105,13 @@ public class Fase1 implements GameStateController {
         }
 
         //desenha retangulo preto em toda a tela
+        g.setColor(Color.white);
         g.fillRect(0, 0, 1000, 1000);
 
 
         //desenha os personagens e os ataques
         this.player.draw(g);
-        for (Inimigo inimigo : this.inimigo) {
-            inimigo.draw(g);
-        }
+        this.inimigo.draw(g);
 
         for (Ataque a : this.ataquesPlayer) {
             a.draw(g);
@@ -135,19 +122,32 @@ public class Fase1 implements GameStateController {
 
         this.desenhaHealthBar(g);
 
+
+
+
+
+
+        int x1 = this.inimigo.getX(), x2 = this.inimigo.getPersonagem().spriteAtual.getLargura(), y1 = this.inimigo.getY(), y2 = this.inimigo.getPersonagem().spriteAtual.getAltura();
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.drawRect(x1, y1, x2, y2);
+
+
         for (Ataque a : this.ataquesPlayer) {
             a.draw(g);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.draw(a.getShape());
         }
+
+
+
+
         g.setColor(Color.black);
     }
 
     public void start() {
         this.criaPlayer1();
-        //cria 2 inimigos
-        for (int i = 1; i <= 2; i++) {
-            this.criaInimigo(this.CharSelect.getInimigo());
-            this.CharSelect.sorteiaInimigo();
-        }
+        this.criaInimigo();
     }
 
     public void stop() {
@@ -157,7 +157,7 @@ public class Fase1 implements GameStateController {
     }
 
     public void lancaAtaques() {
-        //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque Ã  lista de ataques
+        //se o player atacou(clicou), verifica se pode atirar(cooldown <= 0) e adiciona o ataque à lista de ataques
 
 
         if (this.player.atacou == true) {
@@ -172,7 +172,7 @@ public class Fase1 implements GameStateController {
                     Object o = con.newInstance(new Object[]{this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()});
                     this.ataquesPlayer.add((Ataque) o);
                 } catch (ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " nÃ£o encontrada");
+                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
                     System.exit(1);
                 } catch (IllegalAccessException ex2) {
                     JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
@@ -203,53 +203,46 @@ public class Fase1 implements GameStateController {
 
         //---------------------\\
 
-        for (int i = 0; i < this.inimigo.size(); i++) {
-            Inimigo inimigo = this.inimigo.get(i);
-////////////////            if (inimigo.getPersonagem().getAtaque() == null) {
-////////////////                System.out.println("problema, man");
-////////////////            }
-            if (inimigo.atacou == true) {
-                if (inimigo.personagem.podeAtirar()) {
-                    model.Ataque a = AtaqueDAO.getPoder(inimigo.getPersonagem().getNome());
-                    String s = "Ataques." + a.getNome();
-                    try {
-                        Class cls = Class.forName(s);
-                        Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, double.class, Personagem.class};
-                        java.lang.reflect.Constructor con = cls.getConstructor(parameters);
-                        Object o = con.newInstance(new Object[]{inimigo.getX(), inimigo.getY(), player.getX(), player.getY(), inimigo.getAngulo(), inimigo.getPersonagem()});
-                        this.ataquesInimigo.add((Ataque) o);
-                    } catch (ClassNotFoundException ex) {
-                        this.inimigo.remove(i);
-                        this.CharSelect.sorteiaInimigo();
-                        this.criaInimigo(this.CharSelect.getInimigo());
-                        JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " nÃ£o encontrada, vamos trocar o pokemon.");
-                        //System.exit(1);
-                    } catch (IllegalAccessException ex2) {
-                        JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
-                        System.exit(1);
-                    } catch (InstantiationException ex3) {
-                        JOptionPane.showMessageDialog(null, "ERROR: " + ex3.getMessage());
-                        System.exit(1);
-                    } catch (NoSuchMethodException ex4) {
-                        JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
-                        System.exit(1);
-                    } catch (IllegalArgumentException ex) {
-                        JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-                        System.exit(1);
-                    } catch (InvocationTargetException ex) {
-                        JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-                        System.exit(1);
-                    } catch (SecurityException ex) {
-                        JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
-                        System.exit(1);
-                    }
-                    // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
-
-                    inimigo.personagem.setCooldownAtual();
+        if (this.inimigo.atacou == true) {
+            if (this.inimigo.personagem.podeAtirar()) {
+                model.Ataque a = AtaqueDAO.getPoder(this.CharSelect.getInimigo());
+                String s = "Ataques." + a.getNome();
+                try {
+                    Class cls = Class.forName(s);
+                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, double.class, Personagem.class};
+                    java.lang.reflect.Constructor con = cls.getConstructor(parameters);
+                    Object o = con.newInstance(new Object[]{this.inimigo.getX(), this.inimigo.getY(), this.player.getX(), this.player.getY(), this.inimigo.getAngulo(), this.inimigo.getPersonagem()});
+                    this.ataquesInimigo.add((Ataque) o);
+                } catch (ClassNotFoundException ex) {
+                    this.CharSelect.sorteiaInimigo();
+                    this.criaInimigo();
+                    JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada, vamos trocar o pokemon.");
+                    //System.exit(1);
+                } catch (IllegalAccessException ex2) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex2.getMessage());
+                    System.exit(1);
+                } catch (InstantiationException ex3) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex3.getMessage());
+                    System.exit(1);
+                } catch (NoSuchMethodException ex4) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex4.getMessage());
+                    System.exit(1);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
+                } catch (InvocationTargetException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
+                } catch (SecurityException ex) {
+                    JOptionPane.showMessageDialog(null, "ERROR: " + ex.getMessage());
+                    System.exit(1);
                 }
+                // this.ataques.add(new Class.(this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()));
+
+                this.inimigo.personagem.setCooldownAtual();
             }
-            inimigo.atacou = false;
         }
+        this.inimigo.atacou = false;
     }
 
     public void criaPlayer1() {
@@ -294,9 +287,10 @@ public class Fase1 implements GameStateController {
 
     }
 
-    public void criaInimigo(String nome) {
-        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
+    public void criaInimigo() {
+        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(CharSelect.getInimigo());
 
+        String nome = pokemon.getNome();
         int id = pokemon.getId();
         int atk = pokemon.getAtkBase();
         int def = pokemon.getDefBase();
@@ -321,9 +315,8 @@ public class Fase1 implements GameStateController {
 
         this.p2 = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
-        Inimigo inimigo = new Inimigo(this.p2, this.player);
-        this.inimigoMaisPerto = inimigo;
-        this.inimigo.add(inimigo);
+        this.inimigo = new Inimigo(this.p2, this.player);
+
     }
 
     public void desenhaHealthBar(Graphics g) {
@@ -331,8 +324,8 @@ public class Fase1 implements GameStateController {
         int hpInicial = this.player.getPersonagem().getHpInicial();
         int hp = this.player.getHp();
         int lvl = this.player.getPersonagem().getLvl();
-
-
+        
+        
 //////////        JProgressBar barraHpPlayer = new JProgressBar();
 //////////        barraHpPlayer.setLocation(100, 600);
 //////////        barraHpPlayer.setString("HP: " + hp + "/" + hpInicial);
@@ -346,7 +339,7 @@ public class Fase1 implements GameStateController {
 //////////        
 //////////        
 //////        
-
+        
         g.setColor(Color.white);
         g.drawString("LVL " + lvl, 98, 568);
         g.drawString("" + this.CharSelect.getPlayer1(), 98, 588);
@@ -356,16 +349,17 @@ public class Fase1 implements GameStateController {
         g.drawString("HP: " + hp + "/" + hpInicial, 100, 650);
 
         // HealthBar do inimigo
-        int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
-        int hpInimigo = this.inimigoMaisPerto.getHp();
-        int lvlInimigo = player.getPersonagem().getLvl();
+        int hpInicialInimigo = this.inimigo.getPersonagem().getHpInicial();
+        int hpInimigo = this.inimigo.getHp();
+        int lvlInimigo = this.player.getPersonagem().getLvl();
         g.setColor(Color.white);
         g.drawString("LVL " + lvlInimigo, 598, 68);
-        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 598, 88);
+        g.drawString("" + this.CharSelect.getInimigo(), 598, 88);
         g.fillRect(598, 98, hpInicialInimigo + 4, 24);
         g.setColor(Color.green);
         g.fillRect(600, 100, hpInimigo, 20);
         g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600, 150);
+
     }
 
     //o problema esta na imagem do ataque, por que se fizer colisao de player com inimigo funciona
@@ -373,27 +367,27 @@ public class Fase1 implements GameStateController {
     //ember funciona perfeitamente
     public void verificaColisao() {
         //colisao ataque inimigo com player
-        for (Inimigo inimigo : this.inimigo) {
-            for (Ataque a : this.ataquesInimigo) {
-                int x1 = this.player.getX(), x2 = this.player.getPersonagem().spriteAtual.pegaLargura(), y1 = this.player.getY(), y2 = this.player.getPersonagem().spriteAtual.pegaAltura();
+        for (Ataque a : this.ataquesInimigo) {
 
-                if (a.getShape().intersects(x1, y1, x2, y2)) {
-                    if (a.desativado == false) {
-                        int lvl = inimigo.personagem.getLvl();
-                        int danoDoAtk = a.getDano();
-                        int atkDoPokemon = inimigo.personagem.getAtk();
-                        int defDoOponente = this.player.personagem.getDef();
-                        int r = 100 - util.Util.random(15);
-                        int multiplicador = 1; //fazer busca no banco
-                        int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
-                        System.out.println(this.CharSelect.getPlayer1() + " took " + dano + " damage!");
-                        this.player.personagem.perdeHp(dano);
-                    }
-                    a.acertou = true;
-                    a.desativado();
-                    //pra mandar pro sei-la-o-que garbage collector
-                    a = null;
+            int x1 = this.player.getX(), x2 = this.player.getPersonagem().spriteAtual.getLargura(), y1 = this.player.getY(), y2 = this.player.getPersonagem().spriteAtual.getAltura();
+
+            if (a.getShape().intersects(x1, y1, x2, y2)) {
+                if (a.desativado == false) {
+                    int lvl = this.inimigo.personagem.getLvl();
+                    int danoDoAtk = a.getDano();
+                    int atkDoPokemon = this.inimigo.personagem.getAtk();
+                    int defDoOponente = this.player.personagem.getDef();
+                    int r = 100 - util.Util.random(15);
+                    int multiplicador = 1; //fazer busca no banco
+                    int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                    System.out.println(this.CharSelect.getPlayer1() + " took " + dano + " damage!");
+                    this.player.personagem.perdeHp(dano);
                 }
+                a.acertou = true;
+                a.desativado();
+                //pra mandar pro sei-la-o-que garbage collector
+                a = null;
+            }
 
 
 //////////////            Point colisao = this.player.personagem.spriteAtual.temColisao(a.imagem);
@@ -414,46 +408,46 @@ public class Fase1 implements GameStateController {
 //////////////                //pra mandar pro sei-la-o-que garbage collector
 //////////////                a = null;
 //////////////            }
-            }
         }
 
         //colisao ataque player com inimigo
+        for (Ataque a : this.ataquesPlayer) {
 
-        for (Inimigo inimigo : this.inimigo) {
-            for (Ataque a : this.ataquesPlayer) {
-                int x1 = inimigo.getX(), x2 = inimigo.getPersonagem().spriteAtual.pegaLargura(), y1 = inimigo.getY(), y2 = inimigo.getPersonagem().spriteAtual.pegaAltura();
+            int x1 = this.inimigo.getX(), x2 = this.inimigo.getPersonagem().spriteAtual.getLargura(), y1 = this.inimigo.getY(), y2 = this.inimigo.getPersonagem().spriteAtual.getAltura();
 
-                if (a.getShape().intersects(x1, y1, x2, y2)) {
-                    if (a.desativado == false) {
-                        int lvl = this.player.personagem.getLvl();
-                        int danoDoAtk = a.getDano();
-                        int atkDoPokemon = this.player.personagem.getAtk();
-                        int defDoOponente = inimigo.personagem.getDef();
-                        int r = 100 - util.Util.random(15);
-                        int multiplicador = 1; //fazer busca no banco
-                        int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
-                        System.out.println(inimigo.getPersonagem().getNome() + " took " + dano + " damage!");
-                        inimigo.personagem.perdeHp(dano);
-
-
-
-                        //faz update no campo totalDanoCausado
-
-                        int idPlayer = this.player.personagem.getId();
-                        PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(idPlayer);
-                        int danoTotal = pokeLiberado.getTotalDanoCausado();
-                        int danoTotalDepois = danoTotal + dano;
+            if (a.getShape().intersects(x1, y1, x2, y2)) {
+                if (a.desativado == false) {
+                    int lvl = this.player.personagem.getLvl();
+                    int danoDoAtk = a.getDano();
+                    int atkDoPokemon = this.player.personagem.getAtk();
+                    int defDoOponente = this.inimigo.personagem.getDef();
+                    int r = 100 - util.Util.random(15);
+                    int multiplicador = 1; //fazer busca no banco
+                    int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                    System.out.println(this.CharSelect.getInimigo() + " took " + dano + " damage!");
+                    System.out.println(atkDoPokemon);
+                    System.out.println(defDoOponente);
+                    this.inimigo.personagem.perdeHp(dano);
 
 
-                        MySQL banco = new MySQL();
-                        String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
-                        boolean bool = banco.executaUpdate(sql);
 
-                    }
-                    a.acertou = true;
-                    a.desativado();
-                    a = null;
+                    //faz update no campo totalDanoCausado
+
+                    int idPlayer = this.player.personagem.getId();
+                    PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(idPlayer);
+                    int danoTotal = pokeLiberado.getTotalDanoCausado();
+                    int danoTotalDepois = danoTotal + dano;
+
+
+                    MySQL banco = new MySQL();
+                    String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
+                    boolean bool = banco.executaUpdate(sql);
+
                 }
+                a.acertou = true;
+                a.desativado();
+                a = null;
+            }
 
 
 
@@ -492,7 +486,6 @@ public class Fase1 implements GameStateController {
 ////////////                a.desativado();
 ////////////                a = null;
 ////////////            }
-            }
         }
     }
 
@@ -523,109 +516,106 @@ public class Fase1 implements GameStateController {
                     + "where idPokemon = " + this.player.personagem.getId();
             boolean bool = banco.executaUpdate(sql);
 
-            JOptionPane.showMessageDialog(null, "VocÃª perdeu, escolha outro personagem e tente novamente.");
+            JOptionPane.showMessageDialog(null, "Você perdeu, escolha outro personagem e tente novamente.");
             System.exit(1);
         }
     }
 
     public void verificaSeInimigoEstaMorto() {
-        for (int i = 0; i < this.inimigo.size(); i++) {
-            Inimigo inimigo = this.inimigo.get(i);
-            if (inimigo.personagem.estaMorto()) {
-                int idPlayer = this.player.personagem.getId();
-                int idInimigo = inimigo.personagem.getId();
-                int lvlInimigo = inimigo.personagem.getLvl();
+        if (this.inimigo.personagem.estaMorto()) {
+            int idPlayer = this.player.personagem.getId();
+            int idInimigo = this.inimigo.personagem.getId();
+            int lvlInimigo = this.inimigo.personagem.getLvl();
 
-                //pega as informacoes do inimigo e calcula a exp a ser adquirida
-                Pokemon pokeInimigo = PokemonDAO.getPokemon(inimigo.personagem.getId());
-                int expBase = pokeInimigo.getBaseExp();
-                int expGanha = (expBase * lvlInimigo) / 7;
+            //pega as informacoes do inimigo e calcula a exp a ser adquirida
+            Pokemon pokeInimigo = PokemonDAO.getPokemon(this.inimigo.personagem.getId());
+            int expBase = pokeInimigo.getBaseExp();
+            int expGanha = (expBase * lvlInimigo) / 7;
 
-                //altera o campo exp do pokemonLiberado no banco
-                PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
-                int exp = expGanha + pokeLiberado.getExp();
-                int lvlPlayer = pokeLiberado.getLvl();
+            //altera o campo exp do pokemonLiberado no banco
+            PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
+            int exp = expGanha + pokeLiberado.getExp();
+            int lvlPlayer = pokeLiberado.getLvl();
 
-                MySQL banco = new MySQL();
-                String sql = "update PokemonLiberado set exp = " + exp + " where idPokemon = " + this.player.personagem.getId();
-                boolean bool = banco.executaUpdate(sql);
+            MySQL banco = new MySQL();
+            String sql = "update PokemonLiberado set exp = " + exp + " where idPokemon = " + this.player.personagem.getId();
+            boolean bool = banco.executaUpdate(sql);
 
-                //verifica se o pokemon ganhou um level
-                sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
-                ConjuntoResultados linhas = banco.executaSelect(sql);
-                int expProxLvlPlayer = 0;
-                if (linhas.next()) {
-                    expProxLvlPlayer = linhas.getInt("exp");
-                }
-
-                //se a exp do player for maior qe a necessaria para passar de level
-                //passa de level
-                if (exp >= expProxLvlPlayer) {
-                    sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
-                    bool = banco.executaUpdate(sql);
-                    this.criaPlayer1();
-                }
-
-                //}
-
-                //update o numero de kill do player
-                int killsAntes = pokeLiberado.getInimigosDerrotados();
-                int killsDepois = killsAntes + 1;
-                sql = "update pokemonLiberado set InimigosDerrotados = " + killsDepois + " where idPokemon = " + this.player.personagem.getId();
-                bool = banco.executaUpdate(sql);
-
-                //update o numero de vezes que o inimigo foi derrotado
-                //se o idInimigo for maior que 9, ou seja, depois do squirtle
-                //aumenta o numero de vezesDerrotado
-                //por que os 9 primeiros pokemons nao podem ser liberados
-                //por morte, mas sim por evolucao.
-                if (idInimigo > 9) {
-                    PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
-                    int vezesAntes = pokeDerrotado.getVezesDerrotado();
-                    int vezesDepois = vezesAntes + 1;
-                    if (!(vezesAntes >= pokeInimigo.getRaridade())) {
-                        sql = "update pokemonDerrotado set vezesDerrotado = " + vezesDepois + " where idPokemon = " + idInimigo;
-                        bool = banco.executaUpdate(sql);
-                    }
-                }
-
-
-
-                //mostra mensagem na tela
-                JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
-
-
-                //se o level do pokemon for maior ou igual ao level de sua evoluÃ§Ã£o
-                //evolui
-                Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
-                //if(pokePlayer.getLevelQueEvolui() != null){
-                if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
-                    this.evolui();
-                }
-
-                //se o player ja matou o pokemon o numero minimo de vezes
-                //libera o pokemon
-                PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
-                if (pokeDerrotado.getVezesDerrotado() >= pokeInimigo.getRaridade()) {
-                    sql = "insert into pokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
-                            + "(1, "
-                            + "" + idInimigo + ", "
-                            + "" + pokeInimigo.getAtkBase() + ", "
-                            + "" + pokeInimigo.getDefBase() + ", "
-                            + "" + pokeInimigo.getSpdBase() + ", "
-                            + "" + pokeInimigo.getHpBase() + ");";
-                    bool = banco.executaInsert(sql);
-                }
-
-                //sorteia o inimigo novamente
-                this.CharSelect.sorteiaInimigo();
-                //cria outro inimigo
-                this.criaInimigo(this.CharSelect.getInimigo());
-                //e deleta o antigo da lista
-                this.inimigo.remove(i);
+            //verifica se o pokemon ganhou um level
+            sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
+            ConjuntoResultados linhas = banco.executaSelect(sql);
+            int expProxLvlPlayer = 0;
+            if (linhas.next()) {
+                expProxLvlPlayer = linhas.getInt("exp");
             }
 
+            //se a exp do player for maior qe a necessaria para passar de level
+            //passa de level
+            if (exp >= expProxLvlPlayer) {
+                sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
+                bool = banco.executaUpdate(sql);
+                this.criaPlayer1();
+            }
+
+            //}
+
+            //update o numero de kill do player
+            int killsAntes = pokeLiberado.getInimigosDerrotados();
+            int killsDepois = killsAntes + 1;
+            sql = "update pokemonLiberado set InimigosDerrotados = " + killsDepois + " where idPokemon = " + this.player.personagem.getId();
+            bool = banco.executaUpdate(sql);
+
+            //update o numero de vezes que o inimigo foi derrotado
+            //se o idInimigo for maior que 9, ou seja, depois do squirtle
+            //aumenta o numero de vezesDerrotado
+            //por que os 9 primeiros pokemons nao podem ser liberados
+            //por morte, mas sim por evolucao.
+            if (idInimigo > 9) {
+                PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
+                int vezesAntes = pokeDerrotado.getVezesDerrotado();
+                int vezesDepois = vezesAntes + 1;
+                if (!(vezesAntes >= pokeInimigo.getRaridade())) {
+                    sql = "update pokemonDerrotado set vezesDerrotado = " + vezesDepois + " where idPokemon = " + idInimigo;
+                    bool = banco.executaUpdate(sql);
+                }
+            }
+
+
+
+            //mostra mensagem na tela
+            JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
+
+
+            //se o level do pokemon for maior ou igual ao level de sua evolução
+            //evolui
+            Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
+            //if(pokePlayer.getLevelQueEvolui() != null){
+            if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
+                this.evolui();
+            }
+
+            //se o player ja matou o pokemon o numero minimo de vezes
+            //libera o pokemon
+            PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(idInimigo);
+            if (pokeDerrotado.getVezesDerrotado() >= pokeInimigo.getRaridade()) {
+                sql = "insert into pokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
+                        + "(1, "
+                        + "" + idInimigo + ", "
+                        + "" + pokeInimigo.getAtkBase() + ", "
+                        + "" + pokeInimigo.getDefBase() + ", "
+                        + "" + pokeInimigo.getSpdBase() + ", "
+                        + "" + pokeInimigo.getHpBase() + "";
+                bool = banco.executaInsert(sql);
+            }
+
+            //sorteia o inimigo novamente
+            this.CharSelect.sorteiaInimigo();
+            //e cria outro inimigo
+            this.criaInimigo();
+
         }
+
+
     }
 
     public void evolui() {
@@ -670,21 +660,5 @@ public class Fase1 implements GameStateController {
 
 
         boolean bool = banco.executaUpdate(sql);
-    }
-
-    public void verificaInimigoMaisPerto() {
-        this.distanciaAteOInimigoMaisPerto = 9999;
-        for (Inimigo inimigo : this.inimigo) {
-            //ve qual Ã© o inimigo mais proximo do player
-            int xPlayer = this.player.getPersonagem().getX();
-            int yPlayer = this.player.getPersonagem().getY();
-            int xInimigo = inimigo.getX();
-            int yInimigo = inimigo.getY();
-            double distancia = util.Util.calculaDistancia(xPlayer, yPlayer, xInimigo, yInimigo);
-            if (distancia < this.distanciaAteOInimigoMaisPerto) {
-                this.inimigoMaisPerto = inimigo;
-                this.distanciaAteOInimigoMaisPerto = distancia;
-            }
-        }
     }
 }

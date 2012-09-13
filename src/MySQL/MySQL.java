@@ -6,7 +6,7 @@ public class MySQL
 {
     Statement statement;
     String user = "root";
-    String pass = "7huy7119";
+    String pass = "senai2012";
     String database = "tcc";
     String host = "localhost";
    
@@ -23,7 +23,9 @@ public class MySQL
             System.exit(0);
         } catch (SQLException e){
             System.out.println("Erro na conexão com a base de dados: "+e);
-        }        
+        } 
+       
+       this.executaUpdate("set global max_connections = 1000;");
     }
 
     public boolean executaInsert(String insert)
@@ -33,6 +35,7 @@ public class MySQL
             return true;
         } catch (SQLException e){
             System.out.println("Erro na Inclusão "+e);
+            System.out.println("O comando sql executado foi: "+insert);
             return false;
         }
     }

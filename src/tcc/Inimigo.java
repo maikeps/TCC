@@ -43,8 +43,10 @@ public class Inimigo extends ObjetoComMovimento {
 
         this.personagem.setDirecao(Direcao.ESQUERDA);
 
-        this.personagem.setX(400);
-        this.personagem.setY(500);
+        int x = util.Util.random(800);
+        int y = util.Util.random(600);
+        this.personagem.setX(x);
+        this.personagem.setY(y);
 
         this.x = this.personagem.getX();
         this.y = this.personagem.getY();
@@ -131,8 +133,6 @@ public class Inimigo extends ObjetoComMovimento {
     }
 
     public void draw(Graphics g) {
-        personagem.spriteAtual.setX(this.personagem.getX());
-        personagem.spriteAtual.setY(this.personagem.getY());
         this.personagem.draw(g);
     }
 

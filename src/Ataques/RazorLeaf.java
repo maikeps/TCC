@@ -6,6 +6,7 @@ package Ataques;
 
 import DAO.AtaqueDAO;
 import Personagens.Personagem;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import javaPlay2.Sprite;
@@ -19,11 +20,6 @@ public class RazorLeaf extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite sprite;
-    double angulo;
-    int destX;
-    int destY;
-    double deltaX, deltaY, dx, dy;
 
     public RazorLeaf(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         
@@ -37,20 +33,15 @@ public class RazorLeaf extends Ataque {
         this.personagem = personagem;
 
         this.desativado = false;
-        this.xInicial = x;
-        this.yInicial = y;
         this.x = x;
         this.y = y;
-        this.destX = destX;
-        this.destY = destY;
-        this.velocidade = 10;
 
         this.angulo = angulo;
 
-        int frame = 0;
+        this.frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+"_Right.png", 9, 220, 85);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 9, 220, 85);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -80,7 +71,7 @@ public class RazorLeaf extends Ataque {
 
     @Override
     public void draw(Graphics g) {
-        this.sprite.draw(g, this.x, this.y);
+        this.sprite.drawRotated(g, this.x, this.y, this.angulo);
     }
 
     @Override

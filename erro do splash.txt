@@ -1,1 +1,0 @@
-se colocar uma img com o caminho errado, o jogo casrrega ela msm assim no inicio, depois vai caregar pra usar no jogo e n da

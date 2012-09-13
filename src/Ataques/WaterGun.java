@@ -33,7 +33,7 @@ public class WaterGun extends Ataque {
         this.angulo = angulo;
 
         try {
-            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+"_Right.png");
+            this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".png");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);

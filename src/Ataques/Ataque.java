@@ -71,13 +71,6 @@ public abstract class Ataque extends ObjetoComMovimento {
 
         } else {
             double degree = this.angulo; //desired degree
-            System.out.println("x: " + this.x);
-            System.out.println("y: " + this.y);
-            if (this.sprite == null) {
-                System.out.println("nao carregou o sprite");
-            }
-            System.out.println("largura: " + this.sprite.pegaLargura());
-            System.out.println("altura: " + this.sprite.pegaAltura());
             Shape rect = new Rectangle(this.x, this.y, this.sprite.pegaLargura(), this.sprite.pegaAltura()); //creating the rectangle you want to rotate
             AffineTransform transform = new AffineTransform();
             //rotate or do other things with the rectangle (shear, translate, scale and so on)

@@ -87,27 +87,18 @@ public class Splash extends JWindow {
             //se a imagem ja for carregada apos encher a barra, termina o carregamento
             if (!(this.imagemCarregando.getWidth(null) == -1)) {
                 //estranho, por que sempre termina de carrega logo no primeiro loop
-                System.out.println("----");
-                System.out.println("i:"+i);
                 i = this.max;
-                //System.out.println("carregou!");
             }
         }
-////////
-////////        if(this.imagemCarregando.getWidth(null) == -1){ //senao, inicia o carregamento de novo
-////////            System.out.println("erro ao carregar");
-////////            //JOptionPane.showMessageDialog(null, "Erro ao carregar a imagem "+this.src+", a imagem sera carregada novamente");
-////////            this.carrega();
-////////        }
         //se a imagem ja for carregada apos encher a barra, termina o carregamento
         
         if (!(this.imagemCarregando.getWidth(null) == -1)) {
             
             i = this.max;
-            System.out.println("carregou!");
         } else { //senao, inicia o carregamento de novo
-            //JOptionPane.showMessageDialog(null, "Erro ao carregar a imagem "+this.src+", a imagem sera carregada novamente");
-            this.carrega();
+            JOptionPane.showMessageDialog(null, "Erro ao carregar a imagem "+this.src+", a imagem sera carregada novamente(nao vai nao, arrumar esse erro)");
+            return;
+            //this.carrega();
         }
     }
 

@@ -16,19 +16,15 @@ Necessarios:
 
 	--> Para fazer com que os pokemons de um elemento so nascam em areas desse elemento, usar o valor "raridade" da tabela pokemon para ver se o pokemon vai ou nao nascer em cada tile. se nascer, a variavel "ocupado" do tile sera true e permanecerá assim ate o pokemon morrer, assim ficara sendo false. so pode nascer outro pokemon nesse mesmo tile se essa variavel for false.
 
-	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro. Para fazer isso, usar o metodo drawTranslated(tem que arrumar ainda, mas ja da pra mudar a imagem)
+	--> Fazer com que os pontos X e Y das imagens dos personagens sejam no centro
 
 	--> Arrumar teclas para cima e para baixo(ir da primeira linha para a ultima e vice-versa)
 
 	--> Arumar a tabela bonusDeElemento, tem elementos que nao possuem vantagens ou desantagens. Fazer assim: tabela bonusDeElemento possuindo apenas o elemento em questao, o elemento sobre o qual tem vantagem(ou desvantagem) e o multiplicador. ficaria assim: Fire, Grass, 2.0.  2.0 significa 2x dano e 0.5 significa metade do dano.
 
-	--> Fazer a colisao no jogo(arrumar)
-
 	--> Atualizar dados do personagem liberado na fase1 quando cria ele(acho que ja foi)
 
 	--> Arrumar sistema de cura em ataques que curam(LeechSeed)
-
-	--> Para diminuir o "lag" fazer com que apenas imagens rotacionadas sejam do tipo PixelPerfect, o resto(imagens de personagens, tiles e ataques nao rotacionados) seria do tipo Imagem
 
 	--> Fazer busca no banco para adicionar o multiplicador(x0.5 ou x2) de dano(metodo verificaColisao)
 
@@ -36,11 +32,7 @@ Necessarios:
 
 	--> Botar musica de "perseguicao" quando inimigo estiver perseguindo player :D ou nao
 
-	--> Arrumar o problema de imagens que antigamente eram da classe sprite(passar frame por frame)
-
 	--> Verificar se sistema de dano esta correto
-
-	--> Para arrumar o problema da lentidao, fazer colisao por quadrados em imagem que não é feita a rotacao.
 
 	--> Colocar tabela evolucao ou criar o campo evolucao na tabela pokemon, para saber para qual pokemon que evolui em determinado level
 
@@ -53,7 +45,5 @@ Necessarios:
 	--> Adicionar opcao ao jogador de evoluir ou nao o pokemon, assim como no gameboy
 
 	--> Arrumar SplashScreen, nao carrega totalmente algumas imagens e fica "piscando"
-
-	--> Arrumar o Kills/Deaths, mostra sempre zero, a nao ser que o player nao tenha morrido nenhuma vez	
 
 --------

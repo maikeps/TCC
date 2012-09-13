@@ -19,7 +19,6 @@ public class HydroPump extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite sprite;
 
     public HydroPump(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         
@@ -46,7 +45,7 @@ public class HydroPump extends Ataque {
         int frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+"_Right.png", 14, 220, 120);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 14, 220, 120);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -73,6 +72,9 @@ public class HydroPump extends Ataque {
 
     @Override
     public void draw(Graphics g) {
+        if (this.frame >= 8) {
+            return;
+        }
        // this.imagem.drawRotated(g, this.x, this.y, this.angulo);
         this.sprite.drawRotated(g, this.x, this.y, this.angulo);
         

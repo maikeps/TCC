@@ -29,11 +29,11 @@ public class Personagem extends ObjetoComMovimento {
     public Direcao direcao;
 
     //Com colisão pixel perfct 
-   public GameObjectImagePixelPerfect  spriteRight; 
-   public GameObjectImagePixelPerfect  spriteLeft;
-   public GameObjectImagePixelPerfect  spriteUp;
-   public GameObjectImagePixelPerfect  spriteDown;
-   public GameObjectImagePixelPerfect  spriteAtual;
+   public Imagem  spriteRight; 
+   public Imagem  spriteLeft;
+   public Imagem  spriteUp;
+   public Imagem  spriteDown;
+   public Imagem  spriteAtual;
     
     public int cooldownAtual; //como esta o cooldown atualmente(diminui em um por step)
     public int cooldown; //cooldown que tem que esperar ate atacar de novo
@@ -84,10 +84,10 @@ public class Personagem extends ObjetoComMovimento {
         */
 
          try {
-            this.spriteRight = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Right.gif");
-            this.spriteLeft = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Left.gif");
-            this.spriteDown = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Down.gif");
-            this.spriteUp = new GameObjectImagePixelPerfect("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Up.gif");
+            this.spriteRight = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Right.gif");
+            this.spriteLeft = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Left.gif");
+            this.spriteDown = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Down.gif");
+            this.spriteUp = new Imagem("resources/personagens/"+this.id+" - "+this.nome+"/"+this.nome+"_Up.gif");
             this.spriteAtual = this.spriteDown;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
@@ -109,7 +109,7 @@ public class Personagem extends ObjetoComMovimento {
             this.velocidade = this.velocidadeInicial;
         }
         if (this.tocaParedeCima()) {
-            this.y = 194;
+            this.y = 5;
             this.velocidade = this.velocidadeInicial;
         }
         if (this.tocaParedeBaixo()) {
@@ -124,11 +124,11 @@ public class Personagem extends ObjetoComMovimento {
 //    }
 
       public void draw(Graphics g) {
-        this.spriteAtual.draw(g);
+        this.spriteAtual.draw(g, this.x, this.y);
     }
 
     public boolean tocaParedeEsquerda() {
-        return (this.x <= 4);
+        return (this.x < 0);
     }
 
     public boolean tocaParedeDireita() {
@@ -140,7 +140,7 @@ public class Personagem extends ObjetoComMovimento {
     }
 
     public boolean tocaParedeCima() {
-        return (this.y < 190);
+        return (this.y < 0);
     }
 
     //retorna o retangulo invisivel ocupado pelo personagem

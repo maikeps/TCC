@@ -20,11 +20,6 @@ public class FlameThrower extends Ataque {
 
     int frameElapsed;
     int frame;
-    Sprite sprite;
-    double angulo;
-    int destX;
-    int destY;
-    double deltaX, deltaY, dx, dy;
 
     public FlameThrower(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         
@@ -51,7 +46,7 @@ public class FlameThrower extends Ataque {
         int frame = 0;
 
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+"_Right.png", 8, 215, 65);
+            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 8, 215, 65);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -78,10 +73,7 @@ public class FlameThrower extends Ataque {
 
     @Override
     public void draw(Graphics g) {
-       // this.imagem.drawRotated(g, this.x, this.y, this.angulo);
         this.sprite.drawRotated(g, this.x, this.y, this.angulo);
-        
-       //this.spriteAtual.draw(g, this.x, this.y);
     }
 
     @Override

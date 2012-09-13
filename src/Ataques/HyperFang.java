@@ -29,7 +29,7 @@ public class HyperFang extends Ataque {
         this.destX = destX;
         this.destY = destY;
 
-        this.angulo = angulo;
+        this.angulo = 0;
 
         try {
             this.imagem = new Imagem("resources/ataques/"+name+"/"+name+".gif");

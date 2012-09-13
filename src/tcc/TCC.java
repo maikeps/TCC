@@ -19,20 +19,15 @@ public class TCC {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        Splash s = new Splash();
-        util.Util.carregaImagens();
-        s.setVisible(false);
-        
-
         try {
 
             String p1 = "ABC";
             CharacterSelect CharSelect = new CharacterSelect(p1);
 
-            GameEngine.getInstance().addGameStateController(1, new MainMenu());
-            GameEngine.getInstance().addGameStateController(2, CharSelect);
-            GameEngine.getInstance().addGameStateController(3, new Fase1(CharSelect));
+            GameEngine.getInstance().addGameStateController(1, new LoadingScreen());
+            GameEngine.getInstance().addGameStateController(2, new MainMenu());
+            GameEngine.getInstance().addGameStateController(3, CharSelect);
+            GameEngine.getInstance().addGameStateController(4, new Fase1(CharSelect));
 
             GameEngine.getInstance().setStartingGameStateController(1);
 
