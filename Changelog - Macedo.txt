@@ -4,3 +4,6 @@
 - Barra de Progresso some quando ja for liberado
 
 - Arrumado bug - dos numeros de kills serem passados para a evolução 
+
+14/09
+- Nos fizemos os danos aparecessem na tela.

@@ -18,12 +18,13 @@ public class SolarBeam extends Ataque {
     
     public SolarBeam(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
+        this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         this.desativado = false;
         this.xInicial = x;
@@ -63,6 +64,10 @@ public class SolarBeam extends Ataque {
             return;
         }
         this.cont ++;
+        
+        if (this.desativado) {
+            this.contadorDano++;
+        }
     }
 
     @Override

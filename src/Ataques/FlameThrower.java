@@ -23,12 +23,13 @@ public class FlameThrower extends Ataque {
 
     public FlameThrower(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         
+        this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         this.personagem = personagem;
 
@@ -68,6 +69,14 @@ public class FlameThrower extends Ataque {
             this.sprite.setCurrAnimFrame(this.frame);
             this.frameElapsed -= 5;
 
+        }
+        
+        if (this.desativado) {
+            this.contadorDano++;
+        }
+        
+        if(acertou == true){
+            this.contadorDano++;
         }
     }
 

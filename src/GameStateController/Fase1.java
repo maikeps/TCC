@@ -139,6 +139,28 @@ public class Fase1 implements GameStateController {
             a.draw(g);
         }
         g.setColor(Color.black);
+
+        for (Ataque a : this.ataquesInimigo) {
+            if (a.acertou == true) {
+                if (a.getContador() >= 25) {
+                   // return;
+                } else {
+                    g.setColor(Color.red);
+                    g.drawString("" + a.getDano(), a.getX(), a.getY());
+                }
+            }
+        }
+        for (Ataque a : this.ataquesPlayer) {
+            if (a.acertou == true) {
+                if (a.getContador() >= 25) {
+                   // return;
+                } else {
+                    g.setColor(Color.white);
+                    g.drawString("" + a.getDano(), a.getX(), a.getY());
+                }
+            }
+        }
+
     }
 
     public void start() {
@@ -380,19 +402,20 @@ public class Fase1 implements GameStateController {
                 if (a.getShape().intersects(x1, y1, x2, y2)) {
                     if (a.desativado == false) {
                         int lvl = inimigo.personagem.getLvl();
-                        int danoDoAtk = a.getDano();
+                        int danoDoAtk = a.getDanoBruto();
                         int atkDoPokemon = inimigo.personagem.getAtk();
                         int defDoOponente = this.player.personagem.getDef();
                         int r = 100 - util.Util.random(15);
                         int multiplicador = 1; //fazer busca no banco
                         int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                        a.setDano(dano);
                         System.out.println(this.CharSelect.getPlayer1() + " took " + dano + " damage!");
                         this.player.personagem.perdeHp(dano);
                     }
-                    a.acertou = true;
+                    a.setAcertou(true);
                     a.desativado();
                     //pra mandar pro sei-la-o-que garbage collector
-                    a = null;
+                   // a = null;
                 }
 
 
@@ -426,12 +449,13 @@ public class Fase1 implements GameStateController {
                 if (a.getShape().intersects(x1, y1, x2, y2)) {
                     if (a.desativado == false) {
                         int lvl = this.player.personagem.getLvl();
-                        int danoDoAtk = a.getDano();
+                        int danoDoAtk = a.getDanoBruto();
                         int atkDoPokemon = this.player.personagem.getAtk();
                         int defDoOponente = inimigo.personagem.getDef();
                         int r = 100 - util.Util.random(15);
                         int multiplicador = 1; //fazer busca no banco
                         int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                        a.setDano(dano);
                         System.out.println(inimigo.getPersonagem().getNome() + " took " + dano + " damage!");
                         inimigo.personagem.perdeHp(dano);
 
@@ -450,9 +474,9 @@ public class Fase1 implements GameStateController {
                         boolean bool = banco.executaUpdate(sql);
 
                     }
-                    a.acertou = true;
+                    a.setAcertou(true);
                     a.desativado();
-                    a = null;
+                    //a = null;
                 }
 
 

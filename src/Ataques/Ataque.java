@@ -22,7 +22,8 @@ public abstract class Ataque extends ObjetoComMovimento {
     int velocidade = 15; //Determina a velocidade em que o personagem anda
     public boolean desativado;
     public boolean acertou = false;
-    int dano;// è o dano do ataque
+    int dano;// dano final
+    int danoBruto;// dano inicial 
     int xInicial; // Possição inicial para 
     int yInicial;
     // Imagem imagem;
@@ -34,12 +35,16 @@ public abstract class Ataque extends ObjetoComMovimento {
     int destX;
     int destY;
     double deltaX, deltaY, dx, dy;
+    int contadorDano;
 
     public void step(long timeElapsed) {
         if (this.desativado == true) {
+            this.contadorDano++;
             return;
         }
-
+//        if (getAcertou() == true) {
+//            this.contadorDano++;
+//        }
     }
 
     public void draw(Graphics g) {
@@ -52,8 +57,16 @@ public abstract class Ataque extends ObjetoComMovimento {
         this.dano = n;
     }
 
+    public void setDanoBruto(int n) {
+        this.danoBruto = n;
+    }
+
     public int getDano() {
         return this.dano;
+    }
+
+    public int getDanoBruto() {
+        return this.danoBruto;
     }
 
     public Shape getShape() {
@@ -179,6 +192,23 @@ public abstract class Ataque extends ObjetoComMovimento {
 
     public void setPersonagem(Personagem personagem) {
         this.personagem = personagem;
+    }
+
+    public void setContador(int num){
+        this.contadorDano = num;
+    }
+    
+    public int getContador() {
+        return contadorDano;
+    }
+    
+
+    public void setAcertou(boolean acertou) {
+        this.acertou = acertou;
+    }
+
+    public boolean getAcertou() {
+        return this.acertou;
     }
 
     public void desativado() {
