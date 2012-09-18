@@ -17,6 +17,7 @@ public class Thunder extends Ataque {
     int frame;
 
     public Thunder(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+        this.setContador(0);
         this.personagem = personagem;
         
         
@@ -25,7 +26,7 @@ public class Thunder extends Ataque {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         
         AudioPlayer.play("resources/sounds/Sound 1.wav");
@@ -47,6 +48,7 @@ public class Thunder extends Ataque {
 
     public void step(long timeElapsed) {
         if (this.frame >= 7) {
+            this.contadorDano++;
             return;
         }
 
@@ -55,6 +57,9 @@ public class Thunder extends Ataque {
             this.frame++;
             this.sprite.setCurrAnimFrame(this.frame);
             this.frameElapsed -= 5;
+        }
+       if (this.desativado) {
+            this.contadorDano++;
         }
     }
 

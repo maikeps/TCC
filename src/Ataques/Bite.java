@@ -14,12 +14,13 @@ public class Bite extends Ataque {
 
     public Bite(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
 
+        this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         this.desativado = false;
         this.xInicial = x;
@@ -50,11 +51,15 @@ public class Bite extends Ataque {
 
     public void step(long timeElapsed) {
         if (this.desativado) {
+            this.contadorDano++;
             return;
         }
         this.x += this.dx;
         this.y += this.dy;
-
+        
+        if(acertou == true){
+            this.contadorDano++;
+        }
 
     }
 

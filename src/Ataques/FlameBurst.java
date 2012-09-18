@@ -17,6 +17,7 @@ public class FlameBurst extends Ataque {
     int frame;
 
     public FlameBurst(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+        this.setContador(0);
         this.personagem = personagem;
         
         
@@ -25,7 +26,7 @@ public class FlameBurst extends Ataque {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         
         AudioPlayer.play("resources/sounds/Sound 1.wav");
@@ -55,6 +56,13 @@ public class FlameBurst extends Ataque {
             this.frame++;
             this.sprite.setCurrAnimFrame(this.frame);
             this.frameElapsed -= 4;
+        }
+        if (this.desativado) {
+            this.contadorDano++;
+        }
+        
+        if(acertou == true){
+            this.contadorDano++;
         }
     }
 
