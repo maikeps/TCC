@@ -59,8 +59,10 @@ public class Inimigo extends ObjetoComMovimento {
 
     public void step(long timeElapsed) {
 
-        this.x = this.personagem.getX();
-        this.y = this.personagem.getY();
+//        this.x = this.personagem.getX() - this.player.offsetx;
+//        this.y = this.personagem.getY() - this.player.offsety;
+this.personagem.setX(this.personagem.getX() + this.player.offsetx);
+        this.personagem.setY(this.personagem.getY() + this.player.offsety);
 
         this.direcao = this.personagem.getDirecao();
 
@@ -134,6 +136,7 @@ public class Inimigo extends ObjetoComMovimento {
 
     public void draw(Graphics g) {
         this.personagem.draw(g);
+        g.drawString(""+this.player.offsetx, 500, 500);
     }
 
     public Direcao getDirecao() {

@@ -127,7 +127,7 @@ public class Scene
         this.drawStartY = drawStartY;
     }
 
-    public void draw(Graphics g)
+    public void draw(Graphics g, int offsetx, int offsety)
     {
         //first clear the scene
        // GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
@@ -137,8 +137,8 @@ public class Scene
        // g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         //first draw the backdrop
-        int startDrawX = drawStartX;
-        int startDrawY = drawStartY;
+        int startDrawX = drawStartX + offsetx;
+        int startDrawY = drawStartY + offsety;
 
         g.drawImage(backDrop, startDrawX, startDrawY, null);
 
@@ -229,7 +229,7 @@ public class Scene
         return v;
     }
 
-    public void step(int timeElapsed)
+    public void step(long timeElapsed)
     {
         for(int i = 0 ; i < overlays.size() ; i++)
         {

@@ -33,6 +33,8 @@ public class Player extends ObjetoComMovimento {
     public Rectangle campoDeVisao;
     public int xMouse;
     public int yMouse;
+    public int offsetx;
+    public int offsety;
     
     
     public Player(Personagem personagem) {
@@ -46,8 +48,8 @@ public class Player extends ObjetoComMovimento {
 
         this.personagem.setDirecao(Direcao.DIREITA);
 
-        this.personagem.setX(200);
-        this.personagem.setY(500);
+        this.personagem.setX(GameEngine.getInstance().getGameCanvas().getWidth()/2 - personagem.spriteAtual.pegaLargura()/2);
+        this.personagem.setY(GameEngine.getInstance().getGameCanvas().getHeight()/2 - personagem.spriteAtual.pegaAltura()/2);
 
         
         
@@ -62,42 +64,46 @@ public class Player extends ObjetoComMovimento {
         if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.ESQUERDA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.personagem.moveEsquerdaCima(7);
+            //this.personagem.moveEsquerdaCima(7);
 
         } else if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.personagem.moveEsquerdaBaixo(7);
+            //this.personagem.moveEsquerdaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.DIREITA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.personagem.moveDireitaCima(7);
+            //this.personagem.moveDireitaCima(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.DIREITA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.personagem.moveDireitaBaixo(7);
+            //this.personagem.moveDireitaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D)) {
             this.personagem.direcao = Direcao.DIREITA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.personagem.moveDireita(5);
+            this.offsetx -= 5; 
+            //this.personagem.moveDireita(5);
 
         } else if (teclado.keyDown(Keys.A)) {
             this.personagem.direcao = Direcao.ESQUERDA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.personagem.moveEsquerda(5);
+            this.offsetx += 5;
+            //this.personagem.moveEsquerda(5);
 
         } else if (teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.CIMA;
             this.personagem.spriteAtual = this.personagem.spriteUp;
-            this.personagem.moveCima(5);
+            this.offsety += 5;
+            //this.personagem.moveCima(5);
 
         } else if (teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteDown;
-            this.personagem.moveBaixo(5);
+            this.offsety -= 5;
+            //this.personagem.moveBaixo(5);
 
         }
 

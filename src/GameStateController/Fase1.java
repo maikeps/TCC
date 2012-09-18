@@ -13,19 +13,19 @@ import MySQL.ConjuntoResultados;
 import MySQL.MySQL;
 import Personagens.Personagem;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import javaPlay2.GameEngine;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javaPlay2.GameStateController;
+import javaPlay2.Scene;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import tcc.Inimigo;
 import tcc.Player;
 import model.Pokemon;
@@ -48,6 +48,7 @@ public class Fase1 implements GameStateController {
     Font f;
     Inimigo inimigoMaisPerto;
     double distanciaAteOInimigoMaisPerto = 9999;
+    Scene cenario;
 
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
@@ -57,6 +58,18 @@ public class Fase1 implements GameStateController {
         this.ataquesPlayer = new ArrayList<Ataque>();
         this.ataquesInimigo = new ArrayList<Ataque>();
         this.inimigo = new ArrayList<Inimigo>();
+        this.cenario = new Scene();
+        try {
+            cenario.loadFromFile("resources/mapa inicial.txt");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void step(long timeElapsed) {
@@ -73,6 +86,8 @@ public class Fase1 implements GameStateController {
 
         this.player.step(timeElapsed);
         for (Inimigo inimigo : this.inimigo) {
+            //inimigo.personagem.setX(inimigo.personagem.getX() + player.offsetx);
+            //inimigo.personagem.setY(inimigo.personagem.getY() + player.offsety);
             inimigo.step(timeElapsed);
         }
 
@@ -99,9 +114,16 @@ public class Fase1 implements GameStateController {
         }
 
         this.verificaColisao();
+        cenario.step(timeElapsed);
+        
+        
+        
     }
 
     public void draw(Graphics g) {
+        
+        cenario.draw(g, player.offsetx, player.offsety);
+        
 
         //cria fonte
         try {
@@ -115,10 +137,6 @@ public class Fase1 implements GameStateController {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
             System.exit(1);
         }
-
-        //desenha retangulo preto em toda a tela
-        g.fillRect(0, 0, 1000, 1000);
-
 
         //desenha os personagens e os ataques
         this.player.draw(g);
