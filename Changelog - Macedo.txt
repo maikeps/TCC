@@ -7,3 +7,6 @@
 
 14/09
 - Nos fizemos os danos aparecessem na tela.
+
+17/09
+- Arrumar problema no github (TESTE)
