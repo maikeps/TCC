@@ -90,12 +90,14 @@ public class Splash extends JWindow {
                 i = this.max;
             }
         }
-        //se a imagem ja for carregada apos encher a barra, termina o carregamento
-        
-        if (!(this.imagemCarregando.getWidth(null) == -1)) {
+
+        //se a imagem ainda nao estiver carregada, tem algo errado
+        //entao mostra uma msg de erro e passa para aprox img
+        //nao funciona a segunda parte '-'
+        if ((this.imagemCarregando.getWidth(null) == -1)) {
             
-            i = this.max;
-        } else { //senao, inicia o carregamento de novo
+//////            i = this.max;
+//////        } else { //senao, inicia o carregamento de novo
             JOptionPane.showMessageDialog(null, "Erro ao carregar a imagem "+this.src+", a imagem sera carregada novamente(nao vai nao, arrumar esse erro)");
             return;
             //this.carrega();
