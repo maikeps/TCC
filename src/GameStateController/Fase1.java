@@ -133,7 +133,6 @@ public class Fase1 implements GameStateController {
 
         cenario.draw(g, player.offsetx, player.offsety);
 
-
         //cria fonte
         try {
             this.f = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream("resources/fontes/PressStart2P.ttf"));
@@ -148,10 +147,10 @@ public class Fase1 implements GameStateController {
         }
 
         //desenha os personagens e os ataques
-        this.player.draw(g);
         for (Inimigo inimigo : this.inimigo) {
             inimigo.draw(g);
         }
+        this.player.draw(g);
 
         for (Ataque a : this.ataquesPlayer) {
             a.draw(g);
@@ -188,10 +187,11 @@ public class Fase1 implements GameStateController {
             }
         }
         for (int i = 0; i < this.inimigo.size(); i++) {
-            double dist = this.inimigo.get(i).calculaDistanciaAtePlayer(this.player.personagem.getX(), this.player.personagem.getY());
-            g.drawString("distancia: " + dist, 100, 100 + 50 * i);
+            double dist = this.inimigo.get(i).calculaDistanciaAtePonto(this.player.personagem.getX(), this.player.personagem.getY());
+            //g.drawString("distancia: " + dist, 100, 100 + 50 * i);
+            g.drawString("destX: " + this.inimigo.get(i).getDistanciaX(), 100, 100+50*i);
         }
-
+        g.drawString("xPlayer:"+this.player.personagem.getX(), 500, 500);
     }
 
     public void start() {
@@ -199,10 +199,12 @@ public class Fase1 implements GameStateController {
 
         this.criaPlayer1();
         //cria 2 inimigos
-        for (int i = 1; i <= 2; i++) {
+        int rand = util.Util.random(15)+1;
+        for (int i = 1; i <= rand; i++) {
             this.criaInimigo(this.CharSelect.getInimigo());
             this.CharSelect.sorteiaInimigo();
         }
+        this.verificaInimigoMaisPerto();
     }
 
     public void stop() {
@@ -376,7 +378,9 @@ public class Fase1 implements GameStateController {
 
         this.p2 = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
-        Inimigo inimigo = new Inimigo(this.p2, this.player);
+        int x = util.Util.random(this.cenario.getWidth());
+        int y = util.Util.random(this.cenario.getHeight());
+        Inimigo inimigo = new Inimigo(this.p2, this.player, x, y);
         this.inimigoMaisPerto = inimigo;
         this.inimigo.add(inimigo);
     }
@@ -403,24 +407,24 @@ public class Fase1 implements GameStateController {
 //////        
 
         g.setColor(Color.white);
-        g.drawString("LVL " + lvl, 98, 568);
-        g.drawString("" + this.CharSelect.getPlayer1(), 98, 588);
-        g.fillRect(98, 598, hpInicial + 4, 24);
+        g.drawString("LVL " + lvl, 98-this.player.offsetx, 568-this.player.offsety);
+        g.drawString("" + this.CharSelect.getPlayer1(), 98-this.player.offsetx, 588-this.player.offsety);
+        g.fillRect(98-this.player.offsetx, 598-this.player.offsety, hpInicial + 4, 24);
         g.setColor(Color.green);
-        g.fillRect(100, 600, hp, 20);
-        g.drawString("HP: " + hp + "/" + hpInicial, 100, 650);
+        g.fillRect(100-this.player.offsetx, 600-this.player.offsety, hp, 20);
+        g.drawString("HP: " + hp + "/" + hpInicial, 100-this.player.offsetx, 650-this.player.offsety);
 
         // HealthBar do inimigo
         int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
         int hpInimigo = this.inimigoMaisPerto.getHp();
         int lvlInimigo = player.getPersonagem().getLvl();
         g.setColor(Color.white);
-        g.drawString("LVL " + lvlInimigo, 598, 68);
-        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 598, 88);
-        g.fillRect(598, 98, hpInicialInimigo + 4, 24);
+        g.drawString("LVL " + lvlInimigo, 598-this.player.offsetx, 68-this.player.offsety);
+        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 598-this.player.offsetx, 88-this.player.offsety);
+        g.fillRect(598-this.player.offsetx, 98-this.player.offsety, hpInicialInimigo + 4, 24);
         g.setColor(Color.green);
-        g.fillRect(600, 100, hpInimigo, 20);
-        g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600, 150);
+        g.fillRect(600-this.player.offsetx, 100-this.player.offsety, hpInimigo, 20);
+        g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600-this.player.offsetx, 150-this.player.offsety);
     }
 
     //o problema esta na imagem do ataque, por que se fizer colisao de player com inimigo funciona
@@ -774,7 +778,7 @@ public class Fase1 implements GameStateController {
             }
         }
         try {
-            PerlinNoise2D.limpaTxt(new File("texto.txt"));
+            PerlinNoise2D.limpaTxt(new File("resources/texto.txt"));
         } catch (IOException ex) {
             Logger.getLogger(PerlinNoise2D.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -784,9 +788,10 @@ public class Fase1 implements GameStateController {
         a[1] = "resources/tiles/tiles avulsos/grass.png";
         a[2] = "resources/tiles/tiles avulsos/water.png";
         a[3] = "resources/tiles/tiles avulsos/jungle_grass.png";
-        PerlinNoise2D.saveTxtTeste(new File("texto.txt"), a, true);
+        PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), a, true);
 
         PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), sArray, true);
+        System.out.println("Salvou txt :)");
         try {
             PerlinNoise2D.saveImg(new File("resources/Heightmap.png"), img);
         } catch (IOException e) {

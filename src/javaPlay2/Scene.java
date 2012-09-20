@@ -1,14 +1,13 @@
 /*
  * Scene
  */
-
 package javaPlay2;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,15 +15,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author VisionLab/PUC-Rio
  */
-public class Scene
-{
+public class Scene {
+
     private Image backDrop;
     private Image[] tiles;
     private ArrayList tileLayer;
@@ -33,8 +29,7 @@ public class Scene
     private int drawStartY = 0;
     private final int MAX_SLEEP_COUNT = 30;
 
-    public void loadFromFile(String sceneFile) throws InterruptedException, FileNotFoundException, IOException, Exception
-    {
+    public void loadFromFile(String sceneFile) throws InterruptedException, FileNotFoundException, IOException, Exception {
         tileLayer = new ArrayList();
         overlays = new ArrayList();
 
@@ -49,23 +44,20 @@ public class Scene
 
         int count;
 
-        for(int i = 0 ; i < numOfTileImages ; i++)
-        {
+        for (int i = 0; i < numOfTileImages; i++) {
             //read each tile image name
             line = input.readLine();
 
             tiles[i] = Toolkit.getDefaultToolkit().getImage(line);
 
             count = 0;
-            while(tiles[i].getWidth(null) == -1)
-            {
+            while (tiles[i].getWidth(null) == -1) {
                 Thread.sleep(1);
 
                 count++;
 
-                if(count == MAX_SLEEP_COUNT)
-                {
-                    throw new Exception("image could not be loaded: "+line);
+                if (count == MAX_SLEEP_COUNT) {
+                    throw new Exception("image could not be loaded: " + line);
                 }
             }
         }
@@ -76,14 +68,12 @@ public class Scene
 
         line = input.readLine();
 
-        while(line.equals(endTileSet) != true)
-        {
+        while (line.equals(endTileSet) != true) {
             ArrayList tileLine = new ArrayList();
 
             String[] tileIndices = line.split(",");
 
-            for(int i = 0 ; i < tileIndices.length ; i++)
-            {
+            for (int i = 0; i < tileIndices.length; i++) {
                 tileLine.add(Integer.parseInt(tileIndices[i]));
             }
 
@@ -98,48 +88,46 @@ public class Scene
         backDrop = Toolkit.getDefaultToolkit().getImage(line);
 
         count = 0;
-        while(backDrop.getWidth(null) == -1)
-        {
+        while (backDrop.getWidth(null) == -1) {
             Thread.sleep(1);
 
             count++;
 
-            if(count == MAX_SLEEP_COUNT)
-            {
+            if (count == MAX_SLEEP_COUNT) {
                 throw new Exception("image could not be loaded");
             }
         }
     }
 
-    public void addOverlay(GameObject overlay)
-    {
+    public void addOverlay(GameObject overlay) {
         overlays.add(overlay);
     }
 
-    public void removeOverlay(GameObject overlay)
-    {
+    public void removeOverlay(GameObject overlay) {
         overlays.remove(overlay);
     }
 
-    public void setDrawStartPos(int drawStartX, int drawStartY)
-    {
+    public void setDrawStartPos(int drawStartX, int drawStartY) {
         this.drawStartX = drawStartX;
         this.drawStartY = drawStartY;
     }
 
-    public void draw(Graphics g, int offsetx, int offsety)
-    {
+    public void draw(Graphics g, int offsetx, int offsety) {
         //first clear the scene
-       // GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
+        // GameCanvas canvas = GameEngine.getInstance().getGameCanvas();
 
         g.setColor(Color.BLACK);
 
-       // g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        // g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         //first draw the backdrop
-        int startDrawX = drawStartX + offsetx;
-        int startDrawY = drawStartY + offsety;
+        int startDrawX = drawStartX;
+        //  int startDrawX = drawStartX + offsetx;
+        //   int startDrawY = drawStartY + offsety;
+        int startDrawY = drawStartY;
 
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.translate(offsetx, offsety);
         g.drawImage(backDrop, startDrawX, startDrawY, null);
 
         //now draw the tile set
@@ -149,93 +137,94 @@ public class Scene
         int line = 0;
         int drawY = startDrawY;
 
-        do
-        {
-            ArrayList tileLine = (ArrayList)tileLayer.get(line);
+        do {
+            ArrayList tileLine = (ArrayList) tileLayer.get(line);
 
             int drawX = startDrawX;
 
-            for(int c = 0 ; c < tileLine.size() ; c++, drawX += tileWidth)
-            {
-                int idx = (Integer)tileLine.get(c);
+            for (int c = 0; c < tileLine.size(); c++, drawX += tileWidth) {
+                int idx = (Integer) tileLine.get(c);
 
-                if(idx == 0)
-                {
+                if (idx == 0) {
                     continue;
                 }
 
-                g.drawImage(tiles[idx-1], drawX, drawY, null);
+                g.drawImage(tiles[idx - 1], drawX, drawY, null);
             }
 
             drawY += tileHeight;
             line++;
-        
-        }while(line < tileLayer.size());
+
+        } while (line < tileLayer.size());
 
         //finally draw the overlays
-        for(int i = 0 ; i < overlays.size() ; i++)
-        {
-            GameObject element = (GameObject)overlays.get(i);
+        for (int i = 0; i < overlays.size(); i++) {
+            GameObject element = (GameObject) overlays.get(i);
 
             element.draw(g);
         }
     }
 
-    public ArrayList<TileInfo> getTilesFromRect(Point min, Point max)
-    {
+    public ArrayList<TileInfo> getTilesFromRect(Point min, Point max) {
         ArrayList<TileInfo> v = new ArrayList<TileInfo>();
 
-       
+
         int startDrawX = drawStartX;
-        int startDrawY =  drawStartY;
-        
+        int startDrawY = drawStartY;
+
         int tileWidth = tiles[0].getWidth(null);
         int tileHeight = tiles[0].getHeight(null);
 
         int line = 0;
         int drawY = startDrawY;
 
-        do
-        {
-            ArrayList tileLine = (ArrayList)tileLayer.get(line);
+        do {
+            ArrayList tileLine = (ArrayList) tileLayer.get(line);
 
             int drawX = startDrawX;
 
-            for(int c = 0 ; c < tileLine.size() ; c++, drawX += tileWidth)
-            {
+            for (int c = 0; c < tileLine.size(); c++, drawX += tileWidth) {
                 TileInfo tile = new TileInfo();
 
-                tile.id = (Integer)tileLine.get(c);
-                tile.min.x = drawX ;
-                tile.min.y = drawY ;
-                tile.max.x = drawX + tileWidth-1;
-                tile.max.y = drawY + tileHeight-1;
+                tile.id = (Integer) tileLine.get(c);
+                tile.min.x = drawX;
+                tile.min.y = drawY;
+                tile.max.x = drawX + tileWidth - 1;
+                tile.max.y = drawY + tileHeight - 1;
 
-                if((min.x > tile.max.x) || (max.x < tile.min.x))  {
+                if ((min.x > tile.max.x) || (max.x < tile.min.x)) {
                     continue;
                 }
-                if((min.y > tile.max.y) || (max.y < tile.min.y)) {
+                if ((min.y > tile.max.y) || (max.y < tile.min.y)) {
                     continue;
                 }
-                
+
                 v.add(tile);
             }
 
             drawY += tileHeight;
             line++;
 
-        }while(line < tileLayer.size());
+        } while (line < tileLayer.size());
 
         return v;
     }
 
-    public void step(long timeElapsed)
-    {
-        for(int i = 0 ; i < overlays.size() ; i++)
-        {
-            GameObject element = (GameObject)overlays.get(i);
+    public void step(long timeElapsed) {
+        for (int i = 0; i < overlays.size(); i++) {
+            GameObject element = (GameObject) overlays.get(i);
 
             element.step(timeElapsed);
         }
+    }
+
+    public int getWidth() {
+        System.out.println(this.tileLayer.size());
+        return this.tileLayer.size()*this.tiles[0].getWidth(null);
+    }
+    public int getHeight(){
+        //arrumar, pois esta igual ao de cima
+        //funciona enquanto o mapa for quadrado
+        return this.tileLayer.size()*this.tiles[0].getHeight(null);
     }
 }
