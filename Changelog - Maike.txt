@@ -26,3 +26,6 @@
 -Sistema modificado para suportar multiplos inimigos
 -Melhorado o visual do CharSelect(centralizei a imagem grande e coloquei um quadrado ao redor dela, centralizei a barra de progresso)
 -Bug do K/D mostrando zero quase sempre corrigido
+
+19/09
+-Sistema de mapa aleatorio funcionando, falta implementar no sistema.(Peguei pronto da internet, apenas adaptei)

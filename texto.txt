@@ -1,0 +1,4 @@
+3
+resources/tiles/tiles avulsos/grass.png
+resources/tiles/tiles avulsos/water.png
+resources/tiles/tiles avulsos/jungle_grass.png

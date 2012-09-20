@@ -13,19 +13,24 @@ import MySQL.ConjuntoResultados;
 import MySQL.MySQL;
 import Personagens.Personagem;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javaPlay2.GameEngine;
 import javaPlay2.GameStateController;
+import javaPlay2.Scene;
+import javaPlayExtras.PerlinNoise2D;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import tcc.Inimigo;
 import tcc.Player;
 import model.Pokemon;
@@ -48,6 +53,7 @@ public class Fase1 implements GameStateController {
     Font f;
     Inimigo inimigoMaisPerto;
     double distanciaAteOInimigoMaisPerto = 9999;
+    Scene cenario;
 
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
@@ -57,6 +63,18 @@ public class Fase1 implements GameStateController {
         this.ataquesPlayer = new ArrayList<Ataque>();
         this.ataquesInimigo = new ArrayList<Ataque>();
         this.inimigo = new ArrayList<Inimigo>();
+        this.cenario = new Scene();
+        try {
+            cenario.loadFromFile("resources/texto.txt");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void step(long timeElapsed) {
@@ -73,6 +91,10 @@ public class Fase1 implements GameStateController {
 
         this.player.step(timeElapsed);
         for (Inimigo inimigo : this.inimigo) {
+            inimigo.setXPlayer(this.player.personagem.getX());
+            inimigo.setYPlayer(this.player.personagem.getY());
+            //inimigo.personagem.setX(inimigo.personagem.getX() + player.offsetx);
+            //inimigo.personagem.setY(inimigo.personagem.getY() + player.offsety);
             inimigo.step(timeElapsed);
         }
 
@@ -99,9 +121,18 @@ public class Fase1 implements GameStateController {
         }
 
         this.verificaColisao();
+        cenario.step(timeElapsed);
+
+
+
     }
 
     public void draw(Graphics g) {
+
+        g.fillRect(0, 0, GameEngine.getInstance().getGameCanvas().getWidth(), GameEngine.getInstance().getGameCanvas().getHeight());
+
+        cenario.draw(g, player.offsetx, player.offsety);
+
 
         //cria fonte
         try {
@@ -115,10 +146,6 @@ public class Fase1 implements GameStateController {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
             System.exit(1);
         }
-
-        //desenha retangulo preto em toda a tela
-        g.fillRect(0, 0, 1000, 1000);
-
 
         //desenha os personagens e os ataques
         this.player.draw(g);
@@ -139,9 +166,37 @@ public class Fase1 implements GameStateController {
             a.draw(g);
         }
         g.setColor(Color.black);
+
+        for (Ataque a : this.ataquesInimigo) {
+            if (a.acertou == true) {
+                if (a.getContador() >= 25) {
+                    // return;
+                } else {
+                    g.setColor(Color.red);
+                    g.drawString("" + a.getDano(), a.getX(), a.getY());
+                }
+            }
+        }
+        for (Ataque a : this.ataquesPlayer) {
+            if (a.acertou == true) {
+                if (a.getContador() >= 25) {
+                    // return;
+                } else {
+                    g.setColor(Color.white);
+                    g.drawString("" + a.getDano(), a.getX(), a.getY());
+                }
+            }
+        }
+        for (int i = 0; i < this.inimigo.size(); i++) {
+            double dist = this.inimigo.get(i).calculaDistanciaAtePlayer(this.player.personagem.getX(), this.player.personagem.getY());
+            g.drawString("distancia: " + dist, 100, 100 + 50 * i);
+        }
+
     }
 
     public void start() {
+        this.carregaMapa();
+
         this.criaPlayer1();
         //cria 2 inimigos
         for (int i = 1; i <= 2; i++) {
@@ -380,19 +435,20 @@ public class Fase1 implements GameStateController {
                 if (a.getShape().intersects(x1, y1, x2, y2)) {
                     if (a.desativado == false) {
                         int lvl = inimigo.personagem.getLvl();
-                        int danoDoAtk = a.getDano();
+                        int danoDoAtk = a.getDanoBruto();
                         int atkDoPokemon = inimigo.personagem.getAtk();
                         int defDoOponente = this.player.personagem.getDef();
                         int r = 100 - util.Util.random(15);
                         int multiplicador = 1; //fazer busca no banco
                         int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                        a.setDano(dano);
                         System.out.println(this.CharSelect.getPlayer1() + " took " + dano + " damage!");
                         this.player.personagem.perdeHp(dano);
                     }
-                    a.acertou = true;
+                    a.setAcertou(true);
                     a.desativado();
                     //pra mandar pro sei-la-o-que garbage collector
-                    a = null;
+                    // a = null;
                 }
 
 
@@ -426,12 +482,13 @@ public class Fase1 implements GameStateController {
                 if (a.getShape().intersects(x1, y1, x2, y2)) {
                     if (a.desativado == false) {
                         int lvl = this.player.personagem.getLvl();
-                        int danoDoAtk = a.getDano();
+                        int danoDoAtk = a.getDanoBruto();
                         int atkDoPokemon = this.player.personagem.getAtk();
                         int defDoOponente = inimigo.personagem.getDef();
                         int r = 100 - util.Util.random(15);
                         int multiplicador = 1; //fazer busca no banco
                         int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                        a.setDano(dano);
                         System.out.println(inimigo.getPersonagem().getNome() + " took " + dano + " damage!");
                         inimigo.personagem.perdeHp(dano);
 
@@ -450,9 +507,9 @@ public class Fase1 implements GameStateController {
                         boolean bool = banco.executaUpdate(sql);
 
                     }
-                    a.acertou = true;
+                    a.setAcertou(true);
                     a.desativado();
-                    a = null;
+                    //a = null;
                 }
 
 
@@ -686,5 +743,55 @@ public class Fase1 implements GameStateController {
                 this.distanciaAteOInimigoMaisPerto = distancia;
             }
         }
+    }
+
+    public void carregaMapa() {
+        System.out.println("Started.");
+        int size = 128; // tamanho da imagem (1024x1024)
+        PerlinNoise2D pn2d = new PerlinNoise2D(size, 0.4f, 1, 20000f, new Random());
+        float[][] vals = pn2d.get();//retorna os valores do noise
+        BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
+
+        String sArray[] = new String[size + 1];
+
+        for (int x = 0; x < vals.length; x++) {
+            System.out.println("x: " + x);
+            String s = "";
+            sArray[x] = "";
+            for (int y = 0; y < vals[x].length; y++) {
+                String hexStr = "0x" + (Integer.toHexString(Color.GREEN.getRGB()));
+
+
+                img.setRGB(x, y, ((int) vals[x][y]) | 0xFF721138);//comeca a desenhar a img
+
+                if (img.getRGB(x, y) > 0xFF725f53) {
+                    sArray[x] += "2,";
+                } else if (img.getRGB(x, y) < 0xFF725f3d) {
+                    sArray[x] += "3,";
+                } else {
+                    sArray[x] += "1,";
+                }
+            }
+        }
+        try {
+            PerlinNoise2D.limpaTxt(new File("texto.txt"));
+        } catch (IOException ex) {
+            Logger.getLogger(PerlinNoise2D.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String[] a = new String[4];
+        a[0] = "3";
+        a[1] = "resources/tiles/tiles avulsos/grass.png";
+        a[2] = "resources/tiles/tiles avulsos/water.png";
+        a[3] = "resources/tiles/tiles avulsos/jungle_grass.png";
+        PerlinNoise2D.saveTxtTeste(new File("texto.txt"), a, true);
+
+        PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), sArray, true);
+        try {
+            PerlinNoise2D.saveImg(new File("resources/Heightmap.png"), img);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Finished.");
     }
 }

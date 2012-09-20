@@ -1,3 +1,10 @@
 12/09
  - Cesar entra no projeto agora com o github configurado no celular
  - Chegar em casa e fazer pesquisas para a construção do mapa
+
+15/09
+ - tentei aplicar a parte do mapa mas deu erro no programa e não consegui concluir
+
+19/09
+ - mapa funcionando, pequenos bugs a arrumar ainda
+

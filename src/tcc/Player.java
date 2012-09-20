@@ -10,17 +10,14 @@ import javaPlay2.Mouse;
 
 //fazer o DAO de acordo com o personagem recebido como parametro
 //stats entao so pegar do DAO
-
 public class Player extends ObjetoComMovimento {
 
     public Personagem personagem; //personagem escolhido pelo player
-    
 //    public int vida;
 //    protected int velocidade = 1;
 //    protected int velocidadeInicial = 1;
 //    protected Imagem spriteAtual;
 //    protected int cooldownAtaque;
-
 //    public Rectangle campoDeVisao;
 //
 //    
@@ -33,11 +30,20 @@ public class Player extends ObjetoComMovimento {
     public Rectangle campoDeVisao;
     public int xMouse;
     public int yMouse;
-    
-    
+    public int offsetx;
+    public int offsety;
+    public boolean apertouDireita;
+    public boolean apertouEsquerda;
+    public boolean apertouCima;
+    public boolean apertouBaixo;
+    public boolean apertouDireitaCima;
+    public boolean apertouDireitaBaixo;
+    public boolean apertouEsquerdaCima;
+    public boolean apertouEsquerdaBaixo;
+
     public Player(Personagem personagem) {
 
-        
+
         this.destX = 0;
         this.destY = 0;
         this.atacou = false;
@@ -46,11 +52,11 @@ public class Player extends ObjetoComMovimento {
 
         this.personagem.setDirecao(Direcao.DIREITA);
 
-        this.personagem.setX(200);
-        this.personagem.setY(500);
+        this.personagem.setX(GameEngine.getInstance().getGameCanvas().getWidth() / 2 - personagem.spriteAtual.pegaLargura() / 2);
+        this.personagem.setY(GameEngine.getInstance().getGameCanvas().getHeight() / 2 - personagem.spriteAtual.pegaAltura() / 2);
 
-        
-        
+
+
 
     }
 
@@ -62,44 +68,131 @@ public class Player extends ObjetoComMovimento {
         if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.ESQUERDA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.personagem.moveEsquerdaCima(7);
+            this.apertouEsquerdaCima = true;
+            this.offsetx += 7;
+            this.offsety += 7;
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveEsquerdaCima(7);
 
         } else if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.personagem.moveEsquerdaBaixo(7);
+            this.apertouEsquerdaBaixo = true;
+            this.offsetx += 7;
+            this.offsety -= 7;
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            //this.personagem.moveEsquerdaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.DIREITA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.personagem.moveDireitaCima(7);
+            this.apertouDireitaCima = true;
+            this.offsetx -= 7;
+            this.offsety += 7;
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveDireitaCima(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.DIREITA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.personagem.moveDireitaBaixo(7);
+            this.apertouDireitaBaixo = true;
+            this.offsetx -= 7;
+            this.offsety -= 7;
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveDireitaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D)) {
             this.personagem.direcao = Direcao.DIREITA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.personagem.moveDireita(5);
+            this.offsetx -= 10;
+            this.apertouDireita = true;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveDireita(5);
 
         } else if (teclado.keyDown(Keys.A)) {
             this.personagem.direcao = Direcao.ESQUERDA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.personagem.moveEsquerda(5);
+            this.offsetx += 10;
+            this.apertouEsquerda = true;
+            this.apertouDireita = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveEsquerda(5);
 
         } else if (teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.CIMA;
             this.personagem.spriteAtual = this.personagem.spriteUp;
-            this.personagem.moveCima(5);
+            this.offsety += 10;
+            this.apertouCima = true;
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveCima(5);
 
         } else if (teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteDown;
-            this.personagem.moveBaixo(5);
+            this.offsety -= 10;
+            this.apertouBaixo = true;
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
+            //this.personagem.moveBaixo(5);
 
+        } else {
+            this.apertouDireita = false;
+            this.apertouEsquerda = false;
+            this.apertouCima = false;
+            this.apertouBaixo = false;
+            this.apertouDireitaCima = false;
+            this.apertouDireitaBaixo = false;
+            this.apertouEsquerdaCima = false;
+            this.apertouEsquerdaBaixo = false;
         }
+
+
 
 
         Mouse mouse = GameEngine.getInstance().getMouse();
@@ -150,14 +243,14 @@ public class Player extends ObjetoComMovimento {
     public int getDestY() {
         return destY;
     }
-    
+
     @Override
-    public int getX(){
+    public int getX() {
         return this.personagem.getX();
     }
-    
+
     @Override
-    public int getY(){
+    public int getY() {
         return this.personagem.getY();
     }
 
@@ -168,7 +261,7 @@ public class Player extends ObjetoComMovimento {
     public int getYMouse() {
         return yMouse;
     }
-    
+
     public void setCampoDeVisao() {
         this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);
         switch (this.personagem.direcao) {
@@ -190,12 +283,11 @@ public class Player extends ObjetoComMovimento {
             case ESQUERDA_CIMA:
             //nao faz nada;
 
-                
+
         }
     }
 
     public Rectangle getCampoDeVisao() {
         return this.campoDeVisao;
     }
-    
 }

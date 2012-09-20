@@ -17,6 +17,7 @@ public class EarthQuake extends Ataque {
     int frame;
 
     public EarthQuake(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+        this.setContador(0);
         this.personagem = personagem;
         
         
@@ -25,7 +26,7 @@ public class EarthQuake extends Ataque {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         
         AudioPlayer.play("resources/sounds/Sound 1.wav");
@@ -49,12 +50,19 @@ public class EarthQuake extends Ataque {
         if (this.frame >= 4) {
             return;
         }
-
+        
         this.frameElapsed += 1;
         if (this.frameElapsed > 4) {
             this.frame++;
             this.sprite.setCurrAnimFrame(this.frame);
             this.frameElapsed -= 4;
+        }
+        
+        if (this.desativado) {
+            this.contadorDano++;
+        }
+        if(acertou == true){
+            this.contadorDano++;
         }
     }
 

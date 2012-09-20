@@ -100,22 +100,22 @@ public class Personagem extends ObjetoComMovimento {
         
           this.cooldownAtual --;
 
-        if (this.tocaParedeEsquerda()) {
-            this.x = 5;
-            this.velocidade = this.velocidadeInicial;
-        }
-        if (this.tocaParedeDireita()) {
-            this.x = 795 - this.spriteAtual.pegaLargura();
-            this.velocidade = this.velocidadeInicial;
-        }
-        if (this.tocaParedeCima()) {
-            this.y = 5;
-            this.velocidade = this.velocidadeInicial;
-        }
-        if (this.tocaParedeBaixo()) {
-            this.y = 694 - this.spriteAtual.pegaAltura();
-            this.velocidade = this.velocidadeInicial;
-        }
+//        if (this.tocaParedeEsquerda()) {
+//            this.x = 5;
+//            this.velocidade = this.velocidadeInicial;
+//        }
+//        if (this.tocaParedeDireita()) {
+//            this.x = 795 - this.spriteAtual.pegaLargura();
+//            this.velocidade = this.velocidadeInicial;
+//        }
+//        if (this.tocaParedeCima()) {
+//            this.y = 5;
+//            this.velocidade = this.velocidadeInicial;
+//        }
+//        if (this.tocaParedeBaixo()) {
+//            this.y = 694 - this.spriteAtual.pegaAltura();
+//            this.velocidade = this.velocidadeInicial;
+//        }
 
     }
 

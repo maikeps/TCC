@@ -15,12 +15,13 @@ public class WaterPulse extends Ataque {
 
     public WaterPulse(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
         
+        this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
-        this.setDano(a.getAtk());
+        this.setDanoBruto(a.getAtk());
         
         this.personagem = personagem;
         AudioPlayer.play("resources/sounds/Sound 1.wav");
@@ -54,6 +55,10 @@ public class WaterPulse extends Ataque {
             this.frame++;
             this.sprite.setCurrAnimFrame(this.frame);
             this.frameElapsed -= 4;
+        }
+        
+       if (this.desativado) {
+            this.contadorDano++;
         }
     }
 

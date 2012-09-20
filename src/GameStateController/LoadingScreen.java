@@ -124,6 +124,7 @@ public class LoadingScreen implements GameStateController {
             this.progresso++;
         }
 
+        /////////codigo do maike
 //////////////////        //carrega os ataques
 //////////////////        for (Ataque a : listaDeAtaques) {
 //////////////////            System.out.println("ataque: "+a.getNome());
@@ -135,6 +136,24 @@ public class LoadingScreen implements GameStateController {
 //////////////////            // CharacterSelect.pokemonImage.draw(g, 0, 0);
 //////////////////            this.progresso++;
 //////////////////        }
+
+        /*/carrega os ataques
+            codigo do macedo
+        for (Ataque a : listaDeAtaques) {
+            System.out.println("ataque: "+a.getNome());
+            try {
+                try{
+                  imgAtaque = new Imagem("resources/ataques/" + a.getNome() + "/" + a.getNome() + ".gif");
+                }finally{
+                  imgAtaque = new Imagem("resources/ataques/" + a.getNome() + "/" + a.getNome() + ".png");
+                }        
+            } catch (Exception ex) {
+                Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // CharacterSelect.pokemonImage.draw(g, 0, 0);
+            this.progresso++;
+        }
+*/
 
         //carrega a imagem do mainMenu
         try {

@@ -59,8 +59,43 @@ public class Inimigo extends ObjetoComMovimento {
 
     public void step(long timeElapsed) {
 
-        this.x = this.personagem.getX();
-        this.y = this.personagem.getY();
+//        this.x = this.personagem.getX() - this.player.offsetx;
+//        this.y = this.personagem.getY() - this.player.offsety;
+
+        // Cima e Baixo
+        if (player.apertouCima) {
+            this.personagem.moveBaixo(10);
+        }
+        if (player.apertouBaixo) {
+            this.personagem.moveCima(10);
+        }
+
+
+        // Direção para a direita
+        if (player.apertouDireita) {
+            this.personagem.moveEsquerda(10);
+        }
+        if (player.apertouDireitaBaixo) {
+            this.personagem.moveEsquerdaCima(10);
+        }
+        if (player.apertouDireitaCima) {
+            this.personagem.moveEsquerdaBaixo(10);
+        }
+
+        // Direção para a esquerda
+        if (player.apertouEsquerda) {
+            this.personagem.moveDireita(10);
+        }
+        if (player.apertouEsquerdaBaixo) {
+            this.personagem.moveDireitaCima(10);
+        }
+        if (player.apertouEsquerdaCima) {
+            this.personagem.moveDireitaBaixo(10);
+        }
+
+
+
+        //this.personagem.setY(this.personagem.getY() + this.player.offsety);
 
         this.direcao = this.personagem.getDirecao();
 
@@ -113,11 +148,11 @@ public class Inimigo extends ObjetoComMovimento {
         if (this.estado == EstadoInimigo.PERSEGUINDO) {
             // this.aproxima();
 //            this.ataca();
-            this.velocidade = 2;
+            this.velocidade = 8;
         }
         if (this.estado == EstadoInimigo.FUGINDO) {
             //this.afasta();
-            this.velocidade = 4;
+            this.velocidade = 8;
         }
 
 
@@ -134,6 +169,7 @@ public class Inimigo extends ObjetoComMovimento {
 
     public void draw(Graphics g) {
         this.personagem.draw(g);
+        g.drawString("" + this.player.offsetx, 500, 500);
     }
 
     public Direcao getDirecao() {
@@ -221,7 +257,7 @@ public class Inimigo extends ObjetoComMovimento {
         if (this.xPlayer > this.x && this.yPlayer > this.y && this.angulo <= 360.0 && this.angulo > 315.0) {
             quadranteDoPlayer = 8;
         }
-        
+
 
 
         switch (quadranteDoPlayer) {
