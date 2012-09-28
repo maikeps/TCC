@@ -42,7 +42,7 @@ public class Player extends ObjetoComMovimento {
     public boolean apertouEsquerdaBaixo;
     int velocidade = 5;
 
-    public Player(Personagem personagem) {
+    public Player(Personagem personagem, int xSpawn, int ySpawn) {
 
 
         this.destX = 0;
@@ -53,17 +53,17 @@ public class Player extends ObjetoComMovimento {
 
         this.personagem.setDirecao(Direcao.DIREITA);
 
-        this.personagem.setX(GameEngine.getInstance().getGameCanvas().getWidth() / 2 - personagem.spriteAtual.pegaLargura() / 2);
-        this.personagem.setY(GameEngine.getInstance().getGameCanvas().getHeight() / 2 - personagem.spriteAtual.pegaAltura() / 2);
+        this.personagem.setX((GameEngine.getInstance().getGameCanvas().getWidth() / 2 - personagem.spriteAtual.pegaLargura() / 2)+xSpawn);
+        this.personagem.setY((GameEngine.getInstance().getGameCanvas().getHeight() / 2 - personagem.spriteAtual.pegaAltura() / 2)+ySpawn);
 
 
-
+        this.offsetx = -xSpawn;
+        this.offsety = -ySpawn;
 
     }
 
     public void step(long timeElapsed) {
         personagem.step(timeElapsed);
-        
         
           // Cima e Baixo
 ////////        if (this.apertouCima) {
@@ -255,8 +255,6 @@ public class Player extends ObjetoComMovimento {
 
         if (mouse.isLeftButtonPressed()) {
             ponto = new Point(mouse.getMousePos());
-           // System.out.println((ponto.x+this.offsetx)+" - "+(ponto.y+this.offsety));
-            System.out.println(this.personagem.getX()+" - "+this.personagem.getY());
             this.destX = ponto.x;
             this.destY = ponto.y;
           //  this.destX = this.xMouse+this.offsetx;

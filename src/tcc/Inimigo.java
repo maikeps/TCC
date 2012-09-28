@@ -157,11 +157,11 @@ public class Inimigo extends ObjetoComMovimento {
         if (this.estado == EstadoInimigo.PERSEGUINDO) {
             // this.aproxima();
 //            this.ataca();
-            this.velocidade = 7;
+            this.velocidade = 4;
         }
         if (this.estado == EstadoInimigo.FUGINDO) {
             //this.afasta();
-            this.velocidade = 7;
+            this.velocidade = 4;
         }
 
 
