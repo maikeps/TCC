@@ -813,7 +813,7 @@ public class Fase1 implements GameStateController {
         }
     }
 
-    public void desenhaLinhaAteInimigoMaisPerto(Graphics g) {
+    public void desenhaLinhaAteInimigoMaisPerto(Graphics g)     {
         int xPlayer = this.player.personagem.getX();
         int yPlayer = this.player.personagem.getY();
         int xInimigo = this.inimigoMaisPerto.personagem.getX();
@@ -828,7 +828,7 @@ public class Fase1 implements GameStateController {
         } else if (angulo > 45 && angulo <= 135) { //cima
             g.fillRect(xPlayer, yPlayer-300, 25, 25);
         } else if (angulo > 135 && angulo <= 225) { //esquerda
-            g.fillRect(xPlayer-400, yPlayer, 25, 25);
+            g.fillRect(xPlayer-100, yPlayer, 25, 25);
         } else if (angulo > 225 && angulo <= 315) { //baixo
             g.fillRect(xPlayer, 300+yPlayer, 25, 25);
         }

@@ -113,14 +113,6 @@ public class Player extends ObjetoComMovimento {
             this.offsetx += i;
             this.offsety += i;
             this.personagem.moveEsquerdaCima(this.velocidade);
-//            this.apertouDireita = false;
-//            this.apertouEsquerda = false;
-//            this.apertouCima = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaBaixo = false;
-            //this.personagem.moveEsquerdaCima(7);
 
         } else if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
@@ -130,14 +122,6 @@ public class Player extends ObjetoComMovimento {
             this.offsetx += i;
             this.offsety -= i;
             this.personagem.moveEsquerdaBaixo(this.velocidade);
-//            this.apertouDireita = false;
-//            this.apertouEsquerda = false;
-//            this.apertouCima = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaCima = false;
-            //this.personagem.moveEsquerdaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.DIREITA_CIMA;
@@ -147,14 +131,6 @@ public class Player extends ObjetoComMovimento {
             int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
             this.offsetx -= i;
             this.offsety += i;
-//            this.apertouDireita = false;
-//            this.apertouEsquerda = false;
-//            this.apertouCima = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaCima = false;
-//            this.apertouEsquerdaBaixo = false;
-            //this.personagem.moveDireitaCima(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.DIREITA_BAIXO;
@@ -164,74 +140,30 @@ public class Player extends ObjetoComMovimento {
             this.offsetx -= i;
             this.offsety -= i;
             this.personagem.moveDireitaBaixo(this.velocidade);
-//            this.apertouDireita = false;
-//            this.apertouEsquerda = false;
-//            this.apertouCima = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouEsquerdaCima = false;
-//            this.apertouEsquerdaBaixo = false;
-            //this.personagem.moveDireitaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D)) {
             this.personagem.direcao = Direcao.DIREITA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
             this.offsetx -= this.velocidade;
             this.personagem.moveDireita(this.velocidade);
-//            this.apertouDireita = true;
-//            this.apertouEsquerda = false;
-//            this.apertouCima = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaCima = false;
-//            this.apertouEsquerdaBaixo = false;
-            //this.personagem.moveDireita(5);
 
         } else if (teclado.keyDown(Keys.A)) {
             this.personagem.direcao = Direcao.ESQUERDA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
             this.offsetx += this.velocidade;
             this.personagem.moveEsquerda(this.velocidade);
-//            this.apertouEsquerda = true;
-//            this.apertouDireita = false;
-//            this.apertouCima = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaCima = false;
-//            this.apertouEsquerdaBaixo = false;
-            //this.personagem.moveEsquerda(5);
 
         } else if (teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.CIMA;
             this.personagem.spriteAtual = this.personagem.spriteUp;
             this.offsety += this.velocidade;
-//            this.apertouCima = true;
-//            this.apertouDireita = false;
-//            this.apertouEsquerda = false;
-//            this.apertouBaixo = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaCima = false;
-//            this.apertouEsquerdaBaixo = false;
             this.personagem.moveCima(this.velocidade);
-            //this.personagem.moveCima(5);
 
         } else if (teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteDown;
             this.offsety -= this.velocidade;
-//            this.apertouBaixo = true;
-//            this.apertouDireita = false;
-//            this.apertouEsquerda = false;
-//            this.apertouCima = false;
-//            this.apertouDireitaCima = false;
-//            this.apertouDireitaBaixo = false;
-//            this.apertouEsquerdaCima = false;
-//            this.apertouEsquerdaBaixo = false;
             this.personagem.moveBaixo(this.velocidade);
-            //this.personagem.moveBaixo(5);
 
         } else {
             this.apertouDireita = false;

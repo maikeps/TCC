@@ -32,3 +32,6 @@
 
 20/09
 -Sistema de navegacao no mapa corrigido
+
+27/09
+-Geracao de mapa aprimorado
