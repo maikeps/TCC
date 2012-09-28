@@ -29,7 +29,7 @@ public class PerlinNoise2D {
     public static void main(String[] args) {
         System.out.println("Started.");
         int size = 128; // tamanho da imagem (1024x1024)
-        PerlinNoise2D pn2d = new PerlinNoise2D(size, 0.4f, 1, 20000f, new Random());
+        PerlinNoise2D pn2d = new PerlinNoise2D(size, 0.2f, 5, 20000f, new Random());
         float[][] vals = pn2d.get();//retorna os valores do noise
         BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -96,8 +96,8 @@ public class PerlinNoise2D {
     }
 
     public PerlinNoise2D(int size, float roughness, float varyation, float seed, Random rand) {
-        this.roughness = roughness;
-        this.varyation = varyation;
+        this.roughness = roughness; //frequencia?
+        this.varyation = varyation; //amplitude?
         this.rand = rand;
 
         int realsize = 1;

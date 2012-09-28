@@ -54,7 +54,6 @@ public class Fase1 implements GameStateController {
     Font f;
     Inimigo inimigoMaisPerto;
     double distanciaAteOInimigoMaisPerto = 9999;
-    Scene cenario;
     CenarioComColisao cenarioColisao;
     
     public Fase1(CharacterSelect CharSelect) {
@@ -65,34 +64,17 @@ public class Fase1 implements GameStateController {
         this.ataquesPlayer = new ArrayList<Ataque>();
         this.ataquesInimigo = new ArrayList<Ataque>();
         this.inimigo = new ArrayList<Inimigo>();
-        this.cenario = new Scene();
-        
-////        try {
-////            cenario.loadFromFile("resources/texto.txt");
-////        } catch (InterruptedException ex) {
-////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-////        } catch (FileNotFoundException ex) {
-////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-////        } catch (IOException ex) {
-////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-////        } catch (Exception ex) {
-////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-////        }
 
-        try {
-            this.cenarioColisao = new CenarioComColisao("resources/texto.txt");
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
         //this.cenarioColisao.adicionaObjeto(this.player);
-        for(Inimigo inimigo : this.inimigo){
-           this.cenarioColisao.adicionaObjeto(inimigo);            
-        }
+        
+
     }
 
     public void step(long timeElapsed) {
 
+        System.out.println(this.player.personagem.getPontoMin() + " - " + this.player.personagem.getPontoMax());
+        
         this.verificaInimigoMaisPerto();
 
 //        //this.xMouse = this.player.getPersonagem().xMouse;
@@ -136,10 +118,10 @@ public class Fase1 implements GameStateController {
 
         this.verificaColisao();
         
-        System.out.println(this.player.personagem.getPontoMin()+" - "+this.player.personagem.getPontoMax());
-        
-        if(this.cenarioColisao.temColisaoComTile(this.player.personagem, 2)){
-             System.exit(1);
+        System.out.println();
+       
+        if(this.cenarioColisao.temColisaoComTile(this.player.personagem, 3)){
+            
         }
         this.cenarioColisao.step(timeElapsed);
         
@@ -153,8 +135,10 @@ public class Fase1 implements GameStateController {
 
         g.fillRect(0, 0, GameEngine.getInstance().getGameCanvas().getWidth(), GameEngine.getInstance().getGameCanvas().getHeight());
 
+
         //cenario.draw(g, player.offsetx, player.offsety);
         cenarioColisao.draw(g, player.offsetx, player.offsety);
+
 
         //cria fonte
         try {
@@ -170,10 +154,10 @@ public class Fase1 implements GameStateController {
         }
 
         //desenha os personagens e os ataques
-        this.player.draw(g);
         for (Inimigo inimigo : this.inimigo) {
             inimigo.draw(g);
         }
+        this.player.draw(g);
 
         for (Ataque a : this.ataquesPlayer) {
             a.draw(g);
@@ -210,20 +194,35 @@ public class Fase1 implements GameStateController {
             }
         }
         for (int i = 0; i < this.inimigo.size(); i++) {
-            double dist = this.inimigo.get(i).calculaDistanciaAtePlayer(this.player.personagem.getX(), this.player.personagem.getY());
-            g.drawString("distancia: " + dist, 100, 100 + 50 * i);
+            double dist = this.inimigo.get(i).calculaDistanciaAtePonto(this.player.personagem.getX(), this.player.personagem.getY());
+            //g.drawString("distancia: " + dist, 100, 100 + 50 * i);
+            g.drawString("destX: " + this.inimigo.get(i).getDistanciaX(), 100, 100 + 50 * i);
         }
+        g.drawString("xPlayer:" + this.player.personagem.getX(), 500, 500);
 
+        this.desenhaLinhaAteInimigoMaisPerto(g);
     }
 
     public void start() {
+        
         this.carregaMapa();
 
-        this.criaPlayer1();
+        this.criaPlayer1(1000, 1000);
         //cria 2 inimigos
-        for (int i = 1; i <= 2; i++) {
+        int rand = util.Util.random(45) + 1;
+        rand += 15; //minimo 15, max 60 inimigos
+        for (int i = 1; i <= rand; i++) {
             this.criaInimigo(this.CharSelect.getInimigo());
             this.CharSelect.sorteiaInimigo();
+        }
+        this.verificaInimigoMaisPerto();
+
+       
+       // this.cenarioColisao.adicionaObjeto(this.player);
+        
+        for(Inimigo inimigo : this.inimigo){
+           System.out.println(inimigo.personagem.getNome());
+            this.cenarioColisao.adicionaObjeto(inimigo);            
         }
     }
 
@@ -329,7 +328,7 @@ public class Fase1 implements GameStateController {
         }
     }
 
-    public void criaPlayer1() {
+    public void criaPlayer1(int xSpawn, int ySpawn) {
 
         PokemonLiberado pokemon = PokemonLiberadoDAO.getPokemonPeloNome(CharSelect.getPlayer1());
         Pokemon poke = PokemonDAO.getPokemonPeloNome(CharSelect.getPlayer1());
@@ -365,7 +364,7 @@ public class Fase1 implements GameStateController {
 
         this.p = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
-        this.player = new Player(this.p);
+        this.player = new Player(this.p, xSpawn, ySpawn);
 
 
 
@@ -398,7 +397,9 @@ public class Fase1 implements GameStateController {
 
         this.p2 = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
-        Inimigo inimigo = new Inimigo(this.p2, this.player);
+        int x = util.Util.random(this.cenarioColisao.getScene().getWidth());
+        int y = util.Util.random(this.cenarioColisao.getScene().getHeight());
+        Inimigo inimigo = new Inimigo(this.p2, this.player, x, y);
         this.inimigoMaisPerto = inimigo;
         this.inimigo.add(inimigo);
     }
@@ -425,24 +426,24 @@ public class Fase1 implements GameStateController {
 //////        
 
         g.setColor(Color.white);
-        g.drawString("LVL " + lvl, 98, 568);
-        g.drawString("" + this.CharSelect.getPlayer1(), 98, 588);
-        g.fillRect(98, 598, hpInicial + 4, 24);
+        g.drawString("LVL " + lvl, 98 - this.player.offsetx, 568 - this.player.offsety);
+        g.drawString("" + this.CharSelect.getPlayer1(), 98 - this.player.offsetx, 588 - this.player.offsety);
+        g.fillRect(98 - this.player.offsetx, 598 - this.player.offsety, hpInicial + 4, 24);
         g.setColor(Color.green);
-        g.fillRect(100, 600, hp, 20);
-        g.drawString("HP: " + hp + "/" + hpInicial, 100, 650);
+        g.fillRect(100 - this.player.offsetx, 600 - this.player.offsety, hp, 20);
+        g.drawString("HP: " + hp + "/" + hpInicial, 100 - this.player.offsetx, 650 - this.player.offsety);
 
         // HealthBar do inimigo
         int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
         int hpInimigo = this.inimigoMaisPerto.getHp();
         int lvlInimigo = player.getPersonagem().getLvl();
         g.setColor(Color.white);
-        g.drawString("LVL " + lvlInimigo, 598, 68);
-        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 598, 88);
-        g.fillRect(598, 98, hpInicialInimigo + 4, 24);
+        g.drawString("LVL " + lvlInimigo, 598 - this.player.offsetx, 68 - this.player.offsety);
+        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 598 - this.player.offsetx, 88 - this.player.offsety);
+        g.fillRect(598 - this.player.offsetx, 98 - this.player.offsety, hpInicialInimigo + 4, 24);
         g.setColor(Color.green);
-        g.fillRect(600, 100, hpInimigo, 20);
-        g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600, 150);
+        g.fillRect(600 - this.player.offsetx, 100 - this.player.offsety, hpInimigo, 20);
+        g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600 - this.player.offsetx, 150 - this.player.offsety);
     }
 
     //o problema esta na imagem do ataque, por que se fizer colisao de player com inimigo funciona
@@ -642,8 +643,11 @@ public class Fase1 implements GameStateController {
                 if (exp >= expProxLvlPlayer) {
                     sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
                     bool = banco.executaUpdate(sql);
-                    this.criaPlayer1();
-                    
+
+                    int x = this.player.personagem.getX();
+                    int y = this.player.personagem.getY();
+                    this.criaPlayer1(x, y);
+
                 }
 
                 //}
@@ -718,7 +722,7 @@ public class Fase1 implements GameStateController {
         //se o pokemon foi liberado, muda o nome do player para o novo pokemon
         if (procuraPokeLiberado.getNome() != null) {
             this.CharSelect.setPlayer1(procuraPokeLiberado.getNome());
-            this.criaPlayer1();
+            this.criaPlayer1(this.player.personagem.getX(), this.player.personagem.getY());
         } else {
             //senao, faz o insert no banco para liberar o pokemon
             //futuramente aumentar o contador na tabela pokemonDerrotadoa
@@ -734,7 +738,7 @@ public class Fase1 implements GameStateController {
             System.out.println(sql);
             boolean bool = banco.executaInsert(sql);
             this.CharSelect.setPlayer1(pokeASerLiberado.getNome());
-            this.criaPlayer1();
+            this.criaPlayer1(this.player.personagem.getX(), this.player.personagem.getY());
 
         }
 
@@ -771,7 +775,7 @@ public class Fase1 implements GameStateController {
     public void carregaMapa() {
         System.out.println("Started.");
         int size = 128; // tamanho da imagem (1024x1024)
-        PerlinNoise2D pn2d = new PerlinNoise2D(size, 0.4f, 1, 20000f, new Random());
+        PerlinNoise2D pn2d = new PerlinNoise2D(size, 0.2f, 5, 20000f, new Random());
         float[][] vals = pn2d.get();//retorna os valores do noise
         BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -797,7 +801,7 @@ public class Fase1 implements GameStateController {
             }
         }
         try {
-            PerlinNoise2D.limpaTxt(new File("texto.txt"));
+            PerlinNoise2D.limpaTxt(new File("resources/texto.txt"));
         } catch (IOException ex) {
             Logger.getLogger(PerlinNoise2D.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -807,7 +811,7 @@ public class Fase1 implements GameStateController {
         a[1] = "resources/tiles/tiles avulsos/grass.png";
         a[2] = "resources/tiles/tiles avulsos/water.png";
         a[3] = "resources/tiles/tiles avulsos/jungle_grass.png";
-        PerlinNoise2D.saveTxtTeste(new File("texto.txt"), a, true);
+        PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), a, true);
 
         PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), sArray, true);
         try {
@@ -816,5 +820,39 @@ public class Fase1 implements GameStateController {
             e.printStackTrace();
         }
         System.out.println("Finished.");
+        
+        
+        try {
+            this.cenarioColisao = new CenarioComColisao("resources/texto.txt");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        
+       
+    }
+
+    public void desenhaLinhaAteInimigoMaisPerto(Graphics g) {
+        int xPlayer = this.player.personagem.getX();
+        int yPlayer = this.player.personagem.getY();
+        int xInimigo = this.inimigoMaisPerto.personagem.getX();
+        int yInimigo = this.inimigoMaisPerto.personagem.getY();
+
+        g.setColor(Color.YELLOW);
+        g.drawLine(xPlayer, yPlayer, xInimigo, yInimigo);
+
+        double angulo = util.Util.calculaAngulo(xInimigo, xPlayer, yInimigo, yPlayer);
+        if (angulo > 315 && angulo <= 45) { //direita
+            g.fillRect(400+xPlayer, yPlayer, 25, 25);
+        } else if (angulo > 45 && angulo <= 135) { //cima
+            g.fillRect(xPlayer, yPlayer-300, 25, 25);
+        } else if (angulo > 135 && angulo <= 225) { //esquerda
+            g.fillRect(xPlayer-400, yPlayer, 25, 25);
+        } else if (angulo > 225 && angulo <= 315) { //baixo
+            g.fillRect(xPlayer, 300+yPlayer, 25, 25);
+        }
+
+
     }
 }

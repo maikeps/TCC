@@ -40,8 +40,9 @@ public class Player extends ObjetoComMovimento {
     public boolean apertouDireitaBaixo;
     public boolean apertouEsquerdaCima;
     public boolean apertouEsquerdaBaixo;
+    int velocidade = 5;
 
-    public Player(Personagem personagem) {
+    public Player(Personagem personagem, int xSpawn, int ySpawn) {
 
 
         this.destX = 0;
@@ -52,16 +53,55 @@ public class Player extends ObjetoComMovimento {
 
         this.personagem.setDirecao(Direcao.DIREITA);
 
-        this.personagem.setX(GameEngine.getInstance().getGameCanvas().getWidth() / 2 - personagem.spriteAtual.pegaLargura() / 2);
-        this.personagem.setY(GameEngine.getInstance().getGameCanvas().getHeight() / 2 - personagem.spriteAtual.pegaAltura() / 2);
+        this.personagem.setX((GameEngine.getInstance().getGameCanvas().getWidth() / 2 - personagem.spriteAtual.pegaLargura() / 2)+xSpawn);
+        this.personagem.setY((GameEngine.getInstance().getGameCanvas().getHeight() / 2 - personagem.spriteAtual.pegaAltura() / 2)+ySpawn);
 
 
-
+        this.offsetx = -xSpawn;
+        this.offsety = -ySpawn;
 
     }
 
     public void step(long timeElapsed) {
         personagem.step(timeElapsed);
+        
+          // Cima e Baixo
+////////        if (this.apertouCima) {
+//////////            this.personagem.moveCima(10);
+////////        }
+////////        if (this.apertouBaixo) {
+////////            this.personagem.moveBaixo(10);
+////////        }
+////////
+////////
+////////        // Direção para a direita
+////////        if (this.apertouDireita) {
+////////            this.personagem.moveDireita(10);
+////////        }
+////////        if (this.apertouDireitaBaixo) {
+////////            this.personagem.moveDireitaBaixo(10);
+////////        }
+////////        if (this.apertouDireitaCima) {
+////////            this.personagem.moveDireitaCima(10);
+////////        }
+////////
+////////        // Direção para a esquerda
+////////        if (this.apertouEsquerda) {
+////////            this.personagem.moveEsquerda(10);
+////////        }
+////////        if (this.apertouEsquerdaBaixo) {
+////////            this.personagem.moveEsquerdaBaixo(10);
+////////        }
+////////        if (this.apertouEsquerdaCima) {
+////////            this.personagem.moveEsquerdaCima(10);
+////////        }
+////////        
+////////        
+        
+        
+        
+        
+        
 
         Keyboard teclado = GameEngine.getInstance().getKeyboard();
 
@@ -69,116 +109,134 @@ public class Player extends ObjetoComMovimento {
             this.personagem.direcao = Direcao.ESQUERDA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
             this.apertouEsquerdaCima = true;
-            this.offsetx += 10;
-            this.offsety += 10;
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaBaixo = false;
+
+            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
+            this.offsetx += i;
+            this.offsety += i;
+            this.personagem.moveEsquerdaCima(this.velocidade);
+//            this.apertouDireita = false;
+//            this.apertouEsquerda = false;
+//            this.apertouCima = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaBaixo = false;
+
             //this.personagem.moveEsquerdaCima(7);
 
         } else if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
             this.apertouEsquerdaBaixo = true;
-            this.offsetx += 10;
-            this.offsety -= 10;
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
+
+            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
+            this.offsetx += i;
+            this.offsety -= i;
+            this.personagem.moveEsquerdaBaixo(this.velocidade);
+//            this.apertouDireita = false;
+//            this.apertouEsquerda = false;
+//            this.apertouCima = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaCima = false;
+
             //this.personagem.moveEsquerdaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.DIREITA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
             this.apertouDireitaCima = true;
-            this.offsetx -= 7;
-            this.offsety += 7;
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+            this.personagem.moveDireitaCima(this.velocidade);
+            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
+            this.offsetx -= i;
+            this.offsety += i;
+//            this.apertouDireita = false;
+//            this.apertouEsquerda = false;
+//            this.apertouCima = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaCima = false;
+//            this.apertouEsquerdaBaixo = false;
             //this.personagem.moveDireitaCima(7);
 
         } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.DIREITA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteRight;
             this.apertouDireitaBaixo = true;
-            this.offsetx -= 50;
-            this.offsety -= 50;
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+
+            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
+            this.offsetx -= i;
+            this.offsety -= i;
+            this.personagem.moveDireitaBaixo(this.velocidade);
+//            this.apertouDireita = false;
+//            this.apertouEsquerda = false;
+//            this.apertouCima = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouEsquerdaCima = false;
+//            this.apertouEsquerdaBaixo = false;
+
             //this.personagem.moveDireitaBaixo(7);
 
         } else if (teclado.keyDown(Keys.D)) {
             this.personagem.direcao = Direcao.DIREITA;
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.offsetx -= 10;
-            this.apertouDireita = true;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+            this.offsetx -= this.velocidade;
+            this.personagem.moveDireita(this.velocidade);
+//            this.apertouDireita = true;
+//            this.apertouEsquerda = false;
+//            this.apertouCima = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaCima = false;
+//            this.apertouEsquerdaBaixo = false;
             //this.personagem.moveDireita(5);
 
         } else if (teclado.keyDown(Keys.A)) {
             this.personagem.direcao = Direcao.ESQUERDA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.offsetx += 10;
-            this.apertouEsquerda = true;
-            this.apertouDireita = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+            this.offsetx += this.velocidade;
+            this.personagem.moveEsquerda(this.velocidade);
+//            this.apertouEsquerda = true;
+//            this.apertouDireita = false;
+//            this.apertouCima = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaCima = false;
+//            this.apertouEsquerdaBaixo = false;
             //this.personagem.moveEsquerda(5);
 
         } else if (teclado.keyDown(Keys.W)) {
             this.personagem.direcao = Direcao.CIMA;
             this.personagem.spriteAtual = this.personagem.spriteUp;
-            this.offsety += 10;
-            this.apertouCima = true;
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+            this.offsety += this.velocidade;
+//            this.apertouCima = true;
+//            this.apertouDireita = false;
+//            this.apertouEsquerda = false;
+//            this.apertouBaixo = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaCima = false;
+//            this.apertouEsquerdaBaixo = false;
+            this.personagem.moveCima(this.velocidade);
             //this.personagem.moveCima(5);
 
         } else if (teclado.keyDown(Keys.S)) {
             this.personagem.direcao = Direcao.BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteDown;
-            this.offsety -= 10;
-            this.apertouBaixo = true;
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+            this.offsety -= this.velocidade;
+//            this.apertouBaixo = true;
+//            this.apertouDireita = false;
+//            this.apertouEsquerda = false;
+//            this.apertouCima = false;
+//            this.apertouDireitaCima = false;
+//            this.apertouDireitaBaixo = false;
+//            this.apertouEsquerdaCima = false;
+//            this.apertouEsquerdaBaixo = false;
+            this.personagem.moveBaixo(this.velocidade);
             //this.personagem.moveBaixo(5);
 
         } else {
@@ -203,11 +261,12 @@ public class Player extends ObjetoComMovimento {
 
         if (mouse.isLeftButtonPressed()) {
             ponto = new Point(mouse.getMousePos());
-////            this.destX = ponto.x;
-////            this.destY = ponto.y;
-            this.destX = this.xMouse;
-            this.destY = this.yMouse;
-            this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
+            this.destX = ponto.x;
+            this.destY = ponto.y;
+          //  this.destX = this.xMouse+this.offsetx;
+          //  this.destY = this.yMouse+this.offsety;
+           // this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
+            this.angulo = util.Util.calculaAngulo(destX, GameEngine.getInstance().getGameCanvas().getWidth()/2, destY, GameEngine.getInstance().getGameCanvas().getHeight()/2);
             this.atacou = true;
         }
     }

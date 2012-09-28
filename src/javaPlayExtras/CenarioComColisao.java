@@ -16,9 +16,10 @@ import tcc.ObjetoComMovimento;
 public class CenarioComColisao {
 
     private Scene scene;
-
+    
     private ArrayList<ObjetoComMovimento> objetosMovimento;
 
+    
     public CenarioComColisao(String sceneFile) throws FileNotFoundException {
         this.scene = new Scene();
 
@@ -35,6 +36,10 @@ public class CenarioComColisao {
         this.objetosMovimento = new ArrayList<ObjetoComMovimento>();
     }
 
+    public Scene getScene(){
+           return scene;
+    }
+    
     public void adicionaObjeto(ObjetoComMovimento obj) {
         this.objetosMovimento.add(obj);
     }
@@ -63,7 +68,7 @@ public class CenarioComColisao {
         }
         return false;
     }
-
+    
     private void drawDebug(Graphics g){
         for (ObjetoComMovimento obj : this.objetosMovimento) {
             Point objMin = new Point(obj.getX(), obj.getY());

@@ -29,3 +29,6 @@
 
 19/09
 -Sistema de mapa aleatorio funcionando, falta implementar no sistema.(Peguei pronto da internet, apenas adaptei)
+
+20/09
+-Sistema de navegacao no mapa corrigido
