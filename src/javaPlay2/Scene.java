@@ -4,6 +4,7 @@
 
 package javaPlay2;
 
+import Personagens.Personagem;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -238,4 +239,6 @@ public class Scene
             element.step(timeElapsed);
         }
     }
+
+   
 }

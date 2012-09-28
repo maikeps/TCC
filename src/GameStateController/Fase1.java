@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 import javaPlay2.GameEngine;
 import javaPlay2.GameStateController;
 import javaPlay2.Scene;
+import javaPlayExtras.CenarioComColisao;
 import javaPlayExtras.PerlinNoise2D;
 import javax.swing.JOptionPane;
 import tcc.Inimigo;
@@ -54,7 +55,8 @@ public class Fase1 implements GameStateController {
     Inimigo inimigoMaisPerto;
     double distanciaAteOInimigoMaisPerto = 9999;
     Scene cenario;
-
+    CenarioComColisao cenarioColisao;
+    
     public Fase1(CharacterSelect CharSelect) {
         this.CharSelect = CharSelect;
     }
@@ -64,16 +66,28 @@ public class Fase1 implements GameStateController {
         this.ataquesInimigo = new ArrayList<Ataque>();
         this.inimigo = new ArrayList<Inimigo>();
         this.cenario = new Scene();
+        
+////        try {
+////            cenario.loadFromFile("resources/texto.txt");
+////        } catch (InterruptedException ex) {
+////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+////        } catch (FileNotFoundException ex) {
+////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+////        } catch (IOException ex) {
+////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+////        } catch (Exception ex) {
+////            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+////        }
+
         try {
-            cenario.loadFromFile("resources/texto.txt");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+            this.cenarioColisao = new CenarioComColisao("resources/texto.txt");
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //this.cenarioColisao.adicionaObjeto(this.player);
+        for(Inimigo inimigo : this.inimigo){
+           this.cenarioColisao.adicionaObjeto(inimigo);            
         }
     }
 
@@ -121,9 +135,17 @@ public class Fase1 implements GameStateController {
         }
 
         this.verificaColisao();
-        cenario.step(timeElapsed);
+        
+        System.out.println(this.player.personagem.getPontoMin()+" - "+this.player.personagem.getPontoMax());
+        
+        if(this.cenarioColisao.temColisaoComTile(this.player.personagem, 2)){
+             System.exit(1);
+        }
+        this.cenarioColisao.step(timeElapsed);
+        
+        //cenario.step(timeElapsed);
 
-
+       
 
     }
 
@@ -131,8 +153,8 @@ public class Fase1 implements GameStateController {
 
         g.fillRect(0, 0, GameEngine.getInstance().getGameCanvas().getWidth(), GameEngine.getInstance().getGameCanvas().getHeight());
 
-        cenario.draw(g, player.offsetx, player.offsety);
-
+        //cenario.draw(g, player.offsetx, player.offsety);
+        cenarioColisao.draw(g, player.offsetx, player.offsety);
 
         //cria fonte
         try {
@@ -621,6 +643,7 @@ public class Fase1 implements GameStateController {
                     sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
                     bool = banco.executaUpdate(sql);
                     this.criaPlayer1();
+                    
                 }
 
                 //}

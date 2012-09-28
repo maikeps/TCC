@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javaPlay2.Scene;
 import javaPlay2.TileInfo;
+import tcc.ObjetoComMovimento;
 
 
 
@@ -15,7 +16,8 @@ import javaPlay2.TileInfo;
 public class CenarioComColisao {
 
     private Scene scene;
-    private ArrayList<ObjetoComGravidade> objetos;
+
+    private ArrayList<ObjetoComMovimento> objetosMovimento;
 
     public CenarioComColisao(String sceneFile) throws FileNotFoundException {
         this.scene = new Scene();
@@ -30,25 +32,29 @@ public class CenarioComColisao {
             System.out.println(ex.getMessage());
         }
 
-        this.objetos = new ArrayList<ObjetoComGravidade>();
+        this.objetosMovimento = new ArrayList<ObjetoComMovimento>();
     }
 
-    public void adicionaObjeto(ObjetoComGravidade obj) {
-        this.objetos.add(obj);
+    public void adicionaObjeto(ObjetoComMovimento obj) {
+        this.objetosMovimento.add(obj);
     }
 
     public void step(long timeElapsed) {
-        for (ObjetoComGravidade obj : this.objetos) {
+       
+        for (ObjetoComMovimento obj : this.objetosMovimento) {
+            if(obj.getAltura() !=0){
+            System.out.println("fgg");
+            }
             this.verificaColisao(obj);
         }
     }
 
-    public void draw(Graphics g) {
-        this.scene.draw(g);     
+    public void draw(Graphics g, int offsetx , int offsety) {
+        this.scene.draw(g,offsetx,offsety);     
         //this.drawDebug(g);
     }
 
-    public boolean temColisaoComTile(ObjetoComGravidade obj, int idTile){
+    public boolean temColisaoComTile(ObjetoComMovimento obj, int idTile){
         ArrayList<TileInfo> tiles = this.scene.getTilesFromRect(obj.getPontoMin(), obj.getPontoMax());
         for (TileInfo tile : tiles) {
             if ((tile.id == idTile) && obj.temColisao(tile.getRetangle())) {
@@ -59,7 +65,7 @@ public class CenarioComColisao {
     }
 
     private void drawDebug(Graphics g){
-        for (ObjetoComGravidade obj : this.objetos) {
+        for (ObjetoComMovimento obj : this.objetosMovimento) {
             Point objMin = new Point(obj.getX(), obj.getY());
             Point objMax = new Point(obj.getX() + obj.getLargura() - 1, obj.getY() + obj.getAltura() - 1);
 
@@ -77,10 +83,12 @@ public class CenarioComColisao {
         }
     }
 
-    private void verificaColisao(ObjetoComGravidade obj) {
+    private void verificaColisao(ObjetoComMovimento obj) {
         //Considera que não existe bloco abaixo
-        obj.saiuChao();
 
+    if(this.scene == null){
+        System.exit(1);
+    }
         ArrayList<TileInfo> tiles = this.scene.getTilesFromRect(obj.getPontoMin(), obj.getPontoMax());
         DirecaoColisao direcao = null;
 
@@ -92,7 +100,7 @@ public class CenarioComColisao {
         }                
     }
 
-    private DirecaoColisao pegaDirecaoColisao(ObjetoComGravidade obj, TileInfo tile) {
+    private DirecaoColisao pegaDirecaoColisao(ObjetoComMovimento obj, TileInfo tile) {
         /**
          * Para calcular  de ond evem a direção
          * verifica-se quais o ponto do Tile mais próximo do ponto central do objeto.
@@ -124,7 +132,7 @@ public class CenarioComColisao {
         //Caso especial quando o objeto
         //por causa da força da gravidade
         //atravessa todo o tile.
-        if (obj.getY() < tile.getCentralY() && obj.getMaxY() > tile.max.y && obj.getPontoCentral().x > tile.min.x && obj.getPontoCentral().x < tile.max.x && !obj.estaSubindo()) {
+        if (obj.getY() < tile.getCentralY() && obj.getMaxY() > tile.max.y && obj.getPontoCentral().x > tile.min.x && obj.getPontoCentral().x < tile.max.x ) {
             direcao = DirecaoColisao.CIMA_PARA_BAIXO;
         }
 
@@ -138,17 +146,14 @@ public class CenarioComColisao {
         return distance;
     }
 
-    private void realizaColisao(ObjetoComGravidade obj, TileInfo tile, DirecaoColisao direcao) {
+    private void realizaColisao(ObjetoComMovimento obj, TileInfo tile, DirecaoColisao direcao) {
         switch (direcao) {
             case CIMA_PARA_BAIXO:
                 obj.setY(tile.min.y - obj.getAltura());
-                if ( obj.estaDescendo() ) {
-                    obj.chegouChao();
-                }
                 break;
             case BAIXO_PARA_CIMA:
                 obj.setY(tile.max.y);
-                obj.paraSubida();
+               
                 break;
             case ESQUERDA_PARA_DIREITA:                
                 obj.setX(tile.min.x - obj.getLargura());

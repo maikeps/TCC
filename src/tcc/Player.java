@@ -69,8 +69,8 @@ public class Player extends ObjetoComMovimento {
             this.personagem.direcao = Direcao.ESQUERDA_CIMA;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
             this.apertouEsquerdaCima = true;
-            this.offsetx += 7;
-            this.offsety += 7;
+            this.offsetx += 10;
+            this.offsety += 10;
             this.apertouDireita = false;
             this.apertouEsquerda = false;
             this.apertouCima = false;
@@ -84,8 +84,8 @@ public class Player extends ObjetoComMovimento {
             this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteLeft;
             this.apertouEsquerdaBaixo = true;
-            this.offsetx += 7;
-            this.offsety -= 7;
+            this.offsetx += 10;
+            this.offsety -= 10;
             this.apertouDireita = false;
             this.apertouEsquerda = false;
             this.apertouCima = false;
@@ -114,8 +114,8 @@ public class Player extends ObjetoComMovimento {
             this.personagem.direcao = Direcao.DIREITA_BAIXO;
             this.personagem.spriteAtual = this.personagem.spriteRight;
             this.apertouDireitaBaixo = true;
-            this.offsetx -= 7;
-            this.offsety -= 7;
+            this.offsetx -= 50;
+            this.offsety -= 50;
             this.apertouDireita = false;
             this.apertouEsquerda = false;
             this.apertouCima = false;

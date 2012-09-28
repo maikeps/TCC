@@ -133,17 +133,17 @@ public class Inimigo extends ObjetoComMovimento {
             this.estado = EstadoInimigo.PERSEGUINDO;
         }
 
-        if (this.podePerseguir()) {
+//        if (this.podePerseguir()) {
             this.aproxima();
-            this.ataca();//metodo antigo, provavelmente nao sera mais usado
-            this.sorteiaDestino();//nao sei por que tem isso aqui '-'
-        } else {
-            if (this.x != this.destMovimentoX && this.y != this.destMovimentoY) {
-                this.anda();
-            } else {
-                this.sorteiaDestino();
-            }
-        }
+           // this.ataca();//metodo antigo, provavelmente nao sera mais usado
+           // this.sorteiaDestino();//nao sei por que tem isso aqui '-'
+//        } else {
+//            if (this.x != this.destMovimentoX && this.y != this.destMovimentoY) {
+//                this.anda();
+//            } else {
+//                this.sorteiaDestino();
+//            }
+//        }
 
         if (this.estado == EstadoInimigo.PERSEGUINDO) {
             // this.aproxima();

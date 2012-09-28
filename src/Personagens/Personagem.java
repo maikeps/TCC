@@ -17,7 +17,7 @@ import tcc.ObjetoComMovimento;
 
 public class Personagem extends ObjetoComMovimento {
     
-        int velocidade = 1; // ??
+    int velocidade = 1; // ??
     int velocidadeInicial = 1; // ??
     
     /* Colisão simple
