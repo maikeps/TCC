@@ -4,20 +4,21 @@
  */
 package Ataques;
 
-import Personagens.Personagem;
-import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import javaPlay2.Imagem;
-import javaPlay2.Sprite;
-import tcc.ObjetoComMovimento;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SpriteSheet;
+import tcc.GameObject;
+import tcc.Personagem;
+
+
 
 /**
  *
  * @author Maike
  */
-public abstract class Ataque extends ObjetoComMovimento {
+public abstract class Ataque extends GameObject {
 
     int velocidade = 15; //Determina a velocidade em que o personagem anda
     public boolean desativado;
@@ -27,32 +28,15 @@ public abstract class Ataque extends ObjetoComMovimento {
     int xInicial; // Possição inicial para 
     int yInicial;
     // Imagem imagem;
-    public Imagem imagem;
-    public Sprite sprite;
-    Imagem Vazio;
+    public Image imagem;
+    public SpriteSheet sprite;
     Personagem personagem; // personagem que ataca
-    double angulo;
+    float angulo;
     int destX;
     int destY;
     double deltaX, deltaY, dx, dy;
-    int contadorDano;
-
-    public void step(long timeElapsed) {
-        if (this.desativado == true) {
-            this.contadorDano++;
-            return;
-        }
-//        if (getAcertou() == true) {
-//            this.contadorDano++;
-//        }
-    }
-
-    public void draw(Graphics g) {
-        if (this.desativado == true) {
-            return;
-        }
-    }
-
+    int contadorDano; //contador de tempo para o dano que aparece na tela
+    
     public void setDano(int n) {
         this.dano = n;
     }
@@ -72,7 +56,7 @@ public abstract class Ataque extends ObjetoComMovimento {
     public Shape getShape() {
         if (this.imagem != null) {
             double degree = this.angulo; //desired degree
-            Shape rect = new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura()); //creating the rectangle you want to rotate
+            Shape rect = new Rectangle((int)this.x, (int)this.y, this.imagem.getWidth(), this.imagem.getHeight()); //creating the rectangle you want to rotate
             AffineTransform transform = new AffineTransform();
             //rotate or do other things with the rectangle (shear, translate, scale and so on)
             //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis
@@ -84,7 +68,7 @@ public abstract class Ataque extends ObjetoComMovimento {
 
         } else {
             double degree = this.angulo; //desired degree
-            Shape rect = new Rectangle(this.x, this.y, this.sprite.pegaLargura(), this.sprite.pegaAltura()); //creating the rectangle you want to rotate
+            Shape rect = new Rectangle((int)this.x, (int)this.y, this.sprite.getWidth(), this.sprite.getHeight()); //creating the rectangle you want to rotate
             AffineTransform transform = new AffineTransform();
             //rotate or do other things with the rectangle (shear, translate, scale and so on)
             //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis
@@ -96,29 +80,12 @@ public abstract class Ataque extends ObjetoComMovimento {
 
         }
     }
-
-////////     public Rectangle getRetangulo(){
-////////        return new Rectangle(this.x, this.y, this.imagem.pegaLargura(), this.imagem.pegaAltura());
-////////    }
-////////    
-////////    public boolean temColisao(Rectangle retangulo){
-////////        if(this.desativado){
-////////            return false;
-////////        }
-////////        
-////////        if(this.getRetangulo().intersects(retangulo)){
-////////            AudioPlayer.play("resources/sounds/Sound 2.wav");
-////////            this.desativado = true;
-////////            return true;            
-////////        } else {
-////////            return false;
-////////        }
-////////    }
+    
     public double getAngulo() {
         return angulo;
     }
 
-    public void setAngulo(double angulo) {
+    public void setAngulo(float angulo) {
         this.angulo = angulo;
     }
 
@@ -138,7 +105,7 @@ public abstract class Ataque extends ObjetoComMovimento {
         this.deltaY = deltaY;
     }
 
-    public int getDestX() {
+    public float getDestX() {
         return destX;
     }
 
@@ -146,7 +113,7 @@ public abstract class Ataque extends ObjetoComMovimento {
         this.destX = destX;
     }
 
-    public int getDestY() {
+    public float getDestY() {
         return destY;
     }
 
@@ -170,7 +137,7 @@ public abstract class Ataque extends ObjetoComMovimento {
         this.dy = dy;
     }
 
-    public int getxInicial() {
+    public float getxInicial() {
         return xInicial;
     }
 
@@ -178,7 +145,7 @@ public abstract class Ataque extends ObjetoComMovimento {
         this.xInicial = xInicial;
     }
 
-    public int getyInicial() {
+    public float getyInicial() {
         return yInicial;
     }
 

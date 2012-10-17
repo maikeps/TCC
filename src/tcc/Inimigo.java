@@ -1,20 +1,20 @@
 package tcc;
 
-import Personagens.Personagem;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import javaPlay2.Imagem;
-import java.awt.Point;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
 import util.Util;
 
-public class Inimigo extends ObjetoComMovimento {
+public class Inimigo extends GameObject {
 
     public Rectangle campoDeVisao;
     public Personagem personagem;
     public Player player;
     public int vida;
-    protected int velocidade = 4;
-    protected Imagem spriteAtual;
+    protected int velocidade = 3;
+    protected Image spriteAtual;
     protected int cooldownAtaque;
     public boolean atacou;
     int xPlayer;
@@ -26,17 +26,17 @@ public class Inimigo extends ObjetoComMovimento {
     int minDistanciaY = 50;
     EstadoInimigo estado;
     int destX, destY;
-    double angulo;
+    float anguloAtePlayer;
     int alcancePerseguição = 300;
     int destMovimentoX;
     int destMovimentoY;
     //diminuir minDistancia para 50, e so chamar o metodo aproxima se o ataque sorteado tiver uma distancia curta
     //so entao aproxima
-    int destino;
+    int distanciaParaAndar;
     int anguloDestino;
     int xInicial;
     int yInicial;
-    int distanciaMaxAteOSpawn = 25;
+    int distanciaMaxAteOSpawn = 100;
 
     //o player estiver na linha de visao do inimigo e se estiver suficientemente perto, o inimigo atira.
     public Inimigo(Personagem personagem, Player player, int x, int y) {
@@ -51,59 +51,22 @@ public class Inimigo extends ObjetoComMovimento {
         this.xInicial = x;
         this.yInicial = y;
 
-        this.personagem.setX(x);
-        this.personagem.setY(y);
+        this.setX(x);
+        this.setY(y);
 
-        this.x = this.personagem.getX();
-        this.y = this.personagem.getY();
+        this.x = this.getX();
+        this.y = this.getY();
 
-        this.xPlayer = player.getPersonagem().getX();
-        this.yPlayer = player.getPersonagem().getY();
-
-        this.sorteiaDestino();
-
-
+        this.xPlayer = player.personagem.x;
+        this.yPlayer = player.personagem.y;
     }
 
-    public void step(long timeElapsed) {
+    @Override
+    public void update(GameContainer gc, StateBasedGame game, int delta) {
+        this.personagem.update(gc, game, delta);
 
-//        this.x = this.personagem.getX() - this.player.offsetx;
-//        this.y = this.personagem.getY() - this.player.offsety;
-
-////////        // Cima e Baixo
-////////        if (player.apertouCima) {
-////////            this.personagem.moveBaixo(10);
-////////        }
-////////        if (player.apertouBaixo) {
-////////            this.personagem.moveCima(10);
-////////        }
-////////
-////////
-////////        // Direção para a direita
-////////        if (player.apertouDireita) {
-////////            this.personagem.moveEsquerda(10);
-////////        }
-////////        if (player.apertouDireitaBaixo) {
-////////            this.personagem.moveEsquerdaCima(10);
-////////        }
-////////        if (player.apertouDireitaCima) {
-////////            this.personagem.moveEsquerdaBaixo(10);
-////////        }
-////////
-////////        // Direção para a esquerda
-////////        if (player.apertouEsquerda) {
-////////            this.personagem.moveDireita(10);
-////////        }
-////////        if (player.apertouEsquerdaBaixo) {
-////////            this.personagem.moveDireitaCima(10);
-////////        }
-////////        if (player.apertouEsquerdaCima) {
-////////            this.personagem.moveDireitaBaixo(10);
-////////        }
-
-
-
-        //this.personagem.setY(this.personagem.getY() + this.player.offsety);
+        this.personagem.x = this.x;
+        this.personagem.y = this.y;
 
         this.direcao = this.personagem.getDirecao();
 
@@ -125,46 +88,27 @@ public class Inimigo extends ObjetoComMovimento {
             case DIREITA_CIMA:
             case ESQUERDA_BAIXO:
             case ESQUERDA_CIMA:
-            //
+            
         }
 
-        //    this.setCampoDeVisao();
-
-        personagem.step(timeElapsed);
-
-
-
-        if (this.personagem.getHp() <= 50) {
-            this.afasta();
-            //this.estado = EstadoInimigo.FUGINDO;
-        } else {
-            this.estado = EstadoInimigo.PERSEGUINDO;
-        }
-
+//////        if (this.personagem.getHp() <= this.personagem.getHpInicial() * 30 / 100) {
+//////            this.afasta();
+//////        }
         if (this.podePerseguir()) {
             this.aproxima();
-            this.ataca();//metodo antigo, provavelmente nao sera mais usado
-            this.sorteiaDestino();//nao sei por que tem isso aqui '-'
-        } else // if (this.x != this.destMovimentoX && this.y != this.destMovimentoY) {
-        //if (!(this.destMovimentoX == 0 && this.destMovimentoY == 0)) {
-        if (this.destino != 0 || this.calculaDistanciaAtePonto(this.xInicial, this.yInicial) <= this.distanciaMaxAteOSpawn) {
+            this.ataca();
+//            this.sorteiaDestino();
+        } else if (this.distanciaParaAndar > 0 || this.calculaDistanciaAtePonto(this.xInicial, this.yInicial) <= this.distanciaMaxAteOSpawn) {
             this.anda();
         } else {
             this.sorteiaDestino();
         }
-        //}
 
-        if (this.estado == EstadoInimigo.PERSEGUINDO) {
-            // this.aproxima();
-//            this.ataca();
-            this.velocidade = 4;
-        }
-        if (this.estado == EstadoInimigo.FUGINDO) {
-            //this.afasta();
-            this.velocidade = 4;
-        }
+        
+        
+        this.anguloAtePlayer = (float)util.Util.calculaAngulo(destX, this.getX(), destY, this.getY());
 
-
+        
         if (this.distanciaX < 0) {
             this.distanciaX *= (-1);
         }
@@ -172,54 +116,14 @@ public class Inimigo extends ObjetoComMovimento {
             this.distanciaY *= (-1);
         }
 
-
-
     }
 
-    public void draw(Graphics g) {
-        this.personagem.draw(g);
-        g.drawString("" + this.player.offsetx, 500, 500);
+    @Override
+    public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        this.personagem.render(gc, game, g);
     }
 
-    public Direcao getDirecao() {
-        return this.personagem.getDirecao();
-    }
-
-    public Personagem getPersonagem() {
-        return this.personagem;
-    }
-
-    public void setPersonagem(Personagem p) {
-        this.personagem = p;
-    }
-
-    public int getHp() {
-        return this.personagem.getHp();
-    }
-
-    public void setXPlayer(int n) {
-        this.xPlayer = n;
-    }
-
-    public void setYPlayer(int n) {
-        this.yPlayer = n;
-    }
-
-    public void setDistanciaX(int distanciaX) {
-        this.distanciaX = distanciaX;
-    }
-
-    public void setDistanciaY(int distanciaY) {
-        this.distanciaY = distanciaY;
-    }
-
-    public int getDistanciaX() {
-        return distanciaX;
-    }
-
-    public int getDistanciaY() {
-        return distanciaY;
-    }
+    
 
     public void aproxima() {
 
@@ -241,71 +145,89 @@ public class Inimigo extends ObjetoComMovimento {
 
         int quadranteDoPlayer = 1;
         //    this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
-        this.angulo = util.Util.calculaAngulo(this.player.personagem.getX(), this.personagem.getX(), this.player.personagem.getY(), this.personagem.getY());
+//        this.anguloAtePlayer = util.Util.calculaAngulo(this.player.getX(), this.getX(), this.player.getY(), this.getY());
 
-        if (this.xPlayer > this.personagem.getX() && this.yPlayer < this.personagem.getY() && this.angulo <= 45.0) {
+        if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 45.0) {
             quadranteDoPlayer = 1;
         }
-        if (this.xPlayer > this.personagem.getX() && this.yPlayer < this.personagem.getY() && this.angulo <= 90.0 && this.angulo > 4.05) {
+        if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 90.0 && this.anguloAtePlayer > 4.05) {
             quadranteDoPlayer = 2;
         }
-        if (this.xPlayer < this.personagem.getX() && this.yPlayer < this.personagem.getY() && this.angulo <= 135.0 && this.angulo > 90.0) {
+        if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
             quadranteDoPlayer = 3;
         }
-        if (this.xPlayer < this.personagem.getX() && this.yPlayer < this.personagem.getY() && this.angulo <= 180.0 && this.angulo > 135.0) {
+        if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 180.0 && this.anguloAtePlayer > 135.0) {
             quadranteDoPlayer = 4;
         }
-        if (this.xPlayer < this.personagem.getX() && this.yPlayer > this.personagem.getY() && this.angulo <= 225.0 && this.angulo > 180.0) {
+        if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 225.0 && this.anguloAtePlayer > 180.0) {
             quadranteDoPlayer = 5;
         }
-        if (this.xPlayer < this.personagem.getX() && this.yPlayer > this.personagem.getY() && this.angulo <= 270.0 && this.angulo > 225.0) {
+        if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 270.0 && this.anguloAtePlayer > 225.0) {
             quadranteDoPlayer = 6;
         }
-        if (this.xPlayer > this.personagem.getX() && this.yPlayer > this.personagem.getY() && this.angulo <= 315.0 && this.angulo > 270.0) {
+        if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 315.0 && this.anguloAtePlayer > 270.0) {
             quadranteDoPlayer = 7;
         }
-        if (this.xPlayer > this.personagem.getX() && this.yPlayer > this.personagem.getY() && this.angulo <= 360.0 && this.angulo > 315.0) {
+        if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 360.0 && this.anguloAtePlayer > 315.0) {
             quadranteDoPlayer = 8;
         }
+        
 
-
+        double dx = Math.cos(Math.toRadians(this.anguloAtePlayer)) * velocidade;
+        double dy = -Math.sin(Math.toRadians(this.anguloAtePlayer)) * velocidade;
+        
+        this.x += dx;
+        this.y += dy;
 
         switch (quadranteDoPlayer) {
             case 1:
                 this.personagem.direcao = Direcao.DIREITA;
-                this.personagem.moveDireitaCima(this.velocidade);
+               // this.moveDireitaCima(this.velocidade);
                 break;
             case 2:
                 this.personagem.direcao = Direcao.CIMA;
-                this.personagem.moveDireitaCima(this.velocidade);
+               // this.moveDireitaCima(this.velocidade);
                 break;
             case 3:
                 this.personagem.direcao = Direcao.CIMA;
-                this.personagem.moveEsquerdaCima(this.velocidade);
+              //  this.moveEsquerdaCima(this.velocidade);
                 break;
             case 4:
                 this.personagem.direcao = Direcao.ESQUERDA;
-                this.personagem.moveEsquerdaCima(this.velocidade);
+              //  this.moveEsquerdaCima(this.velocidade);
                 break;
             case 5:
                 this.personagem.direcao = Direcao.ESQUERDA;
-                this.personagem.moveEsquerdaBaixo(this.velocidade);
+              //  this.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 6:
                 this.personagem.direcao = Direcao.BAIXO;
-                this.personagem.moveEsquerdaBaixo(this.velocidade);
+              //  this.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 7:
                 this.personagem.direcao = Direcao.BAIXO;
-                this.personagem.moveDireitaBaixo(this.velocidade);
+             //   this.moveDireitaBaixo(this.velocidade);
                 break;
             case 8:
                 this.personagem.direcao = Direcao.DIREITA;
-                this.personagem.moveDireitaBaixo(this.velocidade);
+            //    this.moveDireitaBaixo(this.velocidade);
                 break;
         }
-
-
+        
+//        switch((int)this.anguloAtePlayer){
+//            case 90:
+//                this.moveCima(this.velocidade);
+//                break;
+//            case 180:
+//                this.moveEsquerda(this.velocidade);
+//                break;
+//            case 270:
+//                this.moveBaixo(this.velocidade);
+//                break;
+//            case 360:
+//                this.moveDireita(this.velocidade);
+//                break;
+//        }
 
 //
 //        switch (quadranteDoPlayer) {
@@ -389,57 +311,9 @@ public class Inimigo extends ObjetoComMovimento {
 
     }
 
-    public void afasta() {
-        //se o ataque sorteado for de longa distancia, ou se estiver com pouca vida, tenta se afastar
-        //o inimigo vai tentar sair da linha de visao do player se estiver morrendo
-
-
-        this.estado = EstadoInimigo.FUGINDO;
-
-
-        if (this.yPlayer >= this.personagem.getY() && this.distanciaY >= this.minDistanciaY) {
-            if (this.playerEstaVendo()) {
-                this.personagem.direcao = Direcao.CIMA;
-                //this.personagem.spriteAtual = this.personagem.spriteUp;
-                this.personagem.moveCima(this.velocidade);
-            } else {
-                this.estado = EstadoInimigo.PERSEGUINDO;
-            }
-
-        }
-
-        if (this.yPlayer < this.personagem.getY() && this.distanciaY < (this.minDistanciaY)) {
-            if (this.playerEstaVendo()) {
-                this.personagem.direcao = Direcao.BAIXO;
-                //this.personagem.spriteAtual = this.personagem.spriteDown;
-                this.personagem.moveBaixo(this.velocidade);
-            } else {
-                this.estado = EstadoInimigo.PERSEGUINDO;
-            }
-        }
-        if (this.xPlayer < this.personagem.getX() && this.distanciaX < (this.minDistanciaY)) {
-            if (this.playerEstaVendo()) {
-                this.personagem.direcao = Direcao.DIREITA;
-                //this.personagem.spriteAtual = this.personagem.spriteRight;
-                this.personagem.moveDireita(this.velocidade);
-            } else {
-                this.estado = EstadoInimigo.PERSEGUINDO;
-            }
-        } else if (this.xPlayer >= this.personagem.getX() && this.distanciaX >= this.minDistanciaY) {
-            if (this.playerEstaVendo()) {
-                this.personagem.direcao = Direcao.ESQUERDA;
-                //this.personagem.spriteAtual = this.personagem.spriteLeft;
-                this.personagem.moveEsquerda(this.velocidade);
-            } else {
-                this.estado = EstadoInimigo.PERSEGUINDO;
-            }
-        }
-    }
-
     public void ataca() {
         this.destX = this.player.getX();
         this.destY = this.player.getY();
-        this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
         this.atacou = true;
     }
 
@@ -477,26 +351,26 @@ public class Inimigo extends ObjetoComMovimento {
             case 1:
                 this.personagem.direcao = Direcao.CIMA;
                 this.personagem.spriteAtual = this.personagem.spriteUp;
-                this.personagem.moveDireitaCima(this.velocidade);
+                this.moveDireitaCima(this.velocidade);
                 break;
             case 2:
                 this.personagem.direcao = Direcao.ESQUERDA;
                 this.personagem.spriteAtual = this.personagem.spriteLeft;
-                this.personagem.moveEsquerdaCima(this.velocidade);
+                this.moveEsquerdaCima(this.velocidade);
                 break;
             case 3:
                 this.personagem.direcao = Direcao.BAIXO;
                 this.personagem.spriteAtual = this.personagem.spriteDown;
-                this.personagem.moveEsquerdaBaixo(this.velocidade);
+                this.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 4:
                 this.personagem.direcao = Direcao.DIREITA;
                 this.personagem.spriteAtual = this.personagem.spriteRight;
-                this.personagem.moveDireitaBaixo(this.velocidade);
+                this.moveDireitaBaixo(this.velocidade);
                 break;
         }
 
-        this.destino--;
+        this.distanciaParaAndar-=this.velocidade;
 
 //////        if (this.destMovimentoX < 0) {
 //////            this.destMovimentoX++;
@@ -520,13 +394,13 @@ public class Inimigo extends ObjetoComMovimento {
 
         //this.destMovimentoX = Util.random(200) - 100;
         //this.destMovimentoY = Util.random(200) - 100;
-        this.destino = Util.random(50);
+        this.distanciaParaAndar = Util.random(distanciaMaxAteOSpawn);
         this.anguloDestino = Util.random(360);
     }
 
     public double calculaDistanciaAtePonto(int xPonto, int yPonto) {
-        int x1 = this.personagem.getX();
-        int y1 = this.personagem.getY();
+        int x1 = this.getX();
+        int y1 = this.getY();
         int x2 = xPonto;
         int y2 = yPonto;
 
@@ -541,39 +415,7 @@ public class Inimigo extends ObjetoComMovimento {
 
         return distancia;
     }
-
-    public boolean playerEstaVendo() {
-        //return this.player.getCampoDeVisao().intersects(this.personagem.getRetangulo());
-        return false;
-    }
-
-    public boolean estaVendoPlayer() {
-        return this.getCampoDeVisao().intersects(this.player.personagem.getRetangulo());
-    }
-//
-//    public boolean estaPertoDoPlayer(){
-//        
-//        return()
-//    }
-
-//    public void setCampoDeVisao() {
-//        switch (this.personagem.direcao) {
-//            case CIMA:
-//                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY() - 800, this.personagem.spriteAtual.pegaLargura(), 800);
-//                break;
-//            case BAIXO:
-//                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);
-//                break;
-//            case ESQUERDA:
-//                this.campoDeVisao = new Rectangle(this.personagem.getX() - 800, this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
-//                break;
-//            case DIREITA:
-//                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
-//                break;
-//
-//
-//        }
-//    }
+    
     public Rectangle getCampoDeVisao() {
         return this.campoDeVisao;
     }
@@ -582,15 +424,72 @@ public class Inimigo extends ObjetoComMovimento {
     }
 
     public int getX() {
-        return this.personagem.getX();
+        return this.personagem.x;
     }
 
     public int getY() {
-        return this.personagem.getY();
+        return this.personagem.y;
     }
 
-    public double getAngulo() {
-        return angulo;
+    public void setX(int x) {
+        this.personagem.x = x;
+    }
+
+    public void setY(int y) {
+        this.personagem.y = y;
+    }
+
+    public float getAngulo() {
+        return anguloAtePlayer;
+    }
+    
+    public int getDestX() {
+        return this.destX;
+    }
+
+    public int getDestY() {
+        return this.destY;
+    }
+    
+    
+    public Direcao getDirecao() {
+        return this.personagem.getDirecao();
+    }
+
+    public Personagem getPersonagem() {
+        return this.personagem;
+    }
+
+    public void setPersonagem(Personagem p) {
+        this.personagem = p;
+    }
+
+    public int getHp() {
+        return this.personagem.getHp();
+    }
+
+    public void setXPlayer(int n) {
+        this.xPlayer = n;
+    }
+
+    public void setYPlayer(int n) {
+        this.yPlayer = n;
+    }
+
+    public void setDistanciaX(int distanciaX) {
+        this.distanciaX = distanciaX;
+    }
+
+    public void setDistanciaY(int distanciaY) {
+        this.distanciaY = distanciaY;
+    }
+
+    public int getDistanciaX() {
+        return distanciaX;
+    }
+
+    public int getDistanciaY() {
+        return distanciaY;
     }
 
     public boolean podePerseguir() {

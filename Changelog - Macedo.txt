@@ -9,4 +9,7 @@
 - Nos fizemos os danos aparecessem na tela.
 
 17/09
-- Arrumar problema no github (TESTE)
+- Arrumar problema no github (TESTE);
+
+20/09
+- Criar colisão com o tile(Agua); -Arrumar-

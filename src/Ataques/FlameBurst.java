@@ -1,13 +1,18 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
-import Personagens.Personagem;
-import Personagens.Personagem;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import javaPlay2.Sprite;
-import javaPlayExtras.AudioPlayer;
-import javax.swing.JOptionPane;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
+import tcc.Personagem;
+
+
 
 
 
@@ -15,8 +20,9 @@ public class FlameBurst extends Ataque {
 
     int frameElapsed;
     int frame;
+    Animation animation;
 
-    public FlameBurst(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    public FlameBurst(int x, int y, int destX, int destY, float angulo, Personagem personagem){
         this.setContador(0);
         this.personagem = personagem;
         
@@ -29,48 +35,41 @@ public class FlameBurst extends Ataque {
         this.setDanoBruto(a.getAtk());
         
         
-        AudioPlayer.play("resources/sounds/Sound 1.wav");
         this.desativado = false;
-        this.x = x - (this.personagem.spriteAtual.pegaLargura() + 20);
-        this.y = y - (this.personagem.spriteAtual.pegaAltura() + 50);
+        this.x = x - (this.personagem.spriteAtual.getWidth() / 2 + 20);
+        this.y = y - (this.personagem.spriteAtual.getHeight() / 2 + 50);
         this.frame = 0;
-
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 240, 250);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
-            System.exit(1);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 214, 200);
+        } catch (SlickException ex) {
+            Logger.getLogger(FlameBurst.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        this.animation = new Animation();
+        for (int i = 0; i < 3; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 150);
+        }
+        this.animation.setLooping(false);
 
 
     }
 
-    public void step(long timeElapsed) {
-        if (this.frame >= 4) {
-            return;
-        }
+    @Override
+    public void update(GameContainer gc, StateBasedGame game, int delta) {
 
-        this.frameElapsed += 1;
-        if (this.frameElapsed > 4) {
-            this.frame++;
-            this.sprite.setCurrAnimFrame(this.frame);
-            this.frameElapsed -= 4;
-        }
         if (this.desativado) {
             this.contadorDano++;
         }
-        
-        if(acertou == true){
+        if (acertou == true) {
             this.contadorDano++;
         }
     }
 
     @Override
-    public void draw(Graphics g) {
-        this.sprite.draw(g, this.x, this.y);
+    public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        this.animation.draw(this.x, this.y);
     }
 
+    @Override
     public Rectangle getRetangulo() {
         return new Rectangle(this.x, this.y, 231, 248);
     }

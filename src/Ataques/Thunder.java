@@ -1,13 +1,16 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
-import Personagens.Personagem;
-import Personagens.Personagem;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import javaPlay2.Sprite;
-import javaPlayExtras.AudioPlayer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
+import tcc.Personagem;
 
 
 
@@ -15,8 +18,9 @@ public class Thunder extends Ataque {
 
     int frameElapsed;
     int frame;
+    Animation animation;
 
-    public Thunder(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    public Thunder(int x, int y, int destX, int destY, float angulo, Personagem personagem){
         this.setContador(0);
         this.personagem = personagem;
         
@@ -29,45 +33,46 @@ public class Thunder extends Ataque {
         this.setDanoBruto(a.getAtk());
         
         
-        AudioPlayer.play("resources/sounds/Sound 1.wav");
+        this.angulo = (float) angulo;
+
         this.desativado = false;
-        this.x = x - (this.personagem.spriteAtual.pegaLargura() + 20);
-        this.y = y - (this.personagem.spriteAtual.pegaAltura() + 50);
+        this.x = x - (this.personagem.spriteAtual.getWidth() / 2 + 20);
+        this.y = y - (this.personagem.spriteAtual.getHeight() / 2 + 50);
         this.frame = 0;
-
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 4, 165, 315);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
-            System.exit(1);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 165, 315);
+        } catch (SlickException ex) {
+            JOptionPane.showMessageDialog(null, "ERRO: "+ex.getMessage());
         }
-
+        this.animation = new Animation();
+        for (int i = 0; i < 5; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 150);
+        }
+        this.animation.setLooping(false);
 
 
     }
 
-    public void step(long timeElapsed) {
-        if (this.frame >= 7) {
-            this.contadorDano++;
-            return;
-        }
+    @Override
+    public void update(GameContainer gc, StateBasedGame game, int delta) {
 
-        this.frameElapsed += 1;
-        if (this.frameElapsed > 5) {
-            this.frame++;
-            this.sprite.setCurrAnimFrame(this.frame);
-            this.frameElapsed -= 5;
+        if (this.desativado) {
+            this.contadorDano++;
         }
-       if (this.desativado) {
+        if (acertou == true) {
             this.contadorDano++;
         }
     }
 
     @Override
-    public void draw(Graphics g) {
-        this.sprite.draw(g, this.x, this.y);
+    public void render(GameContainer gc, StateBasedGame game, org.newdawn.slick.Graphics g) {
+        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
+        this.animation.draw(this.x, this.y);
+        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
+
     }
 
+    @Override
     public Rectangle getRetangulo() {
         return new Rectangle(this.x, this.y, 231, 248);
     }

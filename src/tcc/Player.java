@@ -1,16 +1,15 @@
 package tcc;
 
-import Personagens.Personagem;
-import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
-import javaPlay2.GameEngine;
-import javaPlay2.Keyboard;
-import javaPlay2.Mouse;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 //fazer o DAO de acordo com o personagem recebido como parametro
 //stats entao so pegar do DAO
-public class Player extends ObjetoComMovimento {
+public class Player extends GameObject {
 
     public Personagem personagem; //personagem escolhido pelo player
 //    public int vida;
@@ -21,25 +20,16 @@ public class Player extends ObjetoComMovimento {
 //    public Rectangle campoDeVisao;
 //
 //    
-    public double angulo; //angulo formado entre o personagem e o mouse
+    public float angulo; //angulo formado entre o personagem e o mouse
     public boolean atacou; // se o player atacou
     public int destX; // ponto x do clique do mouse
     public int destY; // ponto y do clique do mouse
     int controleTiro; //revisar isso
     int framesControleTiro; //revisar isso
-    public Rectangle campoDeVisao;
     public int xMouse;
     public int yMouse;
     public int offsetx;
     public int offsety;
-    public boolean apertouDireita;
-    public boolean apertouEsquerda;
-    public boolean apertouCima;
-    public boolean apertouBaixo;
-    public boolean apertouDireitaCima;
-    public boolean apertouDireitaBaixo;
-    public boolean apertouEsquerdaCima;
-    public boolean apertouEsquerdaBaixo;
     int velocidade = 5;
 
     public Player(Personagem personagem, int xSpawn, int ySpawn) {
@@ -53,156 +43,106 @@ public class Player extends ObjetoComMovimento {
 
         this.personagem.setDirecao(Direcao.DIREITA);
 
-        this.personagem.setX((GameEngine.getInstance().getGameCanvas().getWidth() / 2 - personagem.spriteAtual.pegaLargura() / 2)+xSpawn);
-        this.personagem.setY((GameEngine.getInstance().getGameCanvas().getHeight() / 2 - personagem.spriteAtual.pegaAltura() / 2)+ySpawn);
+      //  this.personagem.x = xSpawn;
+      //  this.personagem.y = ySpawn;
+
+        this.personagem.x=((800 / 2 - personagem.spriteAtual.getWidth() / 2) + xSpawn);
+        this.personagem.y =((600 / 2 - personagem.spriteAtual.getHeight() / 2) + ySpawn);
+
+
+        this.x = xSpawn;
+        this.y = ySpawn;
 
 
         this.offsetx = -xSpawn;
         this.offsety = -ySpawn;
 
+
+
+
+
     }
 
-    public void step(long timeElapsed) {
-        personagem.step(timeElapsed);
-        
-          // Cima e Baixo
-////////        if (this.apertouCima) {
-//////////            this.personagem.moveCima(10);
-////////        }
-////////        if (this.apertouBaixo) {
-////////            this.personagem.moveBaixo(10);
-////////        }
-////////
-////////
-////////        // Direção para a direita
-////////        if (this.apertouDireita) {
-////////            this.personagem.moveDireita(10);
-////////        }
-////////        if (this.apertouDireitaBaixo) {
-////////            this.personagem.moveDireitaBaixo(10);
-////////        }
-////////        if (this.apertouDireitaCima) {
-////////            this.personagem.moveDireitaCima(10);
-////////        }
-////////
-////////        // Direção para a esquerda
-////////        if (this.apertouEsquerda) {
-////////            this.personagem.moveEsquerda(10);
-////////        }
-////////        if (this.apertouEsquerdaBaixo) {
-////////            this.personagem.moveEsquerdaBaixo(10);
-////////        }
-////////        if (this.apertouEsquerdaCima) {
-////////            this.personagem.moveEsquerdaCima(10);
-////////        }
-////////        
-////////        
-        
-        
-        
-        
-        
+    @Override
+    public void update(GameContainer gc, StateBasedGame game, int delta) {
+        this.personagem.update(gc, game, delta);
 
-        Keyboard teclado = GameEngine.getInstance().getKeyboard();
+        Input input = gc.getInput();
 
-        if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.W)) {
-            this.personagem.direcao = Direcao.ESQUERDA_CIMA;
-            this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.apertouEsquerdaCima = true;
-            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
-            this.offsetx += i;
-            this.offsety += i;
-            this.personagem.moveEsquerdaCima(this.velocidade);
-
-        } else if (teclado.keyDown(Keys.A) && teclado.keyDown(Keys.S)) {
-            this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
-            this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.apertouEsquerdaBaixo = true;
-            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
-            this.offsetx += i;
-            this.offsety -= i;
-            this.personagem.moveEsquerdaBaixo(this.velocidade);
-
-        } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.W)) {
+        if (input.isKeyDown(Input.KEY_D) && input.isKeyDown(Input.KEY_W)) {
             this.personagem.direcao = Direcao.DIREITA_CIMA;
-            this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.apertouDireitaCima = true;
-            this.personagem.moveDireitaCima(this.velocidade);
-            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
+            int i = (int) Math.floor(Math.sqrt(Math.pow(this.velocidade, 2) / 2));
             this.offsetx -= i;
             this.offsety += i;
-
-        } else if (teclado.keyDown(Keys.D) && teclado.keyDown(Keys.S)) {
-            this.personagem.direcao = Direcao.DIREITA_BAIXO;
+            this.moveDireitaCima(this.velocidade);
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.apertouDireitaBaixo = true;
-            int i = (int)Math.floor( Math.sqrt( Math.pow(this.velocidade, 2) / 2));
+
+        } else if (input.isKeyDown(Input.KEY_D) && input.isKeyDown(Input.KEY_S)) {
+            this.personagem.direcao = Direcao.DIREITA_BAIXO;
+            int i = (int) Math.floor(Math.sqrt(Math.pow(this.velocidade, 2) / 2));
             this.offsetx -= i;
             this.offsety -= i;
-            this.personagem.moveDireitaBaixo(this.velocidade);
-
-        } else if (teclado.keyDown(Keys.D)) {
-            this.personagem.direcao = Direcao.DIREITA;
+            this.moveDireitaBaixo(this.velocidade);
             this.personagem.spriteAtual = this.personagem.spriteRight;
-            this.offsetx -= this.velocidade;
-            this.personagem.moveDireita(this.velocidade);
 
-        } else if (teclado.keyDown(Keys.A)) {
-            this.personagem.direcao = Direcao.ESQUERDA;
+        } else if (input.isKeyDown(Input.KEY_A) && input.isKeyDown(Input.KEY_W)) {
+            this.personagem.direcao = Direcao.ESQUERDA_CIMA;
+            int i = (int) Math.floor(Math.sqrt(Math.pow(this.velocidade, 2) / 2));
+            this.offsetx += i;
+            this.offsety += i;
+            this.moveEsquerdaCima(this.velocidade);
             this.personagem.spriteAtual = this.personagem.spriteLeft;
-            this.offsetx += this.velocidade;
-            this.personagem.moveEsquerda(this.velocidade);
 
-        } else if (teclado.keyDown(Keys.W)) {
+        } else if (input.isKeyDown(Input.KEY_A) && input.isKeyDown(Input.KEY_S)) {
+            this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
+            int i = (int) Math.floor(Math.sqrt(Math.pow(this.velocidade, 2) / 2));
+            this.offsetx += i;
+            this.offsety -= i;
+            this.moveEsquerdaBaixo(this.velocidade);
+            this.personagem.spriteAtual = this.personagem.spriteLeft;
+
+        } else if (input.isKeyDown(Input.KEY_W)) {
             this.personagem.direcao = Direcao.CIMA;
-            this.personagem.spriteAtual = this.personagem.spriteUp;
             this.offsety += this.velocidade;
-            this.personagem.moveCima(this.velocidade);
-
-        } else if (teclado.keyDown(Keys.S)) {
+            this.moveCima(this.velocidade);
+            this.personagem.spriteAtual = this.personagem.spriteUp;
+        } else if (input.isKeyDown(Input.KEY_S)) {
             this.personagem.direcao = Direcao.BAIXO;
-            this.personagem.spriteAtual = this.personagem.spriteDown;
             this.offsety -= this.velocidade;
-            this.personagem.moveBaixo(this.velocidade);
-
-        } else {
-            this.apertouDireita = false;
-            this.apertouEsquerda = false;
-            this.apertouCima = false;
-            this.apertouBaixo = false;
-            this.apertouDireitaCima = false;
-            this.apertouDireitaBaixo = false;
-            this.apertouEsquerdaCima = false;
-            this.apertouEsquerdaBaixo = false;
+            this.moveBaixo(this.velocidade);
+            this.personagem.spriteAtual = this.personagem.spriteDown;
+        } else if (input.isKeyDown(Input.KEY_A)) {
+            this.personagem.direcao = Direcao.ESQUERDA;
+            this.offsetx += this.velocidade;
+            this.moveEsquerda(this.velocidade);
+            this.personagem.spriteAtual = this.personagem.spriteLeft;
+        } else if (input.isKeyDown(Input.KEY_D)) {
+            this.personagem.direcao = Direcao.DIREITA;
+            this.offsetx -= this.velocidade;
+            this.moveDireita(this.velocidade);
+            this.personagem.spriteAtual = this.personagem.spriteRight;
         }
 
 
-
-
-        Mouse mouse = GameEngine.getInstance().getMouse();
-        Point ponto = mouse.getMousePos();
-        this.xMouse = ponto.x;
-        this.yMouse = ponto.y;
-
-
-        if (mouse.isLeftButtonPressed()) {
-            ponto = new Point(mouse.getMousePos());
+        if (input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+            Point ponto = new Point(input.getMouseX(), input.getMouseY());
             this.destX = ponto.x;
             this.destY = ponto.y;
-          //  this.destX = this.xMouse+this.offsetx;
-          //  this.destY = this.yMouse+this.offsety;
-           // this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
-            this.angulo = util.Util.calculaAngulo(destX, GameEngine.getInstance().getGameCanvas().getWidth()/2, destY, GameEngine.getInstance().getGameCanvas().getHeight()/2);
+            this.angulo = (float) util.Util.calculaAngulo(destX, gc.getWidth()/2, destY, gc.getHeight()/2);
             this.atacou = true;
         }
+
+        this.personagem.x = gc.getWidth()/2-this.offsetx - personagem.spriteAtual.getWidth() / 2;
+        this.personagem.y = gc.getHeight()/2-this.offsety - personagem.spriteAtual.getHeight() / 2;
     }
 
-    public void draw(Graphics g) {
-        personagem.draw(g);
-    }
-
-    public Direcao getDirecao() {
-        return this.personagem.getDirecao();
+    @Override
+    public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        this.personagem.render(gc, game, g);
+        g.drawString(this.angulo + "", 200, 200);
+        g.drawString(this.destX + " - " + this.x, 200 - offsetx, 250 - offsety);
+        g.drawString(this.destY + " - " + this.y, 200 - offsetx , 300 - offsety);
+        g.drawString(this.personagem.podeAtirar() + " - " + this.personagem.cooldownAtual, 500, 400);
     }
 
     public Personagem getPersonagem() {
@@ -217,62 +157,39 @@ public class Player extends ObjetoComMovimento {
         return this.personagem.getHp();
     }
 
-    public double getAngulo() {
-        return angulo;
+    public float getAngulo() {
+        return this.angulo;
     }
 
     public int getDestX() {
-        return destX;
+        return this.destX;
     }
 
     public int getDestY() {
-        return destY;
+        return this.destY;
     }
 
-    @Override
     public int getX() {
-        return this.personagem.getX();
+        return this.personagem.x;
     }
 
-    @Override
     public int getY() {
-        return this.personagem.getY();
+        return this.personagem.y;
     }
 
-    public int getXMouse() {
-        return xMouse;
+    public float getXMouse() {
+        return this.xMouse;
     }
 
-    public int getYMouse() {
-        return yMouse;
+    public float getYMouse() {
+        return this.yMouse;
     }
 
-    public void setCampoDeVisao() {
-        this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);
-        switch (this.personagem.direcao) {
-            case CIMA:
-                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY() - 800, this.personagem.spriteAtual.pegaLargura(), 800);
-                break;
-            case BAIXO:
-                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), this.personagem.spriteAtual.pegaLargura(), 800);
-                break;
-            case ESQUERDA:
-                this.campoDeVisao = new Rectangle(this.personagem.getX() - 800, this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
-                break;
-            case DIREITA:
-                this.campoDeVisao = new Rectangle(this.personagem.getX(), this.personagem.getY(), 800, this.personagem.spriteAtual.pegaAltura());
-                break;
-            case DIREITA_BAIXO:
-            case DIREITA_CIMA:
-            case ESQUERDA_BAIXO:
-            case ESQUERDA_CIMA:
-            //nao faz nada;
-
-
-        }
+    public int getVelocidade() {
+        return this.velocidade;
     }
 
-    public Rectangle getCampoDeVisao() {
-        return this.campoDeVisao;
+    public void setVelocidade(int velocidade) {
+        this.velocidade = velocidade;
     }
 }

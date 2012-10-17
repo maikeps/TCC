@@ -5,12 +5,17 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
-import Personagens.Personagem;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import javaPlay2.Sprite;
 import javax.swing.JOptionPane;
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.state.StateBasedGame;
+import tcc.Personagem;
+
+
 
 /**
  *
@@ -20,8 +25,9 @@ public class RazorLeaf extends Ataque {
 
     int frameElapsed;
     int frame;
-
-    public RazorLeaf(int x, int y, int destX, int destY, double angulo, Personagem personagem) {
+    Animation animation;
+    
+    public RazorLeaf(int x, int y, int destX, int destY, float angulo, Personagem personagem){
         
         this.setContador(0);
         String name = this.toString();
@@ -37,54 +43,53 @@ public class RazorLeaf extends Ataque {
         this.x = x;
         this.y = y;
 
-        this.angulo = angulo;
+        this.angulo = (float) angulo;
 
+        this.desativado = false;
+        this.x = x - (this.personagem.spriteAtual.getWidth() / 2 + 20);
+        this.y = y - (this.personagem.spriteAtual.getHeight() / 2 + 50);
         this.frame = 0;
-
         try {
-            this.sprite = new Sprite("resources/ataques/"+name+"/"+name+".png", 9, 220, 85);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
-            System.exit(1);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 214, 200);
+        } catch (SlickException ex) {
+            JOptionPane.showMessageDialog(null, "ERRO: "+ex.getMessage());
         }
+        this.animation = new Animation();
+        for (int i = 0; i < 8; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 150);
+        }
+        this.animation.setLooping(false);
 
-      //  this.ajustaAtaque();
 
     }
 
-    public void step(long timeElapsed) {
-        if (this.frame >= 9) {
-            return;
-        }
+    @Override
+    public void update(GameContainer gc, StateBasedGame game, int delta) {
 
-        this.frameElapsed++;
-
-        if (this.frameElapsed > 5) {
-            this.frame++;
-            this.sprite.setCurrAnimFrame(this.frame);
-            this.frameElapsed -= 5;
-
-        }
-        
         if (this.desativado) {
             this.contadorDano++;
         }
-
-
-
+        if (acertou == true) {
+            this.contadorDano++;
+        }
     }
 
     @Override
-    public void draw(Graphics g) {
-        this.sprite.drawRotated(g, this.x, this.y, this.angulo);
-    }
+    public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        if(this.animation.isStopped()){
+            return;
+        }
+        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
+        this.animation.draw(this.x, this.y);
+        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
 
-    @Override
-    public Rectangle getRetangulo() {
+    }
+    
+        public Rectangle getRetangulo() {
             return new Rectangle(this.x, this.y, 220, 85);
     }
 
-    @Override
+    
     public boolean temColisao(Rectangle retangulo) {
         if (this.desativado || this.frame == 9) {
             return false;
@@ -106,36 +111,5 @@ public class RazorLeaf extends Ataque {
         return this.frameElapsed;
     }
 
-    public void ajustaAtaque() {
-        switch (this.direcao) {
-            case DIREITA:
-                this.x = this.x + this.personagem.spriteAtual.pegaLargura() - 5;
-                this.y = this.y - 30;
-                break;
-            case ESQUERDA:
-                this.x = this.x - 225;
-                this.y = this.y - 30;
-                break;
-            case CIMA:
-                this.x += this.personagem.spriteAtual.pegaLargura() - 80;
-                this.y -= 240;
-                break;
-            case BAIXO:
-                this.x += this.personagem.spriteAtual.pegaLargura() - 80;
-                this.y += this.personagem.spriteAtual.pegaAltura() - 50;
-                break;
-            case DIREITA_CIMA:
-                this.x = this.x + this.personagem.spriteAtual.pegaLargura();
-                break;
-            case DIREITA_BAIXO:
-                this.x = this.x + this.personagem.spriteAtual.pegaLargura();
-                this.y = this.y + this.personagem.spriteAtual.pegaAltura();
-                break;
-            case ESQUERDA_CIMA:
-                break;
-            case ESQUERDA_BAIXO:
-                this.y = this.y + this.personagem.spriteAtual.pegaAltura();
-                break;
-        }
-    }
+
 }

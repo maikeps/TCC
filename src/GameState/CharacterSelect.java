@@ -1,0 +1,511 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package GameState;
+
+import DAO.PokemonDAO;
+import DAO.PokemonDerrotadoDAO;
+import DAO.PokemonLiberadoDAO;
+import tcc.Player;
+import java.util.ArrayList;
+import model.Pokemon;
+import model.PokemonDerrotado;
+import model.PokemonLiberado;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
+import util.Util;
+
+/**
+ *
+ * @author maike_p_santos
+ */
+public class CharacterSelect extends BasicGameState {
+
+    public static final int ID = 5;
+    StateBasedGame game;
+    private Image cenario; //imagem de fundo
+    static String player1; //qual personagem o player escolheu
+    private String inimigo; //qual personagem o inimigo escolheu
+    private int xSelecionado = 1; //qual pokemon esta selecionado na horizontal(de 1 ate 9)
+    private int ySelecionado = 1; //qual pokemon esta selecionado na vertical(de 1 ate 3)
+    private int xDraw; //qual o x do quadrado de selecao
+    private int yDraw; //qual o y do quadrado de selecao
+    public ArrayList<PokemonLiberado> listaDePokemonLiberado; //lista de pokemons liberados
+    public ArrayList<Pokemon> listaDePokemon; //lista de pokemon(todos)
+    public ArrayList<String> nomes; //lista de nomes dos pokemons
+    public Image pokemonImage; //imagem do pokemon a desenhar
+    public int pokemonSelecionado = 0; //qual pokemon esta selecionado(na lista o item zero é o primeiro pokemon)
+    public Image imgGrande; //imagem redimensionada do pokemon
+    public int linha = 1; //em qual linha o quadrado de selecao esta atualmente
+    public int numLinhas; //numero de linhas de pokemon
+    Player player;
+    String[][] listaNomes;
+
+    public CharacterSelect(String p1) {
+        this.ySelecionado = 1;
+        this.player1 = p1;
+        this.xDraw = 70;
+        this.yDraw = 70 + 350;
+    }
+
+    @Override
+    public int getID() {
+        return this.ID;
+    }
+
+    @Override
+    public void init(GameContainer gc, StateBasedGame game) throws SlickException {
+        this.game = game;
+
+        this.sorteiaInimigo();
+
+        this.listaDePokemon = PokemonDAO.getLista();
+        this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
+
+        this.nomes = new ArrayList<String>();
+
+        for (Pokemon p : this.listaDePokemon) {
+            this.nomes.add(p.getNome());
+        }
+
+        this.numLinhas = ((this.listaDePokemon.size() + 1) / 9) + 1;
+
+        this.listaNomes = new String[9][this.numLinhas];
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < this.numLinhas; y++) {
+                String nome = this.listaDePokemon.get(x + y).getNome();
+                this.listaNomes[x][y] = nome;
+                System.out.println(this.listaNomes[x][y] + " - x: " + x + " - y: " + y + " - id:" + (x + y));
+            }
+        }
+
+
+        this.cenario = new Image("resources/Cenario/fundo CharSelect.png");
+    }
+
+    @Override
+    public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
+    }
+
+    @Override
+    public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        this.cenario.draw(0, 0);
+
+        g.setColor(Color.white);
+        g.drawString(" P1, escolha o personagem", 325, 420);
+
+        g.drawRect(this.xDraw, this.yDraw, 80, 80);
+        g.drawRect(this.xDraw + 1, this.yDraw + 1, 79, 79);
+        g.drawRect(this.xDraw + 2, this.yDraw + 2, 78, 78);
+        g.drawRect(this.xDraw + 3, this.yDraw + 3, 77, 77);
+        g.drawRect(this.xDraw + 4, this.yDraw + 4, 76, 76);
+
+        this.desenhaFundo(gc, g);
+        this.desenhaImagens(gc, g);
+        this.desenhaStats(gc, g);
+
+    }
+
+    public void keyPressed(int key, char c) {
+        if (key == Input.KEY_UP) {
+            this.ySelecionado--;
+            this.linha--;
+            this.pokemonSelecionado -= 9;
+            if (this.linha <= 0) {
+                this.ySelecionado = this.numLinhas - 1;
+                this.linha = this.numLinhas - 1;
+                this.pokemonSelecionado += 9 * (this.numLinhas - 1);
+            }
+            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
+        }
+        if (key == Input.KEY_DOWN) {
+            this.ySelecionado++;
+            this.linha++;
+            this.pokemonSelecionado += 9;
+            if (this.linha >= this.numLinhas) {
+                this.ySelecionado = 1;
+                this.linha = 1;
+                this.pokemonSelecionado = this.xSelecionado;
+            }
+            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
+        }
+        if (key == Input.KEY_LEFT) {
+
+            this.xSelecionado--;
+            this.pokemonSelecionado--;
+            if (this.xSelecionado <= 0) {
+                this.xSelecionado = 9;
+                this.pokemonSelecionado += 9;
+            }
+            this.xDraw = this.xSelecionado * 75 - 5;
+
+        }
+        System.out.println(this.xSelecionado);
+        if (key == Input.KEY_RIGHT) {
+            this.xSelecionado++;
+            this.pokemonSelecionado++;
+            if (this.xSelecionado > 9) {
+                this.xSelecionado = 1;
+                this.pokemonSelecionado -= 9;
+            }
+            this.xDraw = this.xSelecionado * 75 - 5;
+        }
+
+        if (key == Input.KEY_BACK) {
+            game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+        }
+
+        if (key == Input.KEY_ENTER) {
+            Pokemon p = this.listaDePokemon.get(this.pokemonSelecionado);
+            String nome = p.getNome();
+            PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
+            if (pl.getNome() != null) {
+                this.player1 = this.nomes.get(this.pokemonSelecionado);
+                this.sorteiaInimigo();
+                while (inimigo.equals(this.player1)) {
+                    this.sorteiaInimigo();
+                }
+                System.out.println(pl.getNome());
+                game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
+        }
+    }
+
+    public void desenhaImagens(GameContainer gc, Graphics g) throws SlickException {
+
+        int x1 = 0; //x da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)
+        int y1 = 350; //y da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)
+        int cont1 = 0; //contador que verifica se já foram desenhados 9 pokemons na linha(nao-liberados)
+        int cont2 = 1; //contador que verifica s já foram desenhados 9 pokemons na linha(liberados)
+        int x2 = 0; //x da imagem que sera desenhada(desenha todos os pokemons liberados)
+        int y2 = 350; //y da imagem que sera desenhada(desenha todos os pokemons liberados)
+
+
+        //se a linha selecionada pelo retangulo de selecao for maior que 3(abaixo da terceira)
+        //modifica o y para fazer com que as imagens vão para cima
+        if (this.linha > 3) {
+            y1 -= 75 * (this.linha - 3);
+            y2 -= 75 * (this.linha - 3);
+        }
+
+        //desenha todos os pokemons
+        for (Pokemon pokemon : this.listaDePokemon) {
+            cont1++; //aumenta o cont
+            if (cont1 > 9) {
+                //se o cont for maior que 9, quer dizer que ja desenhou 9 pokemons nessa linha
+                //entao passa para a proxima
+                cont1 = 1;
+                x1 = 0;
+                y1 += 75;
+            }
+
+            String nome = pokemon.getNome(); //pega o nome do pokemon a desenhar
+            //cria a imagem do pokemon   
+            this.pokemonImage = new Image("resources/personagens/" + pokemon.getId() + " - " + nome + "/" + nome + "_Locked.gif");
+            //se o y do pokemon estiver dentro do especificado
+            //quer dizer que ele esta em uma das tres linhas
+            //entao desenha
+            if (!(75 + y1 <= 350 || 75 + y1 > 575)) {
+                this.pokemonImage.draw(75 + x1, 75 + y1);
+            }
+
+            x1 += 75; //aumenta o x para desenhar o proximo pokemon 75px a direita
+
+        }
+
+
+
+
+
+        //desenha os pokemons liberados
+        for (PokemonLiberado pl : this.listaDePokemonLiberado) {
+
+            //se o numero do pokemon for maior que 9*cont2
+            //por exemplo: se o numero for 15
+            //15 é maior que 9*cont2(inicialmente = 1)
+            //ou seja, 15 é maior que 9
+            //entao aumenta em um o cont2, zera o x2 e aumenta em 75 o y2
+            //isso quer dizer que nao tem mais pokemon liberado para desenhar nessa linha
+            if (pl.getIdPokemon() > 9 * cont2) {
+                cont2++;
+                x2 = 0;
+                y2 += 75;
+            }
+
+            //pega o nome do pokemon
+            String nome = pl.getNome();
+
+            //cria a imagem
+            this.pokemonImage = new Image("resources/personagens/" + pl.getIdPokemon() + " - " + nome + "/" + nome + "_Down.gif");
+
+
+            //se o y do pokemon estiver dentro do especificado
+            //quer dizer que ele esta em uma das tres linhas
+            //entao desenha
+            if (!(75 + y2 <= 350 || 75 + y2 > 575)) {
+                this.pokemonImage.draw(75 + x2 * (pl.getIdPokemon() - 1), 75 + y2);
+            }
+            x2 = 75; //aumenta o x para desenhar o proximo pokemon 75px a direita
+        }
+
+
+
+
+        //desenha o pokemon com zoom para aparecer na parte superior da tela
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado(apenas os liberados)
+        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+
+        if (pl.getIdPokemon() != 0) { //se a busca do dao retornar resultado, desenha a imagem colorida
+            this.imgGrande = new Image("resources/personagens/" + pl.getIdPokemon() + " - " + pl.getNome() + "/" + pl.getNome() + "_Down.gif");
+        } else { //senão, desenha preto.
+            this.imgGrande = new Image("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Locked.gif");
+        }
+
+        imgGrande.drawCentered(gc.getWidth() / 2, 200);
+        // imgGrande.draw(gc.getWidth() / 2, gc.getHeight() / 2, imgGrande.getWidth()*5, imgGrande.getHeight()*5);
+
+
+
+
+        g.setColor(Color.lightGray);
+        g.fillRect(75, 40, 675, 10);//cima
+        g.fillRect(75, 300, 675, 10);//baixo
+        g.fillRect(75, 40, 200, 260);//esquerda
+        g.fillRect(525, 40, 225, 260);//direita
+
+
+        g.setColor(Color.decode("1996553984"));
+        g.drawRect(gc.getWidth() / 2 - 250 / 2, 50, 250, 250);
+        g.setColor(Color.white);
+
+    }
+
+    public void desenhaFundo(GameContainer gc, Graphics g) {
+
+        //arrumar
+        //desenha fundo de cima
+        g.setColor(Color.lightGray);
+        g.fillRect(75, 40, 675, 350);
+        g.setColor(Color.white);
+        g.fillRect((gc.getWidth() / 2) - 250 / 2, 50, 250, 250);
+        g.setColor(Color.decode("1996553984"));
+        g.drawRect(75, 40, 675, 350);
+
+
+        int linhas = 3;
+        int colunas = 9;
+
+        //desenha os quadrados que ficam por baixo dos pokemons
+        for (int i = 1; i <= colunas; i++) {
+            for (int i2 = 1; i2 <= linhas; i2++) {
+                g.setColor(Color.lightGray);
+                g.fillRect(75 * i, 350 + 75 * i2, 70, 70);
+                //g.setColor(Color.red); 
+                g.setColor(Color.decode("1996553984"));
+                g.drawRect(75 * i, 350 + 75 * i2, 70, 70);
+            }
+        }
+        g.setColor(Color.white);
+    }
+
+    public void desenhaStats(GameContainer gc, Graphics g) {
+
+        int i = this.pokemonSelecionado;
+
+        //nome do pokemon
+        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 300, 375);
+        Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
+        g.setColor(Color.white);
+        //desenha barras de stats - HP, ATK, DEF, SPD
+        g.fillRect(100, 160, p.getHpBase(), 20);
+        g.fillRect(100, 185, p.getAtkBase(), 20);
+        g.fillRect(100, 210, p.getDefBase(), 20);
+        g.fillRect(100, 235, p.getSpdBase(), 20);
+        g.setColor(Color.black);
+        //desenha os numeros dos stats
+        g.drawString("HP: " + p.getHpBase(), 100, 175);
+        g.drawString("ATK: " + p.getAtkBase(), 100, 200);
+        g.drawString("DEF: " + p.getDefBase(), 100, 225);
+        g.drawString("SPD: " + p.getSpdBase(), 100, 250);
+
+        //informacoes sobre o pokemon
+        g.setColor(Color.white);
+        PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
+        g.drawString("Kills: " + pl.getInimigosDerrotados(), 550, 175);
+        g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 550, 200);
+        g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 550, 225);
+        g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 550, 250);
+        if (pl.getVezesDerrotasParaNPC() == 0) {
+            g.drawString("K/D: " + pl.getInimigosDerrotados(), 550, 275);
+        } else {
+            double killsDeaths = (double) pl.getInimigosDerrotados() / (double) pl.getVezesDerrotasParaNPC();
+            g.drawString("K/D: " + (killsDeaths), 550, 275);
+        }
+
+
+        //desenha a progress bar
+        //nao desenha na primeira linha por que a raridade dos 9 primeiros pokemons é zero
+        //isso quer dizer que nao tem como eles aparecerem como inimigo.
+
+
+        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+        PokemonLiberado pokeliberado = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
+
+        if (pokeliberado.getNome() == null) {
+            int x = gc.getWidth() / 2;
+            g.setColor(Color.green);
+            g.fillRect(x - poke.getRaridade() / 2, 325, poke.getRaridade(), 29); //desenha a barra de baixo, quando essa encher, o pokemon é liberado
+            PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado + 1); //ve quantas vezes o pokemon foi derrotado
+            g.setColor(Color.white);
+            g.fillRect((x - poke.getRaridade() / 2) + 2, 327, pokeDerrotado.getVezesDerrotado(), 25); //desenha a barra de cima que mostra quantas vezes o pokemon foi derrotado
+            g.setColor(Color.black);
+            g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), (x - 50) + 10, 345); //escreve os numeros
+            g.setColor(Color.white);
+
+        }
+    }
+
+    public void sorteiaInimigo() {
+        this.nomes = new ArrayList<String>();
+        this.listaDePokemon = PokemonDAO.getLista();
+        this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
+        for (Pokemon p : this.listaDePokemon) {
+            this.nomes.add(p.getNome());
+        }
+        int n = Util.random(this.nomes.size() + 1);
+        while (n >= this.nomes.size()) {
+            n = Util.random(this.nomes.size() + 1);
+        }
+        //System.out.println("inimigo no charSelect: "+this.nomes.get(n));
+        this.inimigo = this.nomes.get(n);
+    }
+
+    public String getPlayer1() {
+        return this.player1;
+    }
+
+    public void setPlayer1(String player1) {
+        this.player1 = player1;
+    }
+
+    public String getInimigo() {
+        return this.inimigo;
+    }
+
+    public void setInimigo(String inimigo) {
+        this.inimigo = inimigo;
+    }
+
+    public int getYSelecionado() {
+        return this.ySelecionado;
+    }
+
+    public int getXDraw() {
+        return this.xDraw;
+    }
+//////    public void teclas() {
+//////
+//////        Keyboard teclado = GameEngine.getInstance().getKeyboard();
+//////
+//////        if (teclado.keyDown(Keys.ESQUERDA)) {
+//////           
+//////
+//////            Util.sleep(150);
+//////        }
+//////        if (teclado.keyDown(Keys.DIREITA)) {
+//////            //se o quadrado de seleção nao estiver na ultima coluna
+//////            //o quadrado entao simplesmenta anda uma casa para a direita
+//////            if (this.xSelecionado < 8) {
+//////                this.xSelecionado += 1;
+//////                this.pokemonSelecionado += 1;
+//////            } else //se o quadrado de seleção esiver na ultima coluna
+//////            //o quadrado entao vai para a primeira coluna(esquerda)
+//////            if (this.xSelecionado >= 0) {
+//////                this.xSelecionado = 0;
+//////                this.pokemonSelecionado -= 8;
+//////            }
+//////
+//////            this.xDraw = (this.xSelecionado + 1) * 75 - 5;
+//////
+//////            Util.sleep(150);
+//////        }
+//////
+//////        if (teclado.keyDown(Keys.CIMA)) {
+//////            //se o quadrado de seleção nao estiver na primeira linha
+//////            //o quadrado entao simplesmenta anda uma casa para cima
+//////            if (this.ySelecionado > 1) {
+//////                //se a linha for uma das tres primeiras, move o quadrado
+//////                //senao, simplesmente deixa ele parado na ultima
+//////                if (this.linha <= 3) {
+//////                    this.ySelecionado -= 1;
+//////                }
+//////                this.pokemonSelecionado -= 9;
+//////                this.linha--; //linha onde esta o quadrado
+//////            } else //se o quadrado de seleção estiver na primeira linha
+//////            //o quadrado entao vai para a linha de bem de baixo(terceira)
+//////            if (this.ySelecionado <= 1) {
+//////                this.ySelecionado = 3;
+//////                this.pokemonSelecionado += 9 * (this.numLinhas - 1); //pokemon selecionado é o da ultima linha
+//////                this.linha = this.numLinhas;
+//////            }
+//////
+//////            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
+//////
+//////            Util.sleep(150);
+//////        }
+//////        if (teclado.keyDown(Keys.BAIXO)) {
+//////            //se o quadrado de seleção nao estiver na ultima linha
+//////            //o quadrado entao simplesmenta anda uma casa para baixo
+//////            this.linha++; //linha onde esta o quadrado
+//////            if (this.ySelecionado < 3) {
+//////                this.ySelecionado += 1;
+//////                this.pokemonSelecionado += 9;
+//////            } else //se o quadrado de seleção esiver na ultima linha
+//////            //o quadrado anda uma linha para baixo, mostrando os pokemons da proxima linha
+//////            //e fazendo desaparecer os da linha de cima
+//////            {
+//////                if (this.linha == this.numLinhas && this.linha > 3) {
+//////                    this.linha = 1;
+//////                    this.ySelecionado = 1;
+//////                    this.pokemonSelecionado = this.xSelecionado;
+//////                } else {
+//////                    this.pokemonSelecionado += 9;
+//////                }
+//////            }
+//////        }
+//////        this.yDraw = (this.ySelecionado * 75 - 5) + 350;
+//////        Util.sleep(150);
+//////
+//////
+//////
+//////        //tecla de enter
+//////
+//////        Pokemon p = this.listaDePokemon.get(this.pokemonSelecionado);
+//////        String nome = p.getNome();
+//////        PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
+//////        //se o jogador apertou espaço e o pokemon escolhido ja foi liberado, comeca o jogo
+//////        if (teclado.keyDown(Keys.ENTER) && pl.getNome() != null) {
+//////            this.player1 = this.nomes.get(this.pokemonSelecionado);
+//////
+//////            Util.sleep(250);
+//////            this.sorteiaInimigo();
+//////            //enquanto o inimigo for igual ao jogador, sorteia de novo.
+//////            //isso nao sera mais usado quando for implantado o sistema de tiles
+//////            //porque pode sim existir um pokemon igual ao selecionado pelo jogador
+//////            while (this.inimigo.equals(this.getPlayer1())) {
+//////                this.sorteiaInimigo();
+//////            }
+//////            this.iniciaJogo();
+//////        }
+//////    }
+//////
+}
