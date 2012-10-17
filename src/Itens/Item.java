@@ -5,6 +5,7 @@
 package Itens;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.geom.Rectangle;
 import tcc.GameObject;
 
 /**
@@ -17,6 +18,12 @@ public abstract class Item extends GameObject{
     Efeito efeito;
     Image image;
 
+    public Item() {
+    }
+    int forca;
+    
+    boolean pegou = false;
+
     public Efeito getEfeito() {
         return efeito;
     }
@@ -26,7 +33,7 @@ public abstract class Item extends GameObject{
     }
 
     public Image getImage() {
-        return image;
+        return this.image;
     }
 
     public void setImage(Image image) {
@@ -48,6 +55,20 @@ public abstract class Item extends GameObject{
     public void setRaridade(int raridade) {
         this.raridade = raridade;
     }
+
+    public int getForca() {
+        return forca;
+    }
+
+    public void setForca(int forca) {
+        this.forca = forca;
+    }
           
+    
+    
+    @Override
+    public Rectangle getRetangulo() {
+        return new Rectangle(this.x, this.y, this.image.getWidth(), this.image.getHeight());
+    }
     
 }

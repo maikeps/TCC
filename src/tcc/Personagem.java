@@ -56,12 +56,21 @@ public class Personagem extends GameObject {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
-
+        
+        this.setLargura(this.spriteAtual.getWidth());
+        this.setAltura(this.spriteAtual.getHeight());
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
         this.cooldownAtual--;
+        
+        if(this.hp > this.hpInicial){
+            this.hp = this.hpInicial;
+        }
+        if(this.hp < 0){
+            this.hp = 0;
+        }
     }
 
     @Override

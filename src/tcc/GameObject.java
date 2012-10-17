@@ -7,6 +7,7 @@ package tcc;
 import java.awt.Point;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -20,6 +21,8 @@ public abstract class GameObject {
     
     protected int x;
     protected int y;
+    
+    Image image;
     
     protected int altura;
     protected int largura;

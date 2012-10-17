@@ -56,11 +56,6 @@ public class Player extends GameObject {
 
         this.offsetx = -xSpawn;
         this.offsety = -ySpawn;
-
-
-
-
-
     }
 
     @Override

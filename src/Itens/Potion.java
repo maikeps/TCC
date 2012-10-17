@@ -23,18 +23,31 @@ public class Potion extends Item {
         this.y = y;
         
         this.raridade = 25;
+        this.forca = 50;
+        
+        this.efeito = Efeito.CURA;
 
         try {
-            this.image = new Image("resources/personagens/1 - Bulbasaur/Bulbasaur_Down.gif");
+            this.image = new Image("resources/itens/potion.png");
+           // this.image = new Image("resources/personagens/1 - Bulbasaur/Bulbasaur_Down.gif");
         } catch (SlickException ex) {
             Logger.getLogger(Potion.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.setLargura(this.image.getWidth());
+        this.setAltura(this.image.getHeight());
     }
 
     public void update(GameContainer gc, StateBasedGame game, int delta) {
+        if(this.pegou){
+       //     return;
+        }
     }
 
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        if(this.pegou){
+        //    return;
+        }
         this.image.draw(this.x, this.y);
     }
 }

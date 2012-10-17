@@ -12,6 +12,7 @@ import DAO.PokemonDerrotadoDAO;
 import DAO.PokemonLiberadoDAO;
 import Itens.Item;
 import Itens.Potion;
+import Itens.Efeito;
 import MySQL.ConjuntoResultados;
 import MySQL.MySQL;
 import java.awt.image.BufferedImage;
@@ -110,9 +111,6 @@ public class Fase1 extends BasicGameState {
             }
         }
 
-        this.player.update(gc, game, i);
-
-
         for (Inimigo inimigo : this.listaInimigos) {
             inimigo.setXPlayer(this.player.getX());
             inimigo.setYPlayer(this.player.getY());
@@ -138,6 +136,9 @@ public class Fase1 extends BasicGameState {
         this.verificaColisao();
         this.verificaSePlayerEstaMorto();
         this.verificaSeInimigoEstaMorto();
+        this.verificaColisaoComItens();
+        
+        this.player.update(gc, game, i);
     }
 
     @Override
@@ -161,7 +162,7 @@ public class Fase1 extends BasicGameState {
             }
         }
         if (this.listaItens.isEmpty()) {
-           // this.adicionaItens();
+            this.adicionaItem();
         }
 
         this.cenarioComColisao.render(gc, game, g, this.player.offsetx, this.player.offsety, this.player.getX(), this.player.getY());
@@ -393,12 +394,12 @@ public class Fase1 extends BasicGameState {
         int lvl = this.player.getPersonagem().getLvl();
 
         g.setColor(Color.white);
-        g.drawString("LVL " + lvl, 98 - this.player.offsetx, 568 - this.player.offsety);
-        g.drawString("" + this.characterSelect.getPlayer1(), 98 - this.player.offsetx, 588 - this.player.offsety);
-        g.fillRect(98 - this.player.offsetx, 598 - this.player.offsety, hpInicial + 4, 24);
+        g.drawString("LVL " + lvl, 98 - this.player.offsetx, 468 - this.player.offsety);
+        g.drawString("" + this.characterSelect.getPlayer1(), 98 - this.player.offsetx, 488 - this.player.offsety);
+        g.fillRect(98 - this.player.offsetx, 498 - this.player.offsety, hpInicial + 4, 24);
         g.setColor(Color.green);
-        g.fillRect(100 - this.player.offsetx, 600 - this.player.offsety, hp, 20);
-        g.drawString("HP: " + hp + "/" + hpInicial, 100 - this.player.offsetx, 650 - this.player.offsety);
+        g.fillRect(100 - this.player.offsetx, 500 - this.player.offsety, hp, 20);
+        g.drawString("HP: " + hp + "/" + hpInicial, 100 - this.player.offsetx, 550 - this.player.offsety);
 
         // HealthBar do inimigo
         int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
@@ -828,16 +829,32 @@ public class Fase1 extends BasicGameState {
 
     }
 
-    public void adicionaItens() {
-        //adiciona potions
-        for (int x = 0; x < 500; x += 32) {
-            for (int y = 0; y < 500; y += 32) {
-                //  Potion potion = new Potion(x, y);
-                System.out.println(x + " - " + y);
-                boolean val = new Random().nextInt(75) == 0;
-                if (val) {
-                    this.listaItens.add(new Potion(x, y));
+    public void adicionaItem() {
+        //adiciona potion
+        int x;
+        int y;
+        for (int i = 0; i < 10; i++) {
+            //  boolean val = new Random().nextInt(75) == 0;
+            // if (val) {
+            x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+            y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+            this.listaItens.add(new Potion(x, y));
+            // }
+        }
+    }
+
+    public void verificaColisaoComItens() {
+        for (int i = 0; i < this.listaItens.size(); i++) {
+            if (this.listaItens.get(i).getRetangulo().intersects(this.player.getPersonagem().getRetangulo())) {
+                switch (this.listaItens.get(i).getEfeito()) {
+                    case CURA:
+                        this.player.getPersonagem().setHp(this.player.getPersonagem().getHp() + this.listaItens.get(i).getForca());
+                        break;
+                    case ENVENENA:
+                        //
+                        break;
                 }
+                this.listaItens.remove(i);
             }
         }
     }
