@@ -113,5 +113,20 @@ public class PokemonLiberadoDAO {
         return p;
     }
     
+     public static int getExperiencia(int lvl){
+        MySQL banco = new MySQL();
+        String sql = "select * from experiencia where lvl = "+lvl;
+        
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        PokemonLiberado p = new PokemonLiberado();
+        
+        int exp = 0;
+        if(linhas.next()){
+            exp = linhas.getInt("exp");                    
+        }
+        
+        return exp;
+     }
+    
     
 }

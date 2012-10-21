@@ -7,6 +7,7 @@ package GameState;
 import DAO.PokemonDAO;
 import DAO.PokemonDerrotadoDAO;
 import DAO.PokemonLiberadoDAO;
+import java.awt.geom.AffineTransform;
 import tcc.Player;
 import java.util.ArrayList;
 import model.Pokemon;
@@ -22,6 +23,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import sun.java2d.loops.ScaledBlit;
 import util.Util;
 
 /**
@@ -54,7 +56,7 @@ public class CharacterSelect extends BasicGameState {
         this.ySelecionado = 1;
         this.player1 = p1;
         this.xDraw = 70;
-        this.yDraw = 70 + 350;
+        this.yDraw = 70 + 260;
     }
 
     @Override
@@ -101,13 +103,13 @@ public class CharacterSelect extends BasicGameState {
         this.cenario.draw(0, 0);
 
         g.setColor(Color.white);
-        g.drawString(" P1, escolha o personagem", 325, 420);
+        g.drawString(" Player 1, escolha o personagem !!", 250, 290);
 
         g.drawRect(this.xDraw, this.yDraw, 80, 80);
         g.drawRect(this.xDraw + 1, this.yDraw + 1, 79, 79);
         g.drawRect(this.xDraw + 2, this.yDraw + 2, 78, 78);
         g.drawRect(this.xDraw + 3, this.yDraw + 3, 77, 77);
-        g.drawRect(this.xDraw + 4, this.yDraw + 4, 76, 76);
+        g.drawRect(this.xDraw + 4, this.yDraw + 4, 76, 77);
 
         this.desenhaFundo(gc, g);
         this.desenhaImagens(gc, g);
@@ -125,7 +127,7 @@ public class CharacterSelect extends BasicGameState {
                 this.linha = this.numLinhas - 1;
                 this.pokemonSelecionado += 9 * (this.numLinhas - 1);
             }
-            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
+            this.yDraw = (this.ySelecionado * 75 - 5) + 260;
         }
         if (key == Input.KEY_DOWN) {
             this.ySelecionado++;
@@ -136,7 +138,7 @@ public class CharacterSelect extends BasicGameState {
                 this.linha = 1;
                 this.pokemonSelecionado = this.xSelecionado;
             }
-            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
+            this.yDraw = (this.ySelecionado * 75 - 5) + 260;
         }
         if (key == Input.KEY_LEFT) {
 
@@ -183,11 +185,11 @@ public class CharacterSelect extends BasicGameState {
     public void desenhaImagens(GameContainer gc, Graphics g) throws SlickException {
 
         int x1 = 0; //x da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)
-        int y1 = 350; //y da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)
+        int y1 = 260; //y da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)
         int cont1 = 0; //contador que verifica se já foram desenhados 9 pokemons na linha(nao-liberados)
         int cont2 = 1; //contador que verifica s já foram desenhados 9 pokemons na linha(liberados)
         int x2 = 0; //x da imagem que sera desenhada(desenha todos os pokemons liberados)
-        int y2 = 350; //y da imagem que sera desenhada(desenha todos os pokemons liberados)
+        int y2 = 260; //y da imagem que sera desenhada(desenha todos os pokemons liberados)
 
 
         //se a linha selecionada pelo retangulo de selecao for maior que 3(abaixo da terceira)
@@ -214,7 +216,7 @@ public class CharacterSelect extends BasicGameState {
             //se o y do pokemon estiver dentro do especificado
             //quer dizer que ele esta em uma das tres linhas
             //entao desenha
-            if (!(75 + y1 <= 350 || 75 + y1 > 575)) {
+            if (!(75 + y1 <= 300 || 75 + y1 > 500)) {
                 this.pokemonImage.draw(75 + x1, 75 + y1);
             }
 
@@ -251,7 +253,7 @@ public class CharacterSelect extends BasicGameState {
             //se o y do pokemon estiver dentro do especificado
             //quer dizer que ele esta em uma das tres linhas
             //entao desenha
-            if (!(75 + y2 <= 350 || 75 + y2 > 575)) {
+            if (!(75 + y2 <= 300 || 75 + y2 > 500)) {
                 this.pokemonImage.draw(75 + x2 * (pl.getIdPokemon() - 1), 75 + y2);
             }
             x2 = 75; //aumenta o x para desenhar o proximo pokemon 75px a direita
@@ -269,22 +271,23 @@ public class CharacterSelect extends BasicGameState {
         } else { //senão, desenha preto.
             this.imgGrande = new Image("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Locked.gif");
         }
-
-        imgGrande.drawCentered(gc.getWidth() / 2, 200);
+        
+        imgGrande.draw(gc.getWidth()/2 - imgGrande.getWidth()/2 - 30, imgGrande.getHeight()/2 + 36,2);        
         // imgGrande.draw(gc.getWidth() / 2, gc.getHeight() / 2, imgGrande.getWidth()*5, imgGrande.getHeight()*5);
 
+         
+       
 
-
-
+        
         g.setColor(Color.lightGray);
         g.fillRect(75, 40, 675, 10);//cima
-        g.fillRect(75, 300, 675, 10);//baixo
-        g.fillRect(75, 40, 200, 260);//esquerda
-        g.fillRect(525, 40, 225, 260);//direita
+        g.fillRect(75, 200, 675, 70);//baixo
+        g.fillRect(75, 40, 200, 220);//esquerda
+        g.fillRect(525, 40, 225, 220);//direita
 
 
         g.setColor(Color.decode("1996553984"));
-        g.drawRect(gc.getWidth() / 2 - 250 / 2, 50, 250, 250);
+        g.drawRect(gc.getWidth() / 2 - 250 / 2, 50, 250, 150);
         g.setColor(Color.white);
 
     }
@@ -293,12 +296,12 @@ public class CharacterSelect extends BasicGameState {
 
         //arrumar
         //desenha fundo de cima
-        g.setColor(Color.lightGray);
-        g.fillRect(75, 40, 675, 350);
+//        g.setColor(Color.red);
+//        g.fillRect(75, 40, 675, 250);        
         g.setColor(Color.white);
-        g.fillRect((gc.getWidth() / 2) - 250 / 2, 50, 250, 250);
+        g.fillRect((gc.getWidth() / 2) - 250 / 2, 50, 250, 150);
         g.setColor(Color.decode("1996553984"));
-        g.drawRect(75, 40, 675, 350);
+        g.drawRect(75, 40, 675, 230);
 
 
         int linhas = 3;
@@ -308,10 +311,10 @@ public class CharacterSelect extends BasicGameState {
         for (int i = 1; i <= colunas; i++) {
             for (int i2 = 1; i2 <= linhas; i2++) {
                 g.setColor(Color.lightGray);
-                g.fillRect(75 * i, 350 + 75 * i2, 70, 70);
+                g.fillRect(75 * i, 260 + 75 * i2, 70, 70);
                 //g.setColor(Color.red); 
                 g.setColor(Color.decode("1996553984"));
-                g.drawRect(75 * i, 350 + 75 * i2, 70, 70);
+                g.drawRect(75 * i, 260 + 75 * i2, 70, 70);
             }
         }
         g.setColor(Color.white);
@@ -322,33 +325,33 @@ public class CharacterSelect extends BasicGameState {
         int i = this.pokemonSelecionado;
 
         //nome do pokemon
-        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 300, 375);
+        g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 330, 210);
         Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
         g.setColor(Color.white);
         //desenha barras de stats - HP, ATK, DEF, SPD
-        g.fillRect(100, 160, p.getHpBase(), 20);
-        g.fillRect(100, 185, p.getAtkBase(), 20);
-        g.fillRect(100, 210, p.getDefBase(), 20);
-        g.fillRect(100, 235, p.getSpdBase(), 20);
+        g.fillRect(100, 60, p.getHpBase(), 20);
+        g.fillRect(100, 85, p.getAtkBase(), 20);
+        g.fillRect(100, 110, p.getDefBase(), 20);
+        g.fillRect(100, 135, p.getSpdBase(), 20);
         g.setColor(Color.black);
         //desenha os numeros dos stats
-        g.drawString("HP: " + p.getHpBase(), 100, 175);
-        g.drawString("ATK: " + p.getAtkBase(), 100, 200);
-        g.drawString("DEF: " + p.getDefBase(), 100, 225);
-        g.drawString("SPD: " + p.getSpdBase(), 100, 250);
+        g.drawString("HP: " + p.getHpBase(), 100, 60);
+        g.drawString("ATK: " + p.getAtkBase(), 100, 85);
+        g.drawString("DEF: " + p.getDefBase(), 100, 110);
+        g.drawString("SPD: " + p.getSpdBase(), 100, 135);
 
         //informacoes sobre o pokemon
         g.setColor(Color.white);
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
-        g.drawString("Kills: " + pl.getInimigosDerrotados(), 550, 175);
-        g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 550, 200);
-        g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 550, 225);
-        g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 550, 250);
+        g.drawString("Kills: " + pl.getInimigosDerrotados(), 550, 60);
+        g.drawString("Deaths: " + pl.getVezesDerrotasParaNPC(), 550, 85);
+        g.drawString("Dano Total: " + pl.getTotalDanoCausado(), 550, 110);
+        g.drawString("Medals: " + pl.getVezesQueZerouOJogo(), 550, 135);
         if (pl.getVezesDerrotasParaNPC() == 0) {
-            g.drawString("K/D: " + pl.getInimigosDerrotados(), 550, 275);
+            g.drawString("K/D: " + pl.getInimigosDerrotados(), 550, 160);
         } else {
             double killsDeaths = (double) pl.getInimigosDerrotados() / (double) pl.getVezesDerrotasParaNPC();
-            g.drawString("K/D: " + (killsDeaths), 550, 275);
+            g.drawString("K/D: " + (killsDeaths), 550, 160);
         }
 
 
@@ -363,12 +366,12 @@ public class CharacterSelect extends BasicGameState {
         if (pokeliberado.getNome() == null) {
             int x = gc.getWidth() / 2;
             g.setColor(Color.green);
-            g.fillRect(x - poke.getRaridade() / 2, 325, poke.getRaridade(), 29); //desenha a barra de baixo, quando essa encher, o pokemon é liberado
+            g.fillRect(x - poke.getRaridade() / 2, 235, poke.getRaridade(), 29); //desenha a barra de baixo, quando essa encher, o pokemon é liberado
             PokemonDerrotado pokeDerrotado = PokemonDerrotadoDAO.getPokemon(this.pokemonSelecionado + 1); //ve quantas vezes o pokemon foi derrotado
             g.setColor(Color.white);
-            g.fillRect((x - poke.getRaridade() / 2) + 2, 327, pokeDerrotado.getVezesDerrotado(), 25); //desenha a barra de cima que mostra quantas vezes o pokemon foi derrotado
+            g.fillRect((x - poke.getRaridade() / 2), 235, pokeDerrotado.getVezesDerrotado(), 29); //desenha a barra de cima que mostra quantas vezes o pokemon foi derrotado
             g.setColor(Color.black);
-            g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), (x - 50) + 10, 345); //escreve os numeros
+            g.drawString(pokeDerrotado.getVezesDerrotado() + "/" + poke.getRaridade(), (x - 50) + 31, 235); //escreve os numeros
             g.setColor(Color.white);
 
         }

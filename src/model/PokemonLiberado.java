@@ -70,7 +70,7 @@ public class PokemonLiberado {
 
     public void setExp(int exp) {
         this.exp = exp;
-    }
+     }
 
     public int getFaseQueChegou() {
         return faseQueChegou;

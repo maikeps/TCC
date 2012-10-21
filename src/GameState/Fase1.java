@@ -393,25 +393,53 @@ public class Fase1 extends BasicGameState {
         int hp = this.player.getHp();
         int lvl = this.player.getPersonagem().getLvl();
 
+        
+      int expInicial = PokemonLiberadoDAO.getExperiencia(this.player.getPersonagem().getLvl()+1);
+      PokemonLiberado exp = PokemonLiberadoDAO.getPokemon(this.player.getPersonagem().getId());
+      int expAtual = exp.getExp();
+          
+        
+        g.setColor(Color.darkGray);
+        g.fillRect(40 - this.player.offsetx, 460 - this.player.offsety,150, 110); 
         g.setColor(Color.white);
-        g.drawString("LVL " + lvl, 98 - this.player.offsetx, 468 - this.player.offsety);
-        g.drawString("" + this.characterSelect.getPlayer1(), 98 - this.player.offsetx, 488 - this.player.offsety);
-        g.fillRect(98 - this.player.offsetx, 498 - this.player.offsety, hpInicial + 4, 24);
+        g.drawString("" + this.characterSelect.getPlayer1(), 60 - this.player.offsetx, 490 - this.player.offsety);
+        g.drawString("LVL " + lvl, 60 - this.player.offsetx, 470 - this.player.offsety);
+//        g.fillRect(90 - this.player.offsetx, 510 - this.player.offsety, hpInicial + 4, 24);
+        // Barra de Life do Player
         g.setColor(Color.green);
-        g.fillRect(100 - this.player.offsetx, 500 - this.player.offsety, hp, 20);
-        g.drawString("HP: " + hp + "/" + hpInicial, 100 - this.player.offsetx, 550 - this.player.offsety);
-
+        g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, hp, 20);
+        g.setColor(Color.white);
+        g.drawString("HP: " + hp + "/" + hpInicial, 60 - this.player.offsetx, 512 - this.player.offsety);
+       
+        // Barra de Experiencia do Player
+       
+//        g.fillRect(90 - this.player.offsetx, 540 - this.player.offsety, expInicial + 4, 24);
+        g.setColor(Color.blue);
+        g.fillRect(92 - this.player.offsetx, 542 - this.player.offsety ,expAtual,20);
+        g.setColor(Color.white);
+        g.drawString("EXP: " + expAtual + "/" + expInicial, 60 - this.player.offsetx, 542 - this.player.offsety);
+        
+//        g.fillRect(92 - this.player.offsetx,530, lvl, hp);
+        
+        
+        
         // HealthBar do inimigo
         int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
         int hpInimigo = this.inimigoMaisPerto.getHp();
-        int lvlInimigo = player.getPersonagem().getLvl();
+        int lvlInimigo = this.inimigoMaisPerto.getPersonagem().getLvl();
+        
+        g.setColor(Color.darkGray);
+        g.fillRect(570 - this.player.offsetx, 20 - this.player.offsety,150, 100); 
+        
         g.setColor(Color.white);
-        g.drawString("LVL " + lvlInimigo, 598 - this.player.offsetx, 68 - this.player.offsety);
-        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 598 - this.player.offsetx, 88 - this.player.offsety);
-        g.fillRect(598 - this.player.offsetx, 98 - this.player.offsety, hpInicialInimigo + 4, 24);
+        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
+        g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
+        
+        g.fillRect(620 - this.player.offsetx, 80 - this.player.offsety, hpInicialInimigo + 4, 24);
         g.setColor(Color.green);
-        g.fillRect(600 - this.player.offsetx, 100 - this.player.offsety, hpInimigo, 20);
-        g.drawString("HP: " + hpInimigo + "/" + hpInicialInimigo, 600 - this.player.offsetx, 150 - this.player.offsety);
+        g.fillRect(622 - this.player.offsetx, 82 - this.player.offsety, hpInimigo, 20);
+        g.setColor(Color.white);
+        g.drawString("HP: ", 590 - this.player.offsetx, 82 - this.player.offsety);
     }
 
     //o problema esta na imagem do ataque, por que se fizer colisao de player com inimigo funciona
