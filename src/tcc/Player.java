@@ -4,7 +4,6 @@ import java.awt.Point;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 //fazer o DAO de acordo com o personagem recebido como parametro
@@ -31,6 +30,8 @@ public class Player extends GameObject {
     public int offsetx;
     public int offsety;
     int velocidade = 5;
+    boolean sendoPerseguido = false;
+    int contRegen;
 
     public Player(Personagem personagem, int xSpawn, int ySpawn) {
 
@@ -43,16 +44,19 @@ public class Player extends GameObject {
 
         this.personagem.setDirecao(Direcao.DIREITA);
 
-      //  this.personagem.x = xSpawn;
-      //  this.personagem.y = ySpawn;
+        //  this.personagem.x = xSpawn;
+        //  this.personagem.y = ySpawn;
 
-        this.personagem.x=((800 / 2 - personagem.spriteAtual.getWidth() / 2) + xSpawn);
-        this.personagem.y =((600 / 2 - personagem.spriteAtual.getHeight() / 2) + ySpawn);
+        this.personagem.x = ((800 / 2 - personagem.spriteAtual.getWidth() / 2) + xSpawn);
+        this.personagem.y = ((600 / 2 - personagem.spriteAtual.getHeight() / 2) + ySpawn);
 
 
-        this.x = xSpawn;
-        this.y = ySpawn;
-
+        //this.x = xSpawn;
+        //this.y = ySpawn;
+        this.x = this.personagem.x;
+        this.y = this.personagem.y;
+        
+        
 
         this.offsetx = -xSpawn;
         this.offsety = -ySpawn;
@@ -60,6 +64,15 @@ public class Player extends GameObject {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
+
+        if (this.sendoPerseguido == false) {
+            this.contRegen++;
+        }
+        // se passou 2s desde que o inimigo parou de perseguir, regenera vida
+        if (this.contRegen > 120) {
+            this.regeneraVida();
+        }
+
         this.personagem.update(gc, game, delta);
 
         Input input = gc.getInput();
@@ -123,12 +136,12 @@ public class Player extends GameObject {
             Point ponto = new Point(input.getMouseX(), input.getMouseY());
             this.destX = ponto.x;
             this.destY = ponto.y;
-            this.angulo = (float) util.Util.calculaAngulo(destX, gc.getWidth()/2, destY, gc.getHeight()/2);
+            this.angulo = (float) util.Util.calculaAngulo(destX, gc.getWidth() / 2, destY, gc.getHeight() / 2);
             this.atacou = true;
         }
 
-        this.personagem.x = gc.getWidth()/2-this.offsetx - personagem.spriteAtual.getWidth() / 2;
-        this.personagem.y = gc.getHeight()/2-this.offsety - personagem.spriteAtual.getHeight() / 2;
+        this.personagem.x = gc.getWidth() / 2 - this.offsetx - personagem.spriteAtual.getWidth() / 2;
+        this.personagem.y = gc.getHeight() / 2 - this.offsety - personagem.spriteAtual.getHeight() / 2;
     }
 
     @Override
@@ -136,8 +149,15 @@ public class Player extends GameObject {
         this.personagem.render(gc, game, g);
         g.drawString(this.angulo + "", 200, 200);
         g.drawString(this.destX + " - " + this.x, 200 - offsetx, 250 - offsety);
-        g.drawString(this.destY + " - " + this.y, 200 - offsetx , 300 - offsety);
+        g.drawString(this.destY + " - " + this.y, 200 - offsetx, 300 - offsety);
         g.drawString(this.personagem.podeAtirar() + " - " + this.personagem.cooldownAtual, 500, 400);
+    }
+
+    public void regeneraVida() {
+        float regenRate = 3 / 100f;//3% do hp por segundo
+        float qtdRegen = this.personagem.getHpInicial() * regenRate;
+        qtdRegen /= 60f;
+        this.getPersonagem().setHp(this.personagem.getHp() + qtdRegen);
     }
 
     public Personagem getPersonagem() {
@@ -148,7 +168,7 @@ public class Player extends GameObject {
         this.personagem = p;
     }
 
-    public int getHp() {
+    public float getHp() {
         return this.personagem.getHp();
     }
 

@@ -40,13 +40,16 @@ public class Potion extends Item {
 
     public void update(GameContainer gc, StateBasedGame game, int delta) {
         if(this.pegou){
-       //     return;
+            this.contador ++;
+        }
+        if(this.contador >= 25){
+            //return;
         }
     }
 
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
         if(this.pegou){
-        //    return;
+            return;
         }
         this.image.draw(this.x, this.y);
     }

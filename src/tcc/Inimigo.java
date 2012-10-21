@@ -94,7 +94,11 @@ public class Inimigo extends GameObject {
 //////        if (this.personagem.getHp() <= this.personagem.getHpInicial() * 30 / 100) {
 //////            this.afasta();
 //////        }
+        this.player.sendoPerseguido = false;
+        
         if (this.podePerseguir()) {
+            this.player.sendoPerseguido = true;
+            this.player.contRegen = 0;
             this.aproxima();
             this.ataca();
 //            this.sorteiaDestino();
@@ -464,7 +468,7 @@ public class Inimigo extends GameObject {
         this.personagem = p;
     }
 
-    public int getHp() {
+    public float getHp() {
         return this.personagem.getHp();
     }
 
