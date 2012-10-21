@@ -25,7 +25,7 @@ public class Personagem extends GameObject {
     protected int atk;
     protected int def;
     protected int spd;
-    protected int hp;
+    protected float hp;
     protected int hpInicial;
     protected int lvl;
 
@@ -138,11 +138,11 @@ public class Personagem extends GameObject {
     }
 
     //---- STATS ----\\
-    public int getHp() {
+    public float getHp() {
         return this.hp;
     }
 
-    public void setHp(int hp) {
+    public void setHp(float hp) {
         this.hp = hp;
     }
 

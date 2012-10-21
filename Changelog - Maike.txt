@@ -35,3 +35,10 @@
 
 27/09
 -Geracao de mapa aprimorado
+
+20/10
+-Arrumado parte de mostrar dano na tela
+-Adicionado Bau e Itens
+-Cura recebida de pocao aparece na tela
+-Vida do jogador regenera apos alguns segundos sem contato com o inimigo
+-Arrumado bug onde Baús apareciam na agua

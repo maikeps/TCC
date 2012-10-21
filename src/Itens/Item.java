@@ -17,12 +17,10 @@ public abstract class Item extends GameObject{
     int raridade;
     Efeito efeito;
     Image image;
-
-    public Item() {
-    }
     int forca;
+    int contador;
     
-    boolean pegou = false;
+    public boolean pegou = false;
 
     public Efeito getEfeito() {
         return efeito;
@@ -63,7 +61,16 @@ public abstract class Item extends GameObject{
     public void setForca(int forca) {
         this.forca = forca;
     }
+
+    public int getContador() {
+        return contador;
+    }
+
+    public void setContador(int contador) {
+        this.contador = contador;
+    }
           
+    
     
     
     @Override

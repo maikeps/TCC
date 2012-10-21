@@ -5,14 +5,13 @@
 package GameState;
 
 import Ataques.Ataque;
-import Ataques.DragonRage;
 import DAO.AtaqueDAO;
 import DAO.PokemonDAO;
 import DAO.PokemonDerrotadoDAO;
 import DAO.PokemonLiberadoDAO;
+import Itens.Bau;
 import Itens.Item;
 import Itens.Potion;
-import Itens.Efeito;
 import MySQL.ConjuntoResultados;
 import MySQL.MySQL;
 import java.awt.image.BufferedImage;
@@ -28,6 +27,7 @@ import javax.swing.JOptionPane;
 import model.Pokemon;
 import model.PokemonDerrotado;
 import model.PokemonLiberado;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -57,12 +57,14 @@ public class Fase1 extends BasicGameState {
     ArrayList<Ataque> ataquesPlayer;
     ArrayList<Ataque> ataquesInimigo;
     ArrayList<Item> listaItens;
+    ArrayList<Bau> listaBaus;
     Personagem personagem;
     boolean atacou;
     Inimigo inimigoMaisPerto;
     double distanciaAteInimigoMaisPerto;
     CenarioComColisao cenarioComColisao;
-    int[] tilesColisao = {2};
+    int[] tilesColisao = {2}; // 2 = agua
+    int lvlInicialPlayer;
 
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
@@ -81,6 +83,7 @@ public class Fase1 extends BasicGameState {
         this.ataquesInimigo = new ArrayList<Ataque>();
         this.listaInimigos = new ArrayList<Inimigo>();
         this.listaItens = new ArrayList<Item>();
+        this.listaBaus = new ArrayList<Bau>();
 
 
         this.carregaMapa();
@@ -93,22 +96,15 @@ public class Fase1 extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
-        if (this.player == null) {
-            int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
-            int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
-            this.criaPlayer(x, y);
-            this.cenarioComColisao.adicionaObjeto(this.player.personagem);
+
+        boolean val = new Random().nextInt(100) <= 1;
+        if (val) {
+            this.adicionaBau();
         }
-        if (this.listaInimigos.isEmpty()) {
-            int rand = util.Util.random(45) + 1;
-            rand += 15; //minimo 15, max 60 inimigos
-            for (int ii = 1; ii <= rand; ii++) {
-                this.criaInimigo(this.characterSelect.getInimigo());
-                this.characterSelect.sorteiaInimigo();
-            }
-            for (Inimigo inimigo : this.listaInimigos) {
-                this.cenarioComColisao.adicionaObjeto(inimigo);
-            }
+
+        val = new Random().nextInt(100) <= 1;
+        if (val) {
+            this.adicionaInimigo();
         }
 
         for (Inimigo inimigo : this.listaInimigos) {
@@ -125,19 +121,38 @@ public class Fase1 extends BasicGameState {
         for (Ataque a : this.ataquesInimigo) {
             a.update(gc, game, i);
         }
+
+        for (Bau bau : this.listaBaus) {
+            bau.update(gc, game, i);
+            if (bau.abriu) {
+                switch (bau.efeito) {
+                    case CURA:
+                        this.adicionaPotion(bau.xItem, bau.yItem);
+                }
+            }
+        }
         for (Item item : this.listaItens) {
             item.update(gc, game, i);
         }
 
         this.cenarioComColisao.update(i, tilesColisao);
 
+
+        for (int cont = 0; cont < this.listaBaus.size(); cont++) {
+            if (this.listaBaus.get(cont).abriu || this.cenarioComColisao.temColisaoComTile(this.listaBaus.get(cont), 2)) {
+                this.listaBaus.remove(cont);
+            }
+        }
+
         this.verificaInimigoMaisPerto();
         this.lancaAtaques();
         this.verificaColisao();
         this.verificaSePlayerEstaMorto();
         this.verificaSeInimigoEstaMorto();
+        this.verificaColisaoComBaus();
         this.verificaColisaoComItens();
-        
+
+
         this.player.update(gc, game, i);
     }
 
@@ -151,23 +166,25 @@ public class Fase1 extends BasicGameState {
             this.cenarioComColisao.adicionaObjeto(this.player.personagem);
         }
         if (this.listaInimigos.isEmpty()) {
-            int rand = util.Util.random(45) + 1;
-            rand += 15; //minimo 15, max 60 inimigos
-            for (int i = 1; i <= rand; i++) {
-                this.criaInimigo(this.characterSelect.getInimigo());
-                this.characterSelect.sorteiaInimigo();
-            }
+            //  int rand = util.Util.random(45) + 1;
+            //  rand += 15; //minimo 15, max 60 inimigos
+            //  for (int i = 1; i <= rand; i++) {
+            // for (int i = 1; i <= 15; i++) {
+            this.criaInimigo(this.characterSelect.getInimigo());
+            this.characterSelect.sorteiaInimigo();
+            // }
             for (Inimigo inimigo : this.listaInimigos) {
                 this.cenarioComColisao.adicionaObjeto(inimigo);
             }
         }
-        if (this.listaItens.isEmpty()) {
-            this.adicionaItem();
-        }
+//        if (this.listaBaus.isEmpty()) {
+//            this.adicionaBaus();
+//        }
 
         this.cenarioComColisao.render(gc, game, g, this.player.offsetx, this.player.offsety, this.player.getX(), this.player.getY());
 
         g.drawString("" + gc.getWidth() / 2 + " - " + this.player.offsetx + " = " + (gc.getWidth() / 2 - this.player.offsetx), 25 - this.player.offsetx, 50 - this.player.offsety);
+        g.drawString("" + this.player.getX() + " - " + this.player.getY(), 25 - this.player.offsetx, 300 - this.player.offsety);
 
         this.player.render(gc, game, g);
 
@@ -193,11 +210,17 @@ public class Fase1 extends BasicGameState {
             }
         }
 
+        for (Bau bau : this.listaBaus) {
+            bau.render(gc, game, g);
+        }
         for (Item item : this.listaItens) {
             item.render(gc, game, g);
         }
 
         this.desenhaHealthBar(g);
+        this.desenhaDano(g);
+        this.desenhaCura(g);
+
     }
 
     public void keyPressed(int key, char c) {
@@ -214,10 +237,14 @@ public class Fase1 extends BasicGameState {
                 String s = "Ataques." + a.getNome();
                 try {
                     Class cls = Class.forName(s);
-                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class};
+                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class
+                    };
                     java.lang.reflect.Constructor con = cls.getConstructor(parameters);
                     Object o = con.newInstance(new Object[]{this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()});
-                    this.ataquesPlayer.add((Ataque) o);
+
+
+                    this.ataquesPlayer.add(
+                            (Ataque) o);
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
@@ -248,15 +275,18 @@ public class Fase1 extends BasicGameState {
                     System.exit(1);
                 }
 
+
                 this.player.personagem.setCooldownAtual();
             }
         }
 
         this.player.atacou = false;
-
         //---------------------\\
 
-        for (int i = 0; i < this.listaInimigos.size(); i++) {
+        for (int i = 0;
+                i
+                < this.listaInimigos.size();
+                i++) {
             if (this.listaInimigos.get(i).atacou == true) {
                 if (this.listaInimigos.get(i).personagem.podeAtirar()) {
 
@@ -347,7 +377,14 @@ public class Fase1 extends BasicGameState {
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
         this.player = new Player(this.personagem, xSpawn, ySpawn);
+        for (Inimigo i : this.listaInimigos) {
+            i.player = this.player;
+        }
+        this.cenarioComColisao.adicionaObjeto(this.player.personagem);
 
+        if (this.lvlInicialPlayer == 0) {
+            this.lvlInicialPlayer = lvl;
+        }
 
     }
 
@@ -360,8 +397,16 @@ public class Fase1 extends BasicGameState {
         int spd = pokemon.getSpdBase();
         int hp = pokemon.getHpBase();
 
-        PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(this.characterSelect.getPlayer1());
-        int lvl = pl.getLvl();
+        int lvl;
+
+        if (this.player.getPersonagem().getLvl() >= 5) {
+            int diferenca = util.Util.random(3);//maximo de 3 leveis de diferenca
+            lvl = this.lvlInicialPlayer + diferenca;
+        } else {
+            lvl = this.player.getPersonagem().getLvl();
+        }
+
+        System.out.println(this.lvlInicialPlayer + " - " + lvl + " - " + nome);
 
         hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
         atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
@@ -390,7 +435,7 @@ public class Fase1 extends BasicGameState {
     public void desenhaHealthBar(Graphics g) {
         // HealthBar do player
         int hpInicial = this.player.getPersonagem().getHpInicial();
-        int hp = this.player.getHp();
+        int hp = (int) this.player.getHp();
         int lvl = this.player.getPersonagem().getLvl();
 
         
@@ -425,12 +470,15 @@ public class Fase1 extends BasicGameState {
         
         // HealthBar do inimigo
         int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
-        int hpInimigo = this.inimigoMaisPerto.getHp();
+
+        int hpInimigo = (int) this.inimigoMaisPerto.getHp();
         int lvlInimigo = this.inimigoMaisPerto.getPersonagem().getLvl();
         
         g.setColor(Color.darkGray);
         g.fillRect(570 - this.player.offsetx, 20 - this.player.offsety,150, 100); 
         
+
+
         g.setColor(Color.white);
         g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
         g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
@@ -857,17 +905,21 @@ public class Fase1 extends BasicGameState {
 
     }
 
-    public void adicionaItem() {
-        //adiciona potion
-        int x;
-        int y;
-        for (int i = 0; i < 10; i++) {
-            //  boolean val = new Random().nextInt(75) == 0;
-            // if (val) {
+    public void adicionaBau() {
+        if (this.listaBaus.size() < 10) {
+            int x;
+            int y;
             x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
             y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
-            this.listaItens.add(new Potion(x, y));
-            // }
+            this.listaBaus.add(new Bau(x, y));
+        }
+    }
+
+    public void verificaColisaoComBaus() {
+        for (int i = 0; i < this.listaBaus.size(); i++) {
+            if (this.listaBaus.get(i).getRetangulo().intersects(this.player.getPersonagem().getRetangulo())) {
+                this.listaBaus.get(i).abriu = true;
+            }
         }
     }
 
@@ -882,8 +934,56 @@ public class Fase1 extends BasicGameState {
                         //
                         break;
                 }
-                this.listaItens.remove(i);
+                this.listaItens.get(i).pegou = true;
             }
+        }
+    }
+
+    public void adicionaPotion(int x, int y) {
+        this.listaItens.add(new Potion(x, y));
+    }
+
+    public void desenhaDano(Graphics g) {
+        for (int i = 0; i < this.ataquesInimigo.size(); i++) {
+            if (this.ataquesInimigo.get(i).acertou == true) {
+                if (this.ataquesInimigo.get(i).getContador() >= 25) {
+                    this.ataquesInimigo.remove(this.ataquesInimigo.get(i));
+                } else {
+                    g.setColor(Color.red);
+                    g.drawString("" + this.ataquesInimigo.get(i).getDano(), this.ataquesInimigo.get(i).getX(), this.ataquesInimigo.get(i).getY());
+                }
+            }
+        }
+        for (int i = 0; i < this.ataquesPlayer.size(); i++) {
+            if (this.ataquesPlayer.get(i).acertou == true) {
+                if (this.ataquesPlayer.get(i).getContador() >= 25) {
+                    this.ataquesPlayer.remove(this.ataquesPlayer.get(i));
+                } else {
+                    g.setColor(Color.white);
+                    g.drawString("" + this.ataquesPlayer.get(i).getDano(), this.ataquesPlayer.get(i).getX(), this.ataquesPlayer.get(i).getY());
+                }
+            }
+        }
+
+    }
+
+    public void desenhaCura(Graphics g) {
+        for (int i = 0; i < this.listaItens.size(); i++) {
+            if (this.listaItens.get(i).pegou) {
+                if (this.listaItens.get(i).getContador() >= 25) {
+                    this.listaItens.remove(this.listaItens.get(i));
+                } else {
+                    g.setColor(Color.green);
+                    g.drawString("" + this.listaItens.get(i).getForca(), this.listaItens.get(i).getX(), this.listaItens.get(i).getY());
+                }
+            }
+        }
+    }
+
+    public void adicionaInimigo() {
+        if (this.listaInimigos.size() < 15) {
+            this.characterSelect.sorteiaInimigo();
+            this.criaInimigo(characterSelect.getInimigo());
         }
     }
 }

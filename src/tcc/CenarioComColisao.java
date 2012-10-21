@@ -94,9 +94,8 @@ public class CenarioComColisao {
         DirecaoColisao direcao = null;
 
         for (TileInfo tile : tiles) {
-          for(int i = 0; i < idTile.length ; i++){ 
+          for(int i = 1; i < idTile.length ; i++){ 
             if ((tile.id == idTile[i]) && obj.temColisao(tile.getRetangle())) {
-                System.out.println("COLISAO COM O TILE"+i);
                 direcao = this.pegaDirecaoColisao(obj, tile);
                 this.realizaColisao(obj, tile, direcao);
             }
