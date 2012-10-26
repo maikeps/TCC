@@ -68,7 +68,7 @@ public abstract class Ataque extends GameObject {
 
         } else {
             double degree = this.angulo; //desired degree
-            Shape rect = new Rectangle((int)this.x, (int)this.y, this.sprite.getWidth(), this.sprite.getHeight()); //creating the rectangle you want to rotate
+            Shape rect = new Rectangle((int)this.x, (int)this.y, this.sprite.getWidth()/this.sprite.getHorizontalCount(), this.sprite.getHeight()/this.sprite.getVerticalCount()); //creating the rectangle you want to rotate
             AffineTransform transform = new AffineTransform();
             //rotate or do other things with the rectangle (shear, translate, scale and so on)
             //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis

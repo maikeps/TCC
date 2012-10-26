@@ -79,6 +79,8 @@ public class MainMenu extends BasicGameState {
                 this.game.enterState(Instructions.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Options")){
+                Options.idPreviousGameState = this.getID();
+                Options.options = new String[]{"Full Screen", "Accept"};
                 this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Exit")){

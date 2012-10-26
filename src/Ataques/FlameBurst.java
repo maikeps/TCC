@@ -66,7 +66,9 @@ public class FlameBurst extends Ataque {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        if(!animation.isStopped()){
         this.animation.draw(this.x, this.y);
+        }
     }
 
     @Override

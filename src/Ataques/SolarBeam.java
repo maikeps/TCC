@@ -75,7 +75,6 @@ public class SolarBeam extends Ataque {
         if (this.desativado == true) {
             return;
         }
-        this.imagem.rotate(this.angulo);
         this.imagem.draw(this.x, this.y);
     }
 }

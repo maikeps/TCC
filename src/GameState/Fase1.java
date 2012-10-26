@@ -54,6 +54,8 @@ public class Fase1 extends BasicGameState {
     CharacterSelect characterSelect;
     Player player;
     ArrayList<Inimigo> listaInimigos;
+    Inimigo boss;
+    //  ArrayList<Ataque> ataquesBoss;
     ArrayList<Ataque> ataquesPlayer;
     ArrayList<Ataque> ataquesInimigo;
     ArrayList<Item> listaItens;
@@ -81,6 +83,7 @@ public class Fase1 extends BasicGameState {
 
         this.ataquesPlayer = new ArrayList<Ataque>();
         this.ataquesInimigo = new ArrayList<Ataque>();
+        //   this.ataquesBoss = new ArrayList<Ataque>();
         this.listaInimigos = new ArrayList<Inimigo>();
         this.listaItens = new ArrayList<Item>();
         this.listaBaus = new ArrayList<Bau>();
@@ -96,6 +99,28 @@ public class Fase1 extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
+        if (this.player == null) {
+            int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
+            int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
+            this.criaPlayer(x, y);
+            this.cenarioComColisao.adicionaObjeto(this.player.personagem);
+            this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+            this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+        }
+        if (this.listaInimigos.isEmpty()) {
+            //  int rand = util.Util.random(45) + 1;
+            //  rand += 15; //minimo 15, max 60 inimigos
+            //  for (int i = 1; i <= rand; i++) {
+            // for (int i = 1; i <= 15; i++) {
+            this.criaInimigo(this.characterSelect.getInimigo());
+            this.characterSelect.sorteiaInimigo();
+            // }
+            for (Inimigo inimigo : this.listaInimigos) {
+                this.cenarioComColisao.adicionaObjeto(inimigo);
+                inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+                inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+            }
+        }
 
         boolean val = new Random().nextInt(100) <= 1;
         if (val) {
@@ -113,9 +138,10 @@ public class Fase1 extends BasicGameState {
             inimigo.update(gc, game, i);
         }
 
-        for (Ataque a : this.ataquesPlayer) {
-            if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 25 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 25) {
-                a.update(gc, game, i);
+        for (int cont = 0; cont < this.ataquesPlayer.size(); cont++) {
+            this.ataquesPlayer.get(cont).update(gc, game, i);
+            if (Math.abs(this.ataquesPlayer.get(cont).getX() - this.player.getX()) >= gc.getWidth() / 2 + 100 && Math.abs(this.ataquesPlayer.get(cont).getY() - this.player.getY()) >= gc.getHeight() / 2 + 100) {
+                this.ataquesPlayer.remove(cont);
             }
         }
         for (Ataque a : this.ataquesInimigo) {
@@ -158,12 +184,13 @@ public class Fase1 extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-
         if (this.player == null) {
-            int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
-            int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+            int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
+            int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
             this.criaPlayer(x, y);
             this.cenarioComColisao.adicionaObjeto(this.player.personagem);
+            this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+            this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
         }
         if (this.listaInimigos.isEmpty()) {
             //  int rand = util.Util.random(45) + 1;
@@ -175,8 +202,22 @@ public class Fase1 extends BasicGameState {
             // }
             for (Inimigo inimigo : this.listaInimigos) {
                 this.cenarioComColisao.adicionaObjeto(inimigo);
+                inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+                inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+                g.fillRect(inimigo.getX(), inimigo.getY(), inimigo.personagem.getAltura(), inimigo.personagem.getLargura());
             }
         }
+
+        int diferencaLvl = this.player.personagem.getLvl() - this.lvlInicialPlayer;
+        if (diferencaLvl >= 5) {
+            //  if (this.boss == null) {
+            if (this.boss == null) {
+                this.criaBoss();
+            }
+        }
+        //  g.drawLine(this.boss.getX(), this.boss.getY(), this.player.getX(), this.player.getY());
+        //  g.fillRect(this.boss.getX(), this.boss.getY(), 1000, 1000);
+        // System.out.println(this.boss.getX()+" - "+ this.boss.getY());
 //        if (this.listaBaus.isEmpty()) {
 //            this.adicionaBaus();
 //        }
@@ -190,21 +231,24 @@ public class Fase1 extends BasicGameState {
 
 
         for (Inimigo inimigo : this.listaInimigos) {
-            if (Math.abs(inimigo.getX() - this.player.getX()) <= gc.getWidth() / 2 + 25 && Math.abs(inimigo.getY() - this.player.getY()) <= gc.getHeight() / 2 + 25) {
+            if (Math.abs(inimigo.getX() - this.player.getX()) <= gc.getWidth() / 2 + 100 && Math.abs(inimigo.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
                 inimigo.render(gc, game, g);
             }
         }
+        //   if (this.boss != null) {
+        //       this.boss.render(gc, game, g);
+        //   }
 
         for (Ataque a : this.ataquesPlayer) {
             if (!a.desativado) {
-                if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 25 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 25) {
+                if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 100 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
                     a.render(gc, game, g);
                 }
             }
         }
         for (Ataque a : this.ataquesInimigo) {
             if (!a.desativado) {
-                if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 25 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 25) {
+                if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 200 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
                     a.render(gc, game, g);
                 }
             }
@@ -224,8 +268,14 @@ public class Fase1 extends BasicGameState {
     }
 
     public void keyPressed(int key, char c) {
-        if (key == Input.KEY_P) {
+        if (key == Input.KEY_P || key == Input.KEY_ESCAPE) {
             this.game.enterState(PauseScreen.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+        }
+        //cheats :D
+        if (key == Input.KEY_ENTER) {
+            //this.characterSelect.sorteiaInimigo();
+            //this.criaInimigo(this.characterSelect.getInimigo());
+            this.criaBoss();
         }
     }
 
@@ -321,7 +371,8 @@ public class Fase1 extends BasicGameState {
                         System.exit(1);
                     } catch (InvocationTargetException ex6) {
                         ex6.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "6ERROR: " + ex6.getMessage());
+                        System.out.println(ex6.getCause());
+                        JOptionPane.showMessageDialog(null, "6ERROR: Metodo invocado joga uma exception");
                         System.exit(1);
                     } catch (SecurityException ex7) {
                         ex7.printStackTrace();
@@ -386,6 +437,12 @@ public class Fase1 extends BasicGameState {
             this.lvlInicialPlayer = lvl;
         }
 
+
+        this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+        this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+
+        Stats.personagem = this.player.personagem;
+
     }
 
     public void criaInimigo(String nome) {
@@ -400,18 +457,21 @@ public class Fase1 extends BasicGameState {
         int lvl;
 
         if (this.player.getPersonagem().getLvl() >= 5) {
-            int diferenca = util.Util.random(3);//maximo de 3 leveis de diferenca
+            int diferenca = util.Util.random(5);//maximo de 5 levels de diferenca
             lvl = this.lvlInicialPlayer + diferenca;
         } else {
             lvl = this.player.getPersonagem().getLvl();
         }
 
-        System.out.println(this.lvlInicialPlayer + " - " + lvl + " - " + nome);
-
         hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
         atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
         def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
         spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
+
+        hp = hp * 2 / 3;
+        atk = atk * 2 / 3;
+        def = def * 2 / 3;
+        spd = spd * 2 / 3;
 
         String sql = "insert into pokemonInimigo "
                 + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
@@ -427,8 +487,20 @@ public class Fase1 extends BasicGameState {
         //    int y = util.Util.random(this.cenarioColisao.getScene().getHeight()+1);
         int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
         int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+        double distancia = util.Util.calculaDistancia(x, y, this.player.getX(), this.player.getY());
+//            while (distancia < 1000) {
+//                x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+//                y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+//            }
+
         Inimigo inimigo = new Inimigo(this.personagem, this.player, x, y);
         this.inimigoMaisPerto = inimigo;
+
+        inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+        inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+
+        inimigo.tipo = "Minion";
+
         this.listaInimigos.add(inimigo);
     }
 
@@ -437,57 +509,72 @@ public class Fase1 extends BasicGameState {
         int hpInicial = this.player.getPersonagem().getHpInicial();
         int hp = (int) this.player.getHp();
         int lvl = this.player.getPersonagem().getLvl();
+        double porcentoHp = (100 * hp) / hpInicial;
 
-        
-      int expInicial = PokemonLiberadoDAO.getExperiencia(this.player.getPersonagem().getLvl()+1);
-      PokemonLiberado exp = PokemonLiberadoDAO.getPokemon(this.player.getPersonagem().getId());
-      int expAtual = exp.getExp();
-          
-        
         g.setColor(Color.darkGray);
-        g.fillRect(40 - this.player.offsetx, 460 - this.player.offsety,150, 110); 
+        g.fillRect(40 - this.player.offsetx, 460 - this.player.offsety, 170, 120);
         g.setColor(Color.white);
         g.drawString("" + this.characterSelect.getPlayer1(), 60 - this.player.offsetx, 490 - this.player.offsety);
         g.drawString("LVL " + lvl, 60 - this.player.offsetx, 470 - this.player.offsety);
 //        g.fillRect(90 - this.player.offsetx, 510 - this.player.offsety, hpInicial + 4, 24);
         // Barra de Life do Player
+        //   g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, hp, 20);
+        g.setColor(Color.gray);
+        g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, 100, 20);
         g.setColor(Color.green);
-        g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, hp, 20);
+        g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, (int) porcentoHp, 20);
         g.setColor(Color.white);
         g.drawString("HP: " + hp + "/" + hpInicial, 60 - this.player.offsetx, 512 - this.player.offsety);
-       
+
         // Barra de Experiencia do Player
-       
+
+        int expBarraTotal = this.player.expProxNivel - this.player.expNivelAtual;
+        int expBarraAtual = this.player.getPersonagem().getExp() - this.player.expNivelAtual;
+
+        double porcento = (100 * expBarraAtual) / expBarraTotal;
+
 //        g.fillRect(90 - this.player.offsetx, 540 - this.player.offsety, expInicial + 4, 24);
+        g.setColor(Color.gray);
+//        g.fillRect(92 - this.player.offsetx, 542 - this.player.offsety, expAtual, 20);
+        g.fillRoundRect(92 - this.player.offsetx, 542 - this.player.offsety, 100, 10, 10);
         g.setColor(Color.blue);
-        g.fillRect(92 - this.player.offsetx, 542 - this.player.offsety ,expAtual,20);
+        g.fillRoundRect(92 - this.player.offsetx, 542 - this.player.offsety, (int) porcento, 10, 10);
+        //  g.fillRect(92 - this.player.offsetx, 542 - this.player.offsety, (int) porcento, 10);
         g.setColor(Color.white);
-        g.drawString("EXP: " + expAtual + "/" + expInicial, 60 - this.player.offsetx, 542 - this.player.offsety);
-        
+        //  g.drawString("EXP: " + expAtual + "/" + expProxNivel, 60 - this.player.offsetx, 542 - this.player.offsety);
+        //  g.drawString("EXP: " + expBarraAtual + "/" + expBarraTotal, 60 - this.player.offsetx, 542 - this.player.offsety);
+
 //        g.fillRect(92 - this.player.offsetx,530, lvl, hp);
-        
-        
-        
+
+
+
         // HealthBar do inimigo
-        int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
+        if (this.distanciaAteInimigoMaisPerto <= 750) {
+            int hpInicialInimigo = this.inimigoMaisPerto.getPersonagem().getHpInicial();
 
-        int hpInimigo = (int) this.inimigoMaisPerto.getHp();
-        int lvlInimigo = this.inimigoMaisPerto.getPersonagem().getLvl();
-        
-        g.setColor(Color.darkGray);
-        g.fillRect(570 - this.player.offsetx, 20 - this.player.offsety,150, 100); 
-        
+            int hpInimigo = (int) this.inimigoMaisPerto.getHp();
+            int lvlInimigo = this.inimigoMaisPerto.getPersonagem().getLvl();
+            double porcentoHpInimigo = (100 * hpInimigo) / hpInicialInimigo;
+
+            g.setColor(Color.darkGray);
+            g.fillRect(570 - this.player.offsetx, 20 - this.player.offsety, 170, 120);
 
 
-        g.setColor(Color.white);
-        g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
-        g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
-        
-        g.fillRect(620 - this.player.offsetx, 80 - this.player.offsety, hpInicialInimigo + 4, 24);
-        g.setColor(Color.green);
-        g.fillRect(622 - this.player.offsetx, 82 - this.player.offsety, hpInimigo, 20);
-        g.setColor(Color.white);
-        g.drawString("HP: ", 590 - this.player.offsetx, 82 - this.player.offsety);
+
+            g.setColor(Color.white);
+            g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
+            g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
+
+            g.setColor(Color.gray);
+            g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, 100, 20);
+            g.setColor(Color.green);
+            g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, (int) porcentoHpInimigo, 20);
+            g.setColor(Color.white);
+            g.drawString("HP: ", 590 - this.player.offsetx, 82 - this.player.offsety);
+            if (this.inimigoMaisPerto.tipo.equals("Boss")) {
+                g.drawString("BOSS", 590 - this.player.offsetx, 95 - this.player.offsety);
+            }
+        }
     }
 
     //o problema esta na imagem do ataque, por que se fizer colisao de player com inimigo funciona
@@ -545,7 +632,10 @@ public class Fase1 extends BasicGameState {
         for (Inimigo inimigo : this.listaInimigos) {
             for (Ataque a : this.ataquesPlayer) {
                 int x1 = inimigo.getX(), x2 = inimigo.getPersonagem().spriteAtual.getWidth(), y1 = inimigo.getY(), y2 = inimigo.getPersonagem().spriteAtual.getHeight();
-
+                if (inimigo.tipo.equals("Boss")) {
+                    x2 *= 2;
+                    y2 *= 2;
+                }
                 if (a.getShape().intersects(x1, y1, x2, y2)) {
                     if (a.desativado == false) {
                         int lvl = this.player.personagem.getLvl();
@@ -669,10 +759,14 @@ public class Fase1 extends BasicGameState {
                 PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
                 int exp = expGanha + pokeLiberado.getExp();
                 int lvlPlayer = pokeLiberado.getLvl();
+                if (inimigo.tipo.equals("Boss")) {
+                    exp *= 5;
+                }
 
                 MySQL banco = new MySQL();
                 String sql = "update PokemonLiberado set exp = " + exp + " where idPokemon = " + this.player.personagem.getId();
                 boolean bool = banco.executaUpdate(sql);
+                this.player.personagem.setExp(exp);
 
                 //verifica se o pokemon ganhou um level
                 sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
@@ -772,13 +866,14 @@ public class Fase1 extends BasicGameState {
             //futuramente aumentar o contador na tabela pokemonDerrotadoa
             //para ver se o pokemon pode ser liberado
             Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
-            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values "
+            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, level) values "
                     + "(1, "
                     + "" + pokeASerLiberado.getId() + ", "
                     + "" + pokeASerLiberado.getAtkBase() + ", "
                     + "" + pokeASerLiberado.getDefBase() + ", "
                     + "" + pokeASerLiberado.getSpdBase() + ", "
-                    + "" + pokeASerLiberado.getHpBase() + ");";
+                    + "" + pokeASerLiberado.getHpBase() + ","
+                    + "" + this.player.personagem.getLvl() + ");";
             System.out.println(sql);
             boolean bool = banco.executaInsert(sql);
             this.characterSelect.setPlayer1(pokeASerLiberado.getNome());
@@ -911,6 +1006,11 @@ public class Fase1 extends BasicGameState {
             int y;
             x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
             y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+//            double distancia = util.Util.calculaDistancia(x, y, this.player.getX(), this.player.getY());
+//            while (distancia < 1000) {
+//                x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+//                y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+//            }
             this.listaBaus.add(new Bau(x, y));
         }
     }
@@ -924,11 +1024,14 @@ public class Fase1 extends BasicGameState {
     }
 
     public void verificaColisaoComItens() {
+
         for (int i = 0; i < this.listaItens.size(); i++) {
             if (this.listaItens.get(i).getRetangulo().intersects(this.player.getPersonagem().getRetangulo())) {
                 switch (this.listaItens.get(i).getEfeito()) {
                     case CURA:
-                        this.player.getPersonagem().setHp(this.player.getPersonagem().getHp() + this.listaItens.get(i).getForca());
+                        if (this.listaItens.get(i).pegou == false) {
+                            this.player.getPersonagem().setHp(this.player.getPersonagem().getHp() + this.listaItens.get(i).getForca());
+                        }
                         break;
                     case ENVENENA:
                         //
@@ -985,5 +1088,58 @@ public class Fase1 extends BasicGameState {
             this.characterSelect.sorteiaInimigo();
             this.criaInimigo(characterSelect.getInimigo());
         }
+    }
+
+    public void criaBoss() {
+
+        this.characterSelect.sorteiaInimigo();
+        String nome = this.characterSelect.getInimigo();
+        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
+
+        int id = pokemon.getId();
+        int atk = pokemon.getAtkBase() * 3;
+        int def = pokemon.getDefBase() * 1;
+        int spd = pokemon.getSpdBase() * 1;
+        int hp = pokemon.getHpBase() * 5;
+
+        int lvl;
+
+        if (this.player.getPersonagem().getLvl() >= 5) {
+            int diferenca = util.Util.random(5);//maximo de 5 leveis de diferenca
+            lvl = this.lvlInicialPlayer + diferenca;
+        } else {
+            lvl = this.player.getPersonagem().getLvl();
+        }
+
+        hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
+        atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
+        def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
+        spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
+
+        String sql = "insert into pokemonInimigo "
+                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
+                + "(\"" + id + "\", \"boss\", \"" + atk + "\", "
+                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
+
+        MySQL bd = new MySQL();
+        boolean bool = bd.executaInsert(sql);
+
+        this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
+
+        int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+        int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+
+        x = 500;
+        y = 500;
+
+        this.boss = new Inimigo(this.personagem, this.player, x, y);
+        this.inimigoMaisPerto = this.boss;
+        this.boss.tipo = "Boss";
+        this.listaInimigos.add(boss);
+
+    }
+
+    public void ganhaLevel(){
+        
     }
 }

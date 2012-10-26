@@ -1,5 +1,6 @@
 package tcc;
 
+import DAO.PokemonLiberadoDAO;
 import java.awt.Point;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -32,9 +33,11 @@ public class Player extends GameObject {
     int velocidade = 5;
     boolean sendoPerseguido = false;
     int contRegen;
+    public int expProxNivel;
+    public int expNivelAtual;
+    public int expAtual;
 
     public Player(Personagem personagem, int xSpawn, int ySpawn) {
-
 
         this.destX = 0;
         this.destY = 0;
@@ -55,16 +58,26 @@ public class Player extends GameObject {
         //this.y = ySpawn;
         this.x = this.personagem.x;
         this.y = this.personagem.y;
-        
-        
+
+
 
         this.offsetx = -xSpawn;
         this.offsety = -ySpawn;
+        
+        
+        
+
+        this.expNivelAtual = PokemonLiberadoDAO.getExperiencia(this.personagem.getLvl());
+        this.expProxNivel = PokemonLiberadoDAO.getExperiencia(this.personagem.getLvl()+1);
+        
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
 
+        this.expAtual = this.personagem.getExp();
+        
+        
         if (this.sendoPerseguido == false) {
             this.contRegen++;
         }

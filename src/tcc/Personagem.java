@@ -1,6 +1,8 @@
 package tcc;
 
+import DAO.PokemonLiberadoDAO;
 import javax.swing.JOptionPane;
+import model.PokemonLiberado;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -28,6 +30,9 @@ public class Personagem extends GameObject {
     protected float hp;
     protected int hpInicial;
     protected int lvl;
+    protected int exp;
+    public int larguraMapa;
+    public int alturaMapa;
 
     public Personagem() {
     }
@@ -42,6 +47,8 @@ public class Personagem extends GameObject {
         this.hp = hp;
         this.hpInicial = hp;
         this.lvl = lvl;
+        PokemonLiberado pokemon = PokemonLiberadoDAO.getPokemon(id);
+        this.exp = pokemon.getExp();
 
         double n = (30 / (double) this.spd) * 100;
         this.cooldown = (int) n;
@@ -56,26 +63,46 @@ public class Personagem extends GameObject {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
         }
-        
-        this.setLargura(this.spriteAtual.getWidth());
-        this.setAltura(this.spriteAtual.getHeight());
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
         this.cooldownAtual--;
-        
-        if(this.hp > this.hpInicial){
+
+        if (this.hp > this.hpInicial) {
             this.hp = this.hpInicial;
         }
-        if(this.hp < 0){
+        if (this.hp < 0) {
             this.hp = 0;
+        }
+
+
+        if (this.x <= 0) {
+            this.x = 1;
+        }
+        if (this.y <= 0) {
+            this.y = 0;
+        }
+        if (this.x > this.larguraMapa) {
+            this.x = this.larguraMapa;
+        }
+        if (this.y > this.alturaMapa) {
+            this.y = this.alturaMapa;
         }
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        this.setLargura(this.spriteAtual.getWidth());
+        this.setAltura(this.spriteAtual.getHeight());
         this.spriteAtual.draw(this.x, this.y);
+    }
+
+    public void renderZoomed(GameContainer gc, StateBasedGame game, Graphics g) {
+        Image img = this.spriteAtual.getScaledCopy(2);
+        this.setLargura(img.getWidth());
+        this.setAltura(img.getHeight());
+        img.draw(this.x, this.y);
     }
 
     public Direcao getDirecao() {
@@ -134,7 +161,7 @@ public class Personagem extends GameObject {
 
     @Override
     public Rectangle getRetangulo() {
-        return new Rectangle(this.x, this.y, this.spriteAtual.getWidth(), this.spriteAtual.getHeight());
+        return new Rectangle(this.x, this.y, this.largura, this.altura);
     }
 
     //---- STATS ----\\
@@ -184,6 +211,14 @@ public class Personagem extends GameObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
     }
 
     public int getLvl() {

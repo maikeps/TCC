@@ -30,7 +30,7 @@ public class Twineedle extends Ataque {
         this.destX = destX;
         this.destY = destY;
 
-        this.angulo = 0;
+        this.angulo = angulo;
 
         try {
             this.imagem = new Image("resources/ataques/"+name+"/"+name+".png");
@@ -46,6 +46,7 @@ public class Twineedle extends Ataque {
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
 
 
+      //  this.imagem.rotate(-this.angulo);
 
     }
 
@@ -69,7 +70,6 @@ public class Twineedle extends Ataque {
         if(this.desativado == true){
             return;
         }
-        this.imagem.rotate(this.angulo);
         this.imagem.draw(this.x, this.y);
     }
 }

@@ -42,3 +42,21 @@
 -Cura recebida de pocao aparece na tela
 -Vida do jogador regenera apos alguns segundos sem contato com o inimigo
 -Arrumado bug onde Baús apareciam na agua
+
+22/10
+-Health Bar so aparece se o inimigo estiver proximo
+-Adicionada opcao "Opcoes" no menu de pausa
+-Barra de experiencia agora cresce de acordo com a porcentagem de experiencia que player ganhou
+
+24/10
+-Barra de vida e de experiencia melhoradas
+-Player nao nasce mais fora do mapa
+
+25/10
+-Adicionada tela de Stats
+
+26/10
+-Ataque "Inferno" adicionado
+-Agora ao derrotar o Boss, ganha 5x mais exp que o normal
+-Arrumado bug das potions que curava a vida toda
+-Ataques "Poison Sting", "Gunk Shot", "Poison Fang", "Acid" e "Poison Jab" adicionados.

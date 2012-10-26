@@ -39,9 +39,9 @@ public class WaterPulse extends Ataque {
         this.angulo = (float) angulo;
 
         this.desativado = false;
-        this.x = x - (this.personagem.spriteAtual.getWidth() / 2 + 20);
-        this.y = y - (this.personagem.spriteAtual.getHeight() / 2 + 50);
-        this.frame = 0;
+        
+     
+        
         try {
             this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 270, 250);
         } catch (SlickException ex) {
@@ -52,6 +52,11 @@ public class WaterPulse extends Ataque {
             animation.addFrame(sprite.getSprite(i, 0), 150);
         }
         this.animation.setLooping(false);
+        
+        
+        this.x = x + this.personagem.spriteAtual.getWidth() / 2-this.sprite.getWidth()/2;
+        this.y = y + this.personagem.spriteAtual.getHeight() / 2-this.sprite.getHeight()/2;
+        
 
 
     }
@@ -78,7 +83,7 @@ public class WaterPulse extends Ataque {
     }
 
     public Rectangle getRetangulo() {
-        return new Rectangle(this.x, this.y, 261, 248);
+        return new Rectangle(this.x, this.y, this.animation.getWidth(), this.animation.getHeight());
     }
 
     public boolean temColisao(Rectangle retangulo) {

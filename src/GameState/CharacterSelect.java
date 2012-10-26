@@ -50,7 +50,6 @@ public class CharacterSelect extends BasicGameState {
     public int linha = 1; //em qual linha o quadrado de selecao esta atualmente
     public int numLinhas; //numero de linhas de pokemon
     Player player;
-    String[][] listaNomes;
 
     public CharacterSelect(String p1) {
         this.ySelecionado = 1;
@@ -81,14 +80,6 @@ public class CharacterSelect extends BasicGameState {
 
         this.numLinhas = ((this.listaDePokemon.size() + 1) / 9) + 1;
 
-        this.listaNomes = new String[9][this.numLinhas];
-        for (int x = 0; x < 9; x++) {
-            for (int y = 0; y < this.numLinhas; y++) {
-                String nome = this.listaDePokemon.get(x + y).getNome();
-                this.listaNomes[x][y] = nome;
-                System.out.println(this.listaNomes[x][y] + " - x: " + x + " - y: " + y + " - id:" + (x + y));
-            }
-        }
 
 
         this.cenario = new Image("resources/Cenario/fundo CharSelect.png");
@@ -271,14 +262,14 @@ public class CharacterSelect extends BasicGameState {
         } else { //senão, desenha preto.
             this.imgGrande = new Image("resources/personagens/" + poke.getId() + " - " + poke.getNome() + "/" + poke.getNome() + "_Locked.gif");
         }
-        
-        imgGrande.draw(gc.getWidth()/2 - imgGrande.getWidth()/2 - 30, imgGrande.getHeight()/2 + 36,2);        
+
+        imgGrande.draw(gc.getWidth() / 2 - imgGrande.getWidth() / 2 - 30, imgGrande.getHeight() / 2 + 36, 2);
         // imgGrande.draw(gc.getWidth() / 2, gc.getHeight() / 2, imgGrande.getWidth()*5, imgGrande.getHeight()*5);
 
-         
-       
 
-        
+
+
+
         g.setColor(Color.lightGray);
         g.fillRect(75, 40, 675, 10);//cima
         g.fillRect(75, 200, 675, 70);//baixo
