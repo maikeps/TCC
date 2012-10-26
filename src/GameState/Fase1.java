@@ -177,6 +177,7 @@ public class Fase1 extends BasicGameState {
         this.verificaSeInimigoEstaMorto();
         this.verificaColisaoComBaus();
         this.verificaColisaoComItens();
+      //  this.verificaSeGanhaLevel();
 
 
         this.player.update(gc, game, i);
@@ -762,6 +763,7 @@ public class Fase1 extends BasicGameState {
                 if (inimigo.tipo.equals("Boss")) {
                     exp *= 5;
                 }
+                this.player.personagem.setExp(exp);
 
                 MySQL banco = new MySQL();
                 String sql = "update PokemonLiberado set exp = " + exp + " where idPokemon = " + this.player.personagem.getId();
@@ -769,24 +771,26 @@ public class Fase1 extends BasicGameState {
                 this.player.personagem.setExp(exp);
 
                 //verifica se o pokemon ganhou um level
-                sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
-                ConjuntoResultados linhas = banco.executaSelect(sql);
-                int expProxLvlPlayer = 0;
-                if (linhas.next()) {
-                    expProxLvlPlayer = linhas.getInt("exp");
-                }
+                this.verificaSeGanhaLevel();
+                
+//                sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
+//                ConjuntoResultados linhas = banco.executaSelect(sql);
+//                int expProxLvlPlayer = 0;
+//                if (linhas.next()) {
+//                    expProxLvlPlayer = linhas.getInt("exp");
+//                }
 
                 //se a exp do player for maior qe a necessaria para passar de level
                 //passa de level
-                if (exp >= expProxLvlPlayer) {
-                    sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
-                    bool = banco.executaUpdate(sql);
-
-                    int x = this.player.getX();
-                    int y = this.player.getY();
-                    this.criaPlayer(x, y);
-
-                }
+//                if (exp >= expProxLvlPlayer) {
+//                    sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
+//                    bool = banco.executaUpdate(sql);
+//
+//                    int x = this.player.getX();
+//                    int y = this.player.getY();
+//                    this.criaPlayer(x, y);
+//
+//                }
 
                 //}
 
@@ -1139,7 +1143,26 @@ public class Fase1 extends BasicGameState {
 
     }
 
-    public void ganhaLevel(){
-        
+    public void verificaSeGanhaLevel() {
+        MySQL banco = new MySQL();
+        int lvlPlayer = this.player.personagem.getLvl();
+        int exp = this.player.personagem.getExp();
+
+        String sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+        int expProxLvlPlayer = 0;
+        if (linhas.next()) {
+            expProxLvlPlayer = linhas.getInt("exp");
+        }
+
+        if (exp >= expProxLvlPlayer) {
+            sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
+            boolean bool = banco.executaUpdate(sql);
+
+            int x = this.player.getX();
+            int y = this.player.getY();
+            this.criaPlayer(x, y);
+
+        }
     }
 }
