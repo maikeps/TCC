@@ -37,6 +37,8 @@ public class Inimigo extends GameObject {
     int xInicial;
     int yInicial;
     int distanciaMaxAteOSpawn = 100;
+    
+    public String tipo;
 
     //o player estiver na linha de visao do inimigo e se estiver suficientemente perto, o inimigo atira.
     public Inimigo(Personagem personagem, Player player, int x, int y) {
@@ -124,7 +126,11 @@ public class Inimigo extends GameObject {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        if(this.tipo.equals("Minion")){
         this.personagem.render(gc, game, g);
+        }else{
+            this.personagem.renderZoomed(gc, game, g);
+        }
     }
 
     

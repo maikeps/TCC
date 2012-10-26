@@ -44,4 +44,8 @@ Necessarios:
 
 	--> Ao invés de fazer com que nao de para ir na agua, fazer com que ande mais devagar, assim teria como acessar ilhas, sem falar que se nascer em um mapa onde tem agua no spawn point, nao trava.
 
+	--> Nas bordas do mapa, ao inves de ter uam area preta, colocar um tile que nao de para passar
+
+	--> Ataques que precisam ser feitos: Body Slam, Double Slap, Metronome, Hurricane, Aerial Ace, Drill Peck, Rock Tomb, String Shot e Mega Horn.
+
 --------

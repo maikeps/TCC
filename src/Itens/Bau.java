@@ -52,13 +52,15 @@ public class Bau extends GameObject{
         } catch (SlickException ex) {
             Logger.getLogger(Bau.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.largura = this.image.getWidth();
+        this.altura = this.image.getHeight();
     }
 
     public void update(GameContainer gc, StateBasedGame game, int delta) {
         if(abriu){
             this.xItem = util.Util.random(200)+this.x - 100;
             this.yItem = util.Util.random(200)+this.y - 100;
-            System.out.println(xItem+" - "+yItem+" classe Bau");
             return;
         }
     }

@@ -25,9 +25,10 @@ public class Options extends BasicGameState {
     public static final int ID = 4;
     StateBasedGame game;
     GameContainer gc;
-    String[] options = {"Full Screen", "Accept"};
+    public static String[] options = {"Stats", "Full Screen", "Accept"};
     private int selected;
     boolean fullScreen = false;
+    public static int idPreviousGameState;
 
     @Override
     public int getID() {
@@ -42,6 +43,11 @@ public class Options extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
+//        if(this.idPreviousGameState == MainMenu.ID){
+//            this.options = new String[]{"Full Screen", "Accept"};
+//        } else {
+//            this.options = new String[]{"Stats", "Full Screen", "Accept"};
+//        }
     }
 
     @Override
@@ -54,7 +60,6 @@ public class Options extends BasicGameState {
             }else{
                 string = "";
             }
-            g.drawString(gc.isFullscreen()+"", 0, 400 + (50 * i));
             g.drawString(string, gc.getWidth() / 2 + 125, 400 + (50 * i));
             if (i == this.selected) {
                 g.drawRect(gc.getWidth() / 2 - 100, 385 + (50 * i), 200, 50);
@@ -77,6 +82,9 @@ public class Options extends BasicGameState {
         }
 
         if (key == Input.KEY_ENTER) {
+            if(this.options[this.selected].equals("Stats")){
+                this.game.enterState(Stats.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
             if (this.options[this.selected].equals("Full Screen")) {
                 if (this.fullScreen == true) {
                     fullScreen = false;
@@ -90,7 +98,7 @@ public class Options extends BasicGameState {
                 } catch (SlickException ex) {
                     Logger.getLogger(Options.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                this.game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+                this.game.enterState(this.idPreviousGameState, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         }
     }

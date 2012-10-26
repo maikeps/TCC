@@ -8,6 +8,7 @@ import GameState.MainMenu;
 import GameState.Options;
 import GameState.PauseScreen;
 import GameState.StartMenu;
+import GameState.Stats;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -37,6 +38,7 @@ public class Main extends StateBasedGame{
         this.addState(cs);
         this.addState(new Fase1(cs));
         this.addState(new PauseScreen());
+        this.addState(new Stats());
     }
     
     public static void main(String[] args) throws SlickException {

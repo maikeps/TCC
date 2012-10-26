@@ -24,7 +24,7 @@ public class PauseScreen extends BasicGameState{
     StateBasedGame game;
     GameContainer gc;
     
-    String[] options = {"Return to Game", "Return to Main Menu", "Exit"};
+    String[] options = {"Return to Game", "Options", "Return to Main Menu", "Exit"};
     int selected;
 
     @Override
@@ -76,6 +76,11 @@ public class PauseScreen extends BasicGameState{
         if(key == Input.KEY_ENTER){
             if(this.options[this.selected].equals("Return to Game")){
                 this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
+            if(this.options[this.selected].equals("Options")){
+                Options.idPreviousGameState = this.getID();
+                Options.options = new String[]{"Stats", "Full Screen", "Accept"};
+                this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Return to Main Menu")){
                 this.game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
