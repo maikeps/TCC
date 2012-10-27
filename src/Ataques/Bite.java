@@ -1,20 +1,23 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
-
-
 public class Bite extends Ataque {
 
-    public Bite(int x, int y, int destX, int destY, float angulo, Personagem personagem){
+    int frameElapsed;
+    int frame;
+    Animation animation;
+
+    public Bite(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
 
         this.setContador(0);
         String name = this.toString();
@@ -23,21 +26,30 @@ public class Bite extends Ataque {
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
         this.setDanoBruto(a.getAtk());
-        
-        this.desativado = false;
-        this.xInicial = x;
-        this.yInicial = y;
-        this.x = x;
-        this.y = y;
-        this.destX = destX;
-        this.destY = destY;
 
-        this.angulo = 0;
+        this.personagem = personagem;
+        this.desativado = false;
+        // this.x = x - (this.personagem.spriteAtual.pegaLargura() + 70);
+        this.x = x;
+        //this.y = y - (this.personagem.spriteAtual.pegaAltura() + 85);
+        this.y = y;
+        this.frame = 0;
+
+        this.angulo = (float) angulo;
+
+        this.desativado = false;
+
+        
         try {
-            this.imagem = new Image("resources/ataques/"+name+"/"+name+".gif");
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 34, 33);
         } catch (SlickException ex) {
-            Logger.getLogger(Bite.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
         }
+        this.animation = new Animation();
+        for (int i = 0; i < 9; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 150);
+        }
+
 
 
         deltaX = Math.abs(this.x - this.destX);
@@ -52,25 +64,45 @@ public class Bite extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if(this.desativado == true){
-            this.contadorDano ++;
+        if (this.desativado) {
+            this.contadorDano++;
             return;
         }
         
         this.x += this.dx;
         this.y += this.dy;
-        
-        if(this.getAcertou() == true){
-            this.contadorDano ++;
+        if (acertou == true) {
+            this.contadorDano++;
         }
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if(this.desativado == true){
-            return;
+        if (!animation.isStopped()) {
+            this.animation.draw(this.x, this.y);
         }
-        this.imagem.rotate(this.angulo);
-        this.imagem.draw(this.x, this.y);
+       // g.fillRect(this.getX(), this.getY(), this.animation.getWidth(), this.animation.getHeight());
+    }
+
+    @Override
+    public Rectangle getRetangulo() {
+        return new Rectangle(this.x, this.y, this.animation.getWidth(), this.animation.getHeight());
+    }
+
+    public boolean temColisao(Rectangle retangulo) {
+        if (this.desativado || this.frame == 4) {
+            return false;
+        }
+
+        if (this.getRetangulo().intersects(retangulo)) {
+            this.desativado = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getFrames() {
+        return this.frameElapsed;
     }
 }
