@@ -567,8 +567,11 @@ public class Fase1 extends BasicGameState {
             g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
             g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
 
+            
             g.setColor(Color.gray);
             g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, 100, 20);
+            
+            
             g.setColor(Color.green);
             g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, (int) porcentoHpInimigo, 20);
             g.setColor(Color.white);
@@ -1185,4 +1188,6 @@ public class Fase1 extends BasicGameState {
             }
         }
     }
+    
+    
 }
