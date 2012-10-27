@@ -10,6 +10,8 @@ import DAO.PokemonLiberadoDAO;
 import java.awt.geom.AffineTransform;
 import tcc.Player;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Pokemon;
 import model.PokemonDerrotado;
 import model.PokemonLiberado;
@@ -19,6 +21,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -162,6 +165,12 @@ public class CharacterSelect extends BasicGameState {
             String nome = p.getNome();
             PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
             if (pl.getNome() != null) {
+                try {
+                    Sound som = new Sound("resources/sounds/personagens/" + pl.getNome()+".wav");
+                    som.play();
+                } catch (SlickException ex) {
+                    Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 this.player1 = this.nomes.get(this.pokemonSelecionado);
                 this.sorteiaInimigo();
                 while (inimigo.equals(this.player1)) {

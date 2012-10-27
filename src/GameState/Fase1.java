@@ -33,6 +33,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -177,7 +178,7 @@ public class Fase1 extends BasicGameState {
         this.verificaSeInimigoEstaMorto();
         this.verificaColisaoComBaus();
         this.verificaColisaoComItens();
-      //  this.verificaSeGanhaLevel();
+        //  this.verificaSeGanhaLevel();
 
 
         this.player.update(gc, game, i);
@@ -599,6 +600,12 @@ public class Fase1 extends BasicGameState {
                         a.setDano(dano);
                         System.out.println(this.characterSelect.getPlayer1() + " took " + dano + " damage!");
                         this.player.personagem.perdeHp(dano);
+                        try {
+                            Sound som = new Sound("resources/sounds/misc/hit.wav");
+                            som.play();
+                        } catch (SlickException ex) {
+                            Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                     a.setAcertou(true);
                     a.desativado();
@@ -663,6 +670,13 @@ public class Fase1 extends BasicGameState {
                         MySQL banco = new MySQL();
                         String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
                         boolean bool = banco.executaUpdate(sql);
+
+                        try {
+                            Sound som = new Sound("resources/sounds/misc/hit.wav");
+                            som.play();
+                        } catch (SlickException ex) {
+                            Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
                     }
                     a.setAcertou(true);
@@ -772,7 +786,7 @@ public class Fase1 extends BasicGameState {
 
                 //verifica se o pokemon ganhou um level
                 this.verificaSeGanhaLevel();
-                
+
 //                sql = "select * from experiencia where lvl = " + (lvlPlayer + 1);
 //                ConjuntoResultados linhas = banco.executaSelect(sql);
 //                int expProxLvlPlayer = 0;
@@ -1163,6 +1177,12 @@ public class Fase1 extends BasicGameState {
             int y = this.player.getY();
             this.criaPlayer(x, y);
 
+            try {
+                Sound som = new Sound("resources/sounds/misc/level up.wav");
+                som.play();
+            } catch (SlickException ex) {
+                Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
