@@ -15,10 +15,8 @@ public class Bite extends Ataque {
 
     int frameElapsed;
     int frame;
-    Animation animation;
 
     public Bite(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
-
         this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
@@ -29,37 +27,26 @@ public class Bite extends Ataque {
 
         this.personagem = personagem;
         this.desativado = false;
-        // this.x = x - (this.personagem.spriteAtual.pegaLargura() + 70);
         this.x = x;
-        //this.y = y - (this.personagem.spriteAtual.pegaAltura() + 85);
         this.y = y;
         this.frame = 0;
-
         this.angulo = (float) angulo;
-
         this.desativado = false;
 
-        
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 34, 33);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 68, 88);
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
         }
         this.animation = new Animation();
-        for (int i = 0; i < 9; i++) {
-            animation.addFrame(sprite.getSprite(i, 0), 150);
+        for (int i = 0; i < 7; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 100);
         }
-
-
 
         deltaX = Math.abs(this.x - this.destX);
         deltaY = Math.abs(this.y - this.destY);
-
         this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
-
-
-
     }
 
     @Override
@@ -68,7 +55,6 @@ public class Bite extends Ataque {
             this.contadorDano++;
             return;
         }
-        
         this.x += this.dx;
         this.y += this.dy;
         if (acertou == true) {
@@ -78,10 +64,9 @@ public class Bite extends Ataque {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if (!animation.isStopped()) {
+            g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
             this.animation.draw(this.x, this.y);
-        }
-       // g.fillRect(this.getX(), this.getY(), this.animation.getWidth(), this.animation.getHeight());
+            g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
     }
 
     @Override

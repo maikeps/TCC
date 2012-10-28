@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Ataques;
 
 import DAO.AtaqueDAO;
@@ -16,18 +12,9 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
-/**
- *
- * @author Maike
- */
 public class FlameThrower extends Ataque {
 
-    int frameElapsed;
-    int frame;
-    Animation animation;
-
-    public FlameThrower(int x, int y, int destX, int destY, float angulo, Personagem personagem){
-
+    public FlameThrower(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
         this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
@@ -37,7 +24,6 @@ public class FlameThrower extends Ataque {
         this.setDanoBruto(a.getAtk());
 
         this.personagem = personagem;
-
         this.desativado = false;
         this.xInicial = x;
         this.yInicial = y;
@@ -48,13 +34,9 @@ public class FlameThrower extends Ataque {
         this.velocidade = 10;
 
         this.angulo = (float) angulo;
-
         this.desativado = false;
-        this.x = x - (this.personagem.spriteAtual.getWidth() / 2 + 20);
-        this.y = y - (this.personagem.spriteAtual.getHeight() / 2 + 50);
-        this.frame = 0;
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 214, 200);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 215, 65);
         } catch (SlickException ex) {
             Logger.getLogger(FlameThrower.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,13 +45,10 @@ public class FlameThrower extends Ataque {
             animation.addFrame(sprite.getSprite(i, 0), 150);
         }
         this.animation.setLooping(false);
-
-
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-
         if (this.desativado) {
             this.contadorDano++;
         }
@@ -80,7 +59,7 @@ public class FlameThrower extends Ataque {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if(this.animation.isStopped()){
+        if (this.animation.isStopped()) {
             return;
         }
         g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
@@ -89,32 +68,7 @@ public class FlameThrower extends Ataque {
 
     }
 
-    public Rectangle getRetangulo() {
-        Rectangle r = new Rectangle(this.x, this.y, 215, 65);
-
-
-
-        return r;
-    }
-
-    public boolean temColisao(Rectangle retangulo) {
-        if (this.desativado || this.frame == 8) {
-            return false;
-        }
-
-        if (this.getRetangulo().intersects(retangulo)) {
-            this.desativado = true;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public boolean estaAtivo() {
         return (this.desativado == false);
-    }
-
-    public int getFrames() {
-        return this.frameElapsed;
     }
 }

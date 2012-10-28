@@ -63,3 +63,4 @@
 
 28/10
 -Bug de colisao com ataques rotacionados corrigido
+-Sons adicionados

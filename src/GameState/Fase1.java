@@ -279,7 +279,8 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_ENTER) {
             //this.characterSelect.sorteiaInimigo();
             //this.criaInimigo(this.characterSelect.getInimigo());
-            this.criaBoss();
+            this.criaInimigo("Blastoise");
+            //this.criaBoss();
         }
     }
 
