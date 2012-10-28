@@ -4,11 +4,11 @@
  */
 package Ataques;
 
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 import tcc.GameObject;
 import tcc.Personagem;
 
@@ -55,27 +55,33 @@ public abstract class Ataque extends GameObject {
 
     public Shape getShape() {
         if (this.imagem != null) {
-            double degree = this.angulo; //desired degree
+            float degree = (float)Math.toRadians(this.angulo); //desired degree
             Shape rect = new Rectangle((int)this.x, (int)this.y, this.imagem.getWidth(), this.imagem.getHeight()); //creating the rectangle you want to rotate
-            AffineTransform transform = new AffineTransform();
+           // Transform t = new Transform();
+            rect = rect.transform(Transform.createRotateTransform(-degree, this.x+this.imagem.getCenterOfRotationX(), this.y+this.imagem.getCenterOfRotationY()));
+            //AffineTransform transform = new AffineTransform();
             //rotate or do other things with the rectangle (shear, translate, scale and so on)
             //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis
-            transform.rotate(Math.toRadians(-degree), this.x, this.y); //rotating in central axis
+            //transform.rotate(Math.toRadians(-degree), this.x, this.y); //rotating in central axis
             //rect receiving the rectangle after rotate
-            rect = transform.createTransformedShape(rect);
+          //  rect = transform.createTransformedShape(rect);
 
             return rect;
 
         } else {
-            double degree = this.angulo; //desired degree
-            Shape rect = new Rectangle((int)this.x, (int)this.y, this.sprite.getWidth()/this.sprite.getHorizontalCount(), this.sprite.getHeight()/this.sprite.getVerticalCount()); //creating the rectangle you want to rotate
-            AffineTransform transform = new AffineTransform();
-            //rotate or do other things with the rectangle (shear, translate, scale and so on)
-            //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis
-            transform.rotate(Math.toRadians(-degree), this.x, this.y); //rotating in central axis
-            //rect receiving the rectangle after rotate
-            rect = transform.createTransformedShape(rect);
-
+            float degree = (float)Math.toRadians(this.angulo); //desired degree
+            Shape rect = new Rectangle((int)this.x, (int)this.y, this.sprite.getWidth()/this.sprite.getHorizontalCount(), this.sprite.getHeight()/this.sprite.getVerticalCount());
+          //  Transform t = new Transform();
+            rect = rect.transform(Transform.createRotateTransform(-degree, this.x+this.sprite.getCenterOfRotationX(), this.y+this.sprite.getCenterOfRotationY()));
+//            double degree = this.angulo; //desired degree
+//            Shape rect = new Rectangle((int)this.x, (int)this.y, this.sprite.getWidth()/this.sprite.getHorizontalCount(), this.sprite.getHeight()/this.sprite.getVerticalCount()); //creating the rectangle you want to rotate
+//            AffineTransform transform = new AffineTransform();
+//            //rotate or do other things with the rectangle (shear, translate, scale and so on)
+//            //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis
+//            transform.rotate(Math.toRadians(-degree), this.x, this.y); //rotating in central axis
+//            //rect receiving the rectangle after rotate
+//            rect = transform.createTransformedShape(rect);
+//
             return rect;
 
         }

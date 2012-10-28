@@ -46,7 +46,7 @@ public class PoisonSting extends Ataque {
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
 
 
-      //  this.imagem.rotate(-this.angulo);
+        this.imagem.rotate(-this.angulo);
 
     }
 

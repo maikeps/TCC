@@ -34,6 +34,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -590,8 +592,9 @@ public class Fase1 extends BasicGameState {
         for (Inimigo inimigo : this.listaInimigos) {
             for (Ataque a : this.ataquesInimigo) {
                 int x1 = this.player.getX(), x2 = this.player.getPersonagem().spriteAtual.getWidth(), y1 = this.player.getY(), y2 = this.player.getPersonagem().spriteAtual.getHeight();
-
-                if (a.getShape().intersects(x1, y1, x2, y2)) {
+                Shape s = new Rectangle(x1, y1, x2, y2);
+               // if (a.getShape().intersects(x1, y1, x2, y2)) {
+                if (a.getShape().intersects(s)) {
                     if (a.desativado == false) {
                         int lvl = inimigo.personagem.getLvl();
                         int danoDoAtk = a.getDanoBruto();
@@ -647,7 +650,8 @@ public class Fase1 extends BasicGameState {
                     x2 *= 2;
                     y2 *= 2;
                 }
-                if (a.getShape().intersects(x1, y1, x2, y2)) {
+                Shape s = new Rectangle(x1, y1, x2, y2);
+                if (a.getShape().intersects(s)) {
                     if (a.desativado == false) {
                         int lvl = this.player.personagem.getLvl();
                         int danoDoAtk = a.getDanoBruto();

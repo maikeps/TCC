@@ -45,7 +45,7 @@ public class WingAttack extends Ataque {
         this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
 
-
+        this.imagem.rotate(-this.angulo);
 
     }
 

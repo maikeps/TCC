@@ -48,7 +48,7 @@ public class Acid extends Ataque {
         }
         this.animation = new Animation();
         for (int i = 0; i < 4; i++) {
-            animation.addFrame(sprite.getSprite(i, 0), 150);
+            animation.addFrame(sprite.getSprite(i, 0), 100);
         }
 
 
