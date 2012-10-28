@@ -13,3 +13,7 @@
 
 20/09
 - Criar colisão com o tile(Agua); -Arrumar-
+
+28/10
+ - Arrumando as classes do formato gif para os formatos png.
+
