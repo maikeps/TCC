@@ -25,7 +25,7 @@ public class Options extends BasicGameState {
     public static final int ID = 4;
     StateBasedGame game;
     GameContainer gc;
-    public static String[] options = {"Stats", "Full Screen", "Accept"};
+    public static String[] options = {"Stats", "Pokedex", "Full Screen", "Accept"};
     private int selected;
     boolean fullScreen = false;
     public static int idPreviousGameState;
@@ -43,11 +43,7 @@ public class Options extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
-//        if(this.idPreviousGameState == MainMenu.ID){
-//            this.options = new String[]{"Full Screen", "Accept"};
-//        } else {
-//            this.options = new String[]{"Stats", "Full Screen", "Accept"};
-//        }
+
     }
 
     @Override
@@ -84,6 +80,9 @@ public class Options extends BasicGameState {
         if (key == Input.KEY_ENTER) {
             if(this.options[this.selected].equals("Stats")){
                 this.game.enterState(Stats.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
+            if(this.options[this.selected].equals("Pokedex")){
+                this.game.enterState(Pokedex.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if (this.options[this.selected].equals("Full Screen")) {
                 if (this.fullScreen == true) {

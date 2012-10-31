@@ -2,12 +2,10 @@ package Ataques;
 
 import DAO.AtaqueDAO;
 import javax.swing.JOptionPane;
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
@@ -41,6 +39,8 @@ public class PoisonFang extends Ataque {
         deltaY = Math.abs(this.y - this.destY);
         this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
+        
+        this.imagem.rotate(-angulo);
     }
 
     @Override

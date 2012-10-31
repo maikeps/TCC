@@ -15,7 +15,6 @@ public class Acid extends Ataque {
 
     int frameElapsed;
     int frame;
-    Animation animation;
 
     public Acid(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
 

@@ -7,6 +7,7 @@ import GameState.Instructions;
 import GameState.MainMenu;
 import GameState.Options;
 import GameState.PauseScreen;
+import GameState.Pokedex;
 import GameState.StartMenu;
 import GameState.Stats;
 import org.newdawn.slick.AppGameContainer;
@@ -40,6 +41,7 @@ public class Main extends StateBasedGame{
         this.addState(new Fase1(cs));
         this.addState(new PauseScreen());
         this.addState(new Stats());
+        this.addState(new Pokedex());
     }
     
     public static void main(String[] args) throws SlickException {

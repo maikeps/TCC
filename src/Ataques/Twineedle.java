@@ -34,19 +34,17 @@ public class Twineedle extends Ataque {
         this.angulo = 0;
 
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 75, 22);
+            this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
-        }
-        this.animation = new Animation();
-        for (int i = 0; i < 1; i++) {
-            animation.addFrame(sprite.getSprite(i, 0), 100);
         }
 
         deltaX = Math.abs(this.x - this.destX);
         deltaY = Math.abs(this.y - this.destY);
         this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
+        
+        this.imagem.rotate(-angulo);
     }
 
     @Override
@@ -67,6 +65,6 @@ public class Twineedle extends Ataque {
         if (this.desativado == true) {
             return;
         }
-        this.animation.draw(this.x, this.y);
+        this.imagem.draw(this.x, this.y);
     }
 }
