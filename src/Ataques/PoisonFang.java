@@ -1,8 +1,6 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -34,13 +32,9 @@ public class PoisonFang extends Ataque {
         this.angulo = 0;
 
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 30, 50);
+            this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
-        }
-        this.animation = new Animation();
-        for (int i = 0; i < 1; i++) {
-            animation.addFrame(sprite.getSprite(i, 0), 100);
         }
 
         deltaX = Math.abs(this.x - this.destX);
@@ -67,6 +61,6 @@ public class PoisonFang extends Ataque {
         if (this.desativado == true) {
             return;
         }
-        this.animation.draw(this.x, this.y);
+        this.imagem.draw(this.x, this.y);
     }
 }

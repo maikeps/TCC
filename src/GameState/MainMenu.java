@@ -4,6 +4,7 @@
  */
 package GameState;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -37,7 +38,6 @@ public class MainMenu extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
         this.gc = gc;
-        
         this.img = new Image("resources/title.png");
     }
 

@@ -277,9 +277,9 @@ public class Fase1 extends BasicGameState {
         }
         //cheats :D
         if (key == Input.KEY_ENTER) {
-            //this.characterSelect.sorteiaInimigo();
-            //this.criaInimigo(this.characterSelect.getInimigo());
-            this.criaInimigo("");
+            this.characterSelect.sorteiaInimigo();
+            this.criaInimigo(this.characterSelect.getInimigo());
+           // this.criaInimigo("Nidorina");
             //this.criaBoss();
         }
     }
@@ -516,14 +516,11 @@ public class Fase1 extends BasicGameState {
         int lvl = this.player.getPersonagem().getLvl();
         double porcentoHp = (100 * hp) / hpInicial;
 
-        g.setColor(Color.darkGray);
-        g.fillRect(40 - this.player.offsetx, 460 - this.player.offsety, 170, 120);
+        g.setColor(new Color(0f, 0f, 0f, 0.6f));
+        g.fillRoundRect(40 - this.player.offsetx, 460 - this.player.offsety, 170, 120, 5);
         g.setColor(Color.white);
         g.drawString("" + this.characterSelect.getPlayer1(), 60 - this.player.offsetx, 490 - this.player.offsety);
         g.drawString("LVL " + lvl, 60 - this.player.offsetx, 470 - this.player.offsety);
-//        g.fillRect(90 - this.player.offsetx, 510 - this.player.offsety, hpInicial + 4, 24);
-        // Barra de Life do Player
-        //   g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, hp, 20);
         g.setColor(Color.gray);
         g.fillRect(92 - this.player.offsetx, 512 - this.player.offsety, 100, 20);
         g.setColor(Color.green);
@@ -532,26 +529,15 @@ public class Fase1 extends BasicGameState {
         g.drawString("HP: " + hp + "/" + hpInicial, 60 - this.player.offsetx, 512 - this.player.offsety);
 
         // Barra de Experiencia do Player
-
         int expBarraTotal = this.player.expProxNivel - this.player.expNivelAtual;
         int expBarraAtual = this.player.getPersonagem().getExp() - this.player.expNivelAtual;
 
         double porcento = (100 * expBarraAtual) / expBarraTotal;
-
-//        g.fillRect(90 - this.player.offsetx, 540 - this.player.offsety, expInicial + 4, 24);
         g.setColor(Color.gray);
-//        g.fillRect(92 - this.player.offsetx, 542 - this.player.offsety, expAtual, 20);
         g.fillRoundRect(92 - this.player.offsetx, 542 - this.player.offsety, 100, 10, 10);
         g.setColor(Color.blue);
         g.fillRoundRect(92 - this.player.offsetx, 542 - this.player.offsety, (int) porcento, 10, 10);
-        //  g.fillRect(92 - this.player.offsetx, 542 - this.player.offsety, (int) porcento, 10);
         g.setColor(Color.white);
-        //  g.drawString("EXP: " + expAtual + "/" + expProxNivel, 60 - this.player.offsetx, 542 - this.player.offsety);
-        //  g.drawString("EXP: " + expBarraAtual + "/" + expBarraTotal, 60 - this.player.offsetx, 542 - this.player.offsety);
-
-//        g.fillRect(92 - this.player.offsetx,530, lvl, hp);
-
-
 
         // HealthBar do inimigo
         if (this.distanciaAteInimigoMaisPerto <= 750) {
@@ -561,8 +547,8 @@ public class Fase1 extends BasicGameState {
             int lvlInimigo = this.inimigoMaisPerto.getPersonagem().getLvl();
             double porcentoHpInimigo = (100 * hpInimigo) / hpInicialInimigo;
 
-            g.setColor(Color.darkGray);
-            g.fillRect(570 - this.player.offsetx, 20 - this.player.offsety, 170, 120);
+            g.setColor(new Color(0f, 0f, 0f, 0.6f));
+            g.fillRoundRect(570 - this.player.offsetx, 20 - this.player.offsety, 170, 120, 5);
 
 
 
@@ -735,6 +721,12 @@ public class Fase1 extends BasicGameState {
 
     public void verificaSePlayerEstaMorto() {
         if (this.player.personagem.estaMorto()) {
+            try {
+                Sound s = new Sound("resources/sounds/misc/death.wav");
+                s.play();
+            } catch (SlickException ex) {
+                Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //reseta os stats
             Pokemon p = PokemonDAO.getPokemon(this.player.personagem.getId());
             PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
@@ -769,6 +761,12 @@ public class Fase1 extends BasicGameState {
         for (int i = 0; i < this.listaInimigos.size(); i++) {
             Inimigo inimigo = this.listaInimigos.get(i);
             if (inimigo.personagem.estaMorto()) {
+                try {
+                    Sound s =new Sound("resources/sounds/misc/exp.wav");
+                    s.play();
+                } catch (SlickException ex) {
+                    Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 int idPlayer = this.player.personagem.getId();
                 int idInimigo = inimigo.personagem.getId();
                 int lvlInimigo = inimigo.personagem.getLvl();
@@ -840,7 +838,7 @@ public class Fase1 extends BasicGameState {
 
 
                 //mostra mensagem na tela
-                JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
+              //  JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
 
 
                 //se o level do pokemon for maior ou igual ao level de sua evolução

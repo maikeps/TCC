@@ -64,3 +64,7 @@
 28/10
 -Bug de colisao com ataques rotacionados corrigido
 -Sons adicionados
+
+29/10
+-Qualidade dos sons aprimorada
+-Fundo da barra de vida "transparente"
