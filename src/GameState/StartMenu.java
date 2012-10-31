@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -28,6 +29,7 @@ public class StartMenu extends BasicGameState {
     Color cor = Color.white;
     int veloc = 1;
     boolean draw = true;
+    Music musica;
 
     @Override
     public int getID() {
@@ -38,10 +40,14 @@ public class StartMenu extends BasicGameState {
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         this.game = game;
         this.imagem = new Image("resources/Title.png");
+        this.musica = new Music("resources/sounds/music/Pokemon Opening.wav");
     }
 
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        if(!this.musica.playing()){
+            this.musica.play();
+        }
         this.cont += this.veloc;
         if (this.cont >= 30) {
             this.veloc = -1;

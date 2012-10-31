@@ -31,7 +31,7 @@ public class HyperFang extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.angulo = 0;
+        this.angulo = angulo;
 
         try {
             this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 60, 90);
@@ -64,9 +64,9 @@ public class HyperFang extends Ataque {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if (this.desativado == true) {
-            return;
-        }
+        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
         this.animation.draw(this.x, this.y);
+        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
+
     }
 }
