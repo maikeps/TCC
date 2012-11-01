@@ -277,9 +277,9 @@ public class Fase1 extends BasicGameState {
         }
         //cheats :D
         if (key == Input.KEY_ENTER) {
-            this.characterSelect.sorteiaInimigo();
-            this.criaInimigo(this.characterSelect.getInimigo());
-           // this.criaInimigo("Nidorina");
+           this.characterSelect.sorteiaInimigo();
+           this.criaInimigo(this.characterSelect.getInimigo());
+           // this.criaInimigo("Pikachu");
             //this.criaBoss();
         }
     }
@@ -890,7 +890,7 @@ public class Fase1 extends BasicGameState {
             //futuramente aumentar o contador na tabela pokemonDerrotadoa
             //para ver se o pokemon pode ser liberado
             Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
-            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, level) values "
+            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, lvl) values "
                     + "(1, "
                     + "" + pokeASerLiberado.getId() + ", "
                     + "" + pokeASerLiberado.getAtkBase() + ", "
