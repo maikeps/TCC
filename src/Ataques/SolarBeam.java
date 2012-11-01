@@ -3,16 +3,16 @@ package Ataques;
 import DAO.AtaqueDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
 public class SolarBeam extends Ataque {
+
+    int contador;
 
     public SolarBeam(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
         this.setContador(0);
@@ -24,28 +24,21 @@ public class SolarBeam extends Ataque {
         model.Ataque a = AtaqueDAO.getAtaque(name);
         this.setDanoBruto(a.getAtk());
 
+        this.angulo = angulo;
+        
         this.desativado = false;
         this.x = x;
         this.y = y;
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 533,92);
+            this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
         } catch (SlickException ex) {
             Logger.getLogger(FlameBurst.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.animation = new Animation();
-        for (int i = 0; i < 1; i++) {
-            animation.addFrame(sprite.getSprite(i, 0), 150);
-        }
-        this.animation.setLooping(false);
-
-        this.x -= this.animation.getCurrentFrame().getWidth() / 2;
-        this.y -= this.animation.getCurrentFrame().getHeight() / 2;
-        this.x += this.personagem.spriteAtual.getWidth() / 2;
-        this.y += this.personagem.spriteAtual.getHeight() / 2;
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
+        this.contador++;
         if (this.desativado) {
             this.contadorDano++;
         }
@@ -56,8 +49,10 @@ public class SolarBeam extends Ataque {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if (!animation.isStopped()) {
-            this.animation.draw(this.x, this.y);
+        if (this.contador <= 5) {
+            g.rotate(this.x, this.y, -this.angulo);
+            this.imagem.draw(this.x, this.y);
+            g.rotate(this.x, this.y, this.angulo);
         }
     }
 }

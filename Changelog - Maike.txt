@@ -68,3 +68,6 @@
 29/10
 -Qualidade dos sons aprimorada
 -Fundo da barra de vida "transparente"
+
+30/10
+-Pokedex adicionada (Pausa -> Options -> Pokedex)

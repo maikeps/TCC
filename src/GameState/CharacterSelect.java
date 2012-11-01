@@ -7,7 +7,6 @@ package GameState;
 import DAO.PokemonDAO;
 import DAO.PokemonDerrotadoDAO;
 import DAO.PokemonLiberadoDAO;
-import java.awt.geom.AffineTransform;
 import tcc.Player;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -26,7 +25,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-import sun.java2d.loops.ScaledBlit;
 import util.Util;
 
 /**

@@ -79,7 +79,7 @@ public class PauseScreen extends BasicGameState{
             }
             if(this.options[this.selected].equals("Options")){
                 Options.idPreviousGameState = this.getID();
-                Options.options = new String[]{"Stats", "Full Screen", "Accept"};
+                Options.options = new String[]{"Stats", "Pokedex", "Full Screen", "Accept"};
                 this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Return to Main Menu")){

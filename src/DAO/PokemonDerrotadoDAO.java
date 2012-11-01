@@ -6,6 +6,7 @@ package DAO;
 
 import MySQL.ConjuntoResultados;
 import MySQL.MySQL;
+import java.util.ArrayList;
 import model.PokemonDerrotado;
 
 /**
@@ -31,8 +32,27 @@ public class PokemonDerrotadoDAO {
         }
 
         return pd;
+    }
+    
+    public static ArrayList<PokemonDerrotado> getLista(){
+        ArrayList<PokemonDerrotado> lista = new ArrayList<PokemonDerrotado>();
 
-        
+        MySQL banco = new MySQL();
+        String sql = "select * from pokemonDerrotado";
+
+        ConjuntoResultados linhas = banco.executaSelect(sql);
+
+        while (linhas.next()) {
+            PokemonDerrotado p = new PokemonDerrotado();
+
+            p.setId(linhas.getInt("id"));
+            p.setIdPokemon(linhas.getInt("idPokemon"));
+            p.setVezesDerrotado(linhas.getInt("vezesDerrotado"));
+
+            lista.add(p);
+        }
+
+        return lista;
     }
     
 }

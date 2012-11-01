@@ -27,11 +27,11 @@ import javax.swing.JOptionPane;
 import model.Pokemon;
 import model.PokemonDerrotado;
 import model.PokemonLiberado;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
@@ -42,7 +42,7 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 import tcc.CenarioComColisao;
 import tcc.Inimigo;
-import tcc.PerlinNoise2D;
+import tcc.ValueNoise2D;
 import tcc.Personagem;
 import tcc.Player;
 
@@ -71,6 +71,8 @@ public class Fase1 extends BasicGameState {
     int[] tilesColisao = {2}; // 2 = agua
     int lvlInicialPlayer;
 
+    Music musica;
+    
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
     }
@@ -96,12 +98,16 @@ public class Fase1 extends BasicGameState {
 
         this.verificaInimigoMaisPerto();
 
-
-
+        this.musica = new Music("resources/sounds/music/GS_trainer.wav");
+        
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
+        if(!this.musica.playing()){
+            this.musica.play();
+        }
+        
         if (this.player == null) {
             int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
             int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
@@ -228,8 +234,6 @@ public class Fase1 extends BasicGameState {
 
         this.cenarioComColisao.render(gc, game, g, this.player.offsetx, this.player.offsety, this.player.getX(), this.player.getY());
 
-        g.drawString("" + gc.getWidth() / 2 + " - " + this.player.offsetx + " = " + (gc.getWidth() / 2 - this.player.offsetx), 25 - this.player.offsetx, 50 - this.player.offsety);
-        g.drawString("" + this.player.getX() + " - " + this.player.getY(), 25 - this.player.offsetx, 300 - this.player.offsety);
 
         this.player.render(gc, game, g);
 
@@ -279,7 +283,8 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_ENTER) {
             this.characterSelect.sorteiaInimigo();
             this.criaInimigo(this.characterSelect.getInimigo());
-           // this.criaInimigo("Nidorina");
+            //this.player.personagem.setHp(this.player.personagem.getHpInicial());
+           // this.criaInimigo("Ekans");
             //this.criaBoss();
         }
     }
@@ -463,7 +468,8 @@ public class Fase1 extends BasicGameState {
 
         if (this.player.getPersonagem().getLvl() >= 5) {
             int diferenca = util.Util.random(5);//maximo de 5 levels de diferenca
-            lvl = this.lvlInicialPlayer + diferenca;
+           // lvl = this.lvlInicialPlayer + diferenca;
+            lvl = this.player.getPersonagem().getLvl() + diferenca;
         } else {
             lvl = this.player.getPersonagem().getLvl();
         }
@@ -879,6 +885,7 @@ public class Fase1 extends BasicGameState {
         MySQL banco = new MySQL();
         int idPlayer = this.player.personagem.getId();
 
+        if(pokePlayer.getLevelQueEvolui() > 0){
         //faz a pesquisa no banco para ver se a evolucao ja foi liberada
         PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId() + 1);
         //se o pokemon foi liberado, muda o nome do player para o novo pokemon
@@ -890,7 +897,7 @@ public class Fase1 extends BasicGameState {
             //futuramente aumentar o contador na tabela pokemonDerrotadoa
             //para ver se o pokemon pode ser liberado
             Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
-            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, level) values "
+            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, lvl) values "
                     + "(1, "
                     + "" + pokeASerLiberado.getId() + ", "
                     + "" + pokeASerLiberado.getAtkBase() + ", "
@@ -917,6 +924,7 @@ public class Fase1 extends BasicGameState {
 
 
         boolean bool = banco.executaUpdate(sql);
+        }
     }
 
     public void verificaInimigoMaisPerto() {
@@ -938,7 +946,7 @@ public class Fase1 extends BasicGameState {
     public void carregaMapa() {
         System.out.println("Started.");
         int size = 128; // tamanho da imagem (1024x1024)
-        PerlinNoise2D pn2d = new PerlinNoise2D(size, 0.2f, 5, 20000f, new Random());
+        ValueNoise2D pn2d = new ValueNoise2D(size, 0.2f, 5, 20000f, new Random());
         float[][] vals = pn2d.get();//retorna os valores do noise
         BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
 
@@ -964,9 +972,9 @@ public class Fase1 extends BasicGameState {
             }
         }
         try {
-            PerlinNoise2D.limpaTxt(new File("resources/texto.txt"));
+            ValueNoise2D.limpaTxt(new File("resources/texto.txt"));
         } catch (IOException ex) {
-            Logger.getLogger(PerlinNoise2D.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ValueNoise2D.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         String[] a = new String[4];
@@ -974,16 +982,16 @@ public class Fase1 extends BasicGameState {
         a[1] = "resources/tiles/tiles avulsos/grass.png";
         a[2] = "resources/tiles/tiles avulsos/water.png";
         a[3] = "resources/tiles/tiles avulsos/jungle_grass.png";
-        PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), a, true);
+        ValueNoise2D.saveTxtTeste(new File("resources/texto.txt"), a, true);
 
-        PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), sArray, true);
+        ValueNoise2D.saveTxtTeste(new File("resources/texto.txt"), sArray, true);
 
         String[] ultimaLinha = {"%"};
-        PerlinNoise2D.saveTxtTeste(new File("resources/texto.txt"), ultimaLinha, true);
+        ValueNoise2D.saveTxtTeste(new File("resources/texto.txt"), ultimaLinha, true);
 
 
         try {
-            PerlinNoise2D.saveImg(new File("resources/Heightmap.png"), img);
+            ValueNoise2D.saveImg(new File("resources/Heightmap.png"), img);
         } catch (IOException e) {
             e.printStackTrace();
         }
