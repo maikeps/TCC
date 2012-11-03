@@ -51,6 +51,8 @@ public class CharacterSelect extends BasicGameState {
     public int linha = 1; //em qual linha o quadrado de selecao esta atualmente
     public int numLinhas; //numero de linhas de pokemon
     Player player;
+    Sound somSelect;
+    Sound somMove;
 
     public CharacterSelect(String p1) {
         this.ySelecionado = 1;
@@ -81,9 +83,10 @@ public class CharacterSelect extends BasicGameState {
 
         this.numLinhas = ((this.listaDePokemon.size() + 1) / 9) + 1;
 
-
-
         this.cenario = new Image("resources/Cenario/fundo CharSelect.png");
+
+        this.somSelect = new Sound("resources/sounds/misc/select.wav");
+        this.somMove = new Sound("resources/sounds/misc/move.wav");
     }
 
     @Override
@@ -107,10 +110,12 @@ public class CharacterSelect extends BasicGameState {
         this.desenhaImagens(gc, g);
         this.desenhaStats(gc, g);
 
+
     }
 
     public void keyPressed(int key, char c) {
         if (key == Input.KEY_UP) {
+            this.somMove.play();
             this.ySelecionado--;
             this.linha--;
             this.pokemonSelecionado -= 9;
@@ -122,6 +127,7 @@ public class CharacterSelect extends BasicGameState {
             this.yDraw = (this.ySelecionado * 75 - 5) + 260;
         }
         if (key == Input.KEY_DOWN) {
+            this.somMove.play();
             this.ySelecionado++;
             this.linha++;
             this.pokemonSelecionado += 9;
@@ -133,7 +139,7 @@ public class CharacterSelect extends BasicGameState {
             this.yDraw = (this.ySelecionado * 75 - 5) + 260;
         }
         if (key == Input.KEY_LEFT) {
-
+            this.somMove.play();
             this.xSelecionado--;
             this.pokemonSelecionado--;
             if (this.xSelecionado <= 0) {
@@ -143,8 +149,8 @@ public class CharacterSelect extends BasicGameState {
             this.xDraw = this.xSelecionado * 75 - 5;
 
         }
-        System.out.println(this.xSelecionado);
         if (key == Input.KEY_RIGHT) {
+            this.somMove.play();
             this.xSelecionado++;
             this.pokemonSelecionado++;
             if (this.xSelecionado > 9) {
@@ -155,6 +161,7 @@ public class CharacterSelect extends BasicGameState {
         }
 
         if (key == Input.KEY_BACK) {
+            this.somSelect.play();
             game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
 
@@ -164,7 +171,7 @@ public class CharacterSelect extends BasicGameState {
             PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
             if (pl.getNome() != null) {
                 try {
-                    Sound som = new Sound("resources/sounds/personagens/" + pl.getNome()+".wav");
+                    Sound som = new Sound("resources/sounds/personagens/" + pl.getNome() + ".wav");
                     som.play();
                 } catch (SlickException ex) {
                     Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
@@ -181,6 +188,7 @@ public class CharacterSelect extends BasicGameState {
     }
 
     public void desenhaImagens(GameContainer gc, Graphics g) throws SlickException {
+        g.setColor(Color.white);
 
         int x1 = 0; //x da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)
         int y1 = 260; //y da imagem que sera desenhada(desenha todos os pokemons como nao-liberados)

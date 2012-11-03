@@ -20,13 +20,20 @@ public class Pokemon {
     protected int levelQueEvolui;
     protected int elementoPrimario;
     protected int elementoSecundario;
+    protected String elementoPrimarioString;
+    protected String elementoSecundarioString;
     protected int baseExp;
+    protected int idAtaque;
+    protected String nomeAtaque;
+    protected int forcaAtaque;
+    protected String elementoAtaque;
+    protected int elementoAtaqueId;
     
     public Pokemon(){
         
     }
     
-    public Pokemon(int id, String nome, int raridade, int atkBase, int defBase, int spdBase, int hpBase, int levelQueEvolui, int elementoPrimario, int elementoSecundario){
+    public Pokemon(int id, String nome, int raridade, int atkBase, int defBase, int spdBase, int hpBase, int levelQueEvolui, int elementoPrimario, int elementoSecundario, String elementoPrimarioString, String elementoSecundarioString, String ataque, int forcaAtaque, String elementoAtaque, int elementoAtaqueId){
         this.id = id;
         this.nome = nome;
         this.raridade = raridade;
@@ -37,6 +44,12 @@ public class Pokemon {
         this.levelQueEvolui = levelQueEvolui;
         this.elementoPrimario = elementoPrimario;
         this.elementoSecundario = elementoSecundario;
+        this.elementoPrimarioString = elementoPrimarioString;
+        this.elementoSecundarioString = elementoSecundarioString;
+        this.nomeAtaque = ataque;
+        this.forcaAtaque = forcaAtaque;
+        this.elementoAtaque = elementoAtaque;
+        this.elementoAtaqueId = elementoAtaqueId;
     }
 
     public int getAtkBase() {
@@ -127,7 +140,61 @@ public class Pokemon {
         this.baseExp = baseExp;
     }
 
+    public String getElementoPrimarioString() {
+        return elementoPrimarioString;
+    }
+
+    public void setElementoPrimarioString(String elementoPrimarioString) {
+        this.elementoPrimarioString = elementoPrimarioString;
+    }
+
+    public String getElementoSecundarioString() {
+        return elementoSecundarioString;
+    }
+
+    public void setElementoSecundarioString(String elementoSecundarioString) {
+        this.elementoSecundarioString = elementoSecundarioString;
+    }
+
+    public int getIdAtaque() {
+        return idAtaque;
+    }
+
+    public void setIdAtaque(int idAtaque) {
+        this.idAtaque = idAtaque;
+    }
     
+    public int getForcaAtaque() {
+        return forcaAtaque;
+    }
+
+    public void setForcaAtaque(int forcaAtaque) {
+        this.forcaAtaque = forcaAtaque;
+    }
+
+    public String getNomeAtaque() {
+        return nomeAtaque;
+    }
+
+    public void setNomeAtaque(String nomeAtaque) {
+        this.nomeAtaque = nomeAtaque;
+    }
+
+    public String getElementoAtaque() {
+        return elementoAtaque;
+    }
+
+    public void setElementoAtaque(String elementoAtaque) {
+        this.elementoAtaque = elementoAtaque;
+    }
+
+    public int getElementoAtaqueId() {
+        return elementoAtaqueId;
+    }
+
+    public void setElementoAtaqueId(int elementoAtaqueId) {
+        this.elementoAtaqueId = elementoAtaqueId;
+    }
     
     
 }

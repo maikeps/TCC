@@ -70,4 +70,9 @@
 -Fundo da barra de vida "transparente"
 
 30/10
--Pokedex adicionada (Pausa -> Options -> Pokedex)
+-Pokedex adicionada (Pausa -> Pokedex)
+
+02/11
+-Mais sons adicionados
+-Menus de som e video adicionados
+-Pokedex aprimorada

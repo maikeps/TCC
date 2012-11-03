@@ -11,6 +11,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -30,6 +31,7 @@ public class StartMenu extends BasicGameState {
     int veloc = 1;
     boolean draw = true;
     Music musica;
+    Sound somSelect;
 
     @Override
     public int getID() {
@@ -41,6 +43,7 @@ public class StartMenu extends BasicGameState {
         this.game = game;
         this.imagem = new Image("resources/Title.png");
         this.musica = new Music("resources/sounds/music/Pokemon Opening.wav");
+        this.somSelect = new Sound("resources/sounds/misc/select.wav");
     }
 
     @Override
@@ -60,6 +63,8 @@ public class StartMenu extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        g.setColor(Color.white);
+        
         this.imagem.draw(195, 50);
         if (this.draw) {
             g.drawString("Press ENTER", gc.getWidth() / 2 - g.getFont().getWidth("Press ENTER") / 2, 400);
@@ -70,6 +75,7 @@ public class StartMenu extends BasicGameState {
     public void keyPressed(int key, char c) {
 
         if (key == Input.KEY_ENTER) {
+            this.somSelect.play();
             game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
 

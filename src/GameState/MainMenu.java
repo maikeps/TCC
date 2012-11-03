@@ -4,13 +4,13 @@
  */
 package GameState;
 
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -28,6 +28,8 @@ public class MainMenu extends BasicGameState {
     String[] options = {"Start Game", "Instructions", "Options", "Exit"};
     private int selected;
     public Image img;
+    Sound somSelect;
+    Sound somMove;
 
     @Override
     public int getID() {
@@ -39,6 +41,8 @@ public class MainMenu extends BasicGameState {
         this.game = game;
         this.gc = gc;
         this.img = new Image("resources/title.png");
+        this.somSelect = new Sound("resources/sounds/misc/select.wav");
+        this.somMove = new Sound("resources/sounds/misc/move.wav");
     }
 
     @Override
@@ -47,6 +51,8 @@ public class MainMenu extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        g.setColor(Color.white);
+        
         this.img.draw(195, 50);
         
         for(int i = 0; i < this.options.length; i++){
@@ -59,12 +65,14 @@ public class MainMenu extends BasicGameState {
 
     public void keyPressed(int key, char c) {
         if (key == Input.KEY_DOWN) {
+            this.somMove.play();
             this.selected++;
             if(this.selected >= this.options.length){
                 this.selected = 0;
             }
         }
         if (key == Input.KEY_UP) {
+            this.somMove.play();
             this.selected--;
             if(this.selected < 0){
                 this.selected = this.options.length - 1;
@@ -72,6 +80,7 @@ public class MainMenu extends BasicGameState {
         }
         
         if(key == Input.KEY_ENTER){
+            this.somSelect.play();
             if(this.options[this.selected].equals("Start Game")){
                 this.game.enterState(CharacterSelect.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
@@ -80,7 +89,6 @@ public class MainMenu extends BasicGameState {
             }
             if(this.options[this.selected].equals("Options")){
                 Options.idPreviousGameState = this.getID();
-                Options.options = new String[]{"Full Screen", "Accept"};
                 this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Exit")){
