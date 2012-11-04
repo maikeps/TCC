@@ -72,6 +72,8 @@ public class Fase1 extends BasicGameState {
     int lvlInicialPlayer;
     Music musica;
     Sound somSelect;
+    ArrayList<String> listaNomes;
+    ArrayList<Pokemon> listaPokemons;
 
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
@@ -92,7 +94,13 @@ public class Fase1 extends BasicGameState {
         this.listaInimigos = new ArrayList<Inimigo>();
         this.listaItens = new ArrayList<Item>();
         this.listaBaus = new ArrayList<Bau>();
+        this.listaNomes = new ArrayList<String>();
+        this.listaPokemons = new ArrayList<Pokemon>();
 
+        this.listaPokemons = PokemonDAO.getLista();
+        for (Pokemon p : this.listaPokemons) {
+            this.listaNomes.add(p.getNome());
+        }
 
         this.carregaMapa();
 
@@ -455,13 +463,23 @@ public class Fase1 extends BasicGameState {
     }
 
     public void criaInimigo(String nome) {
-        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
+        //      Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
 
+        int index = 0;
+        for (int i = 0; i < this.listaNomes.size(); i++) {
+            if(this.listaNomes.get(i).equals(nome)){
+                index = i;
+                break;
+            }
+        }
+        Pokemon pokemon = this.listaPokemons.get(index);
+        
         int id = pokemon.getId();
         int atk = pokemon.getAtkBase();
         int def = pokemon.getDefBase();
         int spd = pokemon.getSpdBase();
         int hp = pokemon.getHpBase();
+
 
         int lvl;
 
@@ -483,13 +501,13 @@ public class Fase1 extends BasicGameState {
         def = def * 2 / 3;
         spd = spd * 2 / 3;
 
-        String sql = "insert into pokemonInimigo "
-                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
-                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
-                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
-
-        MySQL bd = new MySQL();
-        boolean bool = bd.executaInsert(sql);
+//        String sql = "insert into pokemonInimigo "
+//                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
+//                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
+//                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
+//
+//        MySQL bd = new MySQL();
+//        boolean bool = bd.executaInsert(sql);
 
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
 

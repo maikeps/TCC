@@ -70,12 +70,15 @@ public class CharacterSelect extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
 
-        this.sorteiaInimigo();
-
         this.listaDePokemon = PokemonDAO.getLista();
         this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
 
-        this.nomes = new ArrayList<String>();
+        this.nomes = new ArrayList<String>(); 
+        for (Pokemon p : this.listaDePokemon) {
+            this.nomes.add(p.getNome());
+        }
+
+        this.sorteiaInimigo();
 
         for (Pokemon p : this.listaDePokemon) {
             this.nomes.add(p.getNome());
@@ -270,8 +273,9 @@ public class CharacterSelect extends BasicGameState {
 
         //desenha o pokemon com zoom para aparecer na parte superior da tela
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado(apenas os liberados)
-        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
-
+        //Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+        Pokemon poke = this.listaDePokemon.get(this.pokemonSelecionado);
+        
         if (pl.getIdPokemon() != 0) { //se a busca do dao retornar resultado, desenha a imagem colorida
             this.imgGrande = new Image("resources/personagens/" + pl.getIdPokemon() + " - " + pl.getNome() + "/" + pl.getNome() + "_Down.gif");
         } else { //senão, desenha preto.
@@ -332,7 +336,8 @@ public class CharacterSelect extends BasicGameState {
 
         //nome do pokemon
         g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 330, 210);
-        Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
+       // Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
+        Pokemon p = this.listaDePokemon.get(i);
         g.setColor(Color.white);
         //desenha barras de stats - HP, ATK, DEF, SPD
         g.fillRect(100, 60, p.getHpBase(), 20);
@@ -366,7 +371,8 @@ public class CharacterSelect extends BasicGameState {
         //isso quer dizer que nao tem como eles aparecerem como inimigo.
 
 
-        Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+       // Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+        Pokemon poke = this.listaDePokemon.get(this.pokemonSelecionado); //pega o pokemon que esta selecionado
         PokemonLiberado pokeliberado = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
 
         if (pokeliberado.getNome() == null) {
@@ -384,12 +390,7 @@ public class CharacterSelect extends BasicGameState {
     }
 
     public void sorteiaInimigo() {
-        this.nomes = new ArrayList<String>();
-        this.listaDePokemon = PokemonDAO.getLista();
-        this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
-        for (Pokemon p : this.listaDePokemon) {
-            this.nomes.add(p.getNome());
-        }
+       
         int n = Util.random(this.nomes.size() + 1);
         while (n >= this.nomes.size()) {
             n = Util.random(this.nomes.size() + 1);
@@ -421,100 +422,4 @@ public class CharacterSelect extends BasicGameState {
     public int getXDraw() {
         return this.xDraw;
     }
-//////    public void teclas() {
-//////
-//////        Keyboard teclado = GameEngine.getInstance().getKeyboard();
-//////
-//////        if (teclado.keyDown(Keys.ESQUERDA)) {
-//////           
-//////
-//////            Util.sleep(150);
-//////        }
-//////        if (teclado.keyDown(Keys.DIREITA)) {
-//////            //se o quadrado de seleção nao estiver na ultima coluna
-//////            //o quadrado entao simplesmenta anda uma casa para a direita
-//////            if (this.xSelecionado < 8) {
-//////                this.xSelecionado += 1;
-//////                this.pokemonSelecionado += 1;
-//////            } else //se o quadrado de seleção esiver na ultima coluna
-//////            //o quadrado entao vai para a primeira coluna(esquerda)
-//////            if (this.xSelecionado >= 0) {
-//////                this.xSelecionado = 0;
-//////                this.pokemonSelecionado -= 8;
-//////            }
-//////
-//////            this.xDraw = (this.xSelecionado + 1) * 75 - 5;
-//////
-//////            Util.sleep(150);
-//////        }
-//////
-//////        if (teclado.keyDown(Keys.CIMA)) {
-//////            //se o quadrado de seleção nao estiver na primeira linha
-//////            //o quadrado entao simplesmenta anda uma casa para cima
-//////            if (this.ySelecionado > 1) {
-//////                //se a linha for uma das tres primeiras, move o quadrado
-//////                //senao, simplesmente deixa ele parado na ultima
-//////                if (this.linha <= 3) {
-//////                    this.ySelecionado -= 1;
-//////                }
-//////                this.pokemonSelecionado -= 9;
-//////                this.linha--; //linha onde esta o quadrado
-//////            } else //se o quadrado de seleção estiver na primeira linha
-//////            //o quadrado entao vai para a linha de bem de baixo(terceira)
-//////            if (this.ySelecionado <= 1) {
-//////                this.ySelecionado = 3;
-//////                this.pokemonSelecionado += 9 * (this.numLinhas - 1); //pokemon selecionado é o da ultima linha
-//////                this.linha = this.numLinhas;
-//////            }
-//////
-//////            this.yDraw = (this.ySelecionado * 75 - 5) + 350;
-//////
-//////            Util.sleep(150);
-//////        }
-//////        if (teclado.keyDown(Keys.BAIXO)) {
-//////            //se o quadrado de seleção nao estiver na ultima linha
-//////            //o quadrado entao simplesmenta anda uma casa para baixo
-//////            this.linha++; //linha onde esta o quadrado
-//////            if (this.ySelecionado < 3) {
-//////                this.ySelecionado += 1;
-//////                this.pokemonSelecionado += 9;
-//////            } else //se o quadrado de seleção esiver na ultima linha
-//////            //o quadrado anda uma linha para baixo, mostrando os pokemons da proxima linha
-//////            //e fazendo desaparecer os da linha de cima
-//////            {
-//////                if (this.linha == this.numLinhas && this.linha > 3) {
-//////                    this.linha = 1;
-//////                    this.ySelecionado = 1;
-//////                    this.pokemonSelecionado = this.xSelecionado;
-//////                } else {
-//////                    this.pokemonSelecionado += 9;
-//////                }
-//////            }
-//////        }
-//////        this.yDraw = (this.ySelecionado * 75 - 5) + 350;
-//////        Util.sleep(150);
-//////
-//////
-//////
-//////        //tecla de enter
-//////
-//////        Pokemon p = this.listaDePokemon.get(this.pokemonSelecionado);
-//////        String nome = p.getNome();
-//////        PokemonLiberado pl = PokemonLiberadoDAO.getPokemonPeloNome(nome);
-//////        //se o jogador apertou espaço e o pokemon escolhido ja foi liberado, comeca o jogo
-//////        if (teclado.keyDown(Keys.ENTER) && pl.getNome() != null) {
-//////            this.player1 = this.nomes.get(this.pokemonSelecionado);
-//////
-//////            Util.sleep(250);
-//////            this.sorteiaInimigo();
-//////            //enquanto o inimigo for igual ao jogador, sorteia de novo.
-//////            //isso nao sera mais usado quando for implantado o sistema de tiles
-//////            //porque pode sim existir um pokemon igual ao selecionado pelo jogador
-//////            while (this.inimigo.equals(this.getPlayer1())) {
-//////                this.sorteiaInimigo();
-//////            }
-//////            this.iniciaJogo();
-//////        }
-//////    }
-//////
 }
