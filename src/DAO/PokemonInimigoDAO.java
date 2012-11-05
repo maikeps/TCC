@@ -71,22 +71,22 @@ public class PokemonInimigoDAO {
     public static PokemonInimigo getPokemonInimigoPeloNome(String nome){
         
         MySQL banco = new MySQL();
-        String sql = "select * from pokemonInimigo pi "
-                + "inner join pokemon p on p.id = pi.idPokemon "
+        String sql = "select * from pokemonInimigo "
+                + "inner join pokemon on pokemon.id = pokemonInimigo.idPokemon "
                 + "where nome = \""+nome+"\"";
         ConjuntoResultados linhas = banco.executaSelect(sql);
         
         PokemonInimigo p = new PokemonInimigo();
         if(linhas.next()){
             
-            p.setIdPokemon(linhas.getInt("pi.idPokemon"));
-            p.setTipo(linhas.getString("pi.tipo"));
-            p.setAtk(linhas.getInt("pi.atk"));
-            p.setDef(linhas.getInt("pi.def"));
-            p.setSpd(linhas.getInt("pi.spd"));
-            p.setHp(linhas.getInt("pi.hp"));
-            p.setLvl(linhas.getInt("pi.lvl"));
-            p.setNome(linhas.getString("p.nome"));
+            p.setIdPokemon(linhas.getInt("pokemonInimigo.idPokemon"));
+            p.setTipo(linhas.getString("pokemonInimigo.tipo"));
+            p.setAtk(linhas.getInt("pokemonInimigo.atk"));
+            p.setDef(linhas.getInt("pokemonInimigo.def"));
+            p.setSpd(linhas.getInt("pokemonInimigo.spd"));
+            p.setHp(linhas.getInt("pokemonInimigo.hp"));
+            p.setLvl(linhas.getInt("pokemonInimigo.lvl"));
+            p.setNome(linhas.getString("pokemon.nome"));
             
         }
         

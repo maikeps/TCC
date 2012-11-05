@@ -103,10 +103,10 @@ insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQ
 
 
 
-insert into pokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values
-(1, 1, 49, 49, 45, 45),
-(1, 4, 51, 43, 65, 39),
-(1, 7, 48, 65, 43, 44);
+insert into pokemonLiberado (idJogador, idPokemon, atk, def, spd, hp,lvl,exp) values
+(1, 1, 49, 49, 45, 45,1,0),
+(1, 4, 51, 43, 65, 39,1,0),
+(1, 7, 48, 65, 43, 44,1,0);
 
 
 
