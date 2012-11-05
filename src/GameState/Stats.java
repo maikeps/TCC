@@ -10,10 +10,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import tcc.Animacao;
 import tcc.Personagem;
 
 /**
@@ -26,6 +28,7 @@ public class Stats extends BasicGameState {
     StateBasedGame game;
     public static Personagem personagem;
     Image image;
+    Animacao animacao;
     
     String nome;
     int hp;
@@ -34,6 +37,8 @@ public class Stats extends BasicGameState {
     int spd;
     int lvl;
 
+    Sound somSelect;
+    
     @Override
     public int getID() {
         return this.ID;
@@ -42,6 +47,7 @@ public class Stats extends BasicGameState {
     @Override
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
+        this.somSelect = new Sound("resources/sounds/misc/select.wav");
     }
 
     @Override
@@ -49,7 +55,7 @@ public class Stats extends BasicGameState {
         
         
         //this.personagem = Fase1.player.personagem;
-        this.image = this.personagem.spriteDown;
+        this.animacao = this.personagem.animacaoDown;
 
         this.hp = this.personagem.getHpInicial();
         this.atk = this.personagem.getAtk();
@@ -61,6 +67,8 @@ public class Stats extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        g.setColor(Color.white);
+        
         g.drawString(""+this.nome, 100, 50);
         g.drawString("LEVEL: "+this.lvl, 100, 100);
         g.drawString("HP: "+this.hp, 100, 150);
@@ -73,6 +81,7 @@ public class Stats extends BasicGameState {
     
     public void keyPressed(int key, char c){
         if(key == Input.KEY_ENTER){
+            this.somSelect.play();
             this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
     }

@@ -31,8 +31,8 @@ public class HydroPump extends Ataque {
         this.destY = destY;
         this.angulo = (float) angulo;
         this.desativado = false;
-        this.x = x - (this.personagem.spriteAtual.getWidth() / 2 + 20);
-        this.y = y - (this.personagem.spriteAtual.getHeight() / 2 + 50);
+        this.x = x - (this.personagem.animacaoAtual.getImage().getWidth() / 2 + 20);
+        this.y = y - (this.personagem.animacaoAtual.getImage().getHeight() / 2 + 50);
 
         try {
             this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 220, 120);
@@ -58,6 +58,9 @@ public class HydroPump extends Ataque {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
+        if (this.animation.isStopped()) {
+            return;
+        }
         g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
         this.animation.draw(this.x, this.y);
         g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);

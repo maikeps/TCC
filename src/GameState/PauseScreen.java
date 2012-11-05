@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -24,9 +25,11 @@ public class PauseScreen extends BasicGameState{
     StateBasedGame game;
     GameContainer gc;
     
-    String[] options = {"Return to Game", "Options", "Return to Main Menu", "Exit"};
+    String[] options = {"Return to Game", "Stats", "Pokedex", "Options", "Return to Main Menu", "Exit"};
     int selected;
-
+    Sound somSelect;
+    Sound somMove;
+    
     @Override
     public int getID() {
         return this.ID;
@@ -36,6 +39,8 @@ public class PauseScreen extends BasicGameState{
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
         this.gc = gc;
+        this.somSelect = new Sound("resources/sounds/misc/select.wav");
+        this.somMove = new Sound("resources/sounds/misc/move.wav");
     }
 
     @Override
@@ -45,6 +50,8 @@ public class PauseScreen extends BasicGameState{
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        g.setColor(Color.white);
+        
         g.drawString("GAME PAUSED", gc.getWidth()/2-g.getFont().getWidth("GAME PAUSED")/2, 200);
         
         for(int i = 0; i < this.options.length; i++){
@@ -57,16 +64,19 @@ public class PauseScreen extends BasicGameState{
     
     public void keyPressed(int key, char c){
         if(key == Input.KEY_P){
+            this.somSelect.play();
             this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
         
         if(key == Input.KEY_DOWN){
+            this.somMove.play();
             this.selected ++;
             if(this.selected >= this.options.length){
                 this.selected = 0;
             }
         }
         if(key == Input.KEY_UP){
+            this.somMove.play();
             this.selected --;
             if(this.selected < 0){
                 this.selected = this.options.length - 1;
@@ -74,12 +84,19 @@ public class PauseScreen extends BasicGameState{
         }
         
         if(key == Input.KEY_ENTER){
+            this.somMove.play();
             if(this.options[this.selected].equals("Return to Game")){
                 this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
+            if(this.options[this.selected].equals("Stats")){
+                this.game.enterState(Stats.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
+            if(this.options[this.selected].equals("Pokedex")){
+                this.game.enterState(Pokedex.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
             if(this.options[this.selected].equals("Options")){
                 Options.idPreviousGameState = this.getID();
-                Options.options = new String[]{"Stats", "Pokedex", "Full Screen", "Accept"};
+                Options.options = new String[]{"Audio Options", "Video Options", "Accept"};
                 this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Return to Main Menu")){

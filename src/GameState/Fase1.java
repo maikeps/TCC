@@ -70,9 +70,11 @@ public class Fase1 extends BasicGameState {
     CenarioComColisao cenarioComColisao;
     int[] tilesColisao = {2}; // 2 = agua
     int lvlInicialPlayer;
-
     Music musica;
-    
+    Sound somSelect;
+    ArrayList<String> listaNomes;
+    ArrayList<Pokemon> listaPokemons;
+
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
     }
@@ -92,22 +94,28 @@ public class Fase1 extends BasicGameState {
         this.listaInimigos = new ArrayList<Inimigo>();
         this.listaItens = new ArrayList<Item>();
         this.listaBaus = new ArrayList<Bau>();
+        this.listaNomes = new ArrayList<String>();
+        this.listaPokemons = new ArrayList<Pokemon>();
 
+        this.listaPokemons = PokemonDAO.getLista();
+        for (Pokemon p : this.listaPokemons) {
+            this.listaNomes.add(p.getNome());
+        }
 
         this.carregaMapa();
 
         this.verificaInimigoMaisPerto();
 
         this.musica = new Music("resources/sounds/music/GS_trainer.wav");
-        
+        this.somSelect = new Sound("resources/sounds/misc/select.wav");
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
-        if(!this.musica.playing()){
+        if (!this.musica.playing()) {
             this.musica.play();
         }
-        
+
         if (this.player == null) {
             int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
             int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
@@ -194,6 +202,8 @@ public class Fase1 extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        g.setColor(Color.white);
+
         if (this.player == null) {
             int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
             int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
@@ -277,15 +287,16 @@ public class Fase1 extends BasicGameState {
 
     public void keyPressed(int key, char c) {
         if (key == Input.KEY_P || key == Input.KEY_ESCAPE) {
+            this.somSelect.play();
             this.game.enterState(PauseScreen.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
-        //cheats :D
+        //cheats :D 
         if (key == Input.KEY_ENTER) {
 
             this.characterSelect.sorteiaInimigo();
             this.criaInimigo(this.characterSelect.getInimigo());
             //this.player.personagem.setHp(this.player.personagem.getHpInicial());
-           // this.criaInimigo("Ekans");
+            // this.criaInimigo("Ekans");
             //this.criaBoss();
         }
     }
@@ -298,14 +309,10 @@ public class Fase1 extends BasicGameState {
                 String s = "Ataques." + a.getNome();
                 try {
                     Class cls = Class.forName(s);
-                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class
-                    };
+                    Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class};
                     java.lang.reflect.Constructor con = cls.getConstructor(parameters);
                     Object o = con.newInstance(new Object[]{this.player.getX(), this.player.getY(), this.player.getDestX(), this.player.getDestY(), this.player.getAngulo(), this.player.getPersonagem()});
-
-
-                    this.ataquesPlayer.add(
-                            (Ataque) o);
+                    this.ataquesPlayer.add((Ataque) o);
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada");
@@ -457,19 +464,29 @@ public class Fase1 extends BasicGameState {
     }
 
     public void criaInimigo(String nome) {
-        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
+        //      Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
 
+        int index = 0;
+        for (int i = 0; i < this.listaNomes.size(); i++) {
+            if(this.listaNomes.get(i).equals(nome)){
+                index = i;
+                break;
+            }
+        }
+        Pokemon pokemon = this.listaPokemons.get(index);
+        
         int id = pokemon.getId();
         int atk = pokemon.getAtkBase();
         int def = pokemon.getDefBase();
         int spd = pokemon.getSpdBase();
         int hp = pokemon.getHpBase();
 
+
         int lvl;
 
         if (this.player.getPersonagem().getLvl() >= 5) {
             int diferenca = util.Util.random(5);//maximo de 5 levels de diferenca
-           // lvl = this.lvlInicialPlayer + diferenca;
+            // lvl = this.lvlInicialPlayer + diferenca;
             lvl = this.player.getPersonagem().getLvl() + diferenca;
         } else {
             lvl = this.player.getPersonagem().getLvl();
@@ -485,13 +502,13 @@ public class Fase1 extends BasicGameState {
         def = def * 2 / 3;
         spd = spd * 2 / 3;
 
-        String sql = "insert into pokemonInimigo "
-                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
-                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
-                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
-
-        MySQL bd = new MySQL();
-        boolean bool = bd.executaInsert(sql);
+//        String sql = "insert into pokemonInimigo "
+//                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
+//                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
+//                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
+//
+//        MySQL bd = new MySQL();
+//        boolean bool = bd.executaInsert(sql);
 
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
@@ -563,11 +580,11 @@ public class Fase1 extends BasicGameState {
             g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
             g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
 
-            
+
             g.setColor(Color.gray);
             g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, 100, 20);
-            
-            
+
+
             g.setColor(Color.green);
             g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, (int) porcentoHpInimigo, 20);
             g.setColor(Color.white);
@@ -585,9 +602,9 @@ public class Fase1 extends BasicGameState {
         //colisao ataque inimigo com player
         for (Inimigo inimigo : this.listaInimigos) {
             for (Ataque a : this.ataquesInimigo) {
-                int x1 = this.player.getX(), x2 = this.player.getPersonagem().spriteAtual.getWidth(), y1 = this.player.getY(), y2 = this.player.getPersonagem().spriteAtual.getHeight();
+                int x1 = this.player.getX(), x2 = this.player.getPersonagem().animacaoAtual.getImage().getWidth(), y1 = this.player.getY(), y2 = this.player.getPersonagem().animacaoAtual.getImage().getHeight();
                 Shape s = new Rectangle(x1, y1, x2, y2);
-               // if (a.getShape().intersects(x1, y1, x2, y2)) {
+                // if (a.getShape().intersects(x1, y1, x2, y2)) {
                 if (a.getShape().intersects(s)) {
                     if (a.desativado == false) {
                         int lvl = inimigo.personagem.getLvl();
@@ -601,7 +618,7 @@ public class Fase1 extends BasicGameState {
                         System.out.println(this.characterSelect.getPlayer1() + " took " + dano + " damage!");
                         this.player.personagem.perdeHp(dano);
                         try {
-                            Sound som = new Sound("resources/sounds/misc/hit.wav");
+                            Sound som = new Sound("resources/sounds/misc/hit 2.wav");
                             som.play();
                         } catch (SlickException ex) {
                             Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
@@ -639,7 +656,7 @@ public class Fase1 extends BasicGameState {
 
         for (Inimigo inimigo : this.listaInimigos) {
             for (Ataque a : this.ataquesPlayer) {
-                int x1 = inimigo.getX(), x2 = inimigo.getPersonagem().spriteAtual.getWidth(), y1 = inimigo.getY(), y2 = inimigo.getPersonagem().spriteAtual.getHeight();
+                int x1 = inimigo.getX(), x2 = inimigo.getPersonagem().animacaoAtual.getImage().getWidth(), y1 = inimigo.getY(), y2 = inimigo.getPersonagem().animacaoAtual.getImage().getHeight();
                 if (inimigo.tipo.equals("Boss")) {
                     x2 *= 2;
                     y2 *= 2;
@@ -673,7 +690,7 @@ public class Fase1 extends BasicGameState {
                         boolean bool = banco.executaUpdate(sql);
 
                         try {
-                            Sound som = new Sound("resources/sounds/misc/hit.wav");
+                            Sound som = new Sound("resources/sounds/misc/hit 2.wav");
                             som.play();
                         } catch (SlickException ex) {
                             Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
@@ -769,7 +786,7 @@ public class Fase1 extends BasicGameState {
             Inimigo inimigo = this.listaInimigos.get(i);
             if (inimigo.personagem.estaMorto()) {
                 try {
-                    Sound s =new Sound("resources/sounds/misc/exp.wav");
+                    Sound s = new Sound("resources/sounds/misc/exp.wav");
                     s.play();
                 } catch (SlickException ex) {
                     Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
@@ -845,7 +862,7 @@ public class Fase1 extends BasicGameState {
 
 
                 //mostra mensagem na tela
-              //  JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
+                //  JOptionPane.showMessageDialog(null, pokeInimigo.getNome() + " fainted, you got " + expGanha + " experience.");
 
 
                 //se o level do pokemon for maior ou igual ao level de sua evolução
@@ -886,45 +903,45 @@ public class Fase1 extends BasicGameState {
         MySQL banco = new MySQL();
         int idPlayer = this.player.personagem.getId();
 
-        if(pokePlayer.getLevelQueEvolui() > 0){
-        //faz a pesquisa no banco para ver se a evolucao ja foi liberada
-        PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId() + 1);
-        //se o pokemon foi liberado, muda o nome do player para o novo pokemon
-        if (procuraPokeLiberado.getNome() != null) {
-            this.characterSelect.setPlayer1(procuraPokeLiberado.getNome());
-            this.criaPlayer(this.player.getX(), this.player.getY());
-        } else {
-            //senao, faz o insert no banco para liberar o pokemon
-            //futuramente aumentar o contador na tabela pokemonDerrotadoa
-            //para ver se o pokemon pode ser liberado
-            Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
-            String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, lvl) values "
-                    + "(1, "
-                    + "" + pokeASerLiberado.getId() + ", "
-                    + "" + pokeASerLiberado.getAtkBase() + ", "
-                    + "" + pokeASerLiberado.getDefBase() + ", "
-                    + "" + pokeASerLiberado.getSpdBase() + ", "
-                    + "" + pokeASerLiberado.getHpBase() + ","
-                    + "" + this.player.personagem.getLvl() + ");";
-            System.out.println(sql);
-            boolean bool = banco.executaInsert(sql);
-            this.characterSelect.setPlayer1(pokeASerLiberado.getNome());
-            this.criaPlayer(this.player.getX(), this.player.getY());
+        if (pokePlayer.getLevelQueEvolui() > 0) {
+            //faz a pesquisa no banco para ver se a evolucao ja foi liberada
+            PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId() + 1);
+            //se o pokemon foi liberado, muda o nome do player para o novo pokemon
+            if (procuraPokeLiberado.getNome() != null) {
+                this.characterSelect.setPlayer1(procuraPokeLiberado.getNome());
+                this.criaPlayer(this.player.getX(), this.player.getY());
+            } else {
+                //senao, faz o insert no banco para liberar o pokemon
+                //futuramente aumentar o contador na tabela pokemonDerrotadoa
+                //para ver se o pokemon pode ser liberado
+                Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
+                String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, lvl) values "
+                        + "(1, "
+                        + "" + pokeASerLiberado.getId() + ", "
+                        + "" + pokeASerLiberado.getAtkBase() + ", "
+                        + "" + pokeASerLiberado.getDefBase() + ", "
+                        + "" + pokeASerLiberado.getSpdBase() + ", "
+                        + "" + pokeASerLiberado.getHpBase() + ","
+                        + "" + this.player.personagem.getLvl() + ");";
+                System.out.println(sql);
+                boolean bool = banco.executaInsert(sql);
+                this.characterSelect.setPlayer1(pokeASerLiberado.getNome());
+                this.criaPlayer(this.player.getX(), this.player.getY());
 
-        }
-
-
-        String sql = "update pokemonLiberado set"
-                + "  atk =" + pokePlayer.getAtkBase()
-                + ", def =" + pokePlayer.getDefBase()
-                + " , spd =" + pokePlayer.getSpdBase()
-                + ", hp =" + pokePlayer.getHpBase()
-                + ", lvl = 1"
-                + ", exp = 0"
-                + " where idPokemon = " + pokePlayer.getId();
+            }
 
 
-        boolean bool = banco.executaUpdate(sql);
+            String sql = "update pokemonLiberado set"
+                    + "  atk =" + pokePlayer.getAtkBase()
+                    + ", def =" + pokePlayer.getDefBase()
+                    + " , spd =" + pokePlayer.getSpdBase()
+                    + ", hp =" + pokePlayer.getHpBase()
+                    + ", lvl = 1"
+                    + ", exp = 0"
+                    + " where idPokemon = " + pokePlayer.getId();
+
+
+            boolean bool = banco.executaUpdate(sql);
         }
     }
 
@@ -1200,6 +1217,4 @@ public class Fase1 extends BasicGameState {
             }
         }
     }
-    
-    
 }

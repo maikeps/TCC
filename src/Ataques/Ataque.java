@@ -175,4 +175,12 @@ public abstract class Ataque extends GameObject {
     public void desativado() {
         this.desativado = true;
     }
+
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
 }

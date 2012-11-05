@@ -14,11 +14,11 @@ public class Personagem extends GameObject {
 
     int velocidade = 1; // ??
     int velocidadeInicial = 1; // ??
-    public Image spriteRight;
-    public Image spriteLeft;
-    public Image spriteUp;
-    public Image spriteDown;
-    public Image spriteAtual;
+    //public Image spriteRight;
+    //public Image spriteLeft;
+    //public Image spriteUp;
+    //public Image spriteDown;
+    //public Image spriteAtual;
     public int cooldownAtual; //como esta o cooldown atualmente(diminui em um por step)
     public int cooldown; //cooldown que tem que esperar ate atacar de novo
     //se o cooldownAtual for menor que zero, o jogador pode atacar
@@ -34,6 +34,13 @@ public class Personagem extends GameObject {
     public int larguraMapa;
     public int alturaMapa;
 
+    
+    public Animacao animacaoLeft;
+    public Animacao animacaoRight;
+    public Animacao animacaoUp;
+    public Animacao animacaoDown;
+    public Animacao animacaoAtual;
+    
     public Personagem() {
     }
 
@@ -54,11 +61,27 @@ public class Personagem extends GameObject {
         this.cooldown = (int) n;
 
         try {
-            this.spriteRight = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Right.gif");
-            this.spriteLeft = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Left.gif");
-            this.spriteDown = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Down.gif");
-            this.spriteUp = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Up.gif");
-            this.spriteAtual = this.spriteDown;
+            //Animacao exemplo = new Animacao(200);
+            //exemplo.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Right.gif"));
+            //exemplo.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Right2.gif"));
+            this.animacaoLeft = new Animacao(300);
+            this.animacaoLeft.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Left.png"));
+            this.animacaoLeft.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Left2.png"));
+            this.animacaoRight = new Animacao(300);
+            this.animacaoRight.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Right.png"));
+            this.animacaoRight.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Right2.png"));
+            this.animacaoUp = new Animacao(300);
+            this.animacaoUp.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Up.png"));
+            this.animacaoUp.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Up2.png"));
+            this.animacaoDown = new Animacao(300);
+            this.animacaoDown.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Down.png"));
+            this.animacaoDown.add(new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Down2.png"));
+            this.animacaoAtual = this.animacaoDown;
+//            this.spriteRight = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Right.gif");
+//            this.spriteLeft = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Left.gif");
+//            this.spriteDown = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Down.gif");
+//            this.spriteUp = new Image("resources/personagens/" + this.id + " - " + this.nome + "/" + this.nome + "_Up.gif");
+//            this.spriteAtual = this.spriteDown;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Recurso não encontrado: " + ex.getMessage());
             System.exit(1);
@@ -67,6 +90,8 @@ public class Personagem extends GameObject {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
+        this.animacaoAtual.update();
+        
         this.cooldownAtual--;
 
         if (this.hp > this.hpInicial) {
@@ -93,16 +118,24 @@ public class Personagem extends GameObject {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        this.setLargura(this.spriteAtual.getWidth());
-        this.setAltura(this.spriteAtual.getHeight());
-        this.spriteAtual.draw(this.x, this.y);
+//        this.setLargura(this.spriteAtual.getWidth());
+//        this.setAltura(this.spriteAtual.getHeight());
+//        this.spriteAtual.draw(this.x, this.y);
+        
+        this.setLargura(this.animacaoAtual.getImage().getWidth());
+        this.setAltura(this.animacaoAtual.getImage().getHeight());
+        this.animacaoAtual.render(this.x, this.y, 1, false);
     }
 
     public void renderZoomed(GameContainer gc, StateBasedGame game, Graphics g) {
-        Image img = this.spriteAtual.getScaledCopy(2);
-        this.setLargura(img.getWidth());
-        this.setAltura(img.getHeight());
-        img.draw(this.x, this.y);
+//        Image img = this.spriteAtual.getScaledCopy(2);
+//        this.setLargura(img.getWidth());
+//        this.setAltura(img.getHeight());
+//        img.draw(this.x, this.y);
+        
+        this.setLargura(this.animacaoAtual.getImage().getWidth()*2);
+        this.setAltura(this.animacaoAtual.getImage().getHeight()*2);
+        this.animacaoAtual.render(this.x, this.y, 2, false);
     }
 
     public Direcao getDirecao() {

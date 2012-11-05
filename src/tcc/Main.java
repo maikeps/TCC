@@ -1,19 +1,10 @@
 package tcc;
 
 
-import GameState.CharacterSelect;
-import GameState.Fase1;
-import GameState.Instructions;
-import GameState.MainMenu;
-import GameState.Options;
-import GameState.PauseScreen;
-import GameState.Pokedex;
-import GameState.StartMenu;
-import GameState.Stats;
+import GameState.*;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.StateBasedGame;
 
 
@@ -42,6 +33,9 @@ public class Main extends StateBasedGame{
         this.addState(new PauseScreen());
         this.addState(new Stats());
         this.addState(new Pokedex());
+        this.addState(new PokedexIndividual());
+        this.addState(new VideoOptions());
+        this.addState(new AudioOptions());
     }
     
     public static void main(String[] args) throws SlickException {

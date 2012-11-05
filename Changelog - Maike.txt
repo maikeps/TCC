@@ -70,4 +70,14 @@
 -Fundo da barra de vida "transparente"
 
 30/10
--Pokedex adicionada (Pausa -> Options -> Pokedex)
+-Pokedex adicionada (Pausa -> Pokedex)
+
+02/11
+-Mais sons adicionados
+-Menus de som e video adicionados
+-Pokedex aprimorada
+
+03/11
+-CharacterSelect aprimorado - agora nao trava mais ao mover o quadrado de seleção
+-Fase1 aprimorada - agora nao trava mais ao criar um novo inimigo
+-Pequenas correcoes feitas nas classes dos ataques

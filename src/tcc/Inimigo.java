@@ -74,19 +74,19 @@ public class Inimigo extends GameObject {
 
         switch (this.direcao) {
             case BAIXO:
-                this.personagem.spriteAtual = this.personagem.spriteDown;
+                this.personagem.animacaoAtual = this.personagem.animacaoDown;
                 break;
             case CIMA:
-                this.personagem.spriteAtual = this.personagem.spriteUp;
+                this.personagem.animacaoAtual = this.personagem.animacaoUp;
                 break;
             case DIREITA:
-                this.personagem.spriteAtual = this.personagem.spriteRight;
+                this.personagem.animacaoAtual = this.personagem.animacaoRight;
                 break;
             case ESQUERDA:
-                this.personagem.spriteAtual = this.personagem.spriteLeft;
+                this.personagem.animacaoAtual = this.personagem.animacaoLeft;
                 break;
             case DIREITA_BAIXO:
-                this.personagem.spriteAtual = this.personagem.spriteRight;
+                this.personagem.animacaoAtual = this.personagem.animacaoRight;
             case DIREITA_CIMA:
             case ESQUERDA_BAIXO:
             case ESQUERDA_CIMA:
@@ -360,22 +360,22 @@ public class Inimigo extends GameObject {
         switch (quadrante) {
             case 1:
                 this.personagem.direcao = Direcao.CIMA;
-                this.personagem.spriteAtual = this.personagem.spriteUp;
+                this.personagem.animacaoAtual = this.personagem.animacaoUp;
                 this.moveDireitaCima(this.velocidade);
                 break;
             case 2:
                 this.personagem.direcao = Direcao.ESQUERDA;
-                this.personagem.spriteAtual = this.personagem.spriteLeft;
+                this.personagem.animacaoAtual = this.personagem.animacaoLeft;
                 this.moveEsquerdaCima(this.velocidade);
                 break;
             case 3:
                 this.personagem.direcao = Direcao.BAIXO;
-                this.personagem.spriteAtual = this.personagem.spriteDown;
+                this.personagem.animacaoAtual = this.personagem.animacaoDown;
                 this.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 4:
                 this.personagem.direcao = Direcao.DIREITA;
-                this.personagem.spriteAtual = this.personagem.spriteRight;
+                this.personagem.animacaoAtual = this.personagem.animacaoRight;
                 this.moveDireitaBaixo(this.velocidade);
                 break;
         }

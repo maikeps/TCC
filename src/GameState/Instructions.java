@@ -9,6 +9,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -22,7 +23,8 @@ public class Instructions extends BasicGameState{
     
     public static final int ID = 3;
     StateBasedGame game;
-
+    Sound som;
+    
     @Override
     public int getID() {
         return this.ID;
@@ -31,10 +33,12 @@ public class Instructions extends BasicGameState{
     @Override
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
+        this.som = new Sound("resources/sounds/misc/select.wav");
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
+        g.setColor(Color.white);
         
         g.drawString("Arrow keys to move the Pokemon", 100, 200);
         g.drawString("Left mouse button to attack", 100, 250);
@@ -51,6 +55,7 @@ public class Instructions extends BasicGameState{
     
     public void keyPressed(int key, char c){
         if(key == Input.KEY_ENTER){
+            this.som.play();
             this.game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
     }

@@ -50,8 +50,8 @@ public class Player extends GameObject {
         //  this.personagem.x = xSpawn;
         //  this.personagem.y = ySpawn;
 
-        this.personagem.x = ((800 / 2 - personagem.spriteAtual.getWidth() / 2) + xSpawn);
-        this.personagem.y = ((600 / 2 - personagem.spriteAtual.getHeight() / 2) + ySpawn);
+        this.personagem.x = ((800 / 2 - personagem.animacaoAtual.getImage().getWidth() / 2) + xSpawn);
+        this.personagem.y = ((600 / 2 - personagem.animacaoAtual.getImage().getHeight() / 2) + ySpawn);
 
 
         //this.x = xSpawn;
@@ -96,7 +96,7 @@ public class Player extends GameObject {
             this.offsetx -= i;
             this.offsety += i;
             this.moveDireitaCima(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteRight;
+            this.personagem.animacaoAtual = this.personagem.animacaoRight;
 
         } else if (input.isKeyDown(Input.KEY_D) && input.isKeyDown(Input.KEY_S)) {
             this.personagem.direcao = Direcao.DIREITA_BAIXO;
@@ -104,7 +104,7 @@ public class Player extends GameObject {
             this.offsetx -= i;
             this.offsety -= i;
             this.moveDireitaBaixo(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteRight;
+            this.personagem.animacaoAtual = this.personagem.animacaoRight;
 
         } else if (input.isKeyDown(Input.KEY_A) && input.isKeyDown(Input.KEY_W)) {
             this.personagem.direcao = Direcao.ESQUERDA_CIMA;
@@ -112,7 +112,7 @@ public class Player extends GameObject {
             this.offsetx += i;
             this.offsety += i;
             this.moveEsquerdaCima(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteLeft;
+            this.personagem.animacaoAtual = this.personagem.animacaoLeft;
 
         } else if (input.isKeyDown(Input.KEY_A) && input.isKeyDown(Input.KEY_S)) {
             this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
@@ -120,28 +120,28 @@ public class Player extends GameObject {
             this.offsetx += i;
             this.offsety -= i;
             this.moveEsquerdaBaixo(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteLeft;
+            this.personagem.animacaoAtual = this.personagem.animacaoLeft;
 
         } else if (input.isKeyDown(Input.KEY_W)) {
             this.personagem.direcao = Direcao.CIMA;
             this.offsety += this.velocidade;
             this.moveCima(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteUp;
+            this.personagem.animacaoAtual = this.personagem.animacaoUp;
         } else if (input.isKeyDown(Input.KEY_S)) {
             this.personagem.direcao = Direcao.BAIXO;
             this.offsety -= this.velocidade;
             this.moveBaixo(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteDown;
+            this.personagem.animacaoAtual = this.personagem.animacaoDown;
         } else if (input.isKeyDown(Input.KEY_A)) {
             this.personagem.direcao = Direcao.ESQUERDA;
             this.offsetx += this.velocidade;
             this.moveEsquerda(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteLeft;
+            this.personagem.animacaoAtual = this.personagem.animacaoLeft;
         } else if (input.isKeyDown(Input.KEY_D)) {
             this.personagem.direcao = Direcao.DIREITA;
             this.offsetx -= this.velocidade;
             this.moveDireita(this.velocidade);
-            this.personagem.spriteAtual = this.personagem.spriteRight;
+            this.personagem.animacaoAtual = this.personagem.animacaoRight;
         }
 
 
@@ -153,8 +153,8 @@ public class Player extends GameObject {
             this.atacou = true;
         }
 
-        this.personagem.x = gc.getWidth() / 2 - this.offsetx - personagem.spriteAtual.getWidth() / 2;
-        this.personagem.y = gc.getHeight() / 2 - this.offsety - personagem.spriteAtual.getHeight() / 2;
+        this.personagem.x = gc.getWidth() / 2 - this.offsetx - personagem.animacaoAtual.getImage().getWidth() / 2;
+        this.personagem.y = gc.getHeight() / 2 - this.offsety - personagem.animacaoAtual.getImage().getHeight() / 2;
     }
 
     @Override
