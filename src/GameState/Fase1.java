@@ -281,16 +281,11 @@ public class Fase1 extends BasicGameState {
         }
         //cheats :D
         if (key == Input.KEY_ENTER) {
-<<<<<<< HEAD
-           this.characterSelect.sorteiaInimigo();
-           this.criaInimigo(this.characterSelect.getInimigo());
-           // this.criaInimigo("Pikachu");
-=======
+
             this.characterSelect.sorteiaInimigo();
             this.criaInimigo(this.characterSelect.getInimigo());
             //this.player.personagem.setHp(this.player.personagem.getHpInicial());
            // this.criaInimigo("Ekans");
->>>>>>> 5e66c5840a916897678f6f339861d232684e07b6
             //this.criaBoss();
         }
     }

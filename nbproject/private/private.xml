@@ -2,4 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/F:/TCC/Git/TCC/src/MySQL/MySQL.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/DAO/AtaqueDAO.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/DAO/JogadorDAO.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/DAO/PokemonDAO.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/DAO/PokemonDerrotadoDAO.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/DAO/PokemonInimigoDAO.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/DAO/PokemonLiberadoDAO.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/GameState/CharacterSelect.java</file>
+        <file>file:/F:/TCC/Git/TCC/src/tcc/Main.java</file>
+    </open-files>
 </project-private>
