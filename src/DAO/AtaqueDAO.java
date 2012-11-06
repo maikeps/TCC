@@ -60,9 +60,9 @@ public class AtaqueDAO {
 
     public static Ataque getPoder(String nome) {
         MySQL banco = new MySQL();
-        String sql = "select * from pokemon p";
-        sql += " inner join ataque a on p.idAtaque = a.id ";
-        sql += "where p.nome = \"" + nome + "\"";
+        String sql = "select * from pokemon ";
+        sql += "inner join ataque on pokemon.idAtaque = ataque.id ";
+        sql += "where pokemon.nome = \"" + nome + "\"";
 
 
         ConjuntoResultados linhas = banco.executaSelect(sql);
@@ -71,7 +71,7 @@ public class AtaqueDAO {
 
         if (linhas.next()) {
             a.setId(linhas.getInt("id"));
-            a.setNome(linhas.getString("a.nome"));
+            a.setNome(linhas.getString("ataque.nome"));
             a.setAtk(linhas.getInt("atk"));
             a.setElemento(linhas.getInt("elemento"));
 
