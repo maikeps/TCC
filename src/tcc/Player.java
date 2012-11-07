@@ -160,10 +160,6 @@ public class Player extends GameObject {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
         this.personagem.render(gc, game, g);
-        g.drawString(this.angulo + "", 200, 200);
-        g.drawString(this.destX + " - " + this.x, 200 - offsetx, 250 - offsety);
-        g.drawString(this.destY + " - " + this.y, 200 - offsetx, 300 - offsety);
-        g.drawString(this.personagem.podeAtirar() + " - " + this.personagem.cooldownAtual, 500, 400);
     }
 
     public void regeneraVida() {

@@ -1,0 +1,21 @@
+ 
+ 	- Trocar a lingua para o portugues
+	- Poderes que ainda estão faltando
+	- Melhorar a telça de stats(Arrumar para volta no lugar certo)
+	- Mini Mapa
+	- Criar Fases , e separar os pokemons pelo tipo de fase
+	- Utilizar o mouse para jogar
+	- Mudar a mira do mouse
+	- COLISÃO COM OS TILE DA AGUA
+	- Creditos
+	- obstaculos Vegetação
+	- tela de Carregamento
+	- Fazer com que apareca somente inimigo de level especifico do pokemon
+	- Bug de experiencia
+	- Arrumar o BOSS
+	- Colocar portal para mudar de fase ,apos matar o chefe
+	- bonus de elemento (Arrumar no hsql)
+	- Modo de retry ( Apos morrer )
+	- Arrumar o char select ao acessar no meio do jogo
+	- Perguntar se quer evolução
+	 
