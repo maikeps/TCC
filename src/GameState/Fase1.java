@@ -294,9 +294,9 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_ENTER) {
 
             this.characterSelect.sorteiaInimigo();
-            this.criaInimigo(this.characterSelect.getInimigo());
+            //this.criaInimigo(this.characterSelect.getInimigo());
             //this.player.personagem.setHp(this.player.personagem.getHpInicial());
-            // this.criaInimigo("Ekans");
+             this.criaInimigo("Spearow");
             //this.criaBoss();
         }
     }
