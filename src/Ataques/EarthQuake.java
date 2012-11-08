@@ -1,6 +1,7 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -13,6 +14,7 @@ import tcc.Personagem;
 public class EarthQuake extends Ataque {
 
     public EarthQuake(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+        this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
         this.personagem = personagem;
 

@@ -1,6 +1,7 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.Animation;
@@ -8,13 +9,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
 public class FlameThrower extends Ataque {
 
     public FlameThrower(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+        this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {

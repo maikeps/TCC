@@ -81,3 +81,6 @@
 -CharacterSelect aprimorado - agora nao trava mais ao mover o quadrado de seleção
 -Fase1 aprimorada - agora nao trava mais ao criar um novo inimigo
 -Pequenas correcoes feitas nas classes dos ataques
+
+06/11
+-Imagem do cursor do mouse modificado

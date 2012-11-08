@@ -89,6 +89,7 @@ public class PauseScreen extends BasicGameState{
                 this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Stats")){
+                Stats.idPreviousGameState = this.ID;
                 this.game.enterState(Stats.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Pokedex")){

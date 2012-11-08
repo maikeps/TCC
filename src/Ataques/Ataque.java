@@ -4,6 +4,7 @@
  */
 package Ataques;
 
+import java.util.ArrayList;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
@@ -36,7 +37,9 @@ public abstract class Ataque extends GameObject {
     int destY;
     double deltaX, deltaY, dx, dy;
     int contadorDano; //contador de tempo para o dano que aparece na tela
-
+    public ArrayList<Personagem> personagensAcertados;
+    
+    
     public void setDano(int n) {
         this.dano = n;
     }

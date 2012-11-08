@@ -40,6 +40,9 @@ public class MainMenu extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
         this.gc = gc;
+        
+        gc.getGraphics().fillRect(100, 100, 100, 100);
+        
         this.img = new Image("resources/title.png");
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");

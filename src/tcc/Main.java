@@ -4,6 +4,7 @@ package tcc;
 import GameState.*;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -22,6 +23,9 @@ public class Main extends StateBasedGame{
     
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
+        Image cursor = new Image("resources/mouseCursor.png");
+        this.getContainer().setMouseCursor(cursor, cursor.getWidth()/2, cursor.getHeight()/2);
+                
         CharacterSelect cs = new CharacterSelect("Bulbasaur");
         
         this.addState(new StartMenu());
@@ -36,12 +40,14 @@ public class Main extends StateBasedGame{
         this.addState(new PokedexIndividual());
         this.addState(new VideoOptions());
         this.addState(new AudioOptions());
+        this.addState(new GameOver());
     }
     
     public static void main(String[] args) throws SlickException {
         AppGameContainer app = new AppGameContainer(new Main("PokeProject"));
         app.setDisplayMode(800, 600, false);
         app.setTargetFrameRate(60);
+        
         app.start();
     }
     

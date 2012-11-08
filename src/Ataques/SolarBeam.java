@@ -1,6 +1,7 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
@@ -15,6 +16,7 @@ public class SolarBeam extends Ataque {
     int contador;
 
     public SolarBeam(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+        this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
         this.personagem = personagem;
         String name = this.toString();

@@ -1,6 +1,7 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
@@ -17,6 +18,7 @@ public class Acid extends Ataque {
     int frame;
 
     public Acid(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+        this.personagensAcertados = new ArrayList<Personagem>();
 
         this.setContador(0);
         String name = this.toString();
@@ -68,7 +70,7 @@ public class Acid extends Ataque {
             this.contadorDano++;
             return;
         }
-        
+
         this.x += this.dx;
         this.y += this.dy;
         if (acertou == true) {
@@ -81,7 +83,7 @@ public class Acid extends Ataque {
         if (!animation.isStopped()) {
             this.animation.draw(this.x, this.y);
         }
-       // g.fillRect(this.getX(), this.getY(), this.animation.getWidth(), this.animation.getHeight());
+        // g.fillRect(this.getX(), this.getY(), this.animation.getWidth(), this.animation.getHeight());
     }
 
     @Override
