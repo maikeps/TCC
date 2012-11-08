@@ -29,6 +29,7 @@ public class Stats extends BasicGameState {
     public static Personagem personagem;
     Image image;
     Animacao animacao;
+    public static int idPreviousGameState;
     
     String nome;
     int hp;
@@ -82,7 +83,7 @@ public class Stats extends BasicGameState {
     public void keyPressed(int key, char c){
         if(key == Input.KEY_ENTER){
             this.somSelect.play();
-            this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            this.game.enterState(idPreviousGameState, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
     }
 }

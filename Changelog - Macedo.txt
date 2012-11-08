@@ -17,3 +17,5 @@
 28/10
  - Arrumando as classes do formato gif para os formatos png.
 
+05/11
+-HSQL adicionado

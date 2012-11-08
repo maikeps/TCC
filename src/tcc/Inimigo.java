@@ -37,7 +37,6 @@ public class Inimigo extends GameObject {
     int xInicial;
     int yInicial;
     int distanciaMaxAteOSpawn = 100;
-    
     public String tipo;
 
     //o player estiver na linha de visao do inimigo e se estiver suficientemente perto, o inimigo atira.
@@ -90,14 +89,14 @@ public class Inimigo extends GameObject {
             case DIREITA_CIMA:
             case ESQUERDA_BAIXO:
             case ESQUERDA_CIMA:
-            
+
         }
 
 //////        if (this.personagem.getHp() <= this.personagem.getHpInicial() * 30 / 100) {
 //////            this.afasta();
 //////        }
         this.player.sendoPerseguido = false;
-        
+
         if (this.podePerseguir()) {
             this.player.sendoPerseguido = true;
             this.player.contRegen = 0;
@@ -110,11 +109,11 @@ public class Inimigo extends GameObject {
             this.sorteiaDestino();
         }
 
-        
-        
-        this.anguloAtePlayer = (float)util.Util.calculaAngulo(destX, this.getX(), destY, this.getY());
 
-        
+
+        this.anguloAtePlayer = (float) util.Util.calculaAngulo(destX, this.getX(), destY, this.getY());
+
+
         if (this.distanciaX < 0) {
             this.distanciaX *= (-1);
         }
@@ -126,199 +125,66 @@ public class Inimigo extends GameObject {
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if(this.tipo.equals("Minion")){
-        this.personagem.render(gc, game, g);
-        }else{
+        if (this.tipo.equals("Minion")) {
+            this.personagem.render(gc, game, g);
+        } else {
             this.personagem.renderZoomed(gc, game, g);
         }
     }
 
-    
-
     public void aproxima() {
-
-//        int quadranteDoPlayer = 1;
-//
-//        if (this.xPlayer > this.x && this.yPlayer < this.y) {
-//            quadranteDoPlayer = 1;
-//        }
-//        if (this.xPlayer < this.x && this.yPlayer < this.y) {
-//            quadranteDoPlayer = 2;
-//        }
-//        if (this.xPlayer < this.x && this.yPlayer > this.y) {
-//            quadranteDoPlayer = 3;
-//        }
-//        if (this.xPlayer > this.x && this.yPlayer > this.y) {
-//            quadranteDoPlayer = 4;
-//        }
-
-
         int quadranteDoPlayer = 1;
-        //    this.angulo = util.Util.calculaAngulo(destX, this.personagem.getX(), destY, this.personagem.getY());
-//        this.anguloAtePlayer = util.Util.calculaAngulo(this.player.getX(), this.getX(), this.player.getY(), this.getY());
 
         if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 45.0) {
             quadranteDoPlayer = 1;
-        }
-        if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 90.0 && this.anguloAtePlayer > 4.05) {
+        } else if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 90.0 && this.anguloAtePlayer > 4.05) {
             quadranteDoPlayer = 2;
-        }
-        if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
+        } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
             quadranteDoPlayer = 3;
-        }
-        if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 180.0 && this.anguloAtePlayer > 135.0) {
+        } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 180.0 && this.anguloAtePlayer > 135.0) {
             quadranteDoPlayer = 4;
-        }
-        if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 225.0 && this.anguloAtePlayer > 180.0) {
+        } else if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 225.0 && this.anguloAtePlayer > 180.0) {
             quadranteDoPlayer = 5;
-        }
-        if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 270.0 && this.anguloAtePlayer > 225.0) {
+        } else if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 270.0 && this.anguloAtePlayer > 225.0) {
             quadranteDoPlayer = 6;
-        }
-        if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 315.0 && this.anguloAtePlayer > 270.0) {
+        } else if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 315.0 && this.anguloAtePlayer > 270.0) {
             quadranteDoPlayer = 7;
-        }
-        if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 360.0 && this.anguloAtePlayer > 315.0) {
+        } else if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 360.0 && this.anguloAtePlayer > 315.0) {
             quadranteDoPlayer = 8;
         }
-        
 
         double dx = Math.cos(Math.toRadians(this.anguloAtePlayer)) * velocidade;
         double dy = -Math.sin(Math.toRadians(this.anguloAtePlayer)) * velocidade;
-        
+
         this.x += dx;
         this.y += dy;
 
         switch (quadranteDoPlayer) {
             case 1:
                 this.personagem.direcao = Direcao.DIREITA;
-               // this.moveDireitaCima(this.velocidade);
                 break;
             case 2:
                 this.personagem.direcao = Direcao.CIMA;
-               // this.moveDireitaCima(this.velocidade);
                 break;
             case 3:
                 this.personagem.direcao = Direcao.CIMA;
-              //  this.moveEsquerdaCima(this.velocidade);
                 break;
             case 4:
                 this.personagem.direcao = Direcao.ESQUERDA;
-              //  this.moveEsquerdaCima(this.velocidade);
                 break;
             case 5:
                 this.personagem.direcao = Direcao.ESQUERDA;
-              //  this.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 6:
                 this.personagem.direcao = Direcao.BAIXO;
-              //  this.moveEsquerdaBaixo(this.velocidade);
                 break;
             case 7:
                 this.personagem.direcao = Direcao.BAIXO;
-             //   this.moveDireitaBaixo(this.velocidade);
                 break;
             case 8:
                 this.personagem.direcao = Direcao.DIREITA;
-            //    this.moveDireitaBaixo(this.velocidade);
                 break;
         }
-        
-//        switch((int)this.anguloAtePlayer){
-//            case 90:
-//                this.moveCima(this.velocidade);
-//                break;
-//            case 180:
-//                this.moveEsquerda(this.velocidade);
-//                break;
-//            case 270:
-//                this.moveBaixo(this.velocidade);
-//                break;
-//            case 360:
-//                this.moveDireita(this.velocidade);
-//                break;
-//        }
-
-//
-//        switch (quadranteDoPlayer) {
-//            case 1:
-//                this.personagem.direcao = Direcao.CIMA;
-//                this.personagem.spriteAtual = this.personagem.spriteUp;
-//                this.personagem.moveDireitaCima(this.velocidade);
-//                break;
-//            case 2:
-//                this.personagem.direcao = Direcao.ESQUERDA;
-//                this.personagem.spriteAtual = this.personagem.spriteLeft;
-//                this.personagem.moveEsquerdaCima(this.velocidade);
-//                break;
-//            case 3:
-//                this.personagem.direcao = Direcao.BAIXO;
-//                this.personagem.spriteAtual = this.personagem.spriteDown;
-//                this.personagem.moveEsquerdaBaixo(this.velocidade);
-//                break;
-//            case 4:
-//                this.personagem.direcao = Direcao.DIREITA;
-//                this.personagem.spriteAtual = this.personagem.spriteRight;
-//                this.personagem.moveDireitaBaixo(this.velocidade);
-//                break;
-//        }
-
-//
-//                if (this.yPlayer >= this.personagem.getY() && this.calculaDistanciaAtePlayer(xPlayer, yPlayer) >= 80) {
-//                    this.personagem.direcao = Direcao.BAIXO;
-//                    this.personagem.spriteAtual = this.personagem.spriteDown;
-//                    this.personagem.moveBaixo(this.velocidade);
-//                } else if (this.yPlayer >= this.personagem.getY()) {
-//                    this.personagem.direcao = Direcao.BAIXO;
-//                    this.personagem.spriteAtual = this.personagem.spriteDown;
-//                }
-//        
-//                if (this.yPlayer < this.personagem.getY() && this.calculaDistanciaAtePlayer(xPlayer, yPlayer) >= 80) {
-//                    this.personagem.direcao = Direcao.CIMA;
-//                    this.personagem.spriteAtual = this.personagem.spriteUp;
-//                    this.personagem.moveCima(this.velocidade);
-//                } else if (this.yPlayer < this.personagem.getY()) {
-//                    this.personagem.direcao = Direcao.CIMA;
-//                    this.personagem.spriteAtual = this.personagem.spriteUp;
-//                }
-//                if (this.xPlayer < this.personagem.getX() && this.calculaDistanciaAtePlayer(xPlayer, yPlayer) >= 80) {
-//                    this.personagem.direcao = Direcao.ESQUERDA;
-//                    this.personagem.spriteAtual = this.personagem.spriteLeft;
-//                    this.personagem.moveEsquerda(this.velocidade);
-//                } else if (this.xPlayer < this.personagem.getX()) {
-//                    this.personagem.direcao = Direcao.ESQUERDA;
-//                    this.personagem.spriteAtual = this.personagem.spriteLeft;
-//                }
-//        
-//                if (this.xPlayer >= this.personagem.getX() && this.calculaDistanciaAtePlayer(xPlayer, yPlayer) >= 80) {
-//                    this.personagem.direcao = Direcao.DIREITA;
-//                    this.personagem.spriteAtual = this.personagem.spriteRight;
-//                    this.personagem.moveDireita(this.velocidade);
-//                } else if (this.xPlayer >= this.personagem.getX()) {
-//                    this.personagem.direcao = Direcao.DIREITA;
-//                    this.personagem.spriteAtual = this.personagem.spriteRight;
-//                }
-//        
-//        
-//                if (this.xPlayer >= this.personagem.getX() && this.yPlayer >= this.personagem.getY()) {
-//                    this.personagem.direcao = Direcao.DIREITA_BAIXO;
-//                    this.personagem.spriteAtual = this.personagem.spriteDown;
-//                }
-//                if (this.xPlayer >= this.personagem.getX() && this.yPlayer < this.personagem.getY()) {
-//                    this.personagem.direcao = Direcao.DIREITA_CIMA;
-//                    this.personagem.spriteAtual = this.personagem.spriteUp;
-//                }
-//                if (this.xPlayer < this.personagem.getX() && this.yPlayer >= this.personagem.getY()) {
-//                    if (this.distanciaX >= this.distanciaY && this.yPlayer < this.personagem.getY()) {
-//                        //this.personagem.direcao = Direcao.ESQUERDA_BAIXO;
-//                        this.personagem.spriteAtual = this.personagem.spriteUp;
-//                    }
-//                    if (this.xPlayer < this.personagem.getX() && this.yPlayer < this.personagem.getY()) {
-//                        // this.personagem.direcao = Direcao.ESQUERDA_CIMA;
-//                        this.personagem.spriteAtual = this.personagem.spriteLeft;
-//                    }
-//                }
-
     }
 
     public void ataca() {
@@ -380,7 +246,7 @@ public class Inimigo extends GameObject {
                 break;
         }
 
-        this.distanciaParaAndar-=this.velocidade;
+        this.distanciaParaAndar -= this.velocidade;
 
 //////        if (this.destMovimentoX < 0) {
 //////            this.destMovimentoX++;
@@ -425,7 +291,7 @@ public class Inimigo extends GameObject {
 
         return distancia;
     }
-    
+
     public Rectangle getCampoDeVisao() {
         return this.campoDeVisao;
     }
@@ -452,7 +318,7 @@ public class Inimigo extends GameObject {
     public float getAngulo() {
         return anguloAtePlayer;
     }
-    
+
     public int getDestX() {
         return this.destX;
     }
@@ -460,8 +326,7 @@ public class Inimigo extends GameObject {
     public int getDestY() {
         return this.destY;
     }
-    
-    
+
     public Direcao getDirecao() {
         return this.personagem.getDirecao();
     }

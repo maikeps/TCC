@@ -37,6 +37,10 @@ public class Player extends GameObject {
     public int expNivelAtual;
     public int expAtual;
 
+    public int expGanha;
+    public int contExpGanha;
+    
+    
     public Player(Personagem personagem, int xSpawn, int ySpawn) {
 
         this.destX = 0;
@@ -74,7 +78,9 @@ public class Player extends GameObject {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-
+        if(this.expGanha != 0){
+            this.contExpGanha --;
+        }
         this.expAtual = this.personagem.getExp();
         
         
