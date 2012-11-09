@@ -1,232 +1,285 @@
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-CREATE SCHEMA IF NOT EXISTS `tcc` DEFAULT CHARACTER SET latin1 ;
-USE `tcc` ;
-
--- -----------------------------------------------------
--- Table `tcc`.`elemento`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`elemento` (
-  `id` INT NOT NULL AUTO_INCREMENT ,
-  `elemento` ENUM('Normal','Fire','Fighting','Water','Flying','Grass','Poison','Electric','Ground','Psychic','Rock','Ice','Bug','Dragon','Ghost','Dark','Steel', ' ') NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`ataque`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`ataque` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `nome` VARCHAR(45) NOT NULL ,
-  `atk` INT(11) NOT NULL ,
-  `elemento` INT NOT NULL ,
-  PRIMARY KEY (`id`, `elemento`) ,
-  INDEX `fk_ataque_elemento1` (`elemento` ASC) ,
-  CONSTRAINT `fk_ataque_elemento1`
-    FOREIGN KEY (`elemento` )
-    REFERENCES `tcc`.`elemento` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`pokemon`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`pokemon` (
-  `id` INT(11) NOT NULL ,
-  `nome` VARCHAR(45) NOT NULL ,
-  `raridade` INT(11) NOT NULL ,
-  `atkBase` INT(11) NOT NULL ,
-  `defBase` INT(11) NOT NULL ,
-  `spdBase` INT(11) NOT NULL ,
-  `hpBase` INT(11) NOT NULL ,
-  `baseExp` INT NOT NULL ,
-  `lvlQueEvolui` INT(11) NULL DEFAULT NULL ,
-  `idAtaque` INT(11) NOT NULL ,
-  `elementoPrimario` INT NOT NULL ,
-  `elementoSecundario` INT NULL ,
-  PRIMARY KEY (`id`, `idAtaque`, `elementoPrimario`, `elementoSecundario`) ,
-  INDEX `fk_pokemon_ataque1` (`idAtaque` ASC) ,
-  INDEX `fk_pokemon_elemento1` (`elementoPrimario` ASC) ,
-  INDEX `fk_pokemon_elemento2` (`elementoSecundario` ASC) ,
-  CONSTRAINT `fk_pokemon_ataque1`
-    FOREIGN KEY (`idAtaque` )
-    REFERENCES `tcc`.`ataque` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pokemon_elemento1`
-    FOREIGN KEY (`elementoPrimario` )
-    REFERENCES `tcc`.`elemento` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pokemon_elemento2`
-    FOREIGN KEY (`elementoSecundario` )
-    REFERENCES `tcc`.`elemento` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`evolucaoporpedra`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`evolucaoporpedra` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `idPokemon` INT NOT NULL ,
-  `idEvolucao` INT NOT NULL ,
-  `elemento` INT NOT NULL ,
-  PRIMARY KEY (`id`, `idPokemon`, `idEvolucao`, `elemento`) ,
-  INDEX `fk_pokemon_has_pokemon_pokemon2` (`idEvolucao` ASC) ,
-  INDEX `fk_pokemon_has_pokemon_pokemon1` (`idPokemon` ASC) ,
-  INDEX `fk_evolucaoporpedra_elemento1` (`elemento` ASC) ,
-  CONSTRAINT `fk_pokemon_has_pokemon_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `tcc`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pokemon_has_pokemon_pokemon2`
-    FOREIGN KEY (`idEvolucao` )
-    REFERENCES `tcc`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_evolucaoporpedra_elemento1`
-    FOREIGN KEY (`elemento` )
-    REFERENCES `tcc`.`elemento` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`jogador`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`jogador` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `nome` VARCHAR(45) NOT NULL ,
-  PRIMARY KEY (`id`) )
-ENGINE = InnoDB
-AUTO_INCREMENT = 1
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`pokemonderrotado`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`pokemonderrotado` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `vezesDerrotado` INT(11) NOT NULL DEFAULT '0' ,
-  `idPokemon` INT(11) NOT NULL ,
-  PRIMARY KEY (`id`, `idPokemon`) ,
-  INDEX `fk_PokemonDerrotado_pokemon1` (`idPokemon` ASC) ,
-  CONSTRAINT `fk_PokemonDerrotado_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `tcc`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`pokemoninimigo`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`pokemoninimigo` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT ,
-  `idPokemon` INT(11) NOT NULL ,
-  `tipo` ENUM('boss','minion') NOT NULL ,
-  `atk` INT(11) NOT NULL ,
-  `def` INT(11) NOT NULL ,
-  `spd` INT(11) NOT NULL ,
-  `hp` INT(11) NOT NULL ,
-  `lvl` INT(11) NOT NULL ,
-  PRIMARY KEY (`id`, `idPokemon`) ,
-  INDEX `fk_PokemonInimigo_pokemon1` (`idPokemon` ASC) ,
-  CONSTRAINT `fk_PokemonInimigo_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `tcc`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`pokemonliberado`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`pokemonliberado` (
-  `idJogador` INT(11) NOT NULL ,
-  `idPokemon` INT(11) NOT NULL ,
-  `lvlQueChegou` INT(11) NULL DEFAULT 0 ,
-  `faseQueChegou` INT(11) NULL DEFAULT 0 ,
-  `inimigosDerrotados` INT(11) NULL DEFAULT 0 ,
-  `vezesQueZerouOJogo` INT(11) NULL DEFAULT 0 ,
-  `vezesDerrotasParaNPC` INT(11) NULL DEFAULT 0 ,
-  `totalDanoCausado` INT(11) NULL DEFAULT 0 ,
-  `atk` INT(11) NOT NULL ,
-  `def` INT(11) NOT NULL ,
-  `spd` INT(11) NOT NULL ,
-  `hp` INT(11) NOT NULL ,
-  `lvl` INT(11) NULL DEFAULT 1 ,
-  `exp` INT NULL DEFAULT 0 ,
-  PRIMARY KEY (`idJogador`, `idPokemon`) ,
-  INDEX `fk_jogador_has_pokemon_pokemon1` (`idPokemon` ASC) ,
-  INDEX `fk_jogador_has_pokemon_jogador` (`idJogador` ASC) ,
-  CONSTRAINT `fk_jogador_has_pokemon_jogador`
-    FOREIGN KEY (`idJogador` )
-    REFERENCES `tcc`.`jogador` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_jogador_has_pokemon_pokemon1`
-    FOREIGN KEY (`idPokemon` )
-    REFERENCES `tcc`.`pokemon` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = latin1;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`experiencia`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`experiencia` (
-  `lvl` INT NOT NULL ,
-  `exp` INT NOT NULL ,
-  PRIMARY KEY (`lvl`) )
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `tcc`.`bonusDeElemento`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `tcc`.`bonusDeElemento` (
-  `elemento` INT NOT NULL ,
-  `elementoMultiplicador` INT NOT NULL ,
-  `multiplicador` DOUBLE NOT NULL ,
-  PRIMARY KEY (`elemento`, `elementoMultiplicador`) ,
-  INDEX `fk_elemento_has_elemento_elemento2` (`elementoMultiplicador` ASC) ,
-  INDEX `fk_elemento_has_elemento_elemento1` (`elemento` ASC) ,
-  CONSTRAINT `fk_elemento_has_elemento_elemento1`
-    FOREIGN KEY (`elemento` )
-    REFERENCES `tcc`.`elemento` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_elemento_has_elemento_elemento2`
-    FOREIGN KEY (`elementoMultiplicador` )
-    REFERENCES `tcc`.`elemento` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+insert into ataque (id,nome, atk, elemento) values
+(1,'WaterGun', 40, 5), 
+(2,'WaterPulse', 60, 5), 
+(3,'HydroPump', 120, 5), 
+(4,'Ember', 40, 3), 
+(5,'FlameBurst', 70, 3), 
+(6,'Inferno', 100, 3), 
+(7,'LeechSeed', 20, 7),
+(8,'RazorLeaf', 55, 7), 
+(9,'SolarBeam', 120, 7), 
+(10,'StringShot', 25, 14),
+(11,'SilverWind', 60, 14),
+(12,'PoisonSting', 15, 8), 
+(13,'Twineedle', 50, 14), 
+(14,'WingAttack', 40, 6), 
+(15,'Twister', 60, 15), 
+(16,'Hurricane', 120, 6),
+(17,'Bite', 60, 17), 
+(18,'HperFang', 80, 2), 
+(19,'AerialAce', 60, 6),
+(20,'DrillPeck', 80, 6),
+(21,'Acid', 40, 8),
+(22,'GunkShot', 120, 8),
+(23,'ElectroBall', 60, 9), 
+(24,'Thunder', 120, 9), 
+(25,'RockTomb', 50, 12), 
+(26,'EarthQuake', 100, 10), 
+(27,'PoisonFang', 50, 8),
+(28,'BodySlam', 85, 2),
+(29,'PoisonJab', 80, 8),
+(30,'MegaHorn', 120, 14),
+(31,'DoubleSlap', 45, 2), 
+(32,'Metronome', 0, 2);
 
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQueEvolui, idAtaque, elementoPrimario, elementoSecundario, baseExp) values
+(1, 'Bulbasaur', 0, 49, 49, 45, 45, 16, 7, 7, 8, 64),
+(2, 'Ivysaur', 75, 62, 63, 60, 60, 32, 8, 7, 8, 141),
+(3, 'Venusaur', 50, 82, 83, 80, 80, null, 9, 7, 8, 208),
+(4, 'Charmander', 0, 51, 43, 65, 39, 16, 4, 3, 1, 65),
+(5, 'Charmeleon', 75, 64, 58, 80, 58, 32, 5, 3, 1, 142),
+(6, 'Charizard', 50, 84, 78, 100, 78, null, 6, 3, 15, 209),
+(7, 'Squirtle', 0, 48, 65, 43, 44, 16, 1, 5, 1, 66),
+(8, 'Wartortle', 75, 63, 80, 58, 59, 32, 2, 5, 1, 143),
+(9, 'Blastoise', 50, 83, 100, 78, 79, null, 3, 5, 1, 210),
+(10, 'Caterpie', 90, 30, 35, 45, 45, 7, 10, 14, 1, 53),
+(11, 'Metapod', 85, 20, 55, 30, 50, 10, 10, 14, 1, 72),
+(12, 'Butterfree', 70, 45, 50, 70, 60, null, 11, 14, 6, 160),
+(13, 'Weedle', 90, 35, 30, 50, 40, 7, 12, 14, 8, 52),
+(14, 'Kakuna', 85, 25, 50, 35, 45, 10, 12, 14, 8, 71),
+(15, 'Beedrill', 70, 80, 40, 75, 65, null, 13, 14, 6, 159),
+(16, 'Pidgey', 85, 45, 40, 56, 40, 18, 14, 2, 6, 55),
+(17, 'Pidgeotto', 65, 60, 55, 71, 63, 36, 15, 2, 6, 113),
+(18, 'Pidgeot', 50, 80, 75, 91, 83, null, 16, 2, 6, 172),
+(19, 'Rattata', 90, 56, 35, 72, 30, 20, 17, 2, 1, 57),
+(20, 'Raticate', 70, 81, 60, 97, 55, null, 18, 2, 1, 116),
+(21, 'Spearow', 85, 60, 30, 70, 40, 20, 19, 2, 6, 58),
+(22, 'Fearow', 65, 90, 65, 70, 40, null, 20, 2, 6, 162),
+(23, 'Ekans', 80, 60, 44, 55, 35, 22, 21, 8, 1, 62),
+(24, 'Arbok', 58, 85, 69, 80, 60, null, 22, 8, 1, 147),
+(25, 'Pikachu', 75, 35, 30, 90, 35, null, 23, 9, 1, 82),
+(26, 'Raichu', 40, 90, 55, 100, 60, null, 24, 9, 1, 122),
+(27, 'Sandshrew', 80, 75, 85, 40, 50, 22, 25, 10, 1, 93),
+(28, 'Sandslash', 58, 100, 110, 65, 75, null, 26, 10, 1, 163),
+(29, 'NidoranF', 85, 47, 52, 41, 55, 16, 12, 8, 1, 59),
+(30, 'Nidorina', 69, 62, 67, 56, 70, null, 27, 8, 1, 117),
+(31, 'Nidoqueen', 49, 82, 87, 76, 90, null, 28, 8, 10, 194),
+(32, 'NidoranM', 85, 57, 40, 50, 46, 26, 12, 8, 1, 60),
+(33, 'Nidorino', 69, 72, 57, 65, 61, null, 29, 8, 1, 118),
+(34, 'Nidoking', 49, 92, 77, 85, 81, null, 30, 8, 10, 195),
+(35, 'Clefairy', 80, 45, 48, 35, 70, null, 31, 2, 1, 68),
+(36, 'Clefable', 60, 70, 73, 60, 95, null, 32, 2, 1, 129);
+-- nao tem imagem pronta ainda
+-- nao tem ataque pronto ainda
+-- (37, 'Vulpix', 80, 41, 40, 65, 38, null, 1, 3, 1, 63),
+-- (38, 'Ninetales', 60, 76, 75, 100, 73, null, 1, 3, 1, 178);
+
+
+
+insert into pokemonLiberado (idJogador, idPokemon, atk, def, spd, hp) values
+(1, 1, 49, 49, 45, 45),
+(1, 4, 51, 43, 65, 39),
+(1, 7, 48, 65, 43, 44);
+
+
+
+insert into pokemonDerrotado (id,idPokemon, vezesDerrotado) values
+(1,1, 0),
+(2,2, 0),
+(3,3, 0),
+(4,4, 0),
+(5,5, 0),
+(6,6, 0),
+(7,7, 0),
+(8,8, 0),
+(9,9, 0),
+(10,10, 0),
+(11,11, 0),
+(12,12, 0),
+(13,13, 0),
+(14,14, 0),
+(15,15, 0),
+(16,16, 0),
+(17,17, 0),
+(18,18, 0),
+(19,19, 0),
+(20,20, 0),
+(21,21, 0),
+(22,22, 0),
+(23,23, 0),
+(24,24, 0),
+(25,25, 0),
+(26,26, 0),
+(27,27, 0),
+(28,28, 0),
+(29,29, 0),
+(30,30, 0),
+(31,31, 0),
+(32,32, 0),
+(33,33, 0),
+(34,34, 0),
+(35,35, 0),
+(36,36, 0);
+
+
+
+insert into bonusDeElemento (elemento, elementoMultiplicador, multiplicador) values
+(2, 12, 0.5),
+(2, 18, 0.5),
+(3, 14, 2.0),
+(3, 7, 2.0),
+(3, 13, 2.0),
+(3, 18, 2.0),
+(3, 15, 0.5),
+(3, 3, 0.5),
+(3, 12, 0.5),
+(3, 5, 0.5),
+(4, 2, 2.0),
+(4, 12, 2.0),
+(4, 18, 2.0),
+(4, 13, 2.0),
+(4, 17, 2.0),
+(4, 8, 0.5),
+(4, 6, 0.5),
+(4, 14, 0.5),
+(4, 11, 0.5),
+(5, 3, 2.0),
+(5, 10, 2.0),
+(5, 12, 2.0),
+(5, 15, 0.5),
+(5, 7, 0.5),
+(5, 5, 0.5),
+(6, 14, 2.0),
+(6, 4, 2.0),
+(6, 7, 2.0),
+(6, 9, 0.5),
+(6, 12, 0.5),
+(6, 18, 0.5),
+(7, 10, 2.0),
+(7, 12, 2.0),
+(7, 5, 2.0),
+(7, 14, 0.5),
+(7, 15, 0.5),
+(7, 3, 0.5),
+(7, 6, 0.5),
+(7, 7, 0.5),
+(7, 8, 0.5),
+(7, 18, 0.5),
+(8, 7, 2.0),
+(8, 16, 0.5),
+(8, 10, 0.5),
+(8, 8, 0.5),
+(8, 12, 0.5);
+-- parou no electric
+
+
+
+
+insert into experiencia (lvl, exp) values
+(1, 0),
+(2, 15),
+(3, 52),
+(4, 122),
+(5, 237),
+(6, 406),
+(7, 637),
+(8, 942),
+(9, 1326),
+(10, 1800),
+(11, 2369),
+(12, 3041),
+(13, 3822),
+(14, 4719),
+(15, 5737),
+(16, 6881),
+(17, 8155),
+(18, 9564),
+(19, 11111),
+(20, 12800),
+(21, 14632),
+(22, 16610),
+(23, 18737),
+(24, 21012),
+(25, 23437),
+(26, 26012),
+(27, 28737),
+(28, 31610),
+(29, 34632),
+(30, 37800),
+(31, 41111),
+(32, 44564),
+(33, 48155),
+(34, 51881),
+(35, 55737),
+(36, 59719),
+(37, 63822),
+(38, 68041),
+(39, 72369),
+(40, 76800),
+(41, 81326),
+(42, 85942),
+(43, 90637),
+(44, 95406),
+(45, 100237),
+(46, 105122),
+(47, 110052),
+(48, 115015),
+(49, 120001),
+(50, 125000),
+(51, 131324),
+(52, 137795),
+(53, 144410),
+(54, 151165),
+(55, 158056),
+(56, 165079),
+(57, 172229),
+(58, 179503),
+(59, 186894),
+(60, 194400),
+(61, 202013),
+(62, 209728),
+(63, 217540),
+(64, 225443),
+(65, 233431),
+(66, 241496),
+(67, 249663),
+(68, 257834),
+(69, 267406),
+(70, 276458),
+(71, 286328),
+(72, 296358),
+(73, 305767),
+(74, 316074),
+(75, 326531),
+(76, 336255),
+(77, 346965),
+(78, 357812),
+(79, 367807),
+(80, 378880),
+(81, 390077),
+(82, 400293),
+(83, 411686),
+(84, 423190),
+(85, 433572),
+(86, 445239),
+(87, 457001),
+(88, 467489),
+(89, 479378),
+(90, 491346),
+(91, 401878),
+(92, 513934),
+(93, 526049),
+(94, 536557),
+(95, 548720),
+(96, 560922),
+(97, 571333),
+(98, 583539),
+(99, 591882),
+(100, 600000);
+
+
+

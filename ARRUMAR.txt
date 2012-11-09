@@ -1,16 +1,26 @@
  
  	- Trocar a lingua para o portugues
 	- Poderes que ainda estão faltando
+<<<<<<< HEAD
+	- Melhorar a telça de stats(Arrumar para volta no lugar certo)
+	- Mini Mapa
+	- Criar Fases , e separar os pokemons pelo tipo de fase
+=======
 	- Melhorar a tela de stats(deixar mais bonito)
 	- Mini Mapa
 	- Criar Fases, e separar os pokemons pelo tipo de fase
+>>>>>>> 9babe96b6ee5feeed556553b38b5d035fdaa329f
 	- Utilizar o mouse para jogar
 	- Mudar a mira do mouse
 	- COLISÃO COM OS TILE DA AGUA
 	- Creditos
 	- obstaculos Vegetação
 	- tela de Carregamento
+<<<<<<< HEAD
+	- Fazer com que apareca somente inimigo de level especifico do pokemon
+=======
 	- Fazer com que apareca somente inimigo de level especifico do pokemon(nao pode aparecer charizard antes do lvl necessario pra libera-lo, nem charmander depois do level para evolui-lo)
+>>>>>>> 9babe96b6ee5feeed556553b38b5d035fdaa329f
 	- Bug de experiencia
 	- Arrumar o BOSS
 	- Colocar portal para mudar de fase ,apos matar o chefe
@@ -18,5 +28,8 @@
 	- Modo de retry ( Apos morrer )
 	- Arrumar o char select ao acessar no meio do jogo
 	- Perguntar se quer evolução
+<<<<<<< HEAD
+=======
 	- Fazer botoes pra informar as teclas a serem usadas nos menus
+>>>>>>> 9babe96b6ee5feeed556553b38b5d035fdaa329f
 	 

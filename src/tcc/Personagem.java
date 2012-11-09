@@ -29,7 +29,7 @@ public class Personagem extends GameObject {
     protected int spd;
     protected float hp;
     protected int hpInicial;
-    protected int lvl;
+    protected int lvl ;
     protected int exp;
     public int larguraMapa;
     public int alturaMapa;

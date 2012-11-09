@@ -29,7 +29,7 @@ public class Twineedle extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.angulo = 0;
+        this.angulo = angulo;
 
         try {
             this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
