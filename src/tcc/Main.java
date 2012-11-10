@@ -47,7 +47,8 @@ public class Main extends StateBasedGame{
         AppGameContainer app = new AppGameContainer(new Main("PokeProject"));
         app.setDisplayMode(800, 600, false);
         app.setTargetFrameRate(60);
-        
+        app.setIcon("resources/pokeProjectIcon.png");
+       
         app.start();
     }
     
