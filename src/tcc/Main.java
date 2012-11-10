@@ -23,7 +23,7 @@ public class Main extends StateBasedGame{
     
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
-        Image cursor = new Image("resources/mouseCursor.png");
+        Image cursor = new Image("resources/Lock-On.png");
         this.getContainer().setMouseCursor(cursor, cursor.getWidth()/2, cursor.getHeight()/2);
                 
         CharacterSelect cs = new CharacterSelect("Bulbasaur");

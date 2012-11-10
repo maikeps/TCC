@@ -292,17 +292,16 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_ENTER) {
 
             this.characterSelect.sorteiaInimigo();
-<<<<<<< HEAD
+
             //this.criaInimigo(this.characterSelect.getInimigo());
-=======
-            this.criaInimigo(this.characterSelect.getInimigo());
             
             String sql = "(1, 8, 48, 65, 43, 44,1,0)";
             MySQL banco = new MySQL();
             boolean bool = banco.executaInsert(sql);
->>>>>>> 9babe96b6ee5feeed556553b38b5d035fdaa329f
+
             //this.player.personagem.setHp(this.player.personagem.getHpInicial());
-             this.criaInimigo("Spearow");
+            this.criaInimigo("Fearow");
+           
             //this.criaBoss();
         }
     }

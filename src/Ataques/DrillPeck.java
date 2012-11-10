@@ -10,9 +10,9 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
-public class Twineedle extends Ataque {
+public class DrillPeck extends Ataque {
 
-    public Twineedle(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+    public DrillPeck(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
         this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
         String name = this.toString();

@@ -3,16 +3,21 @@ package Ataques;
 import DAO.AtaqueDAO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
-public class Twineedle extends Ataque {
+public class Hurricane extends Ataque {
 
-    public Twineedle(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+    int frameElapsed;
+    int frame;
+
+    public Hurricane(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
         this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
         String name = this.toString();
@@ -22,47 +27,67 @@ public class Twineedle extends Ataque {
         model.Ataque a = AtaqueDAO.getAtaque(name);
         this.setDanoBruto(a.getAtk());
 
+        this.personagem = personagem;
         this.desativado = false;
-        this.xInicial = x;
-        this.yInicial = y;
         this.x = x;
         this.y = y;
-        this.destX = destX;
-        this.destY = destY;
-        this.angulo = angulo;
+        this.frame = 0;
+        this.angulo = (float) angulo;
+        this.desativado = false;
 
         try {
-            this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 72, 70);
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
+        }
+        this.animation = new Animation();
+        for (int i = 0; i < 2; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 100);
         }
 
         deltaX = Math.abs(this.x - this.destX);
         deltaY = Math.abs(this.y - this.destY);
         this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
-        
-        this.imagem.rotate(-angulo);
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado == true) {
+        if (this.desativado) {
             this.contadorDano++;
             return;
         }
         this.x += this.dx;
         this.y += this.dy;
-        if (this.getAcertou() == true) {
+        if (acertou == true) {
             this.contadorDano++;
         }
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if (this.desativado == true) {
-            return;
+            this.animation.draw(this.x, this.y);
+    }
+
+    @Override
+    public Rectangle getRetangulo() {
+        return new Rectangle(this.x, this.y, this.animation.getWidth(), this.animation.getHeight());
+    }
+
+    public boolean temColisao(Rectangle retangulo) {
+        if (this.desativado || this.frame == 4) {
+            return false;
         }
-        this.imagem.draw(this.x, this.y);
+
+        if (this.getRetangulo().intersects(retangulo)) {
+            this.desativado = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getFrames() {
+        return this.frameElapsed;
     }
 }
