@@ -25,6 +25,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import tcc.Biomas;
 import util.Util;
 
 /**
@@ -73,7 +74,7 @@ public class CharacterSelect extends BasicGameState {
         this.listaDePokemon = PokemonDAO.getLista();
         this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
 
-        this.nomes = new ArrayList<String>(); 
+        this.nomes = new ArrayList<String>();
         for (Pokemon p : this.listaDePokemon) {
             this.nomes.add(p.getNome());
         }
@@ -90,6 +91,7 @@ public class CharacterSelect extends BasicGameState {
 
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");
+        System.out.println("CharacterSelect loaded.");
     }
 
     @Override
@@ -184,8 +186,12 @@ public class CharacterSelect extends BasicGameState {
                 while (inimigo.equals(this.player1)) {
                     this.sorteiaInimigo();
                 }
-                System.out.println(pl.getNome());
-                game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+
+                Biomas bioma = this.getBiomaNativo(p);
+                ChangeLevel.reset(bioma);//botar o elemento do pokemon
+
+                //game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+                game.enterState(ChangeLevel.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         }
     }
@@ -275,7 +281,7 @@ public class CharacterSelect extends BasicGameState {
         PokemonLiberado pl = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado(apenas os liberados)
         //Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
         Pokemon poke = this.listaDePokemon.get(this.pokemonSelecionado);
-        
+
         if (pl.getIdPokemon() != 0) { //se a busca do dao retornar resultado, desenha a imagem colorida
             this.imgGrande = new Image("resources/personagens/" + pl.getIdPokemon() + " - " + pl.getNome() + "/" + pl.getNome() + "_Down.gif");
         } else { //senão, desenha preto.
@@ -336,7 +342,7 @@ public class CharacterSelect extends BasicGameState {
 
         //nome do pokemon
         g.drawString(i + 1 + " - " + this.nomes.get(i) + "", 330, 210);
-       // Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
+        // Pokemon p = PokemonDAO.getPokemonPeloNome(this.nomes.get(i));
         Pokemon p = this.listaDePokemon.get(i);
         g.setColor(Color.white);
         //desenha barras de stats - HP, ATK, DEF, SPD
@@ -371,7 +377,7 @@ public class CharacterSelect extends BasicGameState {
         //isso quer dizer que nao tem como eles aparecerem como inimigo.
 
 
-       // Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
+        // Pokemon poke = PokemonDAO.getPokemon(this.pokemonSelecionado + 1); //pega o pokemon que esta selecionado
         Pokemon poke = this.listaDePokemon.get(this.pokemonSelecionado); //pega o pokemon que esta selecionado
         PokemonLiberado pokeliberado = PokemonLiberadoDAO.getPokemon(this.pokemonSelecionado + 1);
 
@@ -390,7 +396,7 @@ public class CharacterSelect extends BasicGameState {
     }
 
     public void sorteiaInimigo() {
-       
+
         int n = Util.random(this.nomes.size() + 1);
         while (n >= this.nomes.size()) {
             n = Util.random(this.nomes.size() + 1);
@@ -421,5 +427,31 @@ public class CharacterSelect extends BasicGameState {
 
     public int getXDraw() {
         return this.xDraw;
+    }
+
+    private Biomas getBiomaNativo(Pokemon p) {
+        String elemento = p.getElementoPrimarioString();
+        Biomas bioma = Biomas.GRASS;
+        System.out.println(elemento);
+
+        if (elemento.equals("Normal") || elemento.equals("Grass") || elemento.equals("Flying")) {
+            bioma = Biomas.GRASS;
+        } else if (elemento.equals("Fire") || elemento.equals("Dragon") || elemento.equals("Flying")) {
+            bioma = Biomas.DESERT;
+        } else if (elemento.equals("Water") || elemento.equals("Electric") || elemento.equals("Flying")) {
+            bioma = Biomas.BEACH;
+        } else if (elemento.equals("Poison") || elemento.equals("Dark") || elemento.equals("Shadow")) {
+            bioma = Biomas.SWAMPLAND;
+        } else if (elemento.equals("Ice") || elemento.equals("Water")) {
+            bioma = Biomas.ICELAND;
+        } else if (elemento.equals("Grass") || elemento.equals("Bug") || elemento.equals("Flying")) {
+            bioma = Biomas.FOREST;
+        } else if (elemento.equals("Dragon") || elemento.equals("Rock") || elemento.equals("Ground") || elemento.equals("Steel")) {
+            bioma = Biomas.MOUNTAIN;
+        } else if (elemento.equals("Fighting") || elemento.equals("Ghost") || elemento.equals("Psychic") || elemento.equals("Dark")) {
+            bioma = Biomas.ABANDONED_CASTLE;
+        }
+
+        return bioma;
     }
 }

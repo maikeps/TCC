@@ -41,6 +41,7 @@ public class Main extends StateBasedGame{
         this.addState(new VideoOptions());
         this.addState(new AudioOptions());
         this.addState(new GameOver());
+        this.addState(new ChangeLevel());
     }
     
     public static void main(String[] args) throws SlickException {

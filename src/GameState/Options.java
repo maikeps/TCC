@@ -40,6 +40,7 @@ public class Options extends BasicGameState {
         this.game = game;
         this.gc = gc;
         this.som = new Sound("resources/sounds/misc/select.wav");
+        System.out.println("Options loaded.");
     }
 
     @Override

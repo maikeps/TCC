@@ -125,22 +125,14 @@ public class Scene {
     }
 
     public void draw(GameContainer gc, StateBasedGame game, Graphics g, int offsetx, int offsety, int xPlayer, int yPlayer) {
-
         //first clear the scene
-
         g.setColor(Color.black);
-
-
+        
         //first draw the backdrop
         int startDrawX = drawStartX;
-        //  int startDrawX = drawStartX + offsetx;
-        //   int startDrawY = drawStartY + offsety;
         int startDrawY = drawStartY;
-
         g.translate(offsetx, offsety);
-//        javaG.drawImage(backDrop, startDrawX, startDrawY, null);
-        //   g.drawImage(backDrop, startDrawX, startDrawY);
-
+        
         //now draw the tile set
         int tileWidth = tiles[0].getWidth();
         int tileHeight = tiles[0].getHeight();
@@ -160,7 +152,7 @@ public class Scene {
                     continue;
                 }
 
-                if (Math.abs(drawX - xPlayer) <= gc.getWidth() / 2+25 && Math.abs(drawY - yPlayer) <= gc.getHeight() / 2+25) {
+                if (Math.abs(drawX - xPlayer) <= gc.getWidth() / 2 + 25 && Math.abs(drawY - yPlayer) <= gc.getHeight() / 2 + 25) {
                     g.drawImage(tiles[idx - 1], drawX, drawY);
                 }
             }

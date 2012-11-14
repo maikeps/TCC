@@ -44,6 +44,7 @@ public class StartMenu extends BasicGameState {
         this.imagem = new Image("resources/Title.png");
         this.musica = new Music("resources/sounds/music/Pokemon Opening.wav");
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
+        System.out.println("StartMenu loaded.");
     }
 
     @Override

@@ -62,6 +62,7 @@ public class PokedexIndividual extends BasicGameState {
 
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");
+        System.out.println("PokedexIndividual loaded.");
     }
 
     @Override

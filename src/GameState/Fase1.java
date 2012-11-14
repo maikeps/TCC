@@ -5,19 +5,11 @@
 package GameState;
 
 import Ataques.Ataque;
-import DAO.AtaqueDAO;
-import DAO.PokemonDAO;
-import DAO.PokemonDerrotadoDAO;
-import DAO.PokemonLiberadoDAO;
-import Itens.Bau;
-import Itens.Item;
-import Itens.Potion;
-import MySQL.ConjuntoResultados;
-import MySQL.MySQL;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import DAO.*;
+import Itens.*;
+import MySQL.*;
+import java.awt.Point;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,6 +22,7 @@ import model.PokemonLiberado;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
@@ -40,11 +33,12 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import tcc.Biomas;
 import tcc.CenarioComColisao;
 import tcc.Inimigo;
-import tcc.ValueNoise2D;
 import tcc.Personagem;
 import tcc.Player;
+import tcc.TileInfo;
 
 /**
  *
@@ -58,7 +52,6 @@ public class Fase1 extends BasicGameState {
     Player player;
     ArrayList<Inimigo> listaInimigos;
     Inimigo boss;
-    //  ArrayList<Ataque> ataquesBoss;
     ArrayList<Ataque> ataquesPlayer;
     ArrayList<Ataque> ataquesInimigo;
     ArrayList<Item> listaItens;
@@ -74,6 +67,13 @@ public class Fase1 extends BasicGameState {
     Sound somSelect;
     ArrayList<String> listaNomes;
     ArrayList<Pokemon> listaPokemons;
+    Image portal;
+    public static boolean portalSurgiu;
+    int xPortal;
+    int yPortal;
+    public static boolean podeComecar = false;
+    public static Biomas bioma;
+    int maxInimigos = 25;
 
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
@@ -88,199 +88,150 @@ public class Fase1 extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
 
-        this.ataquesPlayer = new ArrayList<Ataque>();
-        this.ataquesInimigo = new ArrayList<Ataque>();
-        //   this.ataquesBoss = new ArrayList<Ataque>();
-        this.listaInimigos = new ArrayList<Inimigo>();
-        this.listaItens = new ArrayList<Item>();
-        this.listaBaus = new ArrayList<Bau>();
-        this.listaNomes = new ArrayList<String>();
-        this.listaPokemons = new ArrayList<Pokemon>();
-
-        this.listaPokemons = PokemonDAO.getLista();
-        for (Pokemon p : this.listaPokemons) {
-            this.listaNomes.add(p.getNome());
-        }
-
-        this.carregaMapa();
-
-        this.verificaInimigoMaisPerto();
-
-        this.musica = new Music("resources/sounds/music/GS_trainer.wav");
-        this.somSelect = new Sound("resources/sounds/misc/select.wav");
+        System.out.println("Fase1 loaded.");
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
-        if (!this.musica.playing()) {
-            this.musica.play();
-        }
+        if (this.podeComecar) {
 
-        if (this.player == null) {
-            int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
-            int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
-            this.criaPlayer(x, y);
-            this.cenarioComColisao.adicionaObjeto(this.player.personagem);
-            this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
-            this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
-        }
-        if (this.listaInimigos.isEmpty()) {
-            //  int rand = util.Util.random(45) + 1;
-            //  rand += 15; //minimo 15, max 60 inimigos
-            //  for (int i = 1; i <= rand; i++) {
-            // for (int i = 1; i <= 15; i++) {
-            this.criaInimigo(this.characterSelect.getInimigo());
-            this.characterSelect.sorteiaInimigo();
-            // }
-            for (Inimigo inimigo : this.listaInimigos) {
-                this.cenarioComColisao.adicionaObjeto(inimigo);
-                inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
-                inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+            if (!this.musica.playing()) {
+                this.musica.play();
             }
-        }
 
-        boolean val = new Random().nextInt(1000) <= 1;
-        if (val) {
-            this.adicionaBau();
-        }
+            boolean val = new Random().nextInt(1000) <= 1;
+            if (val) {
+                this.adicionaBau();
+            }
 
-        val = new Random().nextInt(100) <= 1;
-        if (val) {
+            //val = new Random().nextInt(100) <= 10;
+            //  if (val) {
             this.adicionaInimigo();
-        }
+            //  }
 
-        for (Inimigo inimigo : this.listaInimigos) {
-            inimigo.setXPlayer(this.player.getX());
-            inimigo.setYPlayer(this.player.getY());
-            inimigo.update(gc, game, i);
-        }
-
-        for (int cont = 0; cont < this.ataquesPlayer.size(); cont++) {
-            this.ataquesPlayer.get(cont).update(gc, game, i);
-            if (Math.abs(this.ataquesPlayer.get(cont).getX() - this.player.getX()) >= gc.getWidth() / 2 + 100 && Math.abs(this.ataquesPlayer.get(cont).getY() - this.player.getY()) >= gc.getHeight() / 2 + 100) {
-                this.ataquesPlayer.remove(cont);
+            for (Inimigo inimigo : this.listaInimigos) {
+                inimigo.setXPlayer(this.player.getX());
+                inimigo.setYPlayer(this.player.getY());
+                inimigo.update(gc, game, i);
             }
-        }
-        for (Ataque a : this.ataquesInimigo) {
-            a.update(gc, game, i);
-        }
 
-        for (Bau bau : this.listaBaus) {
-            bau.update(gc, game, i);
-            if (bau.abriu) {
-                switch (bau.efeito) {
-                    case CURA:
-                        this.adicionaPotion(bau.xItem, bau.yItem);
+            for (int cont = 0; cont < this.ataquesPlayer.size(); cont++) {
+                this.ataquesPlayer.get(cont).update(gc, game, i);
+                if (Math.abs(this.ataquesPlayer.get(cont).getX() - this.player.getX()) >= gc.getWidth() / 2 + 100 && Math.abs(this.ataquesPlayer.get(cont).getY() - this.player.getY()) >= gc.getHeight() / 2 + 100) {
+                    this.ataquesPlayer.remove(cont);
                 }
             }
-        }
-        for (Item item : this.listaItens) {
-            item.update(gc, game, i);
-        }
-
-        this.cenarioComColisao.update(i, tilesColisao);
-
-
-        for (int cont = 0; cont < this.listaBaus.size(); cont++) {
-            if (this.listaBaus.get(cont).abriu || this.cenarioComColisao.temColisaoComTile(this.listaBaus.get(cont), 2)) {
-                this.listaBaus.remove(cont);
+            for (Ataque a : this.ataquesInimigo) {
+                a.update(gc, game, i);
             }
+
+            for (Bau bau : this.listaBaus) {
+                bau.update(gc, game, i);
+                if (bau.abriu) {
+                    switch (bau.efeito) {
+                        case CURA:
+                            this.adicionaPotion(bau.xItem, bau.yItem);
+                    }
+                }
+            }
+            for (Item item : this.listaItens) {
+                item.update(gc, game, i);
+            }
+
+            this.cenarioComColisao.update(i, tilesColisao);
+
+
+            for (int cont = 0; cont < this.listaBaus.size(); cont++) {
+                if (this.listaBaus.get(cont).abriu || this.cenarioComColisao.temColisaoComTile(this.listaBaus.get(cont), 2)) {
+                    this.listaBaus.remove(cont);
+                }
+            }
+
+            this.verificaInimigoMaisPerto();
+            this.lancaAtaques();
+            this.verificaColisao();
+            this.verificaSePlayerEstaMorto();
+            this.verificaSeInimigoEstaMorto();
+            this.verificaColisaoComBaus();
+            this.verificaColisaoComItens();
+            if (this.portalSurgiu) {
+                this.verificaColisaoComPortal();
+            }
+            //  this.verificaSeGanhaLevel();
+
+            this.player.update(gc, game, i);
         }
-
-        this.verificaInimigoMaisPerto();
-        this.lancaAtaques();
-        this.verificaColisao();
-        this.verificaSePlayerEstaMorto();
-        this.verificaSeInimigoEstaMorto();
-        this.verificaColisaoComBaus();
-        this.verificaColisaoComItens();
-        //  this.verificaSeGanhaLevel();
-
-
-        this.player.update(gc, game, i);
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
-        g.setColor(Color.white);
+        if (this.podeComecar == false) {
+            this.inicializa(gc);
+        } else {
+            g.setColor(Color.white);
 
-        if (this.player == null) {
-            int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
-            int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
-            this.criaPlayer(x, y);
-            this.cenarioComColisao.adicionaObjeto(this.player.personagem);
-            this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
-            this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
-        }
-        if (this.listaInimigos.isEmpty()) {
-            //  int rand = util.Util.random(45) + 1;
-            //  rand += 15; //minimo 15, max 60 inimigos
-            //  for (int i = 1; i <= rand; i++) {
-            // for (int i = 1; i <= 15; i++) {
-            this.criaInimigo(this.characterSelect.getInimigo());
-            this.characterSelect.sorteiaInimigo();
-            // }
+            int diferencaLvl = this.player.personagem.getLvl() - this.lvlInicialPlayer;
+            if (diferencaLvl >= 5) {
+                if (this.boss == null) {
+                    this.criaBoss();
+                }
+            }
+
+            this.cenarioComColisao.render(gc, game, g, this.player.offsetx, this.player.offsety, this.player.getX(), this.player.getY());
+
+            if (this.portalSurgiu) {
+                boolean temColisao = false;
+                ArrayList<TileInfo> tilesColisao = this.cenarioComColisao.getScene().getTilesFromRect(new Point(this.xPortal, this.yPortal), new Point(this.xPortal + this.portal.getWidth(), this.xPortal + this.portal.getHeight()));
+                for (TileInfo tile : tilesColisao) {
+                    Shape s = new Rectangle(this.xPortal, this.yPortal, this.portal.getWidth(), this.portal.getHeight());
+                    if (tile.getRetangle().intersects(s)) {
+                        this.criaPortal();
+                        temColisao = true;
+                    }
+                }
+                if (!temColisao) {
+                    g.drawImage(portal, this.xPortal, this.yPortal);
+                }
+            }
+
+            for (Bau bau : this.listaBaus) {
+                bau.render(gc, game, g);
+            }
+            for (Item item : this.listaItens) {
+                item.render(gc, game, g);
+            }
+
+            this.player.render(gc, game, g);
+
             for (Inimigo inimigo : this.listaInimigos) {
-                this.cenarioComColisao.adicionaObjeto(inimigo);
-                inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
-                inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
-                g.fillRect(inimigo.getX(), inimigo.getY(), inimigo.personagem.getAltura(), inimigo.personagem.getLargura());
-            }
-        }
-
-        int diferencaLvl = this.player.personagem.getLvl() - this.lvlInicialPlayer;
-        if (diferencaLvl >= 5) {
-            //  if (this.boss == null) {
-            if (this.boss == null) {
-                this.criaBoss();
-            }
-        }
-        //  g.drawLine(this.boss.getX(), this.boss.getY(), this.player.getX(), this.player.getY());
-        //  g.fillRect(this.boss.getX(), this.boss.getY(), 1000, 1000);
-        // System.out.println(this.boss.getX()+" - "+ this.boss.getY());
-//        if (this.listaBaus.isEmpty()) {
-//            this.adicionaBaus();
-//        }
-
-        this.cenarioComColisao.render(gc, game, g, this.player.offsetx, this.player.offsety, this.player.getX(), this.player.getY());
-        
-
-        for (Bau bau : this.listaBaus) {
-            bau.render(gc, game, g);
-        }
-        for (Item item : this.listaItens) {
-            item.render(gc, game, g);
-        }
-
-        this.player.render(gc, game, g);
-
-
-        for (Inimigo inimigo : this.listaInimigos) {
-            if (Math.abs(inimigo.getX() - this.player.getX()) <= gc.getWidth() / 2 + 100 && Math.abs(inimigo.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
-                inimigo.render(gc, game, g);
-            }
-        }
-
-        for (Ataque a : this.ataquesPlayer) {
-            if (!a.desativado) {
-                if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 100 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
-                    a.render(gc, game, g);
+                if (Math.abs(inimigo.getX() - this.player.getX()) <= gc.getWidth() / 2 + 100 && Math.abs(inimigo.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
+                    inimigo.render(gc, game, g);
                 }
             }
-        }
-        for (Ataque a : this.ataquesInimigo) {
-            if (!a.desativado) {
-                if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 200 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
-                    a.render(gc, game, g);
+
+            for (Ataque a : this.ataquesPlayer) {
+                if (!a.desativado) {
+                    if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 100 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
+                        a.render(gc, game, g);
+                    }
                 }
             }
+            for (Ataque a : this.ataquesInimigo) {
+                if (!a.desativado) {
+                    if (Math.abs(a.getX() - this.player.getX()) <= gc.getWidth() / 2 + 200 && Math.abs(a.getY() - this.player.getY()) <= gc.getHeight() / 2 + 100) {
+                        a.render(gc, game, g);
+                    }
+                }
+            }
+
+            this.desenhaHealthBar(g);
+            this.desenhaDano(g);
+            this.desenhaCura(g);
+            this.desenhaExperienciaGanha(g);
+
+            g.drawString("" + this.listaInimigos.size(), 100, 100);
+
         }
-
-        this.desenhaHealthBar(g);
-        this.desenhaDano(g);
-        this.desenhaCura(g);
-        this.desenhaExperienciaGanha(g);
-
     }
 
     public void keyPressed(int key, char c) {
@@ -292,17 +243,7 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_ENTER) {
 
             this.characterSelect.sorteiaInimigo();
-
-            //this.criaInimigo(this.characterSelect.getInimigo());
-            
-            String sql = "(1, 8, 48, 65, 43, 44,1,0)";
-            MySQL banco = new MySQL();
-            boolean bool = banco.executaInsert(sql);
-
-            //this.player.personagem.setHp(this.player.personagem.getHpInicial());
-            this.criaInimigo("Fearow");
-           
-            //this.criaBoss();
+            this.criaInimigo(this.characterSelect.getInimigo());
         }
     }
 
@@ -356,10 +297,7 @@ public class Fase1 extends BasicGameState {
         this.player.atacou = false;
         //---------------------\\
 
-        for (int i = 0;
-                i
-                < this.listaInimigos.size();
-                i++) {
+        for (int i = 0; i < this.listaInimigos.size(); i++) {
             if (this.listaInimigos.get(i).atacou == true) {
                 if (this.listaInimigos.get(i).personagem.podeAtirar()) {
 
@@ -375,7 +313,7 @@ public class Fase1 extends BasicGameState {
                         this.listaInimigos.remove(i);
                         this.characterSelect.sorteiaInimigo();
                         this.criaInimigo(this.characterSelect.getInimigo());
-                        JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada, vamos trocar o pokemon.");
+                        //   JOptionPane.showMessageDialog(null, "ERROR: classe " + ex.getMessage() + " não encontrada, vamos trocar o pokemon.");
                     } catch (IllegalAccessException ex2) {
                         ex2.printStackTrace();
                         JOptionPane.showMessageDialog(null, "2ERROR: " + ex2.getMessage());
@@ -469,46 +407,100 @@ public class Fase1 extends BasicGameState {
     }
 
     public void criaInimigo(String nome) {
-        //      Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
-
         int index = 0;
-//        for (int i = 0; i < this.listaNomes.size(); i++) {
-//            if (this.listaNomes.get(i).equals(nome)) {
-//                index = i;
-//                break;
-//            }
-//        }
         index = this.listaNomes.indexOf(nome);
-        
+
         Pokemon pokemon = this.listaPokemons.get(index);
+        System.out.println(index);
+        String[] elementoCerto = new String[4];
+        if (this.bioma == Biomas.GRASS) {
+            elementoCerto[0] = "Grass";
+            elementoCerto[1] = "Normal";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.DESERT) {
+            elementoCerto[0] = "Fire";
+            elementoCerto[1] = "Dragon";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.BEACH) {
+            elementoCerto[0] = "Water";
+            elementoCerto[1] = "Electric";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.SWAMPLAND) {
+            elementoCerto[0] = "Poison";
+            elementoCerto[1] = "Dark";
+            elementoCerto[2] = "Shadow";
+        } else if (this.bioma == Biomas.ICELAND) {
+            elementoCerto[0] = "Ice";
+            elementoCerto[1] = "Water";
+        } else if (this.bioma == Biomas.FOREST) {
+            elementoCerto[0] = "Grass";
+            elementoCerto[1] = "Bug";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.MOUNTAIN) {
+            elementoCerto[0] = "Dragon";
+            elementoCerto[1] = "Rock";
+            elementoCerto[2] = "Ground";
+            elementoCerto[3] = "Steel";
+        } else if (this.bioma == Biomas.ABANDONED_CASTLE) {
+            elementoCerto[0] = "Fighting";
+            elementoCerto[1] = "Ghost";
+            elementoCerto[2] = "Psychic";
+            elementoCerto[3] = "Dark";
+        }
+
+        boolean ok = false;
+        for (int i = 0; i < elementoCerto.length; i++) {
+            if (pokemon.getElementoPrimarioString().equals(elementoCerto[i])) {
+                ok = true;
+            }
+        }
+        if (!ok) {
+            return;
+        }
 
         int id = pokemon.getId();
         int atk = pokemon.getAtkBase();
         int def = pokemon.getDefBase();
         int spd = pokemon.getSpdBase();
         int hp = pokemon.getHpBase();
-
-
         int lvl;
+
 
         if (this.player.getPersonagem().getLvl() >= 5) {
             int diferenca = util.Util.random(5);//maximo de 5 levels de diferenca
-            // lvl = this.lvlInicialPlayer + diferenca;
-            lvl = this.player.getPersonagem().getLvl() + diferenca;
+            lvl = this.lvlInicialPlayer + diferenca;
+            //lvl = this.player.getPersonagem().getLvl() + diferenca;
         } else {
             lvl = this.player.getPersonagem().getLvl();
+        }
+        //se o pokemon ja passou do level minimo para evoluir, nao cria
+        if (pokemon.getLevelQueEvolui() <= lvl) {
+            ok = false;
+        }
+        //se o pokemon nao tem evolução, nao cria
+        if (pokemon.getLevelQueEvolui() == 0) {
+            if (this.listaPokemons.get(index - 1).getLevelQueEvolui() > lvl) {
+                ok = false;
+            }
+        }
+        //se o level do pokemon for menor que o necessario para evoluir, nao cria
+        if (index != 0) {
+            if (this.listaPokemons.get(index - 1).getLevelQueEvolui() > lvl) {
+                ok = false;
+            }
+        }
+        if (!ok) {
+            return;
         }
 
         hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
         atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
         def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
         spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
-
         hp = hp * 2 / 3;
         atk = atk * 2 / 3;
         def = def * 2 / 3;
         spd = spd * 2 / 3;
-
 //        String sql = "insert into pokemonInimigo "
 //                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
 //                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
@@ -518,7 +510,6 @@ public class Fase1 extends BasicGameState {
 //        boolean bool = bd.executaInsert(sql);
 
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
-
         //    int x = util.Util.random(this.cenarioColisao.getScene().getWidth()+1);
         //    int y = util.Util.random(this.cenarioColisao.getScene().getHeight()+1);
         int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
@@ -528,14 +519,13 @@ public class Fase1 extends BasicGameState {
 //                x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
 //                y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
 //            }
-
         Inimigo inimigo = new Inimigo(this.personagem, this.player, x, y);
-        this.inimigoMaisPerto = inimigo;
 
+        this.inimigoMaisPerto = inimigo;
         inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
         inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
-
         inimigo.tipo = "Minion";
+
 
         this.listaInimigos.add(inimigo);
     }
@@ -623,6 +613,8 @@ public class Fase1 extends BasicGameState {
                         try {
                             Sound som = new Sound("resources/sounds/misc/hit 2.wav");
                             som.play();
+
+
                         } catch (SlickException ex) {
                             Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -676,6 +668,8 @@ public class Fase1 extends BasicGameState {
                         try {
                             Sound som = new Sound("resources/sounds/misc/hit 2.wav");
                             som.play();
+
+
                         } catch (SlickException ex) {
                             Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -694,6 +688,8 @@ public class Fase1 extends BasicGameState {
             try {
                 Sound s = new Sound("resources/sounds/misc/death.wav");
                 s.play();
+
+
             } catch (SlickException ex) {
                 Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -722,7 +718,7 @@ public class Fase1 extends BasicGameState {
                     + "where idPokemon = " + this.player.personagem.getId();
             boolean bool = banco.executaUpdate(sql);
 
-            this.game.enterState(GameOver.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));            
+            this.game.enterState(GameOver.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
     }
 
@@ -733,6 +729,8 @@ public class Fase1 extends BasicGameState {
                 try {
                     Sound s = new Sound("resources/sounds/misc/exp.wav");
                     s.play();
+
+
                 } catch (SlickException ex) {
                     Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -840,6 +838,10 @@ public class Fase1 extends BasicGameState {
                 this.criaInimigo(this.characterSelect.getInimigo());
                 //e deleta o antigo da lista
                 this.listaInimigos.remove(i);
+
+                //if (inimigo.tipo.equals("Boss")) {
+                this.criaPortal();
+                // }
             }
 
         }
@@ -908,70 +910,14 @@ public class Fase1 extends BasicGameState {
         }
     }
 
-    public void carregaMapa() {
-        System.out.println("Started.");
-        int size = 128; // tamanho da imagem (1024x1024)
-        ValueNoise2D pn2d = new ValueNoise2D(size, 0.2f, 5, 20000f, new Random());
-        float[][] vals = pn2d.get();//retorna os valores do noise
-        BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
-
-        String sArray[] = new String[size + 1];
-
-        for (int x = 0; x < vals.length; x++) {
-            System.out.println("x: " + x);
-            String s = "";
-            sArray[x] = "";
-            for (int y = 0; y < vals[x].length; y++) {
-                String hexStr = "0x" + (Integer.toHexString(java.awt.Color.GREEN.getRGB()));
-
-
-                img.setRGB(x, y, ((int) vals[x][y]) | 0xFF721138);//comeca a desenhar a img
-
-                if (img.getRGB(x, y) > 0xFF725f53) {
-                    sArray[x] += "2,";
-                } else if (img.getRGB(x, y) < 0xFF725f3d) {
-                    sArray[x] += "3,";
-                } else {
-                    sArray[x] += "1,";
-                }
-            }
-        }
-        try {
-            ValueNoise2D.limpaTxt(new File("resources/texto.txt"));
-        } catch (IOException ex) {
-            Logger.getLogger(ValueNoise2D.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        String[] a = new String[4];
-        a[0] = "3";
-        a[1] = "resources/tiles/tiles avulsos/grass.png";
-        a[2] = "resources/tiles/tiles avulsos/water.png";
-        a[3] = "resources/tiles/tiles avulsos/jungle_grass.png";
-        ValueNoise2D.saveTxtTeste(new File("resources/texto.txt"), a, true);
-
-        ValueNoise2D.saveTxtTeste(new File("resources/texto.txt"), sArray, true);
-
-        String[] ultimaLinha = {"%"};
-        ValueNoise2D.saveTxtTeste(new File("resources/texto.txt"), ultimaLinha, true);
-
-
-        try {
-            ValueNoise2D.saveImg(new File("resources/Heightmap.png"), img);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Finished.");
-
-
+    public void carregaMapa(Biomas bioma) {
         try {
             this.cenarioComColisao = new CenarioComColisao("resources/texto.txt");
+
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
     }
 
     public void desenhaLinhaAteInimigoMaisPerto(java.awt.Graphics g) {
@@ -1081,7 +1027,7 @@ public class Fase1 extends BasicGameState {
     }
 
     public void adicionaInimigo() {
-        if (this.listaInimigos.size() < 15) {
+        if (this.listaInimigos.size() < this.maxInimigos) {
             this.characterSelect.sorteiaInimigo();
             this.criaInimigo(characterSelect.getInimigo());
         }
@@ -1159,22 +1105,105 @@ public class Fase1 extends BasicGameState {
             try {
                 Sound som = new Sound("resources/sounds/misc/level up.wav");
                 som.play();
+
+
             } catch (SlickException ex) {
                 Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public void desenhaExperienciaGanha(Graphics g){
+    public void desenhaExperienciaGanha(Graphics g) {
         g.setColor(Color.blue);
-        if(this.player.contExpGanha > 0){
-        g.drawString("+"+this.player.expGanha, 70 - g.getFont().getWidth("+"+this.player.expGanha)/2 - this.player.offsetx, 545 - g.getFont().getHeight("+"+this.player.expGanha)/2 - this.player.offsety);
+        if (this.player.contExpGanha > 0) {
+            g.drawString("+" + this.player.expGanha, 70 - g.getFont().getWidth("+" + this.player.expGanha) / 2 - this.player.offsetx, 545 - g.getFont().getHeight("+" + this.player.expGanha) / 2 - this.player.offsety);
         } else {
             this.player.contExpGanha = 0;
         }
     }
 
-    public void desenhaStatsGanhos(Graphics g){
+    public void desenhaStatsGanhos(Graphics g) {
         //
+    }
+
+    private void criaPortal() {
+        this.portalSurgiu = true;
+        this.xPortal = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+        this.yPortal = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+        System.out.println(xPortal + " - " + yPortal + " criaPortal()");
+    }
+
+    private void verificaColisaoComPortal() {
+        Shape portal = new Rectangle(this.xPortal, this.yPortal, this.portal.getWidth(), this.portal.getHeight());
+        if (this.player.personagem.getRetangulo().intersects(portal)) {
+            //troca de fase, recria tudo
+//            this.listaBaus = null;
+//            this.listaInimigos = null;
+//            this.listaItens = null;
+//            this.player = null;
+//            this.personagem = null;
+//            this.inimigoMaisPerto = null;
+//            this.ataquesInimigo = null;
+//            this.ataquesPlayer = null;
+//            this.boss = null;
+//            this.cenarioComColisao = null;
+//            this.portalSurgiu = false;
+//            this.tilesColisao = null;
+            //troca de fase
+            this.trocaDeFase();
+        }
+    }
+
+    private void trocaDeFase() {
+        ChangeLevel.reset(null);
+        this.game.enterState(ChangeLevel.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+    }
+
+    private void inicializa(GameContainer gc) {
+
+        this.ataquesPlayer = new ArrayList<Ataque>();
+        this.ataquesInimigo = new ArrayList<Ataque>();
+        this.listaInimigos = new ArrayList<Inimigo>();
+        this.listaItens = new ArrayList<Item>();
+        this.listaBaus = new ArrayList<Bau>();
+        this.listaNomes = new ArrayList<String>();
+        this.listaPokemons = new ArrayList<Pokemon>();
+
+        this.listaPokemons = PokemonDAO.getLista();
+        for (Pokemon p : this.listaPokemons) {
+            this.listaNomes.add(p.getNome());
+        }
+
+        this.carregaMapa(Biomas.FOREST);
+
+        this.verificaInimigoMaisPerto();
+        try {
+            this.musica = new Music("resources/sounds/music/GS_trainer.wav");
+            this.somSelect = new Sound("resources/sounds/misc/select.wav");
+            this.portal = new Image("resources/tiles/tiles Avulsos/portal.png");
+
+
+        } catch (SlickException ex) {
+            Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+        int x = util.Util.random(this.cenarioComColisao.getScene().getWidth() - gc.getWidth() / 2 - 50);
+        int y = util.Util.random(this.cenarioComColisao.getScene().getHeight() - gc.getHeight() / 2 - 50);
+        this.criaPlayer(x, y);
+        this.cenarioComColisao.adicionaObjeto(this.player.personagem);
+        this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+        this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+
+        this.criaInimigo(this.characterSelect.getInimigo());
+        this.characterSelect.sorteiaInimigo();
+        for (Inimigo inimigo : this.listaInimigos) {
+            this.cenarioComColisao.adicionaObjeto(inimigo);
+            inimigo.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+            inimigo.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+        }
+
+        this.lvlInicialPlayer = this.player.personagem.getLvl();
+        this.podeComecar = true;
     }
 }

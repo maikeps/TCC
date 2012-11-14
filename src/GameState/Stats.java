@@ -49,6 +49,7 @@ public class Stats extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
+        System.out.println("Stats loaded.");
     }
 
     @Override

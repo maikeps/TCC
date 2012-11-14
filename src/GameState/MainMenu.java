@@ -46,6 +46,7 @@ public class MainMenu extends BasicGameState {
         this.img = new Image("resources/title.png");
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");
+        System.out.println("MainMenu loaded.");
     }
 
     @Override
