@@ -243,10 +243,7 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_ENTER) {
 
             this.characterSelect.sorteiaInimigo();
-<<<<<<< HEAD
 
-            this.criaInimigo(this.characterSelect.getInimigo())
-                    ;
             
             String sql = "(1, 8, 48, 65, 43, 44,1,0)";
             MySQL banco = new MySQL();
@@ -255,10 +252,9 @@ public class Fase1 extends BasicGameState {
             //this.player.personagem.setHp(this.player.personagem.getHpInicial());
             //this.criaInimigo("Fearow");
            
-            //this.criaBoss();
-=======
+
             this.criaInimigo(this.characterSelect.getInimigo());
->>>>>>> d665fc00d62640dff94840e0959203e1b190b6ad
+
         }
     }
 
