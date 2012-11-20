@@ -92,7 +92,7 @@ public class AudioOptions extends BasicGameState {
                 }
             }
             if (this.options[this.selected].equals("Music Volume")) {
-                if (gc.getSoundVolume() > 0) {
+                if (gc.getMusicVolume() > 0) {
                     gc.setMusicVolume(gc.getMusicVolume() - 0.1f);
                 }
             }

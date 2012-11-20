@@ -26,6 +26,9 @@ public class Main extends StateBasedGame{
         Image cursor = new Image("resources/Lock-On.png");
         this.getContainer().setMouseCursor(cursor, cursor.getWidth()/2, cursor.getHeight()/2);
                 
+        container.setSoundVolume(0.5f);
+        container.setMusicVolume(0.5f);
+       
         CharacterSelect cs = new CharacterSelect("Bulbasaur");
         
         this.addState(new StartMenu());
@@ -49,7 +52,7 @@ public class Main extends StateBasedGame{
         app.setDisplayMode(800, 600, false);
         app.setTargetFrameRate(60);
         app.setIcon("resources/pokeProjectIcon.png");
-       
+        
         app.start();
     }
     

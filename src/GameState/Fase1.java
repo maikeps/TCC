@@ -74,6 +74,9 @@ public class Fase1 extends BasicGameState {
     public static boolean podeComecar = false;
     public static Biomas bioma;
     int maxInimigos = 25;
+    boolean primeiraVezQueCriaPlayer = true;
+    boolean playerUpou = false;
+    int contLevelUp;
 
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
@@ -160,7 +163,10 @@ public class Fase1 extends BasicGameState {
             //  this.verificaSeGanhaLevel();
 
             this.player.update(gc, game, i);
-            if(this.cenarioComColisao.temColisaoComTile(this.player.personagem, 2)){
+            if (this.cenarioComColisao.temColisaoComTile(this.player.personagem, 2)) {
+                this.player.setVelocidade(2);
+            } else {
+                this.player.setVelocidade(5);
             }
         }
     }
@@ -230,6 +236,7 @@ public class Fase1 extends BasicGameState {
             this.desenhaDano(g);
             this.desenhaEfeitoDeItem(g);
             this.desenhaExperienciaGanha(g);
+            this.desenhaLevelUp(g);
 
             g.drawString("" + this.listaInimigos.size(), 100, 100);
 
@@ -390,7 +397,12 @@ public class Fase1 extends BasicGameState {
 
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
+        if (this.primeiraVezQueCriaPlayer == false) {
+            xSpawn -= this.game.getContainer().getWidth() / 2;
+            ySpawn -= this.game.getContainer().getHeight() / 2;
+        }
         this.player = new Player(this.personagem, xSpawn, ySpawn);
+
         for (Inimigo i : this.listaInimigos) {
             i.player = this.player;
         }
@@ -405,6 +417,7 @@ public class Fase1 extends BasicGameState {
         this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
 
         Stats.personagem = this.player.personagem;
+        this.primeiraVezQueCriaPlayer = false;
 
     }
 
@@ -1104,13 +1117,13 @@ public class Fase1 extends BasicGameState {
 
             int x = this.player.getX();
             int y = this.player.getY();
-            this.criaPlayer(x, y);
+            this.criaPlayer(x, y);//fazer com que nao crie mais o player, e sim renove as variaveis.
+            this.playerUpou = true;
+            this.contLevelUp = 30;
 
             try {
                 Sound som = new Sound("resources/sounds/misc/level up.wav");
                 som.play();
-
-
             } catch (SlickException ex) {
                 Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1224,6 +1237,20 @@ public class Fase1 extends BasicGameState {
             case POTION_VAZIA:
                 this.listaItens.add(new EmptyPotion(x, y));
                 break;
+        }
+    }
+
+    private void desenhaLevelUp(Graphics g) {
+        if (this.playerUpou) {
+            g.setColor(Color.blue);
+            if (this.contLevelUp > 0) {
+                this.contLevelUp--;
+                int x = this.player.getX() + this.player.personagem.animacaoAtual.getImage().getWidth() / 2 - this.player.offsetx;
+                int y = this.player.getY() + this.player.personagem.animacaoAtual.getImage().getHeight() / 2 - this.player.offsety;
+                g.drawString("Level Up!", x - g.getFont().getWidth("Level Up!") / 2, y - g.getFont().getHeight("Level Up!") / 2);
+            } else {
+                this.playerUpou = false;
+            }
         }
     }
 }
