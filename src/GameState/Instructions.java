@@ -34,6 +34,7 @@ public class Instructions extends BasicGameState{
     public void init(GameContainer gc, StateBasedGame game) throws SlickException {
         this.game = game;
         this.som = new Sound("resources/sounds/misc/select.wav");
+        System.out.println("Instructions loaded.");
     }
 
     @Override

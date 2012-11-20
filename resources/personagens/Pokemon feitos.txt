@@ -25,3 +25,6 @@ Arbok
 Pikachu
 Raichu
 Sandshrew
+--FALTA IMPLEMENTAR--
+Vulpix
+Ninetales

@@ -44,6 +44,7 @@ public class VideoOptions extends BasicGameState {
         this.gc = gc;
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");
+        System.out.println("VideoOptions loaded.");
     }
 
     @Override

@@ -114,8 +114,9 @@ public class PokemonDAO {
         ArrayList<Pokemon> lista = new ArrayList<Pokemon>();
 
         MySQL banco = new MySQL();
-        String sql = "select * from pokemon";
-
+        String sql = "select * from pokemon "
+                + "inner join elemento on pokemon.elementoPrimario = elemento.id";
+                
         ConjuntoResultados linhas = banco.executaSelect(sql);
 
         while (linhas.next()) {
@@ -131,6 +132,7 @@ public class PokemonDAO {
             p.setHpBase(linhas.getInt("hpBase"));
             p.setElementoPrimario(linhas.getInt("elementoPrimario"));
             p.setElementoSecundario(linhas.getInt("elementoSecundario"));
+            p.setElementoPrimarioString(linhas.getString("elemento.elemento"));
 
             lista.add(p);
         }

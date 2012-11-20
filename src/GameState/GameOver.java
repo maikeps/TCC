@@ -7,7 +7,6 @@ package GameState;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -41,6 +40,7 @@ public class GameOver extends BasicGameState {
         this.gc = gc;
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");
+        System.out.println("GameOver loaded.");
     }
 
     @Override
@@ -50,13 +50,13 @@ public class GameOver extends BasicGameState {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.white);
-        
-        g.drawString("GAME OVER", gc.getWidth()/2-g.getFont().getWidth("GAME OVER")/2, 200);
-        
-        for(int i = 0; i < this.options.length; i++){
-            g.drawString(options[i], gc.getWidth()/2-g.getFont().getWidth(this.options[i])/2, 400+(50*i));
-            if(i == this.selected){
-                g.drawRect(gc.getWidth()/2-100, 385+(50*i), 200, 50);
+
+        g.drawString("GAME OVER", gc.getWidth() / 2 - g.getFont().getWidth("GAME OVER") / 2, 200);
+
+        for (int i = 0; i < this.options.length; i++) {
+            g.drawString(options[i], gc.getWidth() / 2 - g.getFont().getWidth(this.options[i]) / 2, 400 + (50 * i));
+            if (i == this.selected) {
+                g.drawRect(gc.getWidth() / 2 - 100, 385 + (50 * i), 200, 50);
             }
         }
     }
@@ -65,33 +65,37 @@ public class GameOver extends BasicGameState {
         if (key == Input.KEY_DOWN) {
             this.somMove.play();
             this.selected++;
-            if(this.selected >= this.options.length){
+            if (this.selected >= this.options.length) {
                 this.selected = 0;
             }
         }
         if (key == Input.KEY_UP) {
             this.somMove.play();
             this.selected--;
-            if(this.selected < 0){
+            if (this.selected < 0) {
                 this.selected = this.options.length - 1;
             }
         }
-        
-        if(key == Input.KEY_ENTER){
+
+        if (key == Input.KEY_ENTER) {
             this.somSelect.play();
-            if(this.options[this.selected].equals("Retry")){
+            if (this.options[this.selected].equals("Retry")) {
                 //recria toda a fase1
-                this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+//                Fase1.podeComecar = false;
+//                Fase1.portalSurgiu = false;
+//                this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+                ChangeLevel.reset(null);//botar o elemento do pokemon
+                game.enterState(ChangeLevel.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Character Select")){
+            if (this.options[this.selected].equals("Character Select")) {
                 //recria todo o character select E a fase1
                 this.game.enterState(CharacterSelect.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Main Menu")){
+            if (this.options[this.selected].equals("Main Menu")) {
                 //recria todo o main menu, o character select E a fase1
                 this.game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Exit")){
+            if (this.options[this.selected].equals("Exit")) {
                 this.gc.exit();
             }
         }

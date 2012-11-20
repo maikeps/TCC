@@ -29,16 +29,16 @@ public class ValueNoise2D {
     public static void main(String[] args) {
         System.out.println("Started.");
         int size = 128; // tamanho da imagem (1024x1024)
-        ValueNoise2D pn2d = new ValueNoise2D(size, 0.2f, 5, 20000f, new Random());
+        ValueNoise2D pn2d = new ValueNoise2D(size, 0.2f, 5, 4500000f, new Random());
         float[][] vals = pn2d.get();//retorna os valores do noise
         BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
 
         String sArray[] = new String[size + 1];
-        
+
         for (int x = 0; x < vals.length; x++) {
             System.out.println("x: " + x);
             String s = "";
-                sArray[x] = "";
+            sArray[x] = "";
             for (int y = 0; y < vals[x].length; y++) {
                 String hexStr = "0x" + (Integer.toHexString(Color.GREEN.getRGB()));
 
@@ -47,7 +47,7 @@ public class ValueNoise2D {
 
                 if (img.getRGB(x, y) > 0xFF725f53) {
                     sArray[x] += "2,";
-                } else if (img.getRGB(x, y) < 0xFF725f3d){
+                } else if (img.getRGB(x, y) < 0xFF725f3d) {
                     sArray[x] += "3,";
                 } else {
                     sArray[x] += "1,";
@@ -74,21 +74,21 @@ public class ValueNoise2D {
         } catch (IOException ex) {
             Logger.getLogger(ValueNoise2D.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         String[] a = new String[4];
         a[0] = "3";
         a[1] = "resources/tiles/tiles avulsos/grass.png";
         a[2] = "resources/tiles/tiles avulsos/water.png";
         a[3] = "resources/tiles/tiles avulsos/jungle_grass.png";
         saveTxtTeste(new File("texto.txt"), a, true);
-        
+
         saveTxtTeste(new File("texto.txt"), sArray, true);
         //   } catch (IOException ex) {
         //       Logger.getLogger(ValueNoise2D.class.getName()).log(Level.SEVERE, null, ex);
         //  }
 
         try {
-            saveImg(new File("Heightmap.png"), img);
+            saveImg(new File("Heightmap2.png"), img);
         } catch (IOException e) {
             e.printStackTrace();
         }

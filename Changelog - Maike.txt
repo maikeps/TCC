@@ -84,3 +84,7 @@
 
 06/11
 -Imagem do cursor do mouse modificado
+
+13/11
+-Adicionada função de trocar de fase
+-Agora so nasce pokemon em seu bioma especifico(pokemon de fogo no deserto, de pedra na montanha, etc)

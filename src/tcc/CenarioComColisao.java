@@ -52,7 +52,6 @@ public class CenarioComColisao {
 
     public void render(GameContainer gc, StateBasedGame game, Graphics g, int offsetx, int offsety, int xPlayer, int yPlayer) {
         this.scene.draw(gc, game, g, offsetx, offsety, xPlayer, yPlayer);
-        //this.drawDebug(g);
     }
 
     public boolean temColisaoComTile(GameObject obj, int idTile) {
