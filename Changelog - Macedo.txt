@@ -19,3 +19,7 @@
 
 05/11
 -HSQL adicionado
+
+21/11
+ - Colocar tuda a linguagem utilizada para o Portugues
+ -  Arrumei a tela de Instruções colocando imagens

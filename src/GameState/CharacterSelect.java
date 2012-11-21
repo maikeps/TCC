@@ -17,6 +17,7 @@ import model.PokemonLiberado;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
@@ -104,7 +105,8 @@ public class CharacterSelect extends BasicGameState {
 
         g.setColor(Color.white);
         g.drawString(" Player 1, escolha o personagem !!", 250, 290);
-
+         g.drawString("Pressione o botão 'BACKSPACE' para voltar", gc.getWidth()/2-g.getFont().getWidth("Pressione o botão 'BACKSPACE' para voltar")/2, 565);
+        
         g.drawRect(this.xDraw, this.yDraw, 80, 80);
         g.drawRect(this.xDraw + 1, this.yDraw + 1, 79, 79);
         g.drawRect(this.xDraw + 2, this.yDraw + 2, 78, 78);
@@ -115,7 +117,7 @@ public class CharacterSelect extends BasicGameState {
         this.desenhaImagens(gc, g);
         this.desenhaStats(gc, g);
 
-
+        
     }
 
     public void keyPressed(int key, char c) {

@@ -26,7 +26,7 @@ public class VideoOptions extends BasicGameState {
     public static final int ID = 11;
     StateBasedGame game;
     GameContainer gc;
-    public static String[] options = {"Full Screen", "Accept"};
+    public static String[] options = {"Tela Cheia", "Aceitar"};
     private int selected;
     boolean fullScreen = false;
     public static int idPreviousGameState;
@@ -59,11 +59,11 @@ public class VideoOptions extends BasicGameState {
         for (int i = 0; i < this.options.length; i++) {
             g.drawString(options[i], gc.getWidth() / 2 - g.getFont().getWidth(this.options[i]) / 2, 400 + (50 * i));
             String string = "";
-            if(options[i].equals("Full Screen")){
+            if(options[i].equals("Tela Cheia")){
                 if(fullScreen){
-                    string = " Yes";
+                    string = " Sim";
                 }else{
-                    string = " No";
+                    string = " Não";
                 }
             }else{
                 string = "";
@@ -93,14 +93,14 @@ public class VideoOptions extends BasicGameState {
 
         if (key == Input.KEY_ENTER) {
             this.somSelect.play();
-            if (this.options[this.selected].equals("Full Screen")) {
+            if (this.options[this.selected].equals("Tela Cheia")) {
                 if (this.fullScreen == true) {
                     fullScreen = false;
                 } else {
                     fullScreen = true;
                 }
             }
-            if (this.options[this.selected].equals("Accept")) {
+            if (this.options[this.selected].equals("Aceitar")) {
                 try {
                     gc.setFullscreen(fullScreen);
                 } catch (SlickException ex) {

@@ -24,7 +24,7 @@ public class AudioOptions extends BasicGameState {
     public static final int ID = 12;
     StateBasedGame game;
     GameContainer gc;
-    String[] options = {"Sound Volume", "Music Volume", "Accept"};
+    String[] options = {"Volume do Som", "Volume da Musica", "Aceitar"};
     private int selected;
     public static int idPreviousGameState;
     Sound somSelect;
@@ -55,10 +55,10 @@ public class AudioOptions extends BasicGameState {
 
         for (int i = 0; i < this.options.length; i++) {
             g.drawString(options[i], gc.getWidth() / 2 - g.getFont().getWidth(this.options[i]) / 2, 400 + (50 * i));
-            if (this.options[i].equals("Sound Volume")) {
+            if (this.options[i].equals("Volume do Som")) {
                 g.drawRect(gc.getWidth() / 2 + 150, 395+(50*i), 100, 20);
                 g.fillRect(gc.getWidth() / 2 + 150, 395+(50*i), gc.getSoundVolume() * 100, 20);
-            } else if (this.options[i].equals("Music Volume")) {
+            } else if (this.options[i].equals("Volume da Musica")) {
                 g.drawRect(gc.getWidth() / 2 + 150, 395+(50*i), 100, 20);
                 g.fillRect(gc.getWidth() / 2 + 150, 395+(50*i), gc.getMusicVolume() * 100, 20);
             }
@@ -86,12 +86,12 @@ public class AudioOptions extends BasicGameState {
 
         if (key == Input.KEY_LEFT) {
             this.somMove.play();
-            if (this.options[this.selected].equals("Sound Volume")) {
+            if (this.options[this.selected].equals("Volume do Som")) {
                 if (gc.getSoundVolume() > 0) {
                     gc.setSoundVolume(gc.getSoundVolume() - 0.1f);
                 }
             }
-            if (this.options[this.selected].equals("Music Volume")) {
+            if (this.options[this.selected].equals("Volume da Musica")) {
                 if (gc.getMusicVolume() > 0) {
                     gc.setMusicVolume(gc.getMusicVolume() - 0.1f);
                 }
@@ -99,12 +99,12 @@ public class AudioOptions extends BasicGameState {
         }
         if (key == Input.KEY_RIGHT) {
             this.somMove.play();
-            if (this.options[this.selected].equals("Sound Volume")) {
+            if (this.options[this.selected].equals("Volume do Som")) {
                 if (gc.getSoundVolume() < 1) {
                     gc.setSoundVolume(gc.getSoundVolume() + 0.1f);
                 }
             }
-            if (this.options[this.selected].equals("Music Volume")) {
+            if (this.options[this.selected].equals("Volume da Musica")) {
                 if (gc.getSoundVolume() < 1) {
                     gc.setMusicVolume(gc.getMusicVolume() + 0.1f);
                 }
@@ -113,7 +113,7 @@ public class AudioOptions extends BasicGameState {
 
         if (key == Input.KEY_ENTER) {
             this.somSelect.play();
-            if (this.options[this.selected].equals("Accept")) {
+            if (this.options[this.selected].equals("Aceitar")) {
                 this.game.enterState(this.idPreviousGameState, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         }

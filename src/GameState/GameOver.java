@@ -24,7 +24,7 @@ public class GameOver extends BasicGameState {
     public static final int ID = 13;
     StateBasedGame game;
     GameContainer gc;
-    String[] options = {"Retry", "Character Select", "Main Menu", "Exit"};
+    String[] options = {"Jogar Novamente", "Escolher Persornagem", "Menu Principal", "Sair"};
     private int selected;
     Sound somSelect;
     Sound somMove;
@@ -79,7 +79,7 @@ public class GameOver extends BasicGameState {
 
         if (key == Input.KEY_ENTER) {
             this.somSelect.play();
-            if (this.options[this.selected].equals("Retry")) {
+            if (this.options[this.selected].equals("Jogar Novamente")) {
                 //recria toda a fase1
 //                Fase1.podeComecar = false;
 //                Fase1.portalSurgiu = false;
@@ -87,15 +87,15 @@ public class GameOver extends BasicGameState {
                 ChangeLevel.reset(null);//botar o elemento do pokemon
                 game.enterState(ChangeLevel.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if (this.options[this.selected].equals("Character Select")) {
+            if (this.options[this.selected].equals("Escolher Persornagem")) {
                 //recria todo o character select E a fase1
                 this.game.enterState(CharacterSelect.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if (this.options[this.selected].equals("Main Menu")) {
+            if (this.options[this.selected].equals("Menu Principal")) {
                 //recria todo o main menu, o character select E a fase1
                 this.game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if (this.options[this.selected].equals("Exit")) {
+            if (this.options[this.selected].equals("Sair")) {
                 this.gc.exit();
             }
         }

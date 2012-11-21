@@ -75,7 +75,8 @@ public class Pokedex extends BasicGameState {
         }
 
         g.setColor(new Color(1f, 1f, 1f, 0.6f));
-        g.fillRect(50, (this.linha * 75) - 25, gc.getWidth() - 100, 75);
+        g.fillRect(50, (this.linha * 75) - 35, gc.getWidth() - 100, 75);
+       
 
         for (Pokemon p : this.listaDePokemon) {
             y1 += 75;
@@ -94,6 +95,7 @@ public class Pokedex extends BasicGameState {
         }
 
         g.drawString(this.selecionado + " - linha: " + this.linha, 200, 200);
+ g.drawString("Pressione o botão 'BACKSPACE' para voltar", gc.getWidth()/2-g.getFont().getWidth("Pressione o botão 'BACKSPACE' para voltar")/2, 560);
     }
 
     public void keyPressed(int key, char c) {
