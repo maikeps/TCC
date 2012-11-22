@@ -25,7 +25,7 @@ public class PauseScreen extends BasicGameState{
     StateBasedGame game;
     GameContainer gc;
     
-    String[] options = {"Return to Game", "Stats", "Pokedex", "Options", "Return to Main Menu", "Exit"};
+    String[] options = {"Retornar ao Jogo", "Status", "Pokedex", "Opções", "Retornar ao Menu", "Sair"};
     int selected;
     Sound somSelect;
     Sound somMove;
@@ -53,7 +53,7 @@ public class PauseScreen extends BasicGameState{
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.white);
         
-        g.drawString("GAME PAUSED", gc.getWidth()/2-g.getFont().getWidth("GAME PAUSED")/2, 200);
+        g.drawString("JOGO PAUSADO", gc.getWidth()/2-g.getFont().getWidth("JOGO PAUSADO")/2, 200);
         
         for(int i = 0; i < this.options.length; i++){
             g.drawString(this.options[i], gc.getWidth()/2-g.getFont().getWidth(this.options[i])/2, 300+(50*i));
@@ -86,25 +86,25 @@ public class PauseScreen extends BasicGameState{
         
         if(key == Input.KEY_ENTER){
             this.somMove.play();
-            if(this.options[this.selected].equals("Return to Game")){
+            if(this.options[this.selected].equals("Retornar ao Jogo")){
                 this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Stats")){
+            if(this.options[this.selected].equals("Status")){
                 Stats.idPreviousGameState = this.ID;
                 this.game.enterState(Stats.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Pokedex")){
                 this.game.enterState(Pokedex.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Options")){
+            if(this.options[this.selected].equals("Opções")){
                 Options.idPreviousGameState = this.getID();
-                Options.options = new String[]{"Audio Options", "Video Options", "Accept"};
+                Options.options = new String[]{"Audio", "Video", "Aceitar"};
                 this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Return to Main Menu")){
+            if(this.options[this.selected].equals("Retornar ao Menu")){
                 this.game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Exit")){
+            if(this.options[this.selected].equals("Sair")){
                 this.gc.exit();
             }
         }

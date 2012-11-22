@@ -25,7 +25,7 @@ public class MainMenu extends BasicGameState {
     public static final int ID = 2;
     StateBasedGame game;
     GameContainer gc;
-    String[] options = {"Start Game", "Instructions", "Options", "Exit"};
+    String[] options = {"Iniciar Jogo", "Instruções", "Opções", "Sair"};
     private int selected;
     public Image img;
     Sound somSelect;
@@ -85,17 +85,17 @@ public class MainMenu extends BasicGameState {
         
         if(key == Input.KEY_ENTER){
             this.somSelect.play();
-            if(this.options[this.selected].equals("Start Game")){
+            if(this.options[this.selected].equals("Iniciar Jogo")){
                 this.game.enterState(CharacterSelect.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Instructions")){
+            if(this.options[this.selected].equals("Instruções")){
                 this.game.enterState(Instructions.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Options")){
+            if(this.options[this.selected].equals("Opções")){
                 Options.idPreviousGameState = this.getID();
                 this.game.enterState(Options.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if(this.options[this.selected].equals("Exit")){
+            if(this.options[this.selected].equals("Sair")){
                 this.gc.exit();
             }
         }

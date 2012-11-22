@@ -24,7 +24,7 @@ public class Options extends BasicGameState {
     public static final int ID = 4;
     StateBasedGame game;
     GameContainer gc;
-    public static String[] options = {"Audio Options", "Video Options", "Accept"};
+    public static String[] options = {"Audio", "Video", "Aceitar"};
     private int selected;
     boolean fullScreen = false;
     public static int idPreviousGameState;
@@ -80,15 +80,15 @@ public class Options extends BasicGameState {
 
         if (key == Input.KEY_ENTER) {
             this.som.play();
-            if (this.options[this.selected].equals("Audio Options")) {
+            if (this.options[this.selected].equals("Audio")) {
                 AudioOptions.idPreviousGameState = this.getID();
                 this.game.enterState(AudioOptions.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if (this.options[this.selected].equals("Video Options")) {
+            if (this.options[this.selected].equals("Video")) {
                 VideoOptions.idPreviousGameState = this.getID();
                 this.game.enterState(VideoOptions.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            if (this.options[this.selected].equals("Accept")) {
+            if (this.options[this.selected].equals("Aceitar")) {
                 this.game.enterState(this.idPreviousGameState, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         }

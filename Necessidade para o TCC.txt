@@ -46,6 +46,6 @@ Necessarios:
 
 	--> Nas bordas do mapa, ao inves de ter uam area preta, colocar um tile que nao de para passar
 
-	--> Ataques que precisam ser feitos: Body Slam, Double Slap, Metronome, Hurricane, Aerial Ace, Drill Peck, Rock Tomb, String Shot e Mega Horn.
+	--> Ataques que precisam ser feitos: Body Slam, Double Slap, Metronome, Rock Tomb e Mega Horn.
 
 --------

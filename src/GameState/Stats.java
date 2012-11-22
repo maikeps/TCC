@@ -78,6 +78,8 @@ public class Stats extends BasicGameState {
         g.drawString("DEF: "+this.def, 100, 250);
         g.drawString("SPD: "+this.spd, 100, 300);
         
+        g.drawString("Pressione o botão 'ENTER' para voltar", gc.getWidth()/2-g.getFont().getWidth("Pressione o botão 'ENTER' para voltar")/2, 550);
+        
 //        g.drawImage(this.image, 200, 300);
     }
     

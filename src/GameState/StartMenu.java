@@ -68,7 +68,7 @@ public class StartMenu extends BasicGameState {
         
         this.imagem.draw(195, 50);
         if (this.draw) {
-            g.drawString("Press ENTER", gc.getWidth() / 2 - g.getFont().getWidth("Press ENTER") / 2, 400);
+            g.drawString("Pressione ENTER", gc.getWidth() / 2 - g.getFont().getWidth("Pressione ENTER") / 2, 400);
         }
     }
 
