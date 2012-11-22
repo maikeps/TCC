@@ -31,6 +31,14 @@ public class Personagem extends GameObject {
     protected int hpInicial;
     protected int lvl ;
     protected int exp;
+    protected int hpBase;
+    protected int atkBase;
+    protected int defBase;
+    protected int spdBase;
+    protected int hpLvlAnterior;
+    protected int atkLvlAnterior;
+    protected int defLvlAnterior;
+    protected int spdLvlAnterior;
     public int larguraMapa;
     public int alturaMapa;
 
@@ -238,6 +246,70 @@ public class Personagem extends GameObject {
         this.spd = spd;
     }
 
+    public int getHpBase() {
+        return hpBase;
+    }
+
+    public void setHpBase(int hpBase) {
+        this.hpBase = hpBase;
+    }
+
+    public int getAtkBase() {
+        return atkBase;
+    }
+
+    public void setAtkBase(int atkBase) {
+        this.atkBase = atkBase;
+    }
+
+    public int getDefBase() {
+        return defBase;
+    }
+
+    public void setDefBase(int defBase) {
+        this.defBase = defBase;
+    }
+
+    public int getSpdBase() {
+        return spdBase;
+    }
+
+    public void setSpdBase(int spdBase) {
+        this.spdBase = spdBase;
+    }
+
+    public int getHpLvlAnterior() {
+        return hpLvlAnterior;
+    }
+
+    public void setHpLvlAnterior(int hpLvlAnterior) {
+        this.hpLvlAnterior = hpLvlAnterior;
+    }
+
+    public int getAtkLvlAnterior() {
+        return atkLvlAnterior;
+    }
+
+    public void setAtkLvlAnterior(int atkLvlAnterior) {
+        this.atkLvlAnterior = atkLvlAnterior;
+    }
+
+    public int getDefLvlAnterior() {
+        return defLvlAnterior;
+    }
+
+    public void setDefLvlAnterior(int defLvlAnterior) {
+        this.defLvlAnterior = defLvlAnterior;
+    }
+
+    public int getSpdLvlAnterior() {
+        return spdLvlAnterior;
+    }
+
+    public void setSpdLvlAnterior(int spdLvlAnterior) {
+        this.spdLvlAnterior = spdLvlAnterior;
+    }
+    
     public int getId() {
         return id;
     }

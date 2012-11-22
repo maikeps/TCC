@@ -31,6 +31,7 @@ public class Bau extends GameObject {
         this.y = y;
 
         int chance = new Random().nextInt(100);
+        efeito = Efeito.CURA;
         if (chance <= 45) {//45%
             efeito = Efeito.ENVENENA;
         } else if (chance > 45 && chance > 70) {//25%
@@ -38,7 +39,7 @@ public class Bau extends GameObject {
         } else if(chance > 70 && chance < 100){//30%
             efeito = Efeito.POTION_VAZIA;
         }
-
+       
         try {
             this.image = new Image("resources/itens/bau.png");
         } catch (SlickException ex) {

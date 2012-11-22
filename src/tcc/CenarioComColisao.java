@@ -92,7 +92,6 @@ public class CenarioComColisao {
         ArrayList<TileInfo> tiles = this.scene.getTilesFromRect(obj.getPontoMin(), obj.getPontoMax());
         DirecaoColisao direcao = null;
 
-                System.out.println(idTile.length+" idTile.length - cenarioComColisao");
         for (TileInfo tile : tiles) {
           for(int i = 1; i < idTile.length ; i++){ 
             if ((tile.id == idTile[i]) && obj.temColisao(tile.getRetangle())) {

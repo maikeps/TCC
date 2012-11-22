@@ -89,3 +89,6 @@
 -Adicionada função de trocar de fase
 -Agora so nasce pokemon em seu bioma especifico(pokemon de fogo no deserto, de pedra na montanha, etc)
 -Item some depois de algum tempo
+
+21/11
+-Agora aparece quanto ganha em cada stat ao ganhar um level

@@ -236,7 +236,7 @@ public class Fase1 extends BasicGameState {
             this.desenhaDano(g);
             this.desenhaEfeitoDeItem(g);
             this.desenhaExperienciaGanha(g);
-            this.desenhaLevelUp(g);
+            this.desenhaStatsGanhos(g);
 
             g.drawString("" + this.listaInimigos.size(), 100, 100);
 
@@ -360,9 +360,6 @@ public class Fase1 extends BasicGameState {
     }
 
     public void criaPlayer(int xSpawn, int ySpawn) {
-
-
-
         PokemonLiberado pokemon = PokemonLiberadoDAO.getPokemonPeloNome(this.characterSelect.getPlayer1());
         Pokemon poke = PokemonDAO.getPokemonPeloNome(this.characterSelect.getPlayer1());
 
@@ -374,16 +371,22 @@ public class Fase1 extends BasicGameState {
         int hp = poke.getHpBase();
         int lvl = pokemon.getLvl();
 
-
-
         //fazer update na tabela PokemonLiberado com os stats novos
         //arrumar por que nao ta zerando os stats
         //aumenta cada vez que eu iniciar o jogo
+        //???
+
+
+        int hpLvlAnterior = hp + ((hp + 1 / 8 + 50) * (lvl - 1) / 50 + 10);
+        int atkLvlAnterior = atk + ((atk + 1 / 8 + 50) * (lvl - 1) / 50 + 5);
+        int defLvlAnterior = def + ((def + 1 / 8 + 50) * (lvl - 1) / 50 + 5);
+        int spdLvlAnterior = spd + ((spd + 1 / 8 + 50) * (lvl - 1) / 50 + 5);
 
         hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
         atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
         def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
         spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
+
 
         String sql = "update pokemonLiberado set "
                 + "hp = " + hp + ", "
@@ -398,10 +401,32 @@ public class Fase1 extends BasicGameState {
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
         if (this.primeiraVezQueCriaPlayer == false) {
-            xSpawn -= this.game.getContainer().getWidth() / 2;
-            ySpawn -= this.game.getContainer().getHeight() / 2;
+            xSpawn -= this.game.getContainer().getWidth() / 2 - this.player.personagem.animacaoAtual.getImage().getWidth() / 2;
+            ySpawn -= this.game.getContainer().getHeight() / 2 - this.player.personagem.animacaoAtual.getImage().getHeight() / 2;
         }
+
+//        personagem.setHpLvlAnterior(this.player.personagem.getHpInicial());
+//        personagem.setAtkLvlAnterior(this.player.personagem.getAtk());
+//        personagem.setDefLvlAnterior(this.player.personagem.getDef());
+//        personagem.setSpdLvlAnterior(this.player.personagem.getSpd());
+
+
         this.player = new Player(this.personagem, xSpawn, ySpawn);
+
+
+        this.player.personagem.setHpLvlAnterior(hpLvlAnterior);
+        this.player.personagem.setAtkLvlAnterior(atkLvlAnterior);
+        this.player.personagem.setDefLvlAnterior(defLvlAnterior);
+        this.player.personagem.setSpdLvlAnterior(spdLvlAnterior);
+        System.out.println(this.player.personagem.getHpLvlAnterior());
+        System.out.println(this.player.personagem.getAtkLvlAnterior());
+        System.out.println(this.player.personagem.getDefLvlAnterior());
+        System.out.println(this.player.personagem.getSpdLvlAnterior());
+
+        this.player.personagem.setHpBase(hp);
+        this.player.personagem.setAtkBase(atk);
+        this.player.personagem.setDefBase(def);
+        this.player.personagem.setSpdBase(spd);
 
         for (Inimigo i : this.listaInimigos) {
             i.player = this.player;
@@ -756,15 +781,16 @@ public class Fase1 extends BasicGameState {
                 Pokemon pokeInimigo = PokemonDAO.getPokemon(inimigo.personagem.getId());
                 int expBase = pokeInimigo.getBaseExp();
                 int expGanha = (expBase * lvlInimigo) / 7;
+                if (inimigo.tipo.equals("Boss")) {
+                    expGanha *= 5;
+                }
                 this.player.expGanha = expGanha;
 
                 //altera o campo exp do pokemonLiberado no banco
                 PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(this.player.personagem.getId());
                 int exp = expGanha + pokeLiberado.getExp();
                 int lvlPlayer = pokeLiberado.getLvl();
-                if (inimigo.tipo.equals("Boss")) {
-                    exp *= 5;
-                }
+
                 this.player.personagem.setExp(exp);
                 this.player.contExpGanha = 60;
 
@@ -853,9 +879,9 @@ public class Fase1 extends BasicGameState {
                 //e deleta o antigo da lista
                 this.listaInimigos.remove(i);
 
-                //if (inimigo.tipo.equals("Boss")) {
-                this.criaPortal();
-                // }
+                if (inimigo.tipo.equals("Boss")) {
+                    this.criaPortal();
+                }
             }
 
         }
@@ -1089,9 +1115,6 @@ public class Fase1 extends BasicGameState {
         int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
         int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
 
-        x = 500;
-        y = 500;
-
         this.boss = new Inimigo(this.personagem, this.player, x, y);
         this.inimigoMaisPerto = this.boss;
         this.boss.tipo = "Boss";
@@ -1119,7 +1142,7 @@ public class Fase1 extends BasicGameState {
             int y = this.player.getY();
             this.criaPlayer(x, y);//fazer com que nao crie mais o player, e sim renove as variaveis.
             this.playerUpou = true;
-            this.contLevelUp = 30;
+            this.contLevelUp = 1000;
 
             try {
                 Sound som = new Sound("resources/sounds/misc/level up.wav");
@@ -1140,7 +1163,50 @@ public class Fase1 extends BasicGameState {
     }
 
     public void desenhaStatsGanhos(Graphics g) {
-        //
+        if (this.playerUpou) {
+            g.setColor(Color.white);
+            if (this.contLevelUp > 0) {
+                this.contLevelUp--;
+
+
+
+                int lvl = this.player.personagem.getLvl();
+                int lvlAntigo = lvl - 1;
+                int atk = this.player.personagem.getAtk();
+                //  int atkAntigo = this.player.personagem.getAtkBase()+(((this.player.personagem.getAtkBase() + 1 / 8 + 50) * lvlAntigo) / 50 + 5);
+                int atkAntigo = this.player.personagem.getAtkLvlAnterior();
+                int def = this.player.personagem.getDef();
+                //int defAntigo = this.player.personagem.getDefBase()+(((this.player.personagem.getDefBase() + 1 / 8 + 50) * lvlAntigo) / 50 + 5);
+                int defAntigo = this.player.personagem.getDefLvlAnterior();
+                int spd = this.player.personagem.getSpd();
+                //int spdAntigo = this.player.personagem.getSpdBase()+(((this.player.personagem.getSpdBase() + 1 / 8 + 50) * lvlAntigo) / 50 + 5);
+                int spdAntigo = this.player.personagem.getSpdLvlAnterior();
+                int hp = this.player.personagem.getHpInicial();
+                //int hpAntigo = this.player.personagem.getHpBase()+(((this.player.personagem.getHpBase() + 1 / 8 + 50) * lvlAntigo) / 50 + 10);
+                int hpAntigo = this.player.personagem.getHpLvlAnterior();
+                int diferencaHp = hp - hpAntigo;
+                int diferencaAtk = atk - atkAntigo;
+                int diferencaDef = def - defAntigo;
+                int diferencaSpd = spd - spdAntigo;
+
+                g.setColor(new Color(0f, 0f, 0f, 0.6f));
+                g.fillRoundRect(590 - this.player.offsetx, 460 - this.player.offsety, 170, 120, 5);
+                g.setColor(Color.white);
+                g.drawString("Level Up!", 675 - g.getFont().getWidth("Level Up!") / 2 - this.player.offsetx, 475 - g.getFont().getHeight("Level Up!") / 2 - this.player.offsety);
+                g.drawString("LVL " + lvlAntigo + " -> " + lvl, 600 - this.player.offsetx, 490 - this.player.offsety);
+                g.drawString("HP  " + hpAntigo + " -> " + hp + " (+" + diferencaHp + ")", 600 - this.player.offsetx, 505 - this.player.offsety);
+                g.drawString("ATK " + atkAntigo + " -> " + atk + " (+" + diferencaAtk + ")", 600 - this.player.offsetx, 520 - this.player.offsety);
+                g.drawString("DEF " + defAntigo + " -> " + def + " (+" + diferencaDef + ")", 600 - this.player.offsetx, 535 - this.player.offsety);
+                g.drawString("SPD " + spdAntigo + " -> " + spd + " (+" + diferencaSpd + ")", 600 - this.player.offsetx, 550 - this.player.offsety);
+            } else {
+                this.playerUpou = false;
+            }
+        }
+
+
+
+
+
     }
 
     private void criaPortal() {
@@ -1237,20 +1303,6 @@ public class Fase1 extends BasicGameState {
             case POTION_VAZIA:
                 this.listaItens.add(new EmptyPotion(x, y));
                 break;
-        }
-    }
-
-    private void desenhaLevelUp(Graphics g) {
-        if (this.playerUpou) {
-            g.setColor(Color.blue);
-            if (this.contLevelUp > 0) {
-                this.contLevelUp--;
-                int x = this.player.getX() + this.player.personagem.animacaoAtual.getImage().getWidth() / 2 - this.player.offsetx;
-                int y = this.player.getY() + this.player.personagem.animacaoAtual.getImage().getHeight() / 2 - this.player.offsety;
-                g.drawString("Level Up!", x - g.getFont().getWidth("Level Up!") / 2, y - g.getFont().getHeight("Level Up!") / 2);
-            } else {
-                this.playerUpou = false;
-            }
         }
     }
 }
