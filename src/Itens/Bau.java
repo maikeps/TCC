@@ -33,9 +33,9 @@ public class Bau extends GameObject {
         int chance = new Random().nextInt(100);
         efeito = Efeito.CURA;
         if (chance <= 45) {//45%
-            efeito = Efeito.ENVENENA;
-        } else if (chance > 45 && chance > 70) {//25%
             efeito = Efeito.CURA;
+        } else if (chance > 45 && chance > 70) {//25%
+            efeito = Efeito.ENVENENA;
         } else if(chance > 70 && chance < 100){//30%
             efeito = Efeito.POTION_VAZIA;
         }

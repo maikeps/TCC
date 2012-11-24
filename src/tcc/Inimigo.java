@@ -138,6 +138,7 @@ public class Inimigo extends GameObject {
         if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 45.0) {
             quadranteDoPlayer = 1;
         } else if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 90.0 && this.anguloAtePlayer > 4.05) {
+            System.out.append("4.05? ANGULO");
             quadranteDoPlayer = 2;
         } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
             quadranteDoPlayer = 3;
@@ -369,5 +370,13 @@ public class Inimigo extends GameObject {
 
     public boolean podePerseguir() {
         return (this.calculaDistanciaAtePonto(this.player.getX(), this.player.getY()) <= this.alcancePerseguição);
+    }
+
+    public int getVelocidade() {
+        return velocidade;
+    }
+
+    public void setVelocidade(int velocidade) {
+        this.velocidade = velocidade;
     }
 }

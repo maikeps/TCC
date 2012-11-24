@@ -71,6 +71,7 @@ public class ChangeLevel extends BasicGameState {
             Fase1.podeComecar = false;
             Fase1.portalSurgiu = false;
             Fase1.bioma = this.bioma;
+            Fase1.primeiraVezQueCriaPlayer = true;
             game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
     }

@@ -74,9 +74,13 @@ public class Fase1 extends BasicGameState {
     public static boolean podeComecar = false;
     public static Biomas bioma;
     int maxInimigos = 25;
-    boolean primeiraVezQueCriaPlayer = true;
+    public static boolean primeiraVezQueCriaPlayer = true;
     boolean playerUpou = false;
     int contLevelUp;
+    boolean evoluiu = false;
+    boolean jogoParado = false;
+    boolean evoluir = false;
+    boolean bossApareceu = false;
 
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
@@ -97,76 +101,87 @@ public class Fase1 extends BasicGameState {
     @Override
     public void update(GameContainer gc, StateBasedGame game, int i) throws SlickException {
         if (this.podeComecar) {
-
-            if (!this.musica.playing()) {
-                this.musica.play();
-            }
-
-            boolean val = new Random().nextInt(1000) <= 1;
-            if (val) {
-                this.adicionaBau();
-            }
-
-            //val = new Random().nextInt(100) <= 10;
-            //  if (val) {
-            this.adicionaInimigo();
-            //  }
-
-            for (Inimigo inimigo : this.listaInimigos) {
-                inimigo.setXPlayer(this.player.getX());
-                inimigo.setYPlayer(this.player.getY());
-                inimigo.update(gc, game, i);
-            }
-
-            for (int cont = 0; cont < this.ataquesPlayer.size(); cont++) {
-                this.ataquesPlayer.get(cont).update(gc, game, i);
-                if (Math.abs(this.ataquesPlayer.get(cont).getX() - this.player.getX()) >= gc.getWidth() / 2 + 100 && Math.abs(this.ataquesPlayer.get(cont).getY() - this.player.getY()) >= gc.getHeight() / 2 + 100) {
-                    this.ataquesPlayer.remove(cont);
-                }
-            }
-            for (Ataque a : this.ataquesInimigo) {
-                a.update(gc, game, i);
-            }
-
-            for (Bau bau : this.listaBaus) {
-                bau.update(gc, game, i);
-                if (bau.abriu) {
-                    this.abreBau(bau);
-                }
-            }
-            for (int n = 0; n < this.listaItens.size(); n++) {
-                this.listaItens.get(n).update(gc, game, i);
-                if (this.listaItens.get(n).tempoDesdeCriacao >= 1000) {
-                    this.listaItens.remove(n);
-                }
-            }
-
-            this.cenarioComColisao.update(i, tilesColisao);
-
-
-            for (int cont = 0; cont < this.listaBaus.size(); cont++) {
-                if (this.listaBaus.get(cont).abriu || this.cenarioComColisao.temColisaoComTile(this.listaBaus.get(cont), 2)) {
-                    this.listaBaus.remove(cont);
-                }
-            }
-
-            this.verificaInimigoMaisPerto();
-            this.lancaAtaques();
-            this.verificaColisao();
-            this.verificaSePlayerEstaMorto();
-            this.verificaSeInimigoEstaMorto();
-            this.verificaColisaoComBaus();
-            this.verificaColisaoComItens();
-            if (this.portalSurgiu) {
-                this.verificaColisaoComPortal();
-            }
-            //  this.verificaSeGanhaLevel();
-
-            this.player.update(gc, game, i);
-            if (this.cenarioComColisao.temColisaoComTile(this.player.personagem, 2)) {
-                this.player.setVelocidade(2);
+            if (this.jogoParado) {
             } else {
-                this.player.setVelocidade(5);
+                if (!this.musica.playing()) {
+                    this.musica.play();
+                }
+
+                boolean val = new Random().nextInt(1000) <= 1;
+                if (val) {
+                    this.adicionaBau();
+                }
+
+                //val = new Random().nextInt(100) <= 10;
+                //  if (val) {
+                this.adicionaInimigo();
+                //  }
+
+                for (Inimigo inimigo : this.listaInimigos) {
+                    inimigo.setXPlayer(this.player.getX());
+                    inimigo.setYPlayer(this.player.getY());
+                    inimigo.update(gc, game, i);
+                    if (this.cenarioComColisao.temColisaoComTile(inimigo, 2)) {
+                        inimigo.setVelocidade(2);
+                    } else {
+                        inimigo.setVelocidade(3);
+                    }
+                }
+
+                for (int cont = 0; cont < this.ataquesPlayer.size(); cont++) {
+                    this.ataquesPlayer.get(cont).update(gc, game, i);
+                    if (Math.abs(this.ataquesPlayer.get(cont).getX() - this.player.getX()) >= gc.getWidth() / 2 + 100 && Math.abs(this.ataquesPlayer.get(cont).getY() - this.player.getY()) >= gc.getHeight() / 2 + 100) {
+                        this.ataquesPlayer.remove(cont);
+                    }
+                }
+                for (Ataque a : this.ataquesInimigo) {
+                    a.update(gc, game, i);
+                }
+
+                for (Bau bau : this.listaBaus) {
+                    bau.update(gc, game, i);
+                    if (bau.abriu) {
+                        this.abreBau(bau);
+                    }
+                }
+                for (int n = 0; n < this.listaItens.size(); n++) {
+                    this.listaItens.get(n).update(gc, game, i);
+                    if (this.listaItens.get(n).tempoDesdeCriacao >= 1000) {
+                        this.listaItens.remove(n);
+                    }
+                }
+
+                this.cenarioComColisao.update(i, tilesColisao);
+
+
+                for (int cont = 0; cont < this.listaBaus.size(); cont++) {
+                    if (this.listaBaus.get(cont).abriu || this.cenarioComColisao.temColisaoComTile(this.listaBaus.get(cont), 2)) {
+                        this.listaBaus.remove(cont);
+                    }
+                }
+
+                this.verificaInimigoMaisPerto();
+                this.lancaAtaques();
+                this.verificaColisao();
+                this.verificaSePlayerEstaMorto();
+                this.verificaSeInimigoEstaMorto();
+                this.verificaColisaoComBaus();
+                this.verificaColisaoComItens();
+                if (this.portalSurgiu) {
+                    this.verificaColisaoComPortal();
+                }
+                //  this.verificaSeGanhaLevel();
+
+                this.player.update(gc, game, i);
+                if (this.cenarioComColisao.temColisaoComTile(this.player.personagem, 2)) {
+                    this.player.setVelocidade(2);
+                } else {
+                    this.player.setVelocidade(5);
+                }
+
+                if (this.evoluir) {
+                    this.evolui();
+                }
             }
         }
     }
@@ -176,11 +191,12 @@ public class Fase1 extends BasicGameState {
         if (this.podeComecar == false) {
             this.inicializa(gc);
         } else {
+
             g.setColor(Color.white);
 
             int diferencaLvl = this.player.personagem.getLvl() - this.lvlInicialPlayer;
             if (diferencaLvl >= 5) {
-                if (this.boss == null) {
+                if (this.bossApareceu == false && this.portalSurgiu == false) {
                     this.criaBoss();
                 }
             }
@@ -238,8 +254,13 @@ public class Fase1 extends BasicGameState {
             this.desenhaExperienciaGanha(g);
             this.desenhaStatsGanhos(g);
 
-            g.drawString("" + this.listaInimigos.size(), 100, 100);
-
+            this.perguntaSeQuerEvoluir(gc, g);
+            if (this.bossApareceu) {
+                this.procuraBoss(gc, g);
+            }
+            if(this.portalSurgiu){
+                this.procuraPortal(gc, g);
+            }
         }
     }
 
@@ -249,21 +270,26 @@ public class Fase1 extends BasicGameState {
             this.game.enterState(PauseScreen.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
         //cheats :D 
-        if (key == Input.KEY_ENTER) {
-
+        if (key == Input.KEY_SPACE) {
             this.characterSelect.sorteiaInimigo();
-
-            
-            String sql = "(1, 8, 48, 65, 43, 44,1,0)";
-            MySQL banco = new MySQL();
-            boolean bool = banco.executaInsert(sql);
-
-            //this.player.personagem.setHp(this.player.personagem.getHpInicial());
-            //this.criaInimigo("Fearow");
-           
-
             this.criaInimigo(this.characterSelect.getInimigo());
 
+            if (this.jogoParado) {
+                this.jogoParado = false;
+            } else {
+                this.jogoParado = true;
+            }
+        }
+
+        if (this.jogoParado) {
+            if (key == Input.KEY_ENTER) {
+                this.evoluir = true;
+                this.jogoParado = false;
+            }
+            if (key == Input.KEY_BACK) {
+                this.evoluir = false;
+                this.jogoParado = false;
+            }
         }
     }
 
@@ -409,11 +435,27 @@ public class Fase1 extends BasicGameState {
         MySQL bd = new MySQL();
         boolean bool = bd.executaUpdate(sql);
 
-        this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
+        if (this.primeiraVezQueCriaPlayer == true || this.evoluiu == true) {
+            //  xSpawn -= this.game.getContainer().getWidth() / 2 - this.player.personagem.animacaoAtual.getImage().getWidth() / 2;
+            //   ySpawn -= this.game.getContainer().getHeight() / 2 - this.player.personagem.animacaoAtual.getImage().getHeight() / 2;
+            this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
 
-        if (this.primeiraVezQueCriaPlayer == false) {
-            xSpawn -= this.game.getContainer().getWidth() / 2 - this.player.personagem.animacaoAtual.getImage().getWidth() / 2;
-            ySpawn -= this.game.getContainer().getHeight() / 2 - this.player.personagem.animacaoAtual.getImage().getHeight() / 2;
+            this.player = new Player(this.personagem, xSpawn, ySpawn);
+            this.primeiraVezQueCriaPlayer = false;
+            this.evoluiu = false;
+        } else {
+            this.player.personagem.setNome(nome);
+            this.player.personagem.setAtk(atk);
+            this.player.personagem.setDef(def);
+            this.player.personagem.setSpd(spd);
+            this.player.personagem.setHpInicial(hp);
+            this.player.personagem.setHp(hp);
+            this.player.personagem.setLvl(lvl);
+            this.player.setX(xSpawn);
+            this.player.setY(ySpawn);
+
+            this.player.expNivelAtual = PokemonLiberadoDAO.getExperiencia(this.player.personagem.getLvl());
+            this.player.expProxNivel = PokemonLiberadoDAO.getExperiencia(this.player.personagem.getLvl() + 1);
         }
 
 //        personagem.setHpLvlAnterior(this.player.personagem.getHpInicial());
@@ -422,17 +464,11 @@ public class Fase1 extends BasicGameState {
 //        personagem.setSpdLvlAnterior(this.player.personagem.getSpd());
 
 
-        this.player = new Player(this.personagem, xSpawn, ySpawn);
-
 
         this.player.personagem.setHpLvlAnterior(hpLvlAnterior);
         this.player.personagem.setAtkLvlAnterior(atkLvlAnterior);
         this.player.personagem.setDefLvlAnterior(defLvlAnterior);
         this.player.personagem.setSpdLvlAnterior(spdLvlAnterior);
-        System.out.println(this.player.personagem.getHpLvlAnterior());
-        System.out.println(this.player.personagem.getAtkLvlAnterior());
-        System.out.println(this.player.personagem.getDefLvlAnterior());
-        System.out.println(this.player.personagem.getSpdLvlAnterior());
 
         this.player.personagem.setHpBase(hp);
         this.player.personagem.setAtkBase(atk);
@@ -453,8 +489,6 @@ public class Fase1 extends BasicGameState {
         this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
 
         Stats.personagem = this.player.personagem;
-        this.primeiraVezQueCriaPlayer = false;
-
     }
 
     public void criaInimigo(String nome) {
@@ -619,25 +653,25 @@ public class Fase1 extends BasicGameState {
             double porcentoHpInimigo = (100 * hpInimigo) / hpInicialInimigo;
 
             g.setColor(new Color(0f, 0f, 0f, 0.6f));
-            g.fillRoundRect(570 - this.player.offsetx, 20 - this.player.offsety, 170, 120, 5);
+            g.fillRoundRect(590 - this.player.offsetx, 20 - this.player.offsety, 170, 120, 5);
 
 
 
             g.setColor(Color.white);
-            g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 590 - this.player.offsetx, 40 - this.player.offsety);
-            g.drawString("LVL " + lvlInimigo, 590 - this.player.offsetx, 60 - this.player.offsety);
+            g.drawString("" + this.inimigoMaisPerto.getPersonagem().getNome(), 610 - this.player.offsetx, 40 - this.player.offsety);
+            g.drawString("LVL " + lvlInimigo, 610 - this.player.offsetx, 60 - this.player.offsety);
 
 
             g.setColor(Color.gray);
-            g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, 100, 20);
+            g.fillRect(642 - this.player.offsetx, 80 - this.player.offsety, 100, 20);
 
 
             g.setColor(Color.green);
-            g.fillRect(622 - this.player.offsetx, 80 - this.player.offsety, (int) porcentoHpInimigo, 20);
+            g.fillRect(642 - this.player.offsetx, 80 - this.player.offsety, (int) porcentoHpInimigo, 20);
             g.setColor(Color.white);
-            g.drawString("HP: ", 590 - this.player.offsetx, 82 - this.player.offsety);
+            g.drawString("HP: ", 610 - this.player.offsetx, 82 - this.player.offsety);
             if (this.inimigoMaisPerto.tipo.equals("Boss")) {
-                g.drawString("BOSS", 590 - this.player.offsetx, 95 - this.player.offsety);
+                g.drawString("BOSS", 610 - this.player.offsetx, 105 - this.player.offsety);
             }
         }
     }
@@ -776,6 +810,9 @@ public class Fase1 extends BasicGameState {
         for (int i = 0; i < this.listaInimigos.size(); i++) {
             Inimigo inimigo = this.listaInimigos.get(i);
             if (inimigo.personagem.estaMorto()) {
+                if (inimigo.tipo.equals("Boss")) {
+                    this.bossApareceu = false;
+                }
                 try {
                     Sound s = new Sound("resources/sounds/misc/exp.wav");
                     s.play();
@@ -792,9 +829,9 @@ public class Fase1 extends BasicGameState {
                 Pokemon pokeInimigo = PokemonDAO.getPokemon(inimigo.personagem.getId());
                 int expBase = pokeInimigo.getBaseExp();
                 int expGanha = (expBase * lvlInimigo) / 7;
-                if (inimigo.tipo.equals("Boss")) {
-                    expGanha *= 5;
-                }
+                // if (inimigo.tipo.equals("Boss")) {
+                expGanha *= 5;
+                // }
                 this.player.expGanha = expGanha;
 
                 //altera o campo exp do pokemonLiberado no banco
@@ -866,7 +903,8 @@ public class Fase1 extends BasicGameState {
                 Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(this.characterSelect.getPlayer1());
                 //if(pokePlayer.getLevelQueEvolui() != null){
                 if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
-                    this.evolui();
+                    this.jogoParado = true;
+                    //this.evolui();
                 }
 
                 //se o player ja matou o pokemon o numero minimo de vezes
@@ -904,10 +942,18 @@ public class Fase1 extends BasicGameState {
         int idPlayer = this.player.personagem.getId();
 
         if (pokePlayer.getLevelQueEvolui() > 0) {
+            this.evoluiu = true;
             //faz a pesquisa no banco para ver se a evolucao ja foi liberada
             PokemonLiberado procuraPokeLiberado = PokemonLiberadoDAO.getPokemon(pokePlayer.getId() + 1);
             //se o pokemon foi liberado, muda o nome do player para o novo pokemon
+            String sql = "";
             if (procuraPokeLiberado.getNome() != null) {
+                sql = "update pokemonLiberado set"
+                        + " lvl = " + this.player.personagem.getLvl()
+                        + ", exp = " + this.player.personagem.getExp()
+                        + " where idPokemon = " + procuraPokeLiberado.getIdPokemon();
+                boolean bool = banco.executaUpdate(sql);
+
                 this.characterSelect.setPlayer1(procuraPokeLiberado.getNome());
                 this.criaPlayer(this.player.getX(), this.player.getY());
             } else {
@@ -915,14 +961,15 @@ public class Fase1 extends BasicGameState {
                 //futuramente aumentar o contador na tabela pokemonDerrotadoa
                 //para ver se o pokemon pode ser liberado
                 Pokemon pokeASerLiberado = PokemonDAO.getPokemon(idPlayer + 1);
-                String sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, lvl) values "
+                sql = "insert into PokemonLiberado (idJogador, idPokemon, atk, def, spd, hp, lvl, exp) values "
                         + "(1, "
                         + "" + pokeASerLiberado.getId() + ", "
                         + "" + pokeASerLiberado.getAtkBase() + ", "
                         + "" + pokeASerLiberado.getDefBase() + ", "
                         + "" + pokeASerLiberado.getSpdBase() + ", "
                         + "" + pokeASerLiberado.getHpBase() + ","
-                        + "" + this.player.personagem.getLvl() + ");";
+                        + "" + this.player.personagem.getLvl() + ","
+                        + "" + this.player.personagem.getExp() + ");";
                 System.out.println(sql);
                 boolean bool = banco.executaInsert(sql);
                 this.characterSelect.setPlayer1(pokeASerLiberado.getNome());
@@ -931,7 +978,7 @@ public class Fase1 extends BasicGameState {
             }
 
 
-            String sql = "update pokemonLiberado set"
+            sql = "update pokemonLiberado set"
                     + "  atk =" + pokePlayer.getAtkBase()
                     + ", def =" + pokePlayer.getDefBase()
                     + " , spd =" + pokePlayer.getSpdBase()
@@ -942,6 +989,7 @@ public class Fase1 extends BasicGameState {
 
 
             boolean bool = banco.executaUpdate(sql);
+            this.evoluir = false;
         }
     }
 
@@ -1071,8 +1119,10 @@ public class Fase1 extends BasicGameState {
                     switch (this.listaItens.get(i).getEfeito()) {
                         case CURA:
                             g.setColor(Color.green);
+                            break;
                         case ENVENENA:
                             g.setColor(Color.red);
+                            break;
                     }
                     g.drawString("" + this.listaItens.get(i).getForca(), this.listaItens.get(i).getX(), this.listaItens.get(i).getY());
                 }
@@ -1088,49 +1138,176 @@ public class Fase1 extends BasicGameState {
     }
 
     public void criaBoss() {
+//
+//        this.characterSelect.sorteiaInimigo();
+//        String nome = this.characterSelect.getInimigo();
+//        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
+//
+//        int id = pokemon.getId();
+//        int atk = pokemon.getAtkBase() * 3;
+//        int def = pokemon.getDefBase() * 1;
+//        int spd = pokemon.getSpdBase() * 1;
+//        int hp = pokemon.getHpBase() * 5;
+//
+//        int lvl;
+//
+//        if (this.player.getPersonagem().getLvl() >= 5) {
+//            int diferenca = util.Util.random(5);//maximo de 5 leveis de diferenca
+//            lvl = this.lvlInicialPlayer + diferenca;
+//        } else {
+//            lvl = this.player.getPersonagem().getLvl();
+//        }
+//
+//        hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
+//        atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
+//        def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
+//        spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
+//
+//        String sql = "insert into pokemonInimigo "
+//                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
+//                + "(\"" + id + "\", \"boss\", \"" + atk + "\", "
+//                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
+//
+//        MySQL bd = new MySQL();
+//        boolean bool = bd.executaInsert(sql);
+//
+//        this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
+//
+//        int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+//        int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+//
+//        this.boss = new Inimigo(this.personagem, this.player, x, y);
+//        this.inimigoMaisPerto = this.boss;
+//        this.boss.tipo = "Boss";
+//        this.listaInimigos.add(boss);
+//        
+//        
+//        --------------------------------------------------------
 
         this.characterSelect.sorteiaInimigo();
         String nome = this.characterSelect.getInimigo();
-        Pokemon pokemon = PokemonDAO.getPokemonPeloNome(nome);
+        int index = 0;
+        index = this.listaNomes.indexOf(nome);
+
+        Pokemon pokemon = this.listaPokemons.get(index);
+        String[] elementoCerto = new String[4];
+        if (this.bioma == Biomas.GRASS) {
+            elementoCerto[0] = "Grass";
+            elementoCerto[1] = "Normal";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.DESERT) {
+            elementoCerto[0] = "Fire";
+            elementoCerto[1] = "Dragon";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.BEACH) {
+            elementoCerto[0] = "Water";
+            elementoCerto[1] = "Electric";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.SWAMPLAND) {
+            elementoCerto[0] = "Poison";
+            elementoCerto[1] = "Dark";
+            elementoCerto[2] = "Shadow";
+        } else if (this.bioma == Biomas.ICELAND) {
+            elementoCerto[0] = "Ice";
+            elementoCerto[1] = "Water";
+        } else if (this.bioma == Biomas.FOREST) {
+            elementoCerto[0] = "Grass";
+            elementoCerto[1] = "Bug";
+            elementoCerto[2] = "Flying";
+        } else if (this.bioma == Biomas.MOUNTAIN) {
+            elementoCerto[0] = "Dragon";
+            elementoCerto[1] = "Rock";
+            elementoCerto[2] = "Ground";
+            elementoCerto[3] = "Steel";
+        } else if (this.bioma == Biomas.ABANDONED_CASTLE) {
+            elementoCerto[0] = "Fighting";
+            elementoCerto[1] = "Ghost";
+            elementoCerto[2] = "Psychic";
+            elementoCerto[3] = "Dark";
+        }
+
+        boolean ok = false;
+        for (int i = 0; i < elementoCerto.length; i++) {
+            if (pokemon.getElementoPrimarioString().equals(elementoCerto[i])) {
+                ok = true;
+            }
+        }
+        if (!ok) {
+            return;
+        }
 
         int id = pokemon.getId();
         int atk = pokemon.getAtkBase() * 3;
         int def = pokemon.getDefBase() * 1;
         int spd = pokemon.getSpdBase() * 1;
         int hp = pokemon.getHpBase() * 5;
-
         int lvl;
 
+
         if (this.player.getPersonagem().getLvl() >= 5) {
-            int diferenca = util.Util.random(5);//maximo de 5 leveis de diferenca
+            int diferenca = util.Util.random(5);//maximo de 5 levels de diferenca
             lvl = this.lvlInicialPlayer + diferenca;
+            //lvl = this.player.getPersonagem().getLvl() + diferenca;
         } else {
             lvl = this.player.getPersonagem().getLvl();
+        }
+        //se o pokemon ja passou do level minimo para evoluir, nao cria
+        if (pokemon.getLevelQueEvolui() <= lvl) {
+            ok = false;
+        }
+        //se o pokemon nao tem evolução, nao cria
+        if (pokemon.getLevelQueEvolui() == 0) {
+            if (this.listaPokemons.get(index - 1).getLevelQueEvolui() > lvl) {
+                ok = false;
+            }
+        }
+        //se o level do pokemon for menor que o necessario para evoluir, nao cria
+        if (index != 0) {
+            if (this.listaPokemons.get(index - 1).getLevelQueEvolui() > lvl) {
+                ok = false;
+            }
+        }
+        if (!ok) {
+            return;
         }
 
         hp += (((hp + 1 / 8 + 50) * lvl) / 50 + 10);
         atk += ((atk + 1 / 8 + 50) * lvl) / 50 + 5;
         def += ((def + 1 / 8 + 50) * lvl) / 50 + 5;
         spd += ((spd + 1 / 8 + 50) * lvl) / 50 + 5;
-
-        String sql = "insert into pokemonInimigo "
-                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
-                + "(\"" + id + "\", \"boss\", \"" + atk + "\", "
-                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
-
-        MySQL bd = new MySQL();
-        boolean bool = bd.executaInsert(sql);
+        hp = hp * 2 / 3;
+        atk = atk * 2 / 3;
+        def = def * 2 / 3;
+        spd = spd * 2 / 3;
+//        String sql = "insert into pokemonInimigo "
+//                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
+//                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
+//                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
+//
+//        MySQL bd = new MySQL();
+//        boolean bool = bd.executaInsert(sql);
 
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
-
+        //    int x = util.Util.random(this.cenarioColisao.getScene().getWidth()+1);
+        //    int y = util.Util.random(this.cenarioColisao.getScene().getHeight()+1);
         int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
         int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
-
+//        double distancia = util.Util.calculaDistancia(x, y, this.player.getX(), this.player.getY());
+//            while (distancia < 1000) {
+//                x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
+//                y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
+//            }
         this.boss = new Inimigo(this.personagem, this.player, x, y);
-        this.inimigoMaisPerto = this.boss;
-        this.boss.tipo = "Boss";
-        this.listaInimigos.add(boss);
 
+        this.inimigoMaisPerto = this.boss;
+        this.boss.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
+        this.boss.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
+        this.boss.tipo = "Boss";
+        System.out.println(this.boss.getX() + " - y: " + this.boss.getY());
+
+        this.bossApareceu = true;
+
+        this.listaInimigos.add(this.boss);
     }
 
     public void verificaSeGanhaLevel() {
@@ -1145,13 +1322,34 @@ public class Fase1 extends BasicGameState {
             expProxLvlPlayer = linhas.getInt("exp");
         }
 
+
+        // boolean bool;
+        int cont = 0;//aumenta se o player upou mais de um level
+//        while (exp >= expProxLvlPlayer) {
+//            if (exp >= expProxLvlPlayer) {
+//                cont++;
+//            }
+//            sql = "select * from experiencia where lvl = " + (lvlPlayer + cont);
+//            linhas = banco.executaSelect(sql);
+//            if (linhas.next()) {
+//                expProxLvlPlayer = linhas.getInt("exp");
+//            }
+//            //if (exp >= expProxLvlPlayer) {
+//            //sql = "update PokemonLiberado set lvl = " + (lvlPlayer + cont) + " where idPokemon = " + this.player.personagem.getId();
+//            // bool = banco.executaUpdate(sql);
+//            //    cont++;
+//            //  }
+//        }
         if (exp >= expProxLvlPlayer) {
+            //if (cont != 0) {
+
+            //sql = "update PokemonLiberado set lvl = " + (lvlPlayer + cont) + " where idPokemon = " + this.player.personagem.getId();
             sql = "update PokemonLiberado set lvl = " + (lvlPlayer + 1) + " where idPokemon = " + this.player.personagem.getId();
             boolean bool = banco.executaUpdate(sql);
 
             int x = this.player.getX();
             int y = this.player.getY();
-            this.criaPlayer(x, y);//fazer com que nao crie mais o player, e sim renove as variaveis.
+            this.criaPlayer(x, y);
             this.playerUpou = true;
             this.contLevelUp = 1000;
 
@@ -1224,7 +1422,6 @@ public class Fase1 extends BasicGameState {
         this.portalSurgiu = true;
         this.xPortal = util.Util.random(this.cenarioComColisao.getScene().getWidth());
         this.yPortal = util.Util.random(this.cenarioComColisao.getScene().getHeight());
-        System.out.println(xPortal + " - " + yPortal + " criaPortal()");
     }
 
     private void verificaColisaoComPortal() {
@@ -1254,7 +1451,6 @@ public class Fase1 extends BasicGameState {
     }
 
     private void inicializa(GameContainer gc) {
-
         this.ataquesPlayer = new ArrayList<Ataque>();
         this.ataquesInimigo = new ArrayList<Ataque>();
         this.listaInimigos = new ArrayList<Inimigo>();
@@ -1315,5 +1511,103 @@ public class Fase1 extends BasicGameState {
                 this.listaItens.add(new EmptyPotion(x, y));
                 break;
         }
+    }
+
+    private void perguntaSeQuerEvoluir(GameContainer gc, Graphics g) {
+        if (this.jogoParado && this.evoluir == true) {
+            g.setColor(new Color(0f, 0f, 0f, 0.9f));
+            g.fillRoundRect(gc.getWidth() / 2 - 200 - this.player.offsetx, gc.getHeight() / 2 - 120 - this.player.offsety, 400, 240, 5);
+
+            Image pokemon;
+            Image evolucao;
+            try {
+                pokemon = new Image("resources/personagens/" + this.player.personagem.getId() + " - " + this.player.personagem.getNome() + "/" + this.player.personagem.getNome() + "_Down.png");
+                String nomeEvolucao = this.listaNomes.get(this.player.personagem.getId());//index 2 - numero 3, por exemplo
+                evolucao = new Image("resources/personagens/" + (this.player.personagem.getId() + 1) + " - " + nomeEvolucao + "/" + nomeEvolucao + "_Down.png");
+                pokemon.draw(gc.getWidth() / 2 - pokemon.getWidth() / 2 - 75 - this.player.offsetx, gc.getHeight() / 2 - pokemon.getHeight() / 2 - this.player.offsety);
+                evolucao.draw(gc.getWidth() / 2 - pokemon.getWidth() / 2 + 75 - this.player.offsetx, gc.getHeight() / 2 - pokemon.getHeight() / 2 - this.player.offsety);
+            } catch (SlickException ex) {
+                Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            g.setColor(Color.white);
+            g.drawString("--->", gc.getWidth() / 2 - g.getFont().getWidth("--->") / 2 - this.player.offsetx, gc.getHeight() / 2 - g.getFont().getHeight("--->") / 2 - this.player.offsety);
+            g.drawString("Deseja evoluir?", gc.getWidth() / 2 - g.getFont().getWidth("Deseja evoluir?") / 2 - this.player.offsetx, gc.getHeight() / 2 - 100 - this.player.offsety);
+            g.drawString("ENTER - Sim | BACKSPACE - Não", gc.getWidth() / 2 - g.getFont().getWidth("ENTER - Sim | BACKSPACE - Não") / 2 - this.player.offsetx, gc.getHeight() / 2 + 75 - this.player.offsety);
+        }
+    }
+
+    public void aviso(GameContainer gc, Graphics g, String[] aviso) {
+        g.setColor(new Color(0f, 0f, 0f, 0.7f));
+        g.fillRoundRect(gc.getWidth() / 2 - 175 - this.player.offsetx, 20 + 3 + 20 - this.player.offsety, 350, 60, 5);
+        g.setColor(Color.white);
+
+        for (int i = 0; i < aviso.length; i++) {
+            g.drawString(aviso[i], gc.getWidth() / 2 - 150 - this.player.offsetx, 50 + (25 * i) - this.player.offsety);
+        }
+    }
+
+    public void procuraPortal(GameContainer gc, Graphics g){
+        int xPlayer = this.player.getX();
+        int yPlayer = this.player.getY();
+
+        double anguloAtePortal = util.Util.calculaAngulo(xPortal, xPlayer, yPortal, yPlayer);
+        String direcao = "";
+        
+        if (anguloAtePortal <= 67.5 && anguloAtePortal > 22.5) {
+            direcao = "Nordeste";
+        } else if (anguloAtePortal < 112.5 && anguloAtePortal > 67.5) {
+            direcao = "Norte";
+        } else if (anguloAtePortal <= 157.5 && anguloAtePortal > 112.5) {
+            direcao = "Noroeste";
+        } else if (anguloAtePortal < 202.5 && anguloAtePortal > 157.5) {
+            direcao = "Oeste";
+        } else if (anguloAtePortal <= 247.5 && anguloAtePortal > 202.5) {
+            direcao = "Sudoeste";
+        } else if (anguloAtePortal < 292.5 && anguloAtePortal > 247.5) {
+            direcao = "Sul";
+        } else if (anguloAtePortal <= 337.5 && anguloAtePortal > 292.5) {
+            direcao = "Sudeste";
+        } else if (anguloAtePortal < 22.5 || anguloAtePortal > 337.5) {
+            direcao = "Leste";
+        }
+
+        String[] aviso = new String[2];
+        aviso[0] = "Você ve uma luz estranha";
+        aviso[1] = "a " + direcao + " de onde você está.";
+        this.aviso(gc, g, aviso);
+    }
+    
+    public void procuraBoss(GameContainer gc, Graphics g) {
+        int xBoss = this.boss.getX();
+        int yBoss = this.boss.getY();
+        int xPlayer = this.player.getX();
+        int yPlayer = this.player.getY();
+
+        double anguloAteBoss = util.Util.calculaAngulo(xBoss, xPlayer, yBoss, yPlayer);
+        String direcao = "";
+
+        if (anguloAteBoss <= 67.5 && anguloAteBoss > 22.5) {
+            direcao = "Nordeste";
+        } else if (anguloAteBoss < 112.5 && anguloAteBoss > 67.5) {
+            direcao = "Norte";
+        } else if (anguloAteBoss <= 157.5 && anguloAteBoss > 112.5) {
+            direcao = "Noroeste";
+        } else if (anguloAteBoss < 202.5 && anguloAteBoss > 157.5) {
+            direcao = "Oeste";
+        } else if (anguloAteBoss <= 247.5 && anguloAteBoss > 202.5) {
+            direcao = "Sudoeste";
+        } else if (anguloAteBoss < 292.5 && anguloAteBoss > 247.5) {
+            direcao = "Sul";
+        } else if (anguloAteBoss <= 337.5 && anguloAteBoss > 292.5) {
+            direcao = "Sudeste";
+        } else if (anguloAteBoss < 22.5 || anguloAteBoss > 337.5) {
+            direcao = "Leste";
+        }
+
+        String[] aviso = new String[2];
+        aviso[0] = "Você ouve um barulho estranho";
+        aviso[1] = "a " + direcao + " de onde você está.";
+        this.aviso(gc, g, aviso);
     }
 }

@@ -92,3 +92,7 @@
 
 21/11
 -Agora aparece quanto ganha em cada stat ao ganhar um level
+
+23/11
+-Agora player tem a opção de evoluir ou não
+-Informações no jogo sobre a localização do chefe e do portal para trocar de fase
