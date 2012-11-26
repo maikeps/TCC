@@ -29,9 +29,10 @@ public class ValueNoise2D {
     public static void main(String[] args) {
         System.out.println("Started.");
         int size = 128; // tamanho da imagem (1024x1024)
-        ValueNoise2D pn2d = new ValueNoise2D(size, 0.2f, 5, 4500000f, new Random());
+        ValueNoise2D pn2d = new ValueNoise2D(size, 0.2f, 5, 20000f, new Random());
         float[][] vals = pn2d.get();//retorna os valores do noise
         BufferedImage img = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage miniMap = new BufferedImage(size + 1, size + 1, BufferedImage.TYPE_INT_ARGB);
 
         String sArray[] = new String[size + 1];
 
@@ -46,11 +47,14 @@ public class ValueNoise2D {
                 img.setRGB(x, y, ((int) vals[x][y]) | 0xFF721138);//comeca a desenhar a img
 
                 if (img.getRGB(x, y) > 0xFF725f53) {
-                    sArray[x] += "2,";
+                    sArray[x] += "2,";//water
+                    miniMap.setRGB(x, y, new Color(0, 0, 255).getRGB());
                 } else if (img.getRGB(x, y) < 0xFF725f3d) {
-                    sArray[x] += "3,";
+                    sArray[x] += "3,";//jungle grass
+                    miniMap.setRGB(x, y, new Color(57, 77, 21).getRGB());
                 } else {
-                    sArray[x] += "1,";
+                    sArray[x] += "1,";//grass
+                    miniMap.setRGB(x, y, new Color(177, 221, 117).getRGB());
                 }
 
                 /*
@@ -86,9 +90,10 @@ public class ValueNoise2D {
         //   } catch (IOException ex) {
         //       Logger.getLogger(ValueNoise2D.class.getName()).log(Level.SEVERE, null, ex);
         //  }
-
+        
         try {
             saveImg(new File("Heightmap2.png"), img);
+            saveImg(new File("minimap.png"), miniMap);
         } catch (IOException e) {
             e.printStackTrace();
         }

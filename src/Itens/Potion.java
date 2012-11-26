@@ -29,7 +29,6 @@ public class Potion extends Item {
 
         try {
             this.image = new Image("resources/itens/potion.png");
-           // this.image = new Image("resources/personagens/1 - Bulbasaur/Bulbasaur_Down.gif");
         } catch (SlickException ex) {
             Logger.getLogger(Potion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -45,6 +44,7 @@ public class Potion extends Item {
         if(this.contador >= 25){
             //return;
         }
+        this.tempoDesdeCriacao ++;
     }
 
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {

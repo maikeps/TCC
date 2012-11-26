@@ -18,55 +18,48 @@ import tcc.GameObject;
  *
  * @author maike_p_santos
  */
-public class Bau extends GameObject{
+public class Bau extends GameObject {
 
     Image image;
-    
     public Efeito efeito;
     public boolean abriu;
     public int xItem;
     public int yItem;
-    
-    public Bau(int x, int y){
+
+    public Bau(int x, int y) {
         this.x = x;
         this.y = y;
-        
-        //25% de chance de vir veneno
-        boolean val = new Random().nextInt(100) <= 25;
-        if (val) {
+
+        int chance = new Random().nextInt(100);
+        if (chance <= 45) {//45%
             efeito = Efeito.ENVENENA;
-        }else{
-        //50% de chance de vir potion
-        //if (val) {
+        } else if (chance > 45 && chance > 70) {//25%
             efeito = Efeito.CURA;
+        } else if(chance > 70 && chance < 100){//30%
+            efeito = Efeito.POTION_VAZIA;
         }
-//        //35% de chance de nao vir nada
-//        val = new Random().nextInt(100) <= 35;
-//        if (val) {
-//            efeito = null;
-//        }
-        
-        
+
         try {
             this.image = new Image("resources/itens/bau.png");
         } catch (SlickException ex) {
             Logger.getLogger(Bau.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         this.largura = this.image.getWidth();
+
         this.altura = this.image.getHeight();
     }
 
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if(abriu){
-            this.xItem = util.Util.random(200)+this.x - 100;
-            this.yItem = util.Util.random(200)+this.y - 100;
+        if (abriu) {
+            this.xItem = util.Util.random(200) + this.x - 100;
+            this.yItem = util.Util.random(200) + this.y - 100;
             return;
         }
     }
 
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if(abriu){
+        if (abriu) {
             return;
         }
         this.image.draw(this.x, this.y);

@@ -54,7 +54,11 @@ insert into ataque (nome, atk, elemento) values
 ("PoisonJab", 80, 8),
 ("MegaHorn", 120, 14),
 ("DoubleSlap", 45, 2), -- fazer duas maos batendo(gif sem fim) -- 31
-("Metronome", 0, 2);
+("Metronome", 0, 2),
+ATAQUES NOVOS
+("FireSpin", 35, 3),
+("FlameThrower", 95, 3),
+("HyperVoice", 90, 2); -- 35
 
 
 
@@ -98,8 +102,25 @@ insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, lvlQ
 (36, "Clefable", 60, 70, 73, 60, 95, null, 32, 2, 1, 129);
 -- nao tem imagem pronta ainda
 -- nao tem ataque pronto ainda
--- (37, "Vulpix", 80, 41, 40, 65, 38, null, 1, 3, 1, 63),
--- (38, "Ninetales", 60, 76, 75, 100, 73, null, 1, 3, 1, 178);
+insert into pokemon (id, nome, raridade, atkBase, defBase, spdBase, hpBase, 
+lvlQueEvolui, idAtaque, elementoPrimario, elementoSecundario, baseExp) values
+(37, "Vulpix", 80, 41, 40, 65, 38, null, 33, 3, 1, 63),
+(38, "Ninetales", 60, 76, 75, 100, 73, null, 34, 3, 1, 178),
+(39, "Jigglypuff", 80, 45, 20, 20, 115, null, 31, 2, 1, 76),
+(40, "Wigglytuff", 60, 70, 45, 45, 140, null, 35, 2, 1, 109),
+(41, "Zubat", 95, 45, 35, 55, 40, 22, 999, 8, 6, 54),
+(42, "Golbat", 80, 80, 70, 90, 75, null, 999, 8, 6, 171),
+(43, "Oddish", 80, 50, 55, 30, 45, 21, 999, 7, 8, 78),
+(44, "Gloom", 65, 65, 70, 40, 60, null, 999, 7, 8, 132),
+(45, "Vileplume", 50, 80, 85, 50, 75, null, 999, 7, 8, 184),
+(46, "Paras", 75, 75, 55, 25, 35, 24, 999, 14, 7, 70),
+(47, "Parasect", 60, 95, 80, 30, 60, null, 999, 14, 7, 128),
+(48, "Venonat", 75, 55, 50, 45, 60, 31, 999, 14, 8, 75),
+(49, "Venomoth", 60, 65, 60, 90, 70, null, 999, 14, 8, 138),
+(50, "Diglett", 80, 55, 25, 95, 10, 26, 999, 10, 1, 81),
+(51, "Dugtrio", 60, 80, 50, 120, 35, null, 999, 10, 1, 153),
+(52, "Meowth", 75, 45, 35, 90, 40, 28, 999, 2, 1, 69),
+(53, "Persian", 50, 70, 60, 115, 65, null, 999, 2, 1, 148);
 
 
 

@@ -128,14 +128,14 @@ public class Fase1 extends BasicGameState {
             for (Bau bau : this.listaBaus) {
                 bau.update(gc, game, i);
                 if (bau.abriu) {
-                    switch (bau.efeito) {
-                        case CURA:
-                            this.adicionaPotion(bau.xItem, bau.yItem);
-                    }
+                    this.abreBau(bau);
                 }
             }
-            for (Item item : this.listaItens) {
-                item.update(gc, game, i);
+            for (int n = 0; n < this.listaItens.size(); n++) {
+                this.listaItens.get(n).update(gc, game, i);
+                if (this.listaItens.get(n).tempoDesdeCriacao >= 1000) {
+                    this.listaItens.remove(n);
+                }
             }
 
             this.cenarioComColisao.update(i, tilesColisao);
@@ -160,6 +160,8 @@ public class Fase1 extends BasicGameState {
             //  this.verificaSeGanhaLevel();
 
             this.player.update(gc, game, i);
+            if(this.cenarioComColisao.temColisaoComTile(this.player.personagem, 2)){
+            }
         }
     }
 
@@ -226,7 +228,7 @@ public class Fase1 extends BasicGameState {
 
             this.desenhaHealthBar(g);
             this.desenhaDano(g);
-            this.desenhaCura(g);
+            this.desenhaEfeitoDeItem(g);
             this.desenhaExperienciaGanha(g);
 
             g.drawString("" + this.listaInimigos.size(), 100, 100);
@@ -411,7 +413,6 @@ public class Fase1 extends BasicGameState {
         index = this.listaNomes.indexOf(nome);
 
         Pokemon pokemon = this.listaPokemons.get(index);
-        System.out.println(index);
         String[] elementoCerto = new String[4];
         if (this.bioma == Biomas.GRASS) {
             elementoCerto[0] = "Grass";
@@ -977,16 +978,14 @@ public class Fase1 extends BasicGameState {
                         }
                         break;
                     case ENVENENA:
-                        //
+                        if (this.listaItens.get(i).pegou == false) {
+                            this.player.getPersonagem().setHp(this.player.getPersonagem().getHp() + this.listaItens.get(i).getForca());
+                        }
                         break;
                 }
                 this.listaItens.get(i).pegou = true;
             }
         }
-    }
-
-    public void adicionaPotion(int x, int y) {
-        this.listaItens.add(new Potion(x, y));
     }
 
     public void desenhaDano(Graphics g) {
@@ -1013,13 +1012,18 @@ public class Fase1 extends BasicGameState {
 
     }
 
-    public void desenhaCura(Graphics g) {
+    public void desenhaEfeitoDeItem(Graphics g) {
         for (int i = 0; i < this.listaItens.size(); i++) {
             if (this.listaItens.get(i).pegou) {
                 if (this.listaItens.get(i).getContador() >= 25) {
                     this.listaItens.remove(this.listaItens.get(i));
                 } else {
-                    g.setColor(Color.green);
+                    switch (this.listaItens.get(i).getEfeito()) {
+                        case CURA:
+                            g.setColor(Color.green);
+                        case ENVENENA:
+                            g.setColor(Color.red);
+                    }
                     g.drawString("" + this.listaItens.get(i).getForca(), this.listaItens.get(i).getX(), this.listaItens.get(i).getY());
                 }
             }
@@ -1205,5 +1209,21 @@ public class Fase1 extends BasicGameState {
 
         this.lvlInicialPlayer = this.player.personagem.getLvl();
         this.podeComecar = true;
+    }
+
+    private void abreBau(Bau bau) {
+        int x = bau.xItem;
+        int y = bau.yItem;
+        switch (bau.efeito) {
+            case CURA:
+                this.listaItens.add(new Potion(x, y));
+                break;
+            case ENVENENA:
+                this.listaItens.add(new Poison(x, y));
+                break;
+            case POTION_VAZIA:
+                this.listaItens.add(new EmptyPotion(x, y));
+                break;
+        }
     }
 }

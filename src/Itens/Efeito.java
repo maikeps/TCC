@@ -1,8 +1,8 @@
 package Itens;
 
-
-
 public enum Efeito {
+
     CURA,
-    ENVENENA    
+    ENVENENA,
+    POTION_VAZIA
 }

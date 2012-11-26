@@ -19,6 +19,7 @@ public abstract class Item extends GameObject{
     Image image;
     int forca;
     int contador;
+    public int tempoDesdeCriacao;
     
     public boolean pegou = false;
 
