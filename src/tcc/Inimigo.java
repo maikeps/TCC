@@ -1,5 +1,6 @@
 package tcc;
 
+import GameState.Fase1;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -24,7 +25,7 @@ public class Inimigo extends GameObject {
     int distanciaY;
     int minDistanciaX = 50;
     int minDistanciaY = 50;
-    EstadoInimigo estado;
+    //  EstadoInimigo estado;
     int destX, destY;
     float anguloAtePlayer;
     int alcancePerseguição = 300;
@@ -119,6 +120,19 @@ public class Inimigo extends GameObject {
         }
         if (this.distanciaY < 0) {
             this.distanciaY *= (-1);
+        }
+
+        if (this.verificaColisaoBaixoMapa()) {
+            this.y -= this.velocidade;
+        }
+        if (this.verificaColisaoCimaMapa()) {
+            this.y += this.velocidade;
+        }
+        if (this.verificaColisaoEsquerdaMapa()) {
+            this.x += this.velocidade;
+        }
+        if (this.verificaColisaoDireitaMapa()) {
+            this.x -= this.velocidade;
         }
 
     }
@@ -248,6 +262,9 @@ public class Inimigo extends GameObject {
         }
 
         this.distanciaParaAndar -= this.velocidade;
+        if(this.verificaColisaoBaixoMapa() || this.verificaColisaoCimaMapa() || this.verificaColisaoDireitaMapa() || this.verificaColisaoEsquerdaMapa()){
+            this.distanciaParaAndar = 0;
+        }
 
 //////        if (this.destMovimentoX < 0) {
 //////            this.destMovimentoX++;
@@ -378,5 +395,37 @@ public class Inimigo extends GameObject {
 
     public void setVelocidade(int velocidade) {
         this.velocidade = velocidade;
+    }
+
+    public boolean verificaColisaoEsquerdaMapa() {
+        boolean colisao = false;
+        if (this.getX() < 0) {
+            colisao = true;
+        }
+        return colisao;
+    }
+
+    public boolean verificaColisaoCimaMapa() {
+        boolean colisao = false;
+        if (this.getY() < 0) {
+            colisao = true;
+        }
+        return colisao;
+    }
+
+    public boolean verificaColisaoDireitaMapa() {
+        boolean colisao = false;
+        if ((this.getX() + this.personagem.getLargura()) > Fase1.tamanhoDoMapa) {
+            colisao = true;
+        }
+        return colisao;
+    }
+
+    public boolean verificaColisaoBaixoMapa() {
+        boolean colisao = false;
+        if ((this.getY() + this.personagem.getAltura()) > Fase1.tamanhoDoMapa) {
+            colisao = true;
+        }
+        return colisao;
     }
 }

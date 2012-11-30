@@ -39,6 +39,7 @@ public class Pokedex extends BasicGameState {
     int linha = 1;// de 1 ate 7, a linha em que o retangulo esta, na tela
     Sound somSelect;
     Sound somMove;
+    ArrayList<Pokemon> pokemonsNaTela;
 
     @Override
     public int getID() {
@@ -51,6 +52,10 @@ public class Pokedex extends BasicGameState {
         this.listaDePokemon = PokemonDAO.getLista();
         this.listaDePokemonLiberado = PokemonLiberadoDAO.getListaPokemon(1);
         this.listaDePokemonDerrotado = PokemonDerrotadoDAO.getLista();
+        this.pokemonsNaTela = new ArrayList<Pokemon>();
+        for (int i = 0; i < 7; i++) {
+            this.pokemonsNaTela.add(this.listaDePokemon.get(i));
+        }
 
         this.somSelect = new Sound("resources/sounds/misc/select.wav");
         this.somMove = new Sound("resources/sounds/misc/move.wav");
@@ -76,7 +81,17 @@ public class Pokedex extends BasicGameState {
 
         g.setColor(new Color(1f, 1f, 1f, 0.6f));
         g.fillRect(50, (this.linha * 75) - 35, gc.getWidth() - 100, 75);
-       
+
+
+        ////////////////////////////////
+        for (int i = 0; i < this.pokemonsNaTela.size(); i++) {
+            Image img = new Image("resources/personagens/" + this.pokemonsNaTela.get(i).getId() + " - " + this.pokemonsNaTela.get(i).getNome() + "/" + this.pokemonsNaTela.get(i).getNome() + "_Locked.gif");
+            img.drawCentered(450, 75 + (75 * i));
+            g.drawString("" + this.pokemonsNaTela.get(i).getNome(), 500, 75 + (75 * i));
+        }
+        ////////////////////////////////
+
+
 
         for (Pokemon p : this.listaDePokemon) {
             y1 += 75;
@@ -95,7 +110,7 @@ public class Pokedex extends BasicGameState {
         }
 
         g.drawString(this.selecionado + " - linha: " + this.linha, 200, 200);
- g.drawString("Pressione o botão 'BACKSPACE' para voltar", gc.getWidth()/2-g.getFont().getWidth("Pressione o botão 'BACKSPACE' para voltar")/2, 560);
+        g.drawString("Pressione o botão 'BACKSPACE' para voltar", gc.getWidth() / 2 - g.getFont().getWidth("Pressione o botão 'BACKSPACE' para voltar") / 2, 560);
     }
 
     public void keyPressed(int key, char c) {
@@ -113,28 +128,57 @@ public class Pokedex extends BasicGameState {
         if (key == Input.KEY_UP) {
             this.somMove.play();
             this.selecionado--;
+            if (this.linha > 1) {
+                this.linha--;
+            }
             if (this.linha == 1) {
                 if (this.selecionado <= 0) {
                     this.selecionado = this.listaDePokemon.size();
                     this.linha = 7;
                 }
-            }
-            if (this.linha > 1) {
-                this.linha--;
+                ///////////////////////////////////////
+                if (this.selecionado == this.listaDePokemon.size()) {
+                    this.pokemonsNaTela.clear();
+                    for (int i = this.listaDePokemon.size()-7; i < this.listaDePokemon.size(); i++) {
+                        this.pokemonsNaTela.add(this.listaDePokemon.get(i));
+                    }
+                } else {
+                    this.pokemonsNaTela.set(0, this.listaDePokemon.get(this.selecionado - 1));
+                    this.pokemonsNaTela.set(1, this.listaDePokemon.get(this.selecionado));
+                    this.pokemonsNaTela.set(2, this.listaDePokemon.get(this.selecionado + 1));
+                    this.pokemonsNaTela.set(3, this.listaDePokemon.get(this.selecionado + 2));
+                    this.pokemonsNaTela.set(4, this.listaDePokemon.get(this.selecionado + 3));
+                    this.pokemonsNaTela.set(5, this.listaDePokemon.get(this.selecionado + 4));
+                    this.pokemonsNaTela.set(6, this.listaDePokemon.get(this.selecionado + 5));
+                }
+                ///////////////////////////////////////
+
             }
         }
         if (key == Input.KEY_DOWN) {
             this.somMove.play();
             this.selecionado++;
+            if (this.linha < 7) {
+                this.linha++;
+            }
             if (linha == 7) {
                 if (this.selecionado > this.listaDePokemon.size()) {
                     this.selecionado = 1;
                     this.linha = 1;
                 }
+                ///////////////////////////////////////
+                if (this.selecionado == 1) {
+                    this.pokemonsNaTela.clear();
+                    for (int i = 0; i < 7; i++) {
+                        this.pokemonsNaTela.add(this.listaDePokemon.get(i));
+                    }
+                } else {
+                    this.pokemonsNaTela.remove(0);
+                    this.pokemonsNaTela.add(this.listaDePokemon.get(this.selecionado - 1));
+                }
+                ///////////////////////////////////////
             }
-            if (this.linha < 7) {
-                this.linha++;
-            }
+
         }
     }
 }

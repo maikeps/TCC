@@ -81,6 +81,7 @@ public class Fase1 extends BasicGameState {
     boolean jogoParado = false;
     boolean evoluir = false;
     boolean bossApareceu = false;
+    public static int tamanhoDoMapa = 0;
 
     public Fase1(CharacterSelect characterSelect) {
         this.characterSelect = characterSelect;
@@ -281,7 +282,7 @@ public class Fase1 extends BasicGameState {
             }
         }
 
-        if (this.jogoParado) {
+        if (this.jogoParado == true) {
             if (key == Input.KEY_ENTER) {
                 this.evoluir = true;
                 this.jogoParado = false;
@@ -1012,7 +1013,7 @@ public class Fase1 extends BasicGameState {
     public void carregaMapa(Biomas bioma) {
         try {
             this.cenarioComColisao = new CenarioComColisao("resources/texto.txt");
-
+            this.tamanhoDoMapa = this.cenarioComColisao.getScene().getWidth();
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
@@ -1241,16 +1242,7 @@ public class Fase1 extends BasicGameState {
         int def = pokemon.getDefBase() * 1;
         int spd = pokemon.getSpdBase() * 1;
         int hp = pokemon.getHpBase() * 5;
-        int lvl;
-
-
-        if (this.player.getPersonagem().getLvl() >= 5) {
-            int diferenca = util.Util.random(5);//maximo de 5 levels de diferenca
-            lvl = this.lvlInicialPlayer + diferenca;
-            //lvl = this.player.getPersonagem().getLvl() + diferenca;
-        } else {
-            lvl = this.player.getPersonagem().getLvl();
-        }
+        int lvl = this.player.getPersonagem().getLvl();
         //se o pokemon ja passou do level minimo para evoluir, nao cria
         if (pokemon.getLevelQueEvolui() <= lvl) {
             ok = false;
@@ -1494,6 +1486,7 @@ public class Fase1 extends BasicGameState {
         }
 
         this.lvlInicialPlayer = this.player.personagem.getLvl();
+        this.bossApareceu = false;
         this.podeComecar = true;
     }
 
@@ -1534,6 +1527,8 @@ public class Fase1 extends BasicGameState {
             g.drawString("--->", gc.getWidth() / 2 - g.getFont().getWidth("--->") / 2 - this.player.offsetx, gc.getHeight() / 2 - g.getFont().getHeight("--->") / 2 - this.player.offsety);
             g.drawString("Deseja evoluir?", gc.getWidth() / 2 - g.getFont().getWidth("Deseja evoluir?") / 2 - this.player.offsetx, gc.getHeight() / 2 - 100 - this.player.offsety);
             g.drawString("ENTER - Sim | BACKSPACE - Não", gc.getWidth() / 2 - g.getFont().getWidth("ENTER - Sim | BACKSPACE - Não") / 2 - this.player.offsetx, gc.getHeight() / 2 + 75 - this.player.offsety);
+        } else {
+            this.jogoParado = false;
         }
     }
 

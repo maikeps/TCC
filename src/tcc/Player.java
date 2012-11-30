@@ -1,6 +1,7 @@
 package tcc;
 
 import DAO.PokemonLiberadoDAO;
+import GameState.Fase1;
 import java.awt.Point;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -36,11 +37,9 @@ public class Player extends GameObject {
     public int expProxNivel;
     public int expNivelAtual;
     public int expAtual;
-
     public int expGanha;
     public int contExpGanha;
-    
-    
+
     public Player(Personagem personagem, int xSpawn, int ySpawn) {
 
         this.destX = 0;
@@ -67,21 +66,22 @@ public class Player extends GameObject {
 
         this.offsetx = -xSpawn;
         this.offsety = -ySpawn;
-        
-        
-        
+
+
+
 
         this.expNivelAtual = PokemonLiberadoDAO.getExperiencia(this.personagem.getLvl());
-        this.expProxNivel = PokemonLiberadoDAO.getExperiencia(this.personagem.getLvl()+1);
-        
+        this.expProxNivel = PokemonLiberadoDAO.getExperiencia(this.personagem.getLvl() + 1);
+
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if(this.expGanha != 0){
-            this.contExpGanha --;
+        if (this.expGanha != 0) {
+            this.contExpGanha--;
         }
         this.expAtual = this.personagem.getExp();
+
         
         
         if (this.sendoPerseguido == false) {
@@ -161,6 +161,23 @@ public class Player extends GameObject {
 
         this.personagem.x = gc.getWidth() / 2 - this.offsetx - personagem.animacaoAtual.getImage().getWidth() / 2;
         this.personagem.y = gc.getHeight() / 2 - this.offsety - personagem.animacaoAtual.getImage().getHeight() / 2;
+
+        if(this.verificaColisaoBaixoMapa()){
+            this.offsety += this.velocidade;
+            this.moveCima(this.velocidade);
+        }
+        if(this.verificaColisaoCimaMapa()){
+            this.offsety -= this.velocidade;
+            this.moveBaixo(this.velocidade);
+        }
+        if(this.verificaColisaoEsquerdaMapa()){
+            this.offsetx -= this.velocidade;
+            this.moveDireita(this.velocidade);
+        }
+        if(this.verificaColisaoDireitaMapa()){
+            this.offsetx += this.velocidade;
+            this.moveEsquerda(this.velocidade);
+        }
     }
 
     @Override
@@ -221,5 +238,34 @@ public class Player extends GameObject {
 
     public void setVelocidade(int velocidade) {
         this.velocidade = velocidade;
+    }
+
+    public boolean verificaColisaoEsquerdaMapa() {
+        boolean colisao = false;
+        if (this.getX() <= 0) {
+            colisao = true;
+        }
+        return colisao;
+    }
+    public boolean verificaColisaoCimaMapa() {
+        boolean colisao = false;
+        if (this.getY() <= 0) {
+            colisao = true;
+        }
+        return colisao;
+    }
+    public boolean verificaColisaoDireitaMapa() {
+        boolean colisao = false;
+        if ((this.getX()+this.personagem.getLargura()) >= Fase1.tamanhoDoMapa) {
+            colisao = true;
+        }
+        return colisao;
+    }
+    public boolean verificaColisaoBaixoMapa() {
+        boolean colisao = false;
+        if ((this.getY()+this.personagem.getAltura()) >= Fase1.tamanhoDoMapa) {
+            colisao = true;
+        }
+        return colisao;
     }
 }
