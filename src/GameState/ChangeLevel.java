@@ -80,8 +80,7 @@ public class ChangeLevel extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.white);
         //sorteia bioma
-        g.drawString("Carregando mapa, por favor aguarde.", gc.getWidth() / 2 - g.getFont().getWidth("Carregando mapa, por favor aguarde.") / 2, gc.getHeight() / 2 + 50);
-
+        
         if (inicializou == false) {
             pn2d = new ValueNoise2D(mapSize, 0.2f, 5, 20000f, new Random());
             vals = pn2d.get();//retorna os valores do noise
@@ -97,6 +96,8 @@ public class ChangeLevel extends BasicGameState {
             this.carregaMapa(bioma, g);
             System.out.println(bioma);
         }
+        g.drawString("Carregando mapa, por favor aguarde.", gc.getWidth() / 2 - g.getFont().getWidth("Carregando mapa, por favor aguarde.") / 2, gc.getHeight() / 2 + 50);
+
     }
 
     public void keyPressed(int key, char c) {

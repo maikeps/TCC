@@ -46,20 +46,18 @@ public class Thunder extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado == true) {
+        if (this.desativado && this.acertou == true) {
             this.contadorDano++;
-            return;
         }
-        if (this.getAcertou() == true) {
-            this.contadorDano++;
+        if (this.animation.isStopped()) {
+            this.desativado = true;
         }
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if (this.desativado == true) {
-            return;
+        if (!animation.isStopped()) {
+            this.animation.draw(this.x, this.y);
         }
-        this.animation.draw(this.x, this.y);
     }
 }

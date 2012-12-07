@@ -27,24 +27,27 @@ public class SolarBeam extends Ataque {
         this.setDanoBruto(a.getAtk());
 
         this.angulo = angulo;
-        
+
         this.desativado = false;
         this.x = x;
         this.y = y;
         try {
             this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
         } catch (SlickException ex) {
-            Logger.getLogger(FlameBurst.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SolarBeam.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.xRotate = this.x;
+        this.yRotate = this.y + this.animation.getHeight() / 2;
+        
+        this.x = x + (this.personagem.animacaoAtual.getImage().getWidth() / 2);
+        this.y = y + (this.personagem.animacaoAtual.getImage().getHeight() / 2) - this.imagem.getHeight() / 2;
+    
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
         this.contador++;
-        if (this.desativado) {
-            this.contadorDano++;
-        }
-        if (acertou == true) {
+        if (this.desativado && this.acertou == true) {
             this.contadorDano++;
         }
     }
@@ -52,9 +55,9 @@ public class SolarBeam extends Ataque {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
         if (this.contador <= 5) {
-            g.rotate(this.x, this.y, -this.angulo);
-            this.imagem.draw(this.x, this.y);
-            g.rotate(this.x, this.y, this.angulo);
+            g.rotate(this.x, this.y + this.imagem.getHeight() / 2, -this.angulo);
+            this.animation.draw(this.x, this.y);
+            g.rotate(this.x, this.y + this.imagem.getHeight() / 2, this.angulo);
         }
     }
 }

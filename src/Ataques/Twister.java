@@ -50,15 +50,15 @@ public class Twister extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado == true) {
+        if (this.desativado && acertou == true) {
             this.contadorDano++;
             return;
         }
+        if(this.acertou){
+            this.desativado = true;
+        }
         this.x += this.dx;
         this.y += this.dy;
-        if (this.getAcertou() == true) {
-            this.contadorDano++;
-        }
     }
 
     @Override

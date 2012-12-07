@@ -2,5 +2,5 @@ teclas piscando :D (instrucoes)
 img dos pokemons p´ra deixa o meu opcoes mais bonitinho :)
 icone no lado das opcoes do menu de opcoes
 botoes no charSelect
-centralizar imgs no charSelect
+centralizar imgs no charSelect ok
 uma so cor da letra

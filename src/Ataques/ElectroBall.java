@@ -11,8 +11,6 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
-
-
 public class ElectroBall extends Ataque {
 
     public ElectroBall(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
@@ -24,7 +22,7 @@ public class ElectroBall extends Ataque {
         }
         model.Ataque a = AtaqueDAO.getAtaque(name);
         this.setDanoBruto(a.getAtk());
-        
+
         this.desativado = false;
         this.xInicial = x;
         this.yInicial = y;
@@ -52,20 +50,20 @@ public class ElectroBall extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if(this.desativado == true){
-            this.contadorDano ++;
+        if (this.desativado && acertou == true) {
+            this.contadorDano++;
             return;
+        }
+        if(this.acertou){
+            this.desativado = true;
         }
         this.x += this.dx;
         this.y += this.dy;
-        if(this.getAcertou() == true){
-            this.contadorDano ++;
-        }
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if(this.desativado == true){
+        if (this.desativado == true) {
             return;
         }
         this.animation.draw(this.x, this.y);

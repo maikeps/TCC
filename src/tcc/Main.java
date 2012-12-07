@@ -38,7 +38,6 @@ public class Main extends StateBasedGame{
         this.addState(cs);
         this.addState(new Fase1(cs));
         this.addState(new PauseScreen());
-        this.addState(new Stats());
         this.addState(new Pokedex());
         this.addState(new PokedexIndividual());
         this.addState(new VideoOptions());

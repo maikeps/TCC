@@ -53,15 +53,15 @@ public class Hurricane extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado) {
+        if (this.desativado && acertou == true) {
             this.contadorDano++;
             return;
         }
+        if(this.acertou){
+            this.desativado = true;
+        }
         this.x += this.dx;
         this.y += this.dy;
-        if (acertou == true) {
-            this.contadorDano++;
-        }
     }
 
     @Override

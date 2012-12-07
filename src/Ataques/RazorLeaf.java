@@ -42,6 +42,13 @@ public class RazorLeaf extends Ataque {
             animation.addFrame(sprite.getSprite(i, 0), 100);
         }
         this.animation.setLooping(false);
+        
+        this.xRotate = this.x;
+        this.yRotate = this.y + this.animation.getHeight() / 2;
+        
+        this.x = x + (this.personagem.animacaoAtual.getImage().getWidth() / 2);
+        this.y = y + (this.personagem.animacaoAtual.getImage().getHeight() / 2) - this.animation.getHeight() / 2;
+    
     }
 
     @Override
@@ -49,12 +56,11 @@ public class RazorLeaf extends Ataque {
         if(this.contadorDano > 35){
             return;
         }
-        if (this.desativado == true) {
+        if (this.desativado && this.acertou == true) {
             this.contadorDano++;
-            return;
         }
-        if (this.getAcertou() == true) {
-            this.contadorDano++;
+        if (animation.isStopped()) {
+            this.desativado = true;
         }
     }
 
@@ -63,9 +69,8 @@ public class RazorLeaf extends Ataque {
         if (this.animation.isStopped()) {
             return;
         }
-        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
+        g.rotate(this.x, this.y + this.animation.getHeight() / 2, -this.angulo);
         this.animation.draw(this.x, this.y);
-        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
-
+        g.rotate(this.x, this.y + this.animation.getHeight() / 2, this.angulo);
     }
 }

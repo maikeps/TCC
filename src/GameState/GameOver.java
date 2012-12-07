@@ -14,6 +14,7 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+import tcc.Biomas;
 
 /**
  *
@@ -28,6 +29,7 @@ public class GameOver extends BasicGameState {
     private int selected;
     Sound somSelect;
     Sound somMove;
+    public static Biomas biomaInicial;
 
     @Override
     public int getID() {
@@ -84,7 +86,8 @@ public class GameOver extends BasicGameState {
 //                Fase1.podeComecar = false;
 //                Fase1.portalSurgiu = false;
 //                this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
-                ChangeLevel.reset(null);//botar o elemento do pokemon
+                
+                ChangeLevel.reset(this.biomaInicial);//botar o elemento do pokemon
                 game.enterState(ChangeLevel.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if (this.options[this.selected].equals("Escolher Persornagem")) {

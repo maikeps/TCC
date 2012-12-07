@@ -47,11 +47,11 @@ public class EarthQuake extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado) {
+        if (this.desativado && this.acertou == true) {
             this.contadorDano++;
         }
-        if (acertou == true) {
-            this.contadorDano++;
+        if (animation.isStopped()) {
+            this.desativado = true;
         }
     }
 

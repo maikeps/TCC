@@ -1,6 +1,7 @@
 package Ataques;
 
 import DAO.AtaqueDAO;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -12,6 +13,7 @@ import tcc.Personagem;
 public class PoisonFang extends Ataque {
 
     public PoisonFang(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
+        this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
@@ -45,15 +47,15 @@ public class PoisonFang extends Ataque {
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado == true) {
+        if (this.desativado && acertou == true) {
             this.contadorDano++;
             return;
         }
+        if(this.acertou){
+            this.desativado = true;
+        }
         this.x += this.dx;
         this.y += this.dy;
-        if (this.getAcertou() == true) {
-            this.contadorDano++;
-        }
     }
 
     @Override

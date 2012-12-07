@@ -33,28 +33,32 @@ public class HydroPump extends Ataque {
         this.destY = destY;
         this.angulo = (float) angulo;
         this.desativado = false;
-        this.x = x - (this.personagem.animacaoAtual.getImage().getWidth() / 2 + 20);
-        this.y = y - (this.personagem.animacaoAtual.getImage().getHeight() / 2 + 50);
-
+                
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 220, 120);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 209, 70);
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
         }
         this.animation = new Animation();
-        for (int i = 0; i < 14; i++) {
-            animation.addFrame(sprite.getSprite(i, 0), 150);
+        for (int i = 0; i < 8; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 100);
         }
         this.animation.setLooping(false);
+        
+        this.xRotate = this.x;
+        this.yRotate = this.y + this.animation.getHeight() / 2;
+        
+        this.x = x + (this.personagem.animacaoAtual.getImage().getWidth() / 2);
+        this.y = y + (this.personagem.animacaoAtual.getImage().getHeight() / 2) - this.animation.getHeight() / 2;
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado) {
+        if (this.desativado && this.acertou == true) {
             this.contadorDano++;
         }
-        if (acertou == true) {
-            this.contadorDano++;
+        if (animation.isStopped()) {
+            this.desativado = true;
         }
     }
 
@@ -63,9 +67,9 @@ public class HydroPump extends Ataque {
         if (this.animation.isStopped()) {
             return;
         }
-        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, -this.angulo);
+        g.rotate(this.x, this.y + this.animation.getHeight() / 2, -this.angulo);
         this.animation.draw(this.x, this.y);
-        g.rotate(this.animation.getCurrentFrame().getCenterOfRotationX() + this.x, this.animation.getCurrentFrame().getCenterOfRotationY() + this.y, this.angulo);
+        g.rotate(this.x, this.y + this.animation.getHeight() / 2, this.angulo);
 
     }
 

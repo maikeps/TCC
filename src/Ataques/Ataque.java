@@ -38,8 +38,9 @@ public abstract class Ataque extends GameObject {
     double deltaX, deltaY, dx, dy;
     int contadorDano; //contador de tempo para o dano que aparece na tela
     public ArrayList<Personagem> personagensAcertados;
-    
-    
+    public int xRotate;
+    public int yRotate;
+
     public void setDano(int n) {
         this.dano = n;
     }
@@ -61,7 +62,10 @@ public abstract class Ataque extends GameObject {
             float degree = (float) Math.toRadians(this.angulo); //desired degree
             Shape rect = new Rectangle((int) this.x, (int) this.y, this.imagem.getWidth(), this.imagem.getHeight()); //creating the rectangle you want to rotate
             // Transform t = new Transform();
-            rect = rect.transform(Transform.createRotateTransform(-degree, this.x + this.imagem.getCenterOfRotationX(), this.y + this.imagem.getCenterOfRotationY()));
+
+            //rect = rect.transform(Transform.createRotateTransform(-degree, this.x + this.imagem.getCenterOfRotationX(), this.y + this.imagem.getCenterOfRotationY()));
+            rect = rect.transform(Transform.createRotateTransform(-degree, this.xRotate, this.yRotate));
+
             //AffineTransform transform = new AffineTransform();
             //rotate or do other things with the rectangle (shear, translate, scale and so on)
             //transform.rotate(Math.toRadians(-degree), this.x + this.imagem.pegaLargura() /2, this.y + this.imagem.pegaAltura() /2); //rotating in central axis
@@ -74,7 +78,12 @@ public abstract class Ataque extends GameObject {
         } else {
             float degree = (float) Math.toRadians(this.angulo); //desired degree
             Shape rect = new Rectangle((int) this.x, (int) this.y, this.animation.getCurrentFrame().getWidth(), this.animation.getCurrentFrame().getHeight());
-            rect = rect.transform(Transform.createRotateTransform(-degree, this.x +  this.animation.getCurrentFrame().getCenterOfRotationX(), this.y +  this.animation.getCurrentFrame().getCenterOfRotationY()));
+            if (this.xRotate == 0 || this.yRotate == 0) {
+                rect = rect.transform(Transform.createRotateTransform(-degree, this.x + this.animation.getCurrentFrame().getCenterOfRotationX(), this.y + this.animation.getCurrentFrame().getCenterOfRotationY()));
+            } else {
+                rect = rect.transform(Transform.createRotateTransform(-degree, this.xRotate, this.yRotate));
+            }
+
             return rect;
         }
     }

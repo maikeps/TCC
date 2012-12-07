@@ -55,7 +55,7 @@ insert into ataque (nome, atk, elemento) values
 ("MegaHorn", 120, 14),
 ("DoubleSlap", 45, 2), -- fazer duas maos batendo(gif sem fim) -- 31
 ("Metronome", 0, 2),
-ATAQUES NOVOS
+ATAQUES NOVOS ATAQUES NOVOS ATAQUES NOVOS ATAQUES NOVOS ATAQUES NOVOS ATAQUES NOVOS ATAQUES NOVOS 
 ("FireSpin", 35, 3),
 ("FlameThrower", 95, 3),
 ("HyperVoice", 90, 2); -- 35
@@ -168,6 +168,16 @@ insert into pokemonDerrotado (idPokemon, vezesDerrotado) values
 (34, 0),
 (35, 0),
 (36, 0);
+--------------- novos ---------------
+(37, 0),
+(38, 0),
+(39, 0),
+(40, 0),
+(41, 0),
+(42, 0),
+(43, 0),
+(44, 0),
+(45, 0);
 
 
 

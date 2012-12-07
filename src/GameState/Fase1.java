@@ -67,12 +67,14 @@ public class Fase1 extends BasicGameState {
     Sound somSelect;
     ArrayList<String> listaNomes;
     ArrayList<Pokemon> listaPokemons;
+    ArrayList<model.Ataque> listaAtaques;
     Image portal;
     public static boolean portalSurgiu;
     int xPortal;
     int yPortal;
     public static boolean podeComecar = false;
     public static Biomas bioma;
+    public static Biomas biomaInicial;
     int maxInimigos = 25;
     public static boolean primeiraVezQueCriaPlayer = true;
     boolean playerUpou = false;
@@ -136,7 +138,10 @@ public class Fase1 extends BasicGameState {
                     }
                 }
                 for (Ataque a : this.ataquesInimigo) {
+                    //for (int x = 0; x < this.ataquesInimigo.size(); x++) {
                     a.update(gc, game, i);
+                    //this.ataquesInimigo.get(x).update(gc, game, i);
+                    //     if(this.ataquesInimigo.get(x).)
                 }
 
                 for (Bau bau : this.listaBaus) {
@@ -259,7 +264,7 @@ public class Fase1 extends BasicGameState {
             if (this.bossApareceu) {
                 this.procuraBoss(gc, g);
             }
-            if(this.portalSurgiu){
+            if (this.portalSurgiu) {
                 this.procuraPortal(gc, g);
             }
         }
@@ -269,17 +274,12 @@ public class Fase1 extends BasicGameState {
         if (key == Input.KEY_P || key == Input.KEY_ESCAPE) {
             this.somSelect.play();
             this.game.enterState(PauseScreen.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+
         }
         //cheats :D 
         if (key == Input.KEY_SPACE) {
             this.characterSelect.sorteiaInimigo();
-            this.criaInimigo(this.characterSelect.getInimigo());
-
-            if (this.jogoParado) {
-                this.jogoParado = false;
-            } else {
-                this.jogoParado = true;
-            }
+            this.criaInimigo("Vileplume");
         }
 
         if (this.jogoParado == true) {
@@ -301,6 +301,10 @@ public class Fase1 extends BasicGameState {
                 model.Ataque a = AtaqueDAO.getPoder(this.characterSelect.getPlayer1());
                 String s = "Ataques." + a.getNome();
                 try {
+                    if (a.getNome().equals("Metronome")) {
+                        int rand = util.Util.random(this.listaAtaques.size());
+                        s = "Ataques." + this.listaAtaques.get(rand - 1).getNome();
+                    }
                     Class cls = Class.forName(s);
                     Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class};
                     java.lang.reflect.Constructor con = cls.getConstructor(parameters);
@@ -351,6 +355,11 @@ public class Fase1 extends BasicGameState {
                     model.Ataque a = AtaqueDAO.getPoder(this.listaInimigos.get(i).personagem.getNome());
                     String s = "Ataques." + a.getNome();
                     try {
+                        if (a.getNome().equals("Metronome")) {
+                            int rand = util.Util.random(this.listaAtaques.size());
+                            s = "Ataques." + this.listaAtaques.get(rand - 1).getNome();
+                            System.out.println("Metronome - " + s);
+                        }
                         Class cls = Class.forName(s);
                         Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class};
                         java.lang.reflect.Constructor con = cls.getConstructor(parameters);
@@ -488,8 +497,6 @@ public class Fase1 extends BasicGameState {
 
         this.player.personagem.larguraMapa = this.cenarioComColisao.getScene().getWidth();
         this.player.personagem.alturaMapa = this.cenarioComColisao.getScene().getHeight();
-
-        Stats.personagem = this.player.personagem;
     }
 
     public void criaInimigo(String nome) {
@@ -559,7 +566,7 @@ public class Fase1 extends BasicGameState {
             lvl = this.player.getPersonagem().getLvl();
         }
         //se o pokemon ja passou do level minimo para evoluir, nao cria
-        if (pokemon.getLevelQueEvolui() <= lvl) {
+        if (pokemon.getLevelQueEvolui() <= lvl && pokemon.getLevelQueEvolui() != 0) {
             ok = false;
         }
         //se o pokemon nao tem evolução, nao cria
@@ -684,28 +691,31 @@ public class Fase1 extends BasicGameState {
                 int x1 = this.player.getX(), x2 = this.player.getPersonagem().animacaoAtual.getImage().getWidth(), y1 = this.player.getY(), y2 = this.player.getPersonagem().animacaoAtual.getImage().getHeight();
                 Shape s = new Rectangle(x1, y1, x2, y2);
                 // if (a.getShape().intersects(x1, y1, x2, y2)) {
-                if (a.getShape().intersects(s)) {
-                    if (a.desativado == false) {
-                        int lvl = inimigo.personagem.getLvl();
-                        int danoDoAtk = a.getDanoBruto();
-                        int atkDoPokemon = inimigo.personagem.getAtk();
-                        int defDoOponente = this.player.personagem.getDef();
-                        int r = 100 - util.Util.random(15);
-                        int multiplicador = 1; //fazer busca no banco
-                        int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
-                        a.setDano(dano);
-                        this.player.personagem.perdeHp(dano);
-                        try {
-                            Sound som = new Sound("resources/sounds/misc/hit 2.wav");
-                            som.play();
+                if (a.getShape().intersects(s) || a.getShape().contains(s)) {
+                    if (!(a.personagensAcertados.contains(player.personagem))) {
+                        a.personagensAcertados.add(player.personagem);
+                        if (a.desativado == false) {
+                            int lvl = inimigo.personagem.getLvl();
+                            int danoDoAtk = a.getDanoBruto();
+                            int atkDoPokemon = inimigo.personagem.getAtk();
+                            int defDoOponente = this.player.personagem.getDef();
+                            int r = 100 - util.Util.random(15);
+                            int multiplicador = 1; //fazer busca no banco
+                            int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                            a.setDano(dano);
+                            this.player.personagem.perdeHp(dano);
+                            try {
+                                Sound som = new Sound("resources/sounds/misc/hit 2.wav");
+                                som.play();
 
 
-                        } catch (SlickException ex) {
-                            Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (SlickException ex) {
+                                Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                     }
                     a.setAcertou(true);
-                    a.desativado();
+                    //a.desativado();
                     //pra mandar pro sei-la-o-que garbage collector
                     // a = null;
                 }
@@ -722,46 +732,46 @@ public class Fase1 extends BasicGameState {
                     y2 *= 2;
                 }
                 Shape s = new Rectangle(x1, y1, x2, y2);
-                if (a.getShape().intersects(s)) {
+                if (a.getShape().intersects(s) || a.getShape().contains(s)) {
                     if (!(a.personagensAcertados.contains(inimigo.personagem))) {
                         a.personagensAcertados.add(inimigo.personagem);
-                        // if (a.desativado == false) {
-                        int lvl = this.player.personagem.getLvl();
-                        int danoDoAtk = a.getDanoBruto();
-                        int atkDoPokemon = this.player.personagem.getAtk();
-                        int defDoOponente = inimigo.personagem.getDef();
-                        int r = 100 - util.Util.random(15);
-                        int multiplicador = 1; //fazer busca no banco
-                        int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
-                        a.setDano(dano);
-                        inimigo.personagem.perdeHp(dano);
+                        if (a.desativado == false) {
+                            int lvl = this.player.personagem.getLvl();
+                            int danoDoAtk = a.getDanoBruto();
+                            int atkDoPokemon = this.player.personagem.getAtk();
+                            int defDoOponente = inimigo.personagem.getDef();
+                            int r = 100 - util.Util.random(15);
+                            int multiplicador = 1; //fazer busca no banco
+                            int dano = (((((((lvl * 2 / 5) + 2) * danoDoAtk * atkDoPokemon / 50) / defDoOponente) + 2) * r / 100) * multiplicador);
+                            a.setDano(dano);
+                            inimigo.personagem.perdeHp(dano);
 
 
 
-                        //faz update no campo totalDanoCausado
+                            //faz update no campo totalDanoCausado
 
-                        int idPlayer = this.player.personagem.getId();
-                        PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(idPlayer);
-                        int danoTotal = pokeLiberado.getTotalDanoCausado();
-                        int danoTotalDepois = danoTotal + dano;
-
-
-                        MySQL banco = new MySQL();
-                        String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
-                        boolean bool = banco.executaUpdate(sql);
-
-                        try {
-                            Sound som = new Sound("resources/sounds/misc/hit 2.wav");
-                            som.play();
+                            int idPlayer = this.player.personagem.getId();
+                            PokemonLiberado pokeLiberado = PokemonLiberadoDAO.getPokemon(idPlayer);
+                            int danoTotal = pokeLiberado.getTotalDanoCausado();
+                            int danoTotalDepois = danoTotal + dano;
 
 
-                        } catch (SlickException ex) {
-                            Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                            MySQL banco = new MySQL();
+                            String sql = "update pokemonLiberado set totalDanoCausado = " + danoTotalDepois + " where idPokemon = " + idPlayer;
+                            boolean bool = banco.executaUpdate(sql);
+
+                            try {
+                                Sound som = new Sound("resources/sounds/misc/hit 2.wav");
+                                som.play();
+
+
+                            } catch (SlickException ex) {
+                                Logger.getLogger(CharacterSelect.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-
                     }
                     a.setAcertou(true);
-                    a.desativado();
+                    //a.desativado();
                     //a = null;
                 }
             }
@@ -773,8 +783,6 @@ public class Fase1 extends BasicGameState {
             try {
                 Sound s = new Sound("resources/sounds/misc/death.wav");
                 s.play();
-
-
             } catch (SlickException ex) {
                 Logger.getLogger(Fase1.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -803,6 +811,7 @@ public class Fase1 extends BasicGameState {
                     + "where idPokemon = " + this.player.personagem.getId();
             boolean bool = banco.executaUpdate(sql);
 
+            GameOver.biomaInicial = this.biomaInicial;
             this.game.enterState(GameOver.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
         }
     }
@@ -903,7 +912,7 @@ public class Fase1 extends BasicGameState {
                 //evolui
                 Pokemon pokePlayer = PokemonDAO.getPokemonPeloNome(this.characterSelect.getPlayer1());
                 //if(pokePlayer.getLevelQueEvolui() != null){
-                if (this.player.personagem.getLvl() >= pokePlayer.getLevelQueEvolui()) {
+                if (this.player.personagem.getLvl() == pokePlayer.getLevelQueEvolui() && pokePlayer.getLevelQueEvolui() != 0) {
                     this.jogoParado = true;
                     //this.evolui();
                 }
@@ -1096,6 +1105,10 @@ public class Fase1 extends BasicGameState {
                     g.setColor(Color.red);
                     g.drawString("" + this.ataquesInimigo.get(i).getDano(), this.ataquesInimigo.get(i).getX(), this.ataquesInimigo.get(i).getY());
                 }
+            } else {
+                if (this.ataquesInimigo.get(i).desativado == true) {
+                    this.ataquesInimigo.remove(i);
+                }
             }
         }
         for (int i = 0; i < this.ataquesPlayer.size(); i++) {
@@ -1105,6 +1118,10 @@ public class Fase1 extends BasicGameState {
                 } else {
                     g.setColor(Color.white);
                     g.drawString("" + this.ataquesPlayer.get(i).getDano(), this.ataquesPlayer.get(i).getX(), this.ataquesPlayer.get(i).getY());
+                }
+            } else {
+                if (this.ataquesPlayer.get(i).desativado == true) {
+                    this.ataquesPlayer.remove(i);
                 }
             }
         }
@@ -1357,7 +1374,7 @@ public class Fase1 extends BasicGameState {
     public void desenhaExperienciaGanha(Graphics g) {
         g.setColor(Color.blue);
         if (this.player.contExpGanha > 0) {
-            g.drawString("+" + this.player.expGanha, 70 - g.getFont().getWidth("+" + this.player.expGanha) / 2 - this.player.offsetx, 545 - g.getFont().getHeight("+" + this.player.expGanha) / 2 - this.player.offsety);
+            g.drawString("+" + this.player.expGanha, 85 - g.getFont().getWidth("+" + this.player.expGanha) - this.player.offsetx, 545 - g.getFont().getHeight("+" + this.player.expGanha) / 2 - this.player.offsety);
         } else {
             this.player.contExpGanha = 0;
         }
@@ -1450,11 +1467,13 @@ public class Fase1 extends BasicGameState {
         this.listaBaus = new ArrayList<Bau>();
         this.listaNomes = new ArrayList<String>();
         this.listaPokemons = new ArrayList<Pokemon>();
+        this.listaAtaques = new ArrayList<model.Ataque>();
 
         this.listaPokemons = PokemonDAO.getLista();
         for (Pokemon p : this.listaPokemons) {
             this.listaNomes.add(p.getNome());
         }
+        this.listaAtaques = AtaqueDAO.getListaAtaque();
 
         this.carregaMapa(Biomas.FOREST);
 
@@ -1507,7 +1526,7 @@ public class Fase1 extends BasicGameState {
     }
 
     private void perguntaSeQuerEvoluir(GameContainer gc, Graphics g) {
-        if (this.jogoParado && this.evoluir == true) {
+        if (this.jogoParado) {// && this.evoluir == true
             g.setColor(new Color(0f, 0f, 0f, 0.9f));
             g.fillRoundRect(gc.getWidth() / 2 - 200 - this.player.offsetx, gc.getHeight() / 2 - 120 - this.player.offsety, 400, 240, 5);
 
@@ -1542,13 +1561,13 @@ public class Fase1 extends BasicGameState {
         }
     }
 
-    public void procuraPortal(GameContainer gc, Graphics g){
+    public void procuraPortal(GameContainer gc, Graphics g) {
         int xPlayer = this.player.getX();
         int yPlayer = this.player.getY();
 
         double anguloAtePortal = util.Util.calculaAngulo(xPortal, xPlayer, yPortal, yPlayer);
         String direcao = "";
-        
+
         if (anguloAtePortal <= 67.5 && anguloAtePortal > 22.5) {
             direcao = "Nordeste";
         } else if (anguloAtePortal < 112.5 && anguloAtePortal > 67.5) {
@@ -1572,7 +1591,7 @@ public class Fase1 extends BasicGameState {
         aviso[1] = "a " + direcao + " de onde você está.";
         this.aviso(gc, g, aviso);
     }
-    
+
     public void procuraBoss(GameContainer gc, Graphics g) {
         int xBoss = this.boss.getX();
         int yBoss = this.boss.getY();

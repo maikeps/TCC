@@ -96,3 +96,13 @@
 23/11
 -Agora player tem a opção de evoluir ou não
 -Informações no jogo sobre a localização do chefe e do portal para trocar de fase
+
+29/11
+-Agora personagens nao saem mais do mapa
+
+30/11
+-Adicionados ataques Metronome, BodySlam e DoubleSlap
+
+04/12
+-Arrumado o bug de não acertar ataques em area(como o FlameBurst)
+-Arrumado o sistema de splash(acertar varios inimigos de uma vez, se estiverem proximos)

@@ -60,22 +60,22 @@ public class Acid extends Ataque {
         this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
         this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
 
-
+        this.xRotate = this.x;
+        this.xRotate = this.x;
 
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado) {
+        if (this.desativado && acertou == true) {
             this.contadorDano++;
             return;
         }
-
+        if(this.acertou){
+            this.desativado = true;
+        }
         this.x += this.dx;
         this.y += this.dy;
-        if (acertou == true) {
-            this.contadorDano++;
-        }
     }
 
     @Override

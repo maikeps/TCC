@@ -25,7 +25,7 @@ public class PauseScreen extends BasicGameState{
     StateBasedGame game;
     GameContainer gc;
     
-    String[] options = {"Retornar ao Jogo", "Status", "Pokedex", "Opções", "Retornar ao Menu", "Sair"};
+    String[] options = {"Retornar ao Jogo","Pokedex", "Opções", "Retornar ao Menu", "Sair"};
     int selected;
     Sound somSelect;
     Sound somMove;
@@ -88,10 +88,6 @@ public class PauseScreen extends BasicGameState{
             this.somMove.play();
             if(this.options[this.selected].equals("Retornar ao Jogo")){
                 this.game.enterState(Fase1.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
-            }
-            if(this.options[this.selected].equals("Status")){
-                Stats.idPreviousGameState = this.ID;
-                this.game.enterState(Stats.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
             if(this.options[this.selected].equals("Pokedex")){
                 this.game.enterState(Pokedex.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
