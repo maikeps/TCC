@@ -115,10 +115,7 @@ public class Fase1 extends BasicGameState {
                     this.adicionaBau();
                 }
 
-                //val = new Random().nextInt(100) <= 10;
-                //  if (val) {
                 this.adicionaInimigo();
-                //  }
 
                 for (Inimigo inimigo : this.listaInimigos) {
                     inimigo.setXPlayer(this.player.getX());
@@ -138,10 +135,7 @@ public class Fase1 extends BasicGameState {
                     }
                 }
                 for (Ataque a : this.ataquesInimigo) {
-                    //for (int x = 0; x < this.ataquesInimigo.size(); x++) {
                     a.update(gc, game, i);
-                    //this.ataquesInimigo.get(x).update(gc, game, i);
-                    //     if(this.ataquesInimigo.get(x).)
                 }
 
                 for (Bau bau : this.listaBaus) {
@@ -599,24 +593,11 @@ public class Fase1 extends BasicGameState {
         atk = atk * 2 / 3;
         def = def * 2 / 3;
         spd = spd * 2 / 3;
-//        String sql = "insert into pokemonInimigo "
-//                + "(idPokemon, tipo, atk, def, spd, hp, lvl) values"
-//                + "(\"" + id + "\", \"minion\", \"" + atk + "\", "
-//                + "\"" + def + "\", \"" + spd + "\", \"" + hp + "\", \"" + lvl + "\")";
-//
-//        MySQL bd = new MySQL();
-//        boolean bool = bd.executaInsert(sql);
-
+        
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
-        //    int x = util.Util.random(this.cenarioColisao.getScene().getWidth()+1);
-        //    int y = util.Util.random(this.cenarioColisao.getScene().getHeight()+1);
         int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
         int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
-//        double distancia = util.Util.calculaDistancia(x, y, this.player.getX(), this.player.getY());
-//            while (distancia < 1000) {
-//                x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
-//                y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
-//            }
+
         Inimigo inimigo = new Inimigo(this.personagem, this.player, x, y);
 
         this.inimigoMaisPerto = inimigo;

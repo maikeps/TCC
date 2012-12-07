@@ -75,24 +75,12 @@ public class Pokedex extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.lightGray);
         g.fillRect(25, 25, gc.getWidth() - 50, gc.getHeight() - 50);
-
-        //    int y1 = 0;
-        //    int y2 = 0;
-        //ERRO TA AQUI
-        //if (this.selecionado > 7) {
-        //     y1 -= 75 * (this.selecionado - this.linha);
-        //     y2 -= 75 * (this.selecionado - this.linha);
-        //  }
-
         g.setColor(new Color(1f, 1f, 1f, 0.6f));
         g.fillRect(50, (this.linha * 75) - 35, gc.getWidth() - 100, 75);
 
 
-        ////////////////////////////////
-
-        for (PokemonLiberado p : this.listaDePokemonLiberado) {
-        }
         for (int i = 0; i < this.pokemonsNaTela.size(); i++) {
+            g.setColor(Color.black);
             String status = "Locked";
             if (this.listaNomesPokemonLiberado.contains(this.pokemonsNaTela.get(i).getNome())) {
                 status = "Down";
@@ -102,37 +90,23 @@ public class Pokedex extends BasicGameState {
             g.drawString("" + this.pokemonsNaTela.get(i).getNome(), 200, 75 + (75 * i));
             int vezesDerrotado = this.listaDePokemonDerrotado.get(this.pokemonsNaTela.get(i).getId() - 1).getVezesDerrotado();
             int vezesMinima = this.listaDePokemon.get(this.pokemonsNaTela.get(i).getId() - 1).getRaridade();
+            
+            if(status.equals("Locked")){
             g.drawString("" + vezesDerrotado + " de " + vezesMinima, 400, 75 + (75 * i));
-            if (vezesMinima > 0) {
+            }else{
+            g.drawString("Liberado!", 400, 75 + (75 * i));
+            }
+            if (vezesMinima > 0 && status.equals("Locked")) {
                 double total = 100;
                 double fracao = (100 * vezesDerrotado) / vezesMinima;
                 g.setColor(Color.black);
                 g.fillRoundRect(499, 74 + (75 * i), (int) total + 2, 22, 2);
                 g.setColor(Color.white);
                 g.fillRoundRect(500, 75 + (75 * i), (int) fracao, 20, 2);
+                g.setColor(Color.black);
                 g.drawString("" + (int) fracao + "%", 615, 75 + (75 * i));
             }
         }
-        ////////////////////////////////
-
-
-
-//        for (Pokemon p : this.listaDePokemon) {
-//            y1 += 75;
-//            Image img = new Image("resources/personagens/" + p.getId() + " - " + p.getNome() + "/" + p.getNome() + "_Locked.gif");
-//            // img.drawCentered(75, 75 + (75 * this.listaDePokemon.indexOf(p)));
-//            img.drawCentered(100, y1);
-//            g.setColor(Color.black);
-//            g.drawString("" + p.getNome(), 200, y1);
-//            int vezesDerrotado = this.listaDePokemonDerrotado.get(p.getId() - 1).getVezesDerrotado();
-//            g.drawString("" + vezesDerrotado, 400, y1);
-//        }
-//        for (PokemonLiberado p : this.listaDePokemonLiberado) {
-//            //y2 = 75 * p.getIdPokemon();
-//            Image img = new Image("resources/personagens/" + p.getIdPokemon() + " - " + p.getNome() + "/" + p.getNome() + "_Down.gif");
-//            img.drawCentered(100, y2 + (75 * p.getIdPokemon()));
-//        }
-
         g.drawString("Pressione o botão 'BACKSPACE' para voltar", gc.getWidth() / 2 - g.getFont().getWidth("Pressione o botão 'BACKSPACE' para voltar") / 2, 560);
     }
 
@@ -151,12 +125,14 @@ public class Pokedex extends BasicGameState {
         if (key == Input.KEY_UP) {
             this.somMove.play();
             this.selecionado--;
+            if (this.linha > 1) {
+                this.linha--;
+            }
             if (this.linha == 1) {
                 if (this.selecionado <= 0) {
                     this.selecionado = this.listaDePokemon.size();
                     this.linha = 7;
                 }
-                ///////////////////////////////////////
                 if (this.selecionado == this.listaDePokemon.size()) {
                     this.pokemonsNaTela.clear();
                     for (int i = this.listaDePokemon.size() - 7; i < this.listaDePokemon.size(); i++) {
@@ -171,22 +147,19 @@ public class Pokedex extends BasicGameState {
                     this.pokemonsNaTela.set(5, this.listaDePokemon.get(this.selecionado + 4));
                     this.pokemonsNaTela.set(6, this.listaDePokemon.get(this.selecionado + 5));
                 }
-                ///////////////////////////////////////
-
-            }
-            if (this.linha > 1) {
-                this.linha--;
             }
         }
         if (key == Input.KEY_DOWN) {
             this.somMove.play();
             this.selecionado++;
+            if (this.linha < 7) {
+                this.linha++;
+            }
             if (linha == 7) {
                 if (this.selecionado > this.listaDePokemon.size()) {
                     this.selecionado = 1;
                     this.linha = 1;
                 }
-                ///////////////////////////////////////
                 if (this.selecionado == 1) {
                     this.pokemonsNaTela.clear();
                     for (int i = 0; i < 7; i++) {
@@ -196,12 +169,7 @@ public class Pokedex extends BasicGameState {
                     this.pokemonsNaTela.remove(0);
                     this.pokemonsNaTela.add(this.listaDePokemon.get(this.selecionado - 1));
                 }
-                ///////////////////////////////////////
             }
-            if (this.linha < 7) {
-                this.linha++;
-            }
-
         }
     }
 }

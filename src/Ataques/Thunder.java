@@ -23,6 +23,8 @@ public class Thunder extends Ataque {
         model.Ataque a = AtaqueDAO.getAtaque(name);
         this.setDanoBruto(a.getAtk());
 
+        this.personagem = personagem;
+        
         this.desativado = false;
         this.xInicial = x;
         this.yInicial = y;
@@ -30,18 +32,26 @@ public class Thunder extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.angulo = 0;
+        this.angulo = (float)angulo;
 
         try {
-            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 165, 315);
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 224, 56);
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
         }
         this.animation = new Animation();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             animation.addFrame(sprite.getSprite(i, 0), 100);
         }
 
+        this.animation.setLooping(false);
+        
+        this.xRotate = this.x;
+        this.yRotate = this.y + this.animation.getHeight() / 2;
+        
+        this.x = x + (this.personagem.animacaoAtual.getImage().getWidth() / 2);
+        this.y = y + (this.personagem.animacaoAtual.getImage().getHeight() / 2) - this.animation.getHeight() / 2;
+    
     }
 
     @Override
@@ -57,7 +67,9 @@ public class Thunder extends Ataque {
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
         if (!animation.isStopped()) {
+            g.rotate(this.x, this.y + this.animation.getHeight() / 2, -this.angulo);
             this.animation.draw(this.x, this.y);
+            g.rotate(this.x, this.y + this.animation.getHeight() / 2, this.angulo);
         }
     }
 }

@@ -148,23 +148,41 @@ public class Inimigo extends GameObject {
 
     public void aproxima() {
         int quadranteDoPlayer = 1;
-
-        if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 45.0) {
+//
+//        if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 45.0) {
+//            quadranteDoPlayer = 1;
+//        } else if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 90.0 && this.anguloAtePlayer > 4.05) {
+//            System.out.append("4.05? ANGULO");
+//            quadranteDoPlayer = 2;
+//        } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
+//            quadranteDoPlayer = 3;
+//        } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 180.0 && this.anguloAtePlayer > 135.0) {
+//            quadranteDoPlayer = 4;
+//        } else if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 225.0 && this.anguloAtePlayer > 180.0) {
+//            quadranteDoPlayer = 5;
+//        } else if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 270.0 && this.anguloAtePlayer > 225.0) {
+//            quadranteDoPlayer = 6;
+//        } else if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 315.0 && this.anguloAtePlayer > 270.0) {
+//            quadranteDoPlayer = 7;
+//        } else if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 360.0 && this.anguloAtePlayer > 315.0) {
+//            quadranteDoPlayer = 8;
+//        }
+        if (this.anguloAtePlayer <= 45.0) {
             quadranteDoPlayer = 1;
-        } else if (this.xPlayer > this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 90.0 && this.anguloAtePlayer > 4.05) {
+        } else if (this.anguloAtePlayer <= 90.0 && this.anguloAtePlayer > 45.0) {
             System.out.append("4.05? ANGULO");
             quadranteDoPlayer = 2;
-        } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
+        } else if (this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
             quadranteDoPlayer = 3;
-        } else if (this.xPlayer < this.getX() && this.yPlayer < this.getY() && this.anguloAtePlayer < 180.0 && this.anguloAtePlayer > 135.0) {
+        } else if (this.anguloAtePlayer <= 180.0 && this.anguloAtePlayer > 135.0) {
             quadranteDoPlayer = 4;
-        } else if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 225.0 && this.anguloAtePlayer > 180.0) {
+        } else if (this.anguloAtePlayer <= 225.0 && this.anguloAtePlayer > 180.0) {
             quadranteDoPlayer = 5;
-        } else if (this.xPlayer < this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 270.0 && this.anguloAtePlayer > 225.0) {
+        } else if (this.anguloAtePlayer <= 270.0 && this.anguloAtePlayer > 225.0) {
             quadranteDoPlayer = 6;
-        } else if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer <= 315.0 && this.anguloAtePlayer > 270.0) {
+        } else if (this.anguloAtePlayer <= 315.0 && this.anguloAtePlayer > 270.0) {
             quadranteDoPlayer = 7;
-        } else if (this.xPlayer > this.getX() && this.yPlayer > this.getY() && this.anguloAtePlayer < 360.0 && this.anguloAtePlayer > 315.0) {
+        } else if (this.anguloAtePlayer <= 360.0 && this.anguloAtePlayer > 315.0) {
             quadranteDoPlayer = 8;
         }
 
@@ -203,27 +221,13 @@ public class Inimigo extends GameObject {
     }
 
     public void ataca() {
-        this.destX = this.player.getX();
-        this.destY = this.player.getY();
+        this.destX = this.player.getX() + player.personagem.animacaoAtual.getImage().getWidth() / 2;
+        this.destY = this.player.getY() + player.personagem.animacaoAtual.getImage().getHeight() / 2;
         this.atacou = true;
     }
 
     public void anda() {
-
         int quadrante = 1;
-
-//////        if (this.destMovimentoX > 0 && this.destMovimentoY <= 0) {
-//////            quadrante = 1;
-//////        }
-//////        if (this.destMovimentoX <= 0 && this.destMovimentoY <= 0) {
-//////            quadrante = 2;
-//////        }
-//////        if (this.destMovimentoX <= 0 && this.destMovimentoY > 0) {
-//////            quadrante = 3;
-//////        }
-//////        if (this.destMovimentoX > 0 && this.destMovimentoY > 0) {
-//////            quadrante = 4;
-//////        }
 
         if (this.anguloDestino < 90) {
             quadrante = 1;
@@ -262,32 +266,13 @@ public class Inimigo extends GameObject {
         }
 
         this.distanciaParaAndar -= this.velocidade;
-        if(this.verificaColisaoBaixoMapa() || this.verificaColisaoCimaMapa() || this.verificaColisaoDireitaMapa() || this.verificaColisaoEsquerdaMapa()){
+        if (this.verificaColisaoBaixoMapa() || this.verificaColisaoCimaMapa() || this.verificaColisaoDireitaMapa() || this.verificaColisaoEsquerdaMapa()) {
             this.distanciaParaAndar = 0;
         }
-
-//////        if (this.destMovimentoX < 0) {
-//////            this.destMovimentoX++;
-//////        } else if (this.destMovimentoX > 0) {
-//////            this.destMovimentoX--;
-//////        }
-//////        if (this.destMovimentoY < 0) {
-//////            this.destMovimentoY++;
-//////        } else if (this.destMovimentoY > 0) {
-//////            this.destMovimentoY--;
-//////        }
 
     }
 
     public void sorteiaDestino() {
-//        this.destMovimentoX = Util.random(this.x + this.alcancePerseguição);
-//        this.destMovimentoX += this.alcancePerseguição;
-//        this.destMovimentoY = Util.random(this.y + this.alcancePerseguição);
-//        this.destMovimentoY += this.alcancePerseguição;
-
-
-        //this.destMovimentoX = Util.random(200) - 100;
-        //this.destMovimentoY = Util.random(200) - 100;
         this.distanciaParaAndar = Util.random(distanciaMaxAteOSpawn);
         this.anguloDestino = Util.random(360);
     }
