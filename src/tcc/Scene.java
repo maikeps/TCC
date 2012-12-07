@@ -151,7 +151,7 @@ public class Scene {
                     continue;
                 }
 
-                if (Math.abs(drawX - xPlayer) <= gc.getWidth() / 2 + 25 && Math.abs(drawY - yPlayer) <= gc.getHeight() / 2 + 25) {
+                if (Math.abs(drawX - xPlayer) <= gc.getWidth() / 2 + 125 && Math.abs(drawY - yPlayer) <= gc.getHeight() / 2 + 125) {
                     g.drawImage(tiles[idx - 1], drawX, drawY);
                 }
             }

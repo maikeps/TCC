@@ -278,8 +278,8 @@ public class Fase1 extends BasicGameState {
         }
         //cheats :D 
         if (key == Input.KEY_SPACE) {
-            this.characterSelect.sorteiaInimigo();
-            this.criaInimigo("Vileplume");
+            // this.characterSelect.sorteiaInimigo();
+            //  this.criaInimigo("Vileplume");
         }
 
         if (this.jogoParado == true) {
@@ -357,8 +357,14 @@ public class Fase1 extends BasicGameState {
                     try {
                         if (a.getNome().equals("Metronome")) {
                             int rand = util.Util.random(this.listaAtaques.size());
+                            while (rand == 0) {
+                                rand = util.Util.random(this.listaAtaques.size());
+                            }
                             s = "Ataques." + this.listaAtaques.get(rand - 1).getNome();
                             System.out.println("Metronome - " + s);
+                            if (s.equals("Ataques.Metronome")) {
+                                System.out.println("Metronome de novo??");
+                            }
                         }
                         Class cls = Class.forName(s);
                         Class[] parameters = new Class[]{int.class, int.class, int.class, int.class, float.class, Personagem.class};
@@ -839,9 +845,9 @@ public class Fase1 extends BasicGameState {
                 Pokemon pokeInimigo = PokemonDAO.getPokemon(inimigo.personagem.getId());
                 int expBase = pokeInimigo.getBaseExp();
                 int expGanha = (expBase * lvlInimigo) / 7;
-                // if (inimigo.tipo.equals("Boss")) {
-                expGanha *= 5;
-                // }
+                if (inimigo.tipo.equals("Boss")) {
+                    expGanha *= 5;
+                }
                 this.player.expGanha = expGanha;
 
                 //altera o campo exp do pokemonLiberado no banco
@@ -1255,7 +1261,7 @@ public class Fase1 extends BasicGameState {
         }
 
         int id = pokemon.getId();
-        int atk = pokemon.getAtkBase() * 3;
+        int atk = pokemon.getAtkBase() * 6;
         int def = pokemon.getDefBase() * 1;
         int spd = pokemon.getSpdBase() * 1;
         int hp = pokemon.getHpBase() * 5;
@@ -1360,7 +1366,7 @@ public class Fase1 extends BasicGameState {
             int y = this.player.getY();
             this.criaPlayer(x, y);
             this.playerUpou = true;
-            this.contLevelUp = 1000;
+            this.contLevelUp = 500;
 
             try {
                 Sound som = new Sound("resources/sounds/misc/level up.wav");

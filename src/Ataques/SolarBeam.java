@@ -37,7 +37,7 @@ public class SolarBeam extends Ataque {
             Logger.getLogger(SolarBeam.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.xRotate = this.x;
-        this.yRotate = this.y + this.animation.getHeight() / 2;
+        this.yRotate = this.y + this.imagem.getHeight() / 2;
         
         this.x = x + (this.personagem.animacaoAtual.getImage().getWidth() / 2);
         this.y = y + (this.personagem.animacaoAtual.getImage().getHeight() / 2) - this.imagem.getHeight() / 2;
@@ -56,7 +56,7 @@ public class SolarBeam extends Ataque {
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
         if (this.contador <= 5) {
             g.rotate(this.x, this.y + this.imagem.getHeight() / 2, -this.angulo);
-            this.animation.draw(this.x, this.y);
+            this.imagem.draw(this.x, this.y);
             g.rotate(this.x, this.y + this.imagem.getHeight() / 2, this.angulo);
         }
     }

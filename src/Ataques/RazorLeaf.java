@@ -16,6 +16,7 @@ public class RazorLeaf extends Ataque {
     public RazorLeaf(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
         this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
+        this.personagem = personagem;
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
