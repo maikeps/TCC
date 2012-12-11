@@ -112,7 +112,7 @@ public class Inimigo extends GameObject {
 
 
 
-        this.anguloAtePlayer = (float) util.Util.calculaAngulo(destX, this.getX(), destY, this.getY());
+        this.anguloAtePlayer = (float) util.Util.calculaAngulo(destX - player.personagem.animacaoAtual.getImage().getWidth() / 2, this.getX(), destY - player.personagem.animacaoAtual.getImage().getHeight() / 2, this.getY());
 
 
         if (this.distanciaX < 0) {
@@ -170,7 +170,6 @@ public class Inimigo extends GameObject {
         if (this.anguloAtePlayer <= 45.0) {
             quadranteDoPlayer = 1;
         } else if (this.anguloAtePlayer <= 90.0 && this.anguloAtePlayer > 45.0) {
-            System.out.append("4.05? ANGULO");
             quadranteDoPlayer = 2;
         } else if (this.anguloAtePlayer <= 135.0 && this.anguloAtePlayer > 90.0) {
             quadranteDoPlayer = 3;

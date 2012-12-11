@@ -3,10 +3,11 @@ package Ataques;
 import DAO.AtaqueDAO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
 import tcc.Personagem;
 
@@ -15,6 +16,7 @@ public class Scratch extends Ataque {
     public Scratch(int x, int y, int destX, int destY, float angulo, Personagem personagem) {
         this.personagensAcertados = new ArrayList<Personagem>();
         this.setContador(0);
+        this.personagem = personagem;
         String name = this.toString();
         if (name.lastIndexOf('.') > 0) {
             name = name.substring(name.lastIndexOf('.') + 1, name.indexOf('@'));
@@ -29,40 +31,46 @@ public class Scratch extends Ataque {
         this.y = y;
         this.destX = destX;
         this.destY = destY;
-        this.angulo = 0;
+        this.angulo = angulo;
 
         try {
-            this.imagem = new Image("resources/ataques/" + name + "/" + name + ".png");
+            this.sprite = new SpriteSheet("resources/ataques/" + name + "/" + name + ".png", 64, 78);
         } catch (SlickException ex) {
             JOptionPane.showMessageDialog(null, "ERRO: " + ex.getMessage());
         }
-
-        deltaX = Math.abs(this.x - this.destX);
-        deltaY = Math.abs(this.y - this.destY);
-        this.dx = Math.cos(Math.toRadians(angulo)) * velocidade;
-        this.dy = -Math.sin(Math.toRadians(angulo)) * velocidade;
+        this.animation = new Animation();
+        for (int i = 0; i < 2; i++) {
+            animation.addFrame(sprite.getSprite(i, 0), 100);
+        }
         
-        this.imagem.rotate(-angulo);
+        this.xRotate = this.x;
+        this.yRotate = this.y + this.animation.getHeight() / 2;
+        
+        this.x = x + (this.personagem.animacaoAtual.getImage().getWidth() / 2);
+        this.y = y + (this.personagem.animacaoAtual.getImage().getHeight() / 2) - this.animation.getHeight() / 2;
+    
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame game, int delta) {
-        if (this.desativado && acertou == true) {
-            this.contadorDano++;
+        if(this.contadorDano > 35){
             return;
         }
-        if(this.acertou){
+        if (this.desativado && this.acertou == true) {
+            this.contadorDano++;
+        }
+        if (animation.isStopped()) {
             this.desativado = true;
         }
-        this.x += this.dx;
-        this.y += this.dy;
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame game, Graphics g) {
-        if (this.desativado == true) {
+        if (this.animation.isStopped()) {
             return;
         }
-        this.imagem.draw(this.x, this.y);
+        g.rotate(this.x, this.y + this.animation.getHeight() / 2, -this.angulo);
+        this.animation.draw(this.x, this.y);
+        g.rotate(this.x, this.y + this.animation.getHeight() / 2, this.angulo);
     }
 }

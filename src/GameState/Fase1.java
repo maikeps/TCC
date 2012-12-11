@@ -295,7 +295,8 @@ public class Fase1 extends BasicGameState {
                 model.Ataque a = AtaqueDAO.getPoder(this.characterSelect.getPlayer1());
                 String s = "Ataques." + a.getNome();
                 try {
-                    if (a.getNome().equals("Metronome")) {
+                    //if (a.getNome().equals("Metronome")) {
+                    while (s.equals("Ataques.Metronome")) {
                         int rand = util.Util.random(this.listaAtaques.size());
                         s = "Ataques." + this.listaAtaques.get(rand - 1).getNome();
                     }
@@ -349,7 +350,8 @@ public class Fase1 extends BasicGameState {
                     model.Ataque a = AtaqueDAO.getPoder(this.listaInimigos.get(i).personagem.getNome());
                     String s = "Ataques." + a.getNome();
                     try {
-                        if (a.getNome().equals("Metronome")) {
+                        //if (a.getNome().equals("Metronome")) {
+                        while (s.equals("Ataques.Metronome")) {
                             int rand = util.Util.random(this.listaAtaques.size());
                             while (rand == 0) {
                                 rand = util.Util.random(this.listaAtaques.size());
@@ -593,7 +595,7 @@ public class Fase1 extends BasicGameState {
         atk = atk * 2 / 3;
         def = def * 2 / 3;
         spd = spd * 2 / 3;
-        
+
         this.personagem = new Personagem(id, nome, atk, def, spd, hp, lvl);
         int x = util.Util.random(this.cenarioComColisao.getScene().getWidth());
         int y = util.Util.random(this.cenarioComColisao.getScene().getHeight());
